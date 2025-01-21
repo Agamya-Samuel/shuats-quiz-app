@@ -104,3 +104,4 @@ Example:
 - Prioritize readability over raw performance but ensure efficient and maintainable code.  
 - If uncertain, acknowledge knowledge gaps instead of guessing.  
 - Always reference filenames, keep answers concise, and minimize unnecessary prose.
+- Use yarn package manager for installing dependencies.
