@@ -37,8 +37,8 @@ and recommending them appropriate courses,
 ## Other Requirements
 - need to implement user-permission model
 
-## [Phase - 1]
-- [ ] homepage w/ department's pic
+## [Phase - 1] Before Quiz Day
+- [x] homepage w/ department's pic
 - [ ] registration page/short survey to gather
 	- [ ] basic user info [name email mobile school name address]
 	- [ ] mcq questions to gather interests and skill of the user in order to make a proper profile of the user for later analysis
@@ -46,7 +46,7 @@ and recommending them appropriate courses,
 - [ ] dashboard page to view registered users
 - [ ] login page, [on non-quiz day], that shows data/time schedule for exam
 
-## [Phase - 2]
+## [Phase - 2] On Quiz Day
 - [ ] interface for quiz
 	- [ ] login page [on d-day]:
 		- [ ] [page 1] display user info
@@ -57,13 +57,23 @@ and recommending them appropriate courses,
 				- [ ] various subjects
 				- [ ] no of questions per subject
 				- [ ] total time
-		- [ ] [page 3] paersue students to choose their strongest subject
+		- [ ] [page 3] pursue students to choose their strongest subject
 - [ ] dashboard page to see current quiz status
 	- [ ] show list of questions, option to add, edit question
 	- [ ] [on d-day] no of users online/attempting questions/ all other states if possible
 	- [ ] interface to add questions for Quiz + Survey.
 
-## [Phase - 3]
+## [Phase - 3] After Quiz Day - Result not Declared
+- [ ] user dashboard page - to see quiz status (if attempted/not attempted) Result Declared on not?
+
+## [Phase - 4] After Quiz Day - Result Declared
+- [ ] show detailed analysis of Quiz
+	- [ ] show correct answers
+	- [ ] show wrong answers
+	- [ ] show percentage of correct answers
+	- [ ] show percentage of wrong answers
+	- [ ] show percentage of skipped answers
+	- [ ] show percentage of total answers
 - [ ] analyze user's profile based on [survey + quiz] answers
 - [ ] recommend course based on
 - [ ] notify user about result declaration
