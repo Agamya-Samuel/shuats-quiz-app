@@ -26,7 +26,7 @@ export async function registerUser({
 
 	// If the user already exists, return an error
 	if (isUserExisting) {
-		return { error: 'User already exists' }; // Return error if user exists
+		return { error: 'User email already exists' }; // Return error if user exists
 	}
 
 	// Hash the password

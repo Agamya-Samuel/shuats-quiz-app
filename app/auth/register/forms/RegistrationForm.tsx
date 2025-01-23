@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { LoadingSpinner } from '@/components/loading-spinner';
 
 export function RegistrationForm() {
 	const { toast } = useToast();
@@ -62,7 +63,7 @@ export function RegistrationForm() {
 					setTimeout(() => {
 						// Redirect to login page after successful registration
 						router.push('/auth/login');
-					}, 2000);
+					}, 1000);
 				} else {
 					toast({
 						title: 'Registration Failed',
@@ -192,7 +193,14 @@ export function RegistrationForm() {
 							className="w-full"
 							disabled={isLoading}
 						>
-							{isLoading ? 'Registering...' : 'Register'}
+							{isLoading ? (
+								<>
+									<span>Registering</span>
+									<LoadingSpinner />
+								</>
+							) : (
+								'Register'
+							)}
 						</Button>
 					</form>
 				</Form>
