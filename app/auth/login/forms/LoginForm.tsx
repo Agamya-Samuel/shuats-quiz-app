@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { LoadingSpinner } from '@/components/loading-spinner';
 
 export function LoginForm() {
 	const { toast } = useToast();
@@ -45,6 +46,7 @@ export function LoginForm() {
 			password: values.password,
 		})
 			.then((response) => {
+				setIsLoading(false);
 				if (response.success) {
 					toast({
 						title: 'Login Successful',
@@ -58,14 +60,15 @@ export function LoginForm() {
 					toast({
 						title: 'Login Failed',
 						description: 'Invalid email or password.',
-						variant: 'error',
+						variant: 'destructive',
 					});
 				}
 			})
 			.catch((error) => {
+				setIsLoading(false);
 				toast({
 					title: 'Login Error',
-					description: `An error occurred while logging in: ${error} Please try again.`,
+					description: `An error occurred while logging in: ${error}. Please try again.`,
 					variant: 'destructive',
 				});
 			});
@@ -118,7 +121,14 @@ export function LoginForm() {
 							className="w-full"
 							disabled={isLoading}
 						>
-							{isLoading ? 'Logging in...' : 'Login'}
+							{isLoading ? (
+								<>
+									<span>Logging in</span>
+									<LoadingSpinner />
+								</>
+							) : (
+								"Login"
+							)}
 						</Button>
 					</form>
 				</Form>
