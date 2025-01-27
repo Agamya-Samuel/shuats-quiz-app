@@ -5,46 +5,14 @@ import Image, { StaticImageData } from "next/image";
 import { useState, useEffect } from "react";
 import { adminImages } from "@/public/images/catalogue-pics/admin";
 import { animalImages } from "@/public/images/catalogue-pics/animal";
-// import { agriImages } from "@/public/images/catalogue-pics/agri";
-// import { artImages } from "@/public/images/catalogue-pics/art";
-// import { deptImages } from "@/public/images/catalogue-pics/dept";
 import { biotechImages } from "@/public/images/catalogue-pics/biotech";
 import { btechImages } from "@/public/images/catalogue-pics/btech";
-// import { culturalImages } from "@/public/images/catalogue-pics/cultural";
-// import { envImages } from "@/public/images/catalogue-pics/env";
-// import { fac_sciImages } from "@/public/images/catalogue-pics/fac_sci";
-// import { fieldImages } from "@/public/images/catalogue-pics/field";
-// import { hostelImages } from "@/public/images/catalogue-pics/hostel";
-// import { labImages } from "@/public/images/catalogue-pics/lab";
-// import { libraryImages } from "@/public/images/catalogue-pics/librarys";
-// import { navImages } from "@/public/images/catalogue-pics/nav";
-// import { nccImages } from "@/public/images/catalogue-pics/ncc";
-// import { sportsImages } from "@/public/images/catalogue-pics/sports";
-// import { meshImages } from "@/public/images/catalogue-pics/mesh";
-// import { masscomImages } from "@/public/images/catalogue-pics/masscom";
-
-// Import other image arrays as needed
 
 const imageSets = [
 	adminImages,
 	biotechImages,
 	btechImages,
 	animalImages,
-	// agriImages,
-	// artImages,
-	// fac_sciImages,
-	// fieldImages,
-	// hostelImages,
-	// labImages,
-	// culturalImages,
-	// envImages,
-	// libraryImages,
-	// navImages,
-	// deptImages,
-	// meshImages,
-	// sportsImages,
-	// nccImages,
-	// masscomImages,
 ];
 
 export default function Gallery() {
@@ -73,73 +41,6 @@ export default function Gallery() {
 			description: "State-of-the-art learning spaces",
 			color: "from-blue-600 to-purple-600",
 		},
-		// {
-		// 	title: "Agri Images",
-		// 	description: "State-of-the-art learning spaces",
-		// 	color: "from-blue-600 to-purple-600",
-		// },
-		// {
-		// 	title: "Art Images",
-		// 	description: "State-of-the-art learning spaces",
-		// 	color: "from-blue-600 to-purple-600",
-		// },
-		// {
-		// 	title: "fac_sciImages",
-		// 	description: "State-of-the-art learning spaces",
-		// 	color: "from-blue-600 to-purple-600",
-		// },
-		// {
-		// 	title: "fieldImages",
-		// 	description: "State-of-the-art learning spaces",
-		// 	color: "from-blue-600 to-purple-600",
-		// },
-		// {
-		// 	title: "hostelImages",
-		// 	description: "State-of-the-art learning spaces",
-		// 	color: "from-blue-600 to-purple-600",
-		// },
-		// {
-		// 	title: "labImages",
-		// 	description: "State-of-the-art learning spaces",
-		// 	color: "from-blue-600 to-purple-600",
-		// },
-		// {
-		// 	title: "Cultural Catalogue",
-		// 	description: "State-of-the-art learning spaces",
-		// 	color: "from-blue-600 to-purple-600",
-		// },
-		// {
-		// 	title: "Env Images",
-		// 	description: "State-of-the-art learning spaces",
-		// 	color: "from-blue-600 to-purple-600",
-		// },
-		// {
-		// 	title: "Library Images",
-		// 	description: "State-of-the-art learning spaces",
-		// 	color: "from-blue-600 to-purple-600",
-		// },
-		// {
-		// 	title: "Mesh Images",
-		// 	description: "State-of-the-art learning spaces",
-		// 	color: "from-blue-600 to-purple-600",
-		// },
-		// {
-		// 	title: "Sports Images",
-		// 	description: "State-of-the-art learning spaces",
-		// 	color: "from-blue-600 to-purple-600",
-		// },
-		// {
-		// 	title: "NCC Images",
-		// 	description: "State-of-the-art learning spaces",
-		// 	color: "from-blue-600 to-purple-600",
-		// },
-		// {
-		// 	title: "Dept Images",
-		// 	description: "State-of-the-art learning spaces",
-		// 	color: "from-blue-600 to-purple-600",
-		// },
-
-		// Add more items as needed
 	];
 
 	useEffect(() => {
