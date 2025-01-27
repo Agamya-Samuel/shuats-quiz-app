@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
-import csdept from '@/public/images/csdept1.jpg';
+import { csdept } from '@/public/images';
 
 export default function Hero() {
 	return (
