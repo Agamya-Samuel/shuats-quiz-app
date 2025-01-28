@@ -2,16 +2,50 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js (v14.x or higher)
+- yarn
+- MongoDB (v5.x or higher)
+
+### Installation
+
+1. Clone the repository
 
 ```bash
-npm run dev
-# or
+git clone https://github.com/agamya-samuel/shuats-quiz-app.git
+```
+
+2. Install dependencies
+
+```bash
+cd shuats-quiz-app
+```
+
+install yarn
+
+```bash
+npm install -g yarn
+```
+
+install dependencies
+
+```bash
+yarn
+```
+
+3. Set up environment variables
+
+Create a `.env` file in the root directory with the following variables:
+
+```bash
+MONGODB_URI=your_mongodb_connection_string
+```
+
+4. Start the development server
+
+```bash
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
