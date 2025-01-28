@@ -1,4 +1,5 @@
-import { RegistrationForm } from '@/app/auth/register/forms/RegistrationForm';
+// app/(auth)/register/page.tsx
+import { RegistrationForm } from './forms/RegistrationForm';
 
 export default function RegisterPage() {
 	return (

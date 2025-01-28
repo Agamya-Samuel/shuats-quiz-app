@@ -1,3 +1,4 @@
+// actions/register.ts
 'use server';
 
 import bcrypt from 'bcrypt';
