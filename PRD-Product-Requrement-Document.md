@@ -40,11 +40,12 @@ and recommending them appropriate courses,
 ## [Phase - 1] Before Quiz Day
 - [x] homepage w/ department's pic
 - [ ] registration page/short survey to gather
-	- [ ] basic user info [name email mobile school name address]
+	- [ ] basic user info [name, email, mobile, school name, address, roll number]
 	- [ ] mcq questions to gather interests and skill of the user in order to make a proper profile of the user for later analysis
 - [ ] email notification for user registration confirmation
 - [ ] dashboard page to view registered users
 - [ ] login page, [on non-quiz day], that shows data/time schedule for exam
+
 
 ## [Phase - 2] On Quiz Day
 - [ ] interface for quiz
