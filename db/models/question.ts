@@ -11,11 +11,25 @@ interface IQuestion extends Document {
 	};
 }
 
+// Define the option schema
+const optionSchema = new Schema(
+	{
+		id: Number,
+		text: String,
+	},
+	{ _id: false }
+);
+
 // Create the Question schema
-const QuestionSchema: Schema<IQuestion> = new Schema({
-	text: { type: String, required: true, unique: true },
-	options: [{ id: Number, text: String }],
-});
+const QuestionSchema: Schema<IQuestion> = new Schema(
+	{
+		text: { type: String, required: true, unique: true },
+		options: [optionSchema],
+	},
+	{
+		versionKey: false,
+	}
+);
 
 // Custom validation to ensure unique option texts
 QuestionSchema.pre('save', function (next) {
@@ -55,9 +69,21 @@ QuestionSchema.virtual('correctAnswer', {
 	justOne: true, // Only one correct answer per question
 });
 
-// Ensure virtual fields are included in JSON output
-QuestionSchema.set('toJSON', { virtuals: true });
-QuestionSchema.set('toObject', { virtuals: true });
+// Modify the toJSON and toObject options to exclude _id
+// QuestionSchema.set('toJSON', {
+// 	virtuals: true,
+// 	versionKey: false,
+// 	transform: (doc, ret) => {
+// 		delete ret._id;
+// 	},
+// });
+// QuestionSchema.set('toObject', {
+// 	virtuals: true,
+// 	versionKey: false,
+// 	transform: (doc, ret) => {
+// 		delete ret._id;
+// 	},
+// });
 
 // Create the Question model
 const Question: Model<IQuestion> =
