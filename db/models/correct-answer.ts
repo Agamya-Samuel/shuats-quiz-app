@@ -8,16 +8,21 @@ interface CorrectAnswer extends Document {
 }
 
 // Create the CorrectAnswer schema
-const CorrectAnswerSchema = new Schema<CorrectAnswer>({
-	questionId: {
-		type: Schema.Types.ObjectId,
-		ref: 'Question',
-		required: true,
-		index: true,
-		unique: true,
+const CorrectAnswerSchema = new Schema<CorrectAnswer>(
+	{
+		questionId: {
+			type: Schema.Types.ObjectId,
+			ref: 'Question',
+			required: true,
+			index: true,
+			unique: true,
+		},
+		correctOptionId: { type: Number, required: true },
 	},
-	correctOptionId: { type: Number, required: true },
-});
+	{
+		versionKey: false,
+	}
+);
 
 // Create the CorrectAnswer model
 const CorrectAnswer: Model<CorrectAnswer> =

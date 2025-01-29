@@ -13,16 +13,20 @@ interface IUser extends Document {
 }
 
 // Create the User schema
-const UserSchema: Schema<IUser> = new Schema({
-	email: { type: String, required: true, unique: true, index: true },
-	mobile: { type: String, required: true },
-	schoolName: { type: String, required: true },
-	rollNo: { type: String, required: true },
-	image: { type: String, required: true },
-	address: { type: String, required: true },
-	password: { type: String, required: true },
-});
-
+const UserSchema: Schema<IUser> = new Schema(
+	{
+		email: { type: String, required: true, unique: true, index: true },
+		mobile: { type: String, required: true },
+		schoolName: { type: String, required: true },
+		rollNo: { type: String, required: true },
+		image: { type: String, required: true },
+		address: { type: String, required: true },
+		password: { type: String, required: true },
+	},
+	{
+		versionKey: false,
+	}
+);
 
 // Create the User model
 const User: Model<IUser> =
