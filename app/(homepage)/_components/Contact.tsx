@@ -104,10 +104,9 @@ export default function Contact() {
 											Address
 										</h4>
 										<p className="text-gray-300">
-											123 College Street, Education
-											District
-											<br />
-											City, State 12345
+											CR9W+2WV, Residential Quarters- AAIDU,
+											Rewa Road, Naini, Mahewa East, Prayagraj,
+											Uttar Pradesh 211007
 										</p>
 									</div>
 								</div>
@@ -118,7 +117,7 @@ export default function Contact() {
 											Email
 										</h4>
 										<p className="text-gray-300">
-											info@collegename.edu
+											shuats@gmail.com
 										</p>
 									</div>
 								</div>
@@ -142,11 +141,11 @@ export default function Contact() {
 							<CardContent className="space-y-3">
 								<div className="flex items-center space-x-2">
 									<Clock className="w-5 h-5 text-blue-400" />
-									<p>Monday - Friday: 8:00 AM - 6:00 PM</p>
+									<p>Monday - Friday: 9:00 AM - 5:30 PM</p>
 								</div>
 								<div className="flex items-center space-x-2">
 									<Clock className="w-5 h-5 text-blue-400" />
-									<p>Saturday: 9:00 AM - 1:00 PM</p>
+									<p>Saturday: Closed</p>
 								</div>
 								<div className="flex items-center space-x-2">
 									<Clock className="w-5 h-5 text-blue-400" />

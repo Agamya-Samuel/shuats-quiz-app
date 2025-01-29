@@ -13,12 +13,13 @@ export default function Footer() {
 							SHUATS
 						</h3>
 						<p className="text-gray-400 mb-4">
-							Empowering minds through quality education and
-							world-class facilities.
+							(U.P. State Act. No. 35 of 2016, as passed by the Uttar Pradesh Legislature)
+							Post Agriculture Institute, Rewa Road, Naini
+							Prayagraj (Formerly Allahabad) - 211 007, U.P., INDIA
 						</p>
 						<div className="flex space-x-4">
 							<a
-								href="#"
+								href="https://www.facebook.com/DCSITshuats/"  target='_blank'
 								className="text-gray-400 hover:text-white transition-colors"
 							>
 								<Facebook className="w-6 h-6" />
@@ -36,7 +37,7 @@ export default function Footer() {
 								<Linkedin className="w-6 h-6" />
 							</a>
 							<a
-								href="#"
+								href="https://www.instagram.com/shuats_edu/" target='_blank'
 								className="text-gray-400 hover:text-white transition-colors"
 							>
 								<Instagram className="w-6 h-6" />
