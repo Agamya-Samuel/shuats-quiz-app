@@ -4,7 +4,7 @@
 import bcrypt from 'bcrypt';
 // import { cookies } from 'next/headers';
 import { connectToDB } from '@/db';
-import User from '@/db/models/User';
+import User from '@/db/models/user';
 
 export async function registerUser({
 	email,
@@ -31,10 +31,7 @@ export async function registerUser({
 	}
 
 	// Hash the password
-	const hashedPassword = await bcrypt.hash(
-		password,
-		10
-	);
+	const hashedPassword = await bcrypt.hash(password, 10);
 
 	// Create a new user
 	const newUser = new User({

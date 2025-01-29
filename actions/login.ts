@@ -3,7 +3,7 @@
 
 import bcrypt from 'bcrypt';
 import { connectToDB } from '@/db';
-import User from '@/db/models/User';
+import User from '@/db/models/user';
 
 export async function loginUser({
 	email,
