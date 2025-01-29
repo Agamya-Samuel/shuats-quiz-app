@@ -1,10 +1,14 @@
-// db/models/Question.ts
+// db/models/question.ts
 import mongoose, { Document, Model, Schema } from 'mongoose';
+import CorrectAnswer from '@/db/models/correct-answer';
 
 // Define the IQuestion interface
 interface IQuestion extends Document {
 	text: string;
 	options: { id: number; text: string }[];
+	correctAnswer?: {
+		correctOptionId: number;
+	};
 }
 
 // Create the Question schema
@@ -43,6 +47,17 @@ QuestionSchema.pre<IQuestion>(
 	}
 );
 
+// Add a virtual field for correctAnswer
+QuestionSchema.virtual('correctAnswer', {
+	ref: 'CorrectAnswer',
+	localField: '_id',
+	foreignField: 'questionId',
+	justOne: true, // Only one correct answer per question
+});
+
+// Ensure virtual fields are included in JSON output
+QuestionSchema.set('toJSON', { virtuals: true });
+QuestionSchema.set('toObject', { virtuals: true });
 
 // Create the Question model
 const Question: Model<IQuestion> =
