@@ -13,6 +13,18 @@ const QuestionSchema: Schema<IQuestion> = new Schema({
 	options: [{ id: Number, text: String }],
 });
 
+// Custom validation to ensure unique option texts
+QuestionSchema.pre('save', function (next) {
+	const optionTexts = this.options.map(option => option.text);
+	const uniqueOptionTexts = new Set(optionTexts);
+
+	if (uniqueOptionTexts.size !== optionTexts.length) {
+		return next(new Error('Option texts must be unique for each question.'));
+	}
+
+	next();
+});
+
 // Create the Question model
 const Question: Model<IQuestion> =
 	mongoose.models.Question ||
