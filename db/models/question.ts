@@ -29,6 +29,21 @@ QuestionSchema.pre('save', function (next) {
 	next();
 });
 
+// Middleware to delete associated correct answer when a question is removed
+QuestionSchema.pre<IQuestion>(
+	'deleteOne',
+	{ document: true, query: false },
+	async function (next: (err?: Error) => void) {
+		try {
+			await CorrectAnswer.deleteOne({ questionId: this._id });
+			next();
+		} catch (error) {
+			next(error as Error);
+		}
+	}
+);
+
+
 // Create the Question model
 const Question: Model<IQuestion> =
 	mongoose.models.Question ||
