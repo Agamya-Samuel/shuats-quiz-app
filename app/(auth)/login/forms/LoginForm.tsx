@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { loginSchema } from '@/schemas/login-schema';
+import { loginSchema } from '@/schemas/forms/login-schema';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -126,7 +126,7 @@ export function LoginForm() {
 									<LoadingSpinner />
 								</>
 							) : (
-								"Login"
+								'Login'
 							)}
 						</Button>
 					</form>

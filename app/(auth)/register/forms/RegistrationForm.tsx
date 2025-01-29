@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { registrationSchema } from '@/schemas/registration-schema';
+import { registrationSchema } from '@/schemas/forms/registration-schema';
 
 import { Button } from '@/components/ui/button';
 import {
