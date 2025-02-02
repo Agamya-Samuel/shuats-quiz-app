@@ -90,7 +90,7 @@ export async function getAllQuestions() {
 
 		// Use .lean() to get plain JavaScript objects and select only needed fields
 		const questions = await Question.find()
-			.select('text options')
+			.select('text options subject')
 			.lean()
 			.exec();
 
@@ -117,6 +117,7 @@ export async function getAllQuestions() {
 				_id: question._id.toString(), // Convert MongoDB ObjectId to string
 				text: question.text || '', // Ensure text exists
 				options: formattedOptions,
+				subject: question.subject || 'unknown', // Include subject in the returned data
 				// Status will be initialized in the client component
 			};
 		});
