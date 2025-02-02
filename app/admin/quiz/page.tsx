@@ -3,22 +3,18 @@ import { QuestionForm } from '@/app/admin/quiz/_components/question-form';
 import { QuestionList } from '@/app/admin/quiz/_components/question-list';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { Suspense } from 'react';
+import LoadingState from '@/components/loading-component';
 
-export default function QuizAdminPage() {
-	// Use the new App Router hooks
+// Separate the main content into a client component
+function QuizContent() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
-
-	// Get the tab from search params
 	const defaultTab = searchParams.get('tab') || 'add';
 
-	// Updated function to handle tab changes
 	const handleTabChange = (value: string) => {
-		// Create a new URLSearchParams instance
 		const params = new URLSearchParams(searchParams);
 		params.set('tab', value);
-
-		// Use the new router.push format
 		router.push(`?${params.toString()}`);
 	};
 
@@ -51,5 +47,14 @@ export default function QuizAdminPage() {
 				</TabsContent>
 			</Tabs>
 		</div>
+	);
+}
+
+// Main page component with Suspense boundary
+export default function QuizAdminPage() {
+	return (
+		<Suspense fallback={<LoadingState />}>
+			<QuizContent />
+		</Suspense>
 	);
 }

@@ -43,7 +43,7 @@ export function DeleteConfirmationDialog({
 					) {
 						// Ensure options are correctly formatted
 						const formattedQuestions =
-							updatedQuestions.questions.map((question: any) => ({
+							updatedQuestions.questions.map((question: Question) => ({
 								...question,
 								options: question.options.map(
 									(option: { id: number; text: string }) => ({

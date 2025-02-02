@@ -86,9 +86,9 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 						</AvatarFallback>
 					</Avatar>
 					<div>
-						<h2 className="font-semibold">{user.name}</h2>
-						<p className="text-sm text-gray-500">{user.school}</p>
-						<p className="text-sm text-gray-500">{user.email}</p>
+						<h2 className="font-semibold">{user?.name}</h2>
+						<p className="text-sm text-gray-500">{user?.school}</p>
+						<p className="text-sm text-gray-500">{user?.email}</p>
 					</div>
 				</div>
 				<div className="flex items-center space-x-2 text-lg font-semibold">

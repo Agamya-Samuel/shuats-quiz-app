@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -34,7 +33,7 @@ interface Option {
 	text: string;
 }
 
-interface Question {
+export interface Question {
 	_id: string;
 	text: string;
 	options: Option[];

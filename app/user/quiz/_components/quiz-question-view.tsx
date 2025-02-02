@@ -29,7 +29,7 @@ export default function QuizQuestionView({
     setQuestions,
     setAnswers,
     setCurrentQuestionIndex,
-    answers,
+    // answers,
 }: QuizQuestionViewProps) {
 	const currentQuestion = questions[currentQuestionIndex];
 

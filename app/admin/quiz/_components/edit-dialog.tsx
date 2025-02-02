@@ -36,6 +36,7 @@ export function EditDialog({
 					<QuestionForm
 						defaultValues={{
 							question: question.text,
+							subject: question.subject, // Add missing required subject field
 							optionA: question.options[0]?.text || '',
 							optionB: question.options[1]?.text || '',
 							optionC: question.options[2]?.text || '',
@@ -56,10 +57,13 @@ export function EditDialog({
 									{ id: 3, text: formData.optionC },
 									{ id: 4, text: formData.optionD },
 								],
+								newCorrectOptionId:
+									ANSWER_OPTIONS.indexOf(formData.correctAnswer) + 1,
+								newSubject: formData.subject,
 							});
 
 							if (response.success) {
-								const updatedQuestions =
+								const updatedQuestions = 
 									await getAllQuestionsWithAnswers();
 								if (
 									updatedQuestions.success &&
@@ -68,17 +72,15 @@ export function EditDialog({
 									// Ensure options are correctly formatted
 									const formattedQuestions =
 										updatedQuestions.questions.map(
-											(question: any) => ({
+											(question: Question) => ({
 												...question,
 												options: question.options.map(
-													(option: any) => ({
+													(option: {
+														id: number;
+														text: string;
+													}) => ({
 														id: option.id,
-														text:
-															typeof option.text ===
-															'string'
-																? option.text
-																: option.text
-																		.text,
+														text: option.text,
 													})
 												),
 											})
