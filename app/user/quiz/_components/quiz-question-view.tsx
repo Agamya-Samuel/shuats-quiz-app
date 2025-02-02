@@ -164,14 +164,14 @@ QuizQuestionViewProps) {
 								/>
 								<Label
 									htmlFor={`option-${option.id}`}
-									className="flex-1 cursor-pointer"
+									className="flex-1 cursor-pointer flex items-center"
 								>
 									<span className="font-medium mr-2">
-										{OptionsMapping[option.id]}.
+										{OptionsMapping[option.id]}{')'}
 									</span>
 									<MarkdownPreview
 										content={option.text}
-										className="inline"
+										className="flex pt-3.5"
 									/>
 								</Label>
 							</div>

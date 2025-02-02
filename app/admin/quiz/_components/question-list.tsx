@@ -21,12 +21,16 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Edit, Trash2, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
 import { subjects } from '@/lib/constants';
 import LoadingComponent from '@/components/loading-component';
 import { EditQuestionForm } from './edit-question-form';
 import { toast } from '@/hooks/use-toast';
-import { Separator } from '@/components/ui/separator';
 import { MarkdownPreview } from '@/components/markdown-preview';
 
 interface Option {
@@ -176,7 +180,7 @@ export function QuestionList() {
 					{displayQuestions.length > 0 ? (
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 							{displayQuestions.map((question) => (
-								<Card key={question._id} className="bg-white">
+								<Card key={question._id} className="bg-white flex flex-col justify-between">
 									<CardHeader className="p-4">
 										<div className="flex justify-between items-start mb-2">
 											<div className="font-medium flex-grow">
@@ -198,7 +202,7 @@ export function QuestionList() {
 											{question.options.map((option) => (
 												<div
 													key={option.id}
-													className={`p-2 text-sm border rounded-md ${
+													className={`flex gap-2 p-2 text-sm border rounded-md ${
 														option.id ===
 														question.correctOptionId
 															? 'bg-green-50 border-green-200 text-green-700'
@@ -301,46 +305,58 @@ export function QuestionList() {
 										}
 									</Badge>
 								</div>
-								<Separator className="my-4 h-1" />
-								<div>
-									<h4 className="font-medium">Question:</h4>
-									<div className="mt-1">
-										<MarkdownPreview
-											content={selectedQuestion.text}
-										/>
-									</div>
-								</div>
-								<div>
-									<h4 className="font-medium">Options:</h4>
-									<div className="space-y-2 mt-1">
-										{selectedQuestion.options.map(
-											(option) => (
-												<div
-													key={option.id}
-													className={`p-2 text-sm border rounded-md ${
-														option.id ===
-														selectedQuestion.correctOptionId
-															? 'bg-green-50 border-green-200 text-green-700'
-															: 'bg-gray-50'
-													}`}
-												>
-													<span className="font-medium">
-														{
-															OptionsMapping[
-																option.id as keyof typeof OptionsMapping
-															]
-														}
-														:
-													</span>{' '}
-													<MarkdownPreview
-														content={option.text}
-														className="inline"
-													/>
-												</div>
-											)
-										)}
-									</div>
-								</div>
+								{/* <Separator className="my-4" /> */}
+								<Card>
+									<CardHeader>
+										<CardTitle>Question: </CardTitle>
+									</CardHeader>
+									<CardContent>
+										<div>
+											<div className="mt-1">
+												<MarkdownPreview
+													content={
+														selectedQuestion.text
+													}
+												/>
+											</div>
+										</div>
+										<div>
+											<h4 className="font-medium">
+												Options:
+											</h4>
+											<div className="space-y-2 mt-1">
+												{selectedQuestion.options.map(
+													(option) => (
+														<div
+															key={option.id}
+															className={`flex gap-2 p-2 text-sm border rounded-md ${
+																option.id ===
+																selectedQuestion.correctOptionId
+																	? 'bg-green-50 border-green-200 text-green-700'
+																	: 'bg-gray-50'
+															}`}
+														>
+															<span className="font-medium">
+																{
+																	OptionsMapping[
+																		option.id as keyof typeof OptionsMapping
+																	]
+																}
+																:
+															</span>{' '}
+															<MarkdownPreview
+																content={
+																	option.text
+																}
+																className="inline"
+															/>
+														</div>
+													)
+												)}
+											</div>
+										</div>
+									</CardContent>
+								</Card>
 							</div>
 						)}
 					</DialogContent>
