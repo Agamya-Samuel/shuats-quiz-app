@@ -22,15 +22,6 @@ export default function AdminDashboardPage() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
-	// new
-
-	const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
-		null
-	);
-	const [isViewOpen, setIsViewOpen] = useState(false);
-	const [isEditOpen, setIsEditOpen] = useState(false);
-	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-
 	// Move the fetch logic to a memoized function
 	const fetchQuestions = useCallback(async () => {
 		try {
@@ -70,38 +61,6 @@ export default function AdminDashboardPage() {
 			mounted = false;
 		};
 	}, [fetchQuestions]);
-
-	// new
-
-	// Simplified handlers
-	const handleEdit = useCallback(
-		(values: any) => {
-			if (!selectedQuestion?._id) return;
-
-			setQuestions((prev) =>
-				prev.map((q) =>
-					q._id === selectedQuestion._id
-						? { ...values, _id: q._id }
-						: q
-				)
-			);
-			setIsEditOpen(false);
-			setSelectedQuestion(null);
-		},
-		[selectedQuestion]
-	);
-
-	const handleDelete = useCallback(() => {
-		if (!selectedQuestion?._id) return;
-
-		setQuestions((prev) =>
-			prev.filter((q) => q._id !== selectedQuestion._id)
-		);
-		setIsDeleteOpen(false);
-		setSelectedQuestion(null);
-	}, [selectedQuestion]);
-
-	// new end
 
 	if (loading) {
 		return (
