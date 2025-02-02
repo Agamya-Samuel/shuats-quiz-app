@@ -2,13 +2,13 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
 // Define the CorrectAnswer interface
-interface CorrectAnswer extends Document {
+interface ICorrectAnswer extends Document {
 	questionId: Schema.Types.ObjectId;
 	correctOptionId: number;
 }
 
 // Create the CorrectAnswer schema
-const CorrectAnswerSchema = new Schema<CorrectAnswer>(
+const CorrectAnswerSchema = new Schema<ICorrectAnswer>(
 	{
 		questionId: {
 			type: Schema.Types.ObjectId,
@@ -25,8 +25,8 @@ const CorrectAnswerSchema = new Schema<CorrectAnswer>(
 );
 
 // Create the CorrectAnswer model
-const CorrectAnswer: Model<CorrectAnswer> =
+const CorrectAnswer: Model<ICorrectAnswer> =
 	mongoose.models.CorrectAnswer ||
-	mongoose.model<CorrectAnswer>('CorrectAnswer', CorrectAnswerSchema);
+	mongoose.model<ICorrectAnswer>('CorrectAnswer', CorrectAnswerSchema);
 
 export default CorrectAnswer;

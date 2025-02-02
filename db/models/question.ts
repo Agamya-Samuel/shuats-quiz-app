@@ -1,14 +1,15 @@
 // db/models/question.ts
+// import { subjects } from '@/lib/constants';
 import mongoose, { Document, Model, Schema } from 'mongoose';
 import CorrectAnswer from '@/db/models/correct-answer';
+// import { subjectKeys } from '@/lib/constants';
 
 // Define the IQuestion interface
 interface IQuestion extends Document {
+	_id: string;
 	text: string;
 	options: { id: number; text: string }[];
-	correctAnswer?: {
-		correctOptionId: number;
-	};
+	subject: string;
 }
 
 // Define the option schema
@@ -25,6 +26,7 @@ const QuestionSchema: Schema<IQuestion> = new Schema(
 	{
 		text: { type: String, required: true, unique: true },
 		options: [optionSchema],
+		subject: { type: String, required: true },
 	},
 	{
 		versionKey: false,
@@ -44,6 +46,7 @@ QuestionSchema.pre('save', function (next) {
 		);
 	}
 
+	console.log('Saving question with subject:', this.subject);
 	next();
 });
 
@@ -60,30 +63,6 @@ QuestionSchema.pre<IQuestion>(
 		}
 	}
 );
-
-// Add a virtual field for correctAnswer
-QuestionSchema.virtual('correctAnswer', {
-	ref: 'CorrectAnswer',
-	localField: '_id',
-	foreignField: 'questionId',
-	justOne: true, // Only one correct answer per question
-});
-
-// Modify the toJSON and toObject options to exclude _id
-// QuestionSchema.set('toJSON', {
-// 	virtuals: true,
-// 	versionKey: false,
-// 	transform: (doc, ret) => {
-// 		delete ret._id;
-// 	},
-// });
-// QuestionSchema.set('toObject', {
-// 	virtuals: true,
-// 	versionKey: false,
-// 	transform: (doc, ret) => {
-// 		delete ret._id;
-// 	},
-// });
 
 // Create the Question model
 const Question: Model<IQuestion> =

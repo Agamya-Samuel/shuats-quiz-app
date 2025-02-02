@@ -3,11 +3,13 @@ import mongoose, { Document, Model, Schema } from 'mongoose';
 
 // Define the User interface
 interface IUser extends Document {
+	name: string;
 	email: string;
 	mobile: string;
 	schoolName: string;
 	rollNo: string;
-	image: string;
+	branch: string;
+	// image: string | null;
 	address: string;
 	password: string;
 }
@@ -16,10 +18,12 @@ interface IUser extends Document {
 const UserSchema: Schema<IUser> = new Schema(
 	{
 		email: { type: String, required: true, unique: true, index: true },
+		name: { type: String, required: true },
 		mobile: { type: String, required: true },
 		schoolName: { type: String, required: true },
 		rollNo: { type: String, required: true },
-		image: { type: String, required: true },
+		branch: { type: String, required: true },
+		// image: { type: String },
 		address: { type: String, required: true },
 		password: { type: String, required: true },
 	},

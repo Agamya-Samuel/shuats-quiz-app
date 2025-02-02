@@ -1,13 +1,5 @@
-// app/user/dashboard/page.tsx
+import { UserDashboard } from './_components/user-dashboard';
 
-export default function DashboardPage() {
-	return (
-
-		<div>
-			<h1>Dashboard Page</h1>
-			<h1>Dashboard Page</h1>
-			<h1>Dashboard Page</h1>
-			<h1>Dashboard Page</h1>
-		</div>
-	);
-};
+export default function UserDashboardPage() {
+	return <UserDashboard />;
+}

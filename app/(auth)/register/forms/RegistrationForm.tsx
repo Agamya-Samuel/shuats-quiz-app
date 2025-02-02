@@ -32,8 +32,11 @@ export function RegistrationForm() {
 		resolver: zodResolver(registrationSchema),
 		defaultValues: {
 			email: '',
+			name: '',
 			mobile: '',
+			rollNo: '',
 			schoolName: '',
+			branch: '',
 			address: '',
 			password: '',
 			confirmPassword: '',
@@ -46,8 +49,11 @@ export function RegistrationForm() {
 		// Save user data to database
 		registerUser({
 			email: values.email,
+			name: values.name,
 			mobile: values.mobile,
+			rollNo: values.rollNo,
 			schoolName: values.schoolName,
+			branch: values.branch,
 			address: values.address,
 			password: values.password,
 		})
@@ -61,7 +67,7 @@ export function RegistrationForm() {
 					});
 					setTimeout(() => {
 						// Redirect to login page after successful registration
-						router.push('/auth/login');
+						router.push('/login');
 					}, 1000);
 				} else {
 					toast({
@@ -107,6 +113,22 @@ export function RegistrationForm() {
 						/>
 						<FormField
 							control={form.control}
+							name="name"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Name</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="Enter your name"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
 							name="mobile"
 							render={({ field }) => (
 								<FormItem>
@@ -130,6 +152,38 @@ export function RegistrationForm() {
 									<FormControl>
 										<Input
 											placeholder="Enter your school name"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="rollNo"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Roll Number</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="Enter your roll number"
+											{...field}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="branch"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Preferred Branch</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="Enter your preferred branch"
 											{...field}
 										/>
 									</FormControl>

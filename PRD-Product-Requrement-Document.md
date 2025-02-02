@@ -43,7 +43,7 @@ and recommending them appropriate courses,
 	- [ ] basic user info [name, email, mobile, school name, address, roll number]
 	- [ ] mcq questions to gather interests and skill of the user in order to make a proper profile of the user for later analysis
 - [ ] email notification for user registration confirmation
-- [ ] dashboard page to view registered users
+- [ ] admin dashboard page to view registered users
 - [ ] login page, [on non-quiz day], that shows data/time schedule for exam
 
 
@@ -78,3 +78,4 @@ and recommending them appropriate courses,
 - [ ] analyze user's profile based on [survey + quiz] answers
 - [ ] recommend course based on
 - [ ] notify user about result declaration
+- [ ] add sentry for error monitoring

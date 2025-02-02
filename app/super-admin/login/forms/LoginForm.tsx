@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { loginUser } from '@/actions/login';
+import { loginSuperAdmin } from '@/actions/login-super-admin';
 
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -39,8 +39,10 @@ export function LoginForm() {
 	function onSubmit(values: z.infer<typeof loginSchema>) {
 		setIsLoading(true);
 
-		// Login user
-		loginUser(values)
+		// Login super admin
+		loginSuperAdmin({
+			password: values.password,
+		})
 			.then((response) => {
 				setIsLoading(false);
 				if (response.success) {
@@ -49,9 +51,7 @@ export function LoginForm() {
 						description: 'You have successfully logged in.',
 						variant: 'success',
 					});
-					// set payload in local storage
-					localStorage.setItem('user', JSON.stringify(response.payload));
-					router.push('/user/quiz'); // Redirect to dashboard page after successful login
+					router.push('/super-admin'); // Redirect to super admin page after successful login
 				} else {
 					toast({
 						title: 'Login Failed',

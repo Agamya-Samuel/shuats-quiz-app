@@ -1,22 +1,27 @@
 // actions/register.ts
 'use server';
 
-import bcrypt from 'bcrypt';
-// import { cookies } from 'next/headers';
+import argon2 from 'argon2';
 import { connectToDB } from '@/db';
 import User from '@/db/models/user';
 
 export async function registerUser({
 	email,
+	name,
 	password,
 	mobile,
+	rollNo,
 	schoolName,
+	branch,
 	address,
 }: {
 	email: string;
+	name: string;
 	password: string;
 	mobile: string;
+	rollNo: string;
 	schoolName: string;
+	branch: string;
 	address: string;
 }) {
 	// Connect to the database
@@ -31,7 +36,7 @@ export async function registerUser({
 	}
 
 	// Hash the password
-	const hashedPassword = await bcrypt.hash(password, 10);
+	const hashedPassword = await argon2.hash(password);
 
 	// Create a new user
 	const newUser = new User({
@@ -39,7 +44,10 @@ export async function registerUser({
 		password: hashedPassword,
 		mobile,
 		schoolName,
+		rollNo,
 		address,
+		name,
+		branch,
 	});
 
 	// Save the user to the database
