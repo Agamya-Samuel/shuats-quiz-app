@@ -14,6 +14,8 @@ export async function middleware(request: NextRequest) {
 		'/user/dashboard',
 		'/admin/dashboard',
 		'/admin/quiz',
+		'/result',
+		'/leaderboard',
 	];
 	const isPublicPath = publicPaths.includes(request.nextUrl.pathname);
 
