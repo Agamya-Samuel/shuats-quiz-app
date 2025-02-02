@@ -27,6 +27,7 @@ import LoadingComponent from '@/components/loading-component';
 import { EditQuestionForm } from './edit-question-form';
 import { toast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
+import { MarkdownPreview } from '@/components/markdown-preview';
 
 interface Option {
 	id: number;
@@ -179,7 +180,9 @@ export function QuestionList() {
 									<CardHeader className="p-4">
 										<div className="flex justify-between items-start mb-2">
 											<div className="font-medium flex-grow">
-												{question.text}
+												<MarkdownPreview
+													content={question.text}
+												/>
 											</div>
 											<Badge className="ml-2">
 												{
@@ -210,7 +213,10 @@ export function QuestionList() {
 														}
 														:
 													</span>{' '}
-													{option.text}
+													<MarkdownPreview
+														content={option.text}
+														className="inline"
+													/>
 												</div>
 											))}
 										</div>
@@ -298,9 +304,11 @@ export function QuestionList() {
 								<Separator className="my-4 h-1" />
 								<div>
 									<h4 className="font-medium">Question:</h4>
-									<p className="mt-1">
-										{selectedQuestion.text}
-									</p>
+									<div className="mt-1">
+										<MarkdownPreview
+											content={selectedQuestion.text}
+										/>
+									</div>
 								</div>
 								<div>
 									<h4 className="font-medium">Options:</h4>
@@ -324,7 +332,10 @@ export function QuestionList() {
 														}
 														:
 													</span>{' '}
-													{option.text}
+													<MarkdownPreview
+														content={option.text}
+														className="inline"
+													/>
 												</div>
 											)
 										)}

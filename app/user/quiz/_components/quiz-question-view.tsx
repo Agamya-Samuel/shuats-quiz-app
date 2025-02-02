@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Question, OptionsMapping } from './quiz-interface';
 import { toast } from '@/hooks/use-toast';
 import { Dispatch, SetStateAction } from 'react';
+import { MarkdownPreview } from '@/components/markdown-preview';
 
 type SetAnswersType = Dispatch<SetStateAction<Record<string, string>>>;
 
@@ -22,33 +23,33 @@ interface QuizQuestionViewProps {
 }
 
 export default function QuizQuestionView({
-    questions,
-    currentQuestionIndex,
-    selectedAnswer,
-    setSelectedAnswer,
-    setQuestions,
-    setAnswers,
-    setCurrentQuestionIndex,
-    // answers,
-}: QuizQuestionViewProps) {
+	questions,
+	currentQuestionIndex,
+	selectedAnswer,
+	setSelectedAnswer,
+	setQuestions,
+	setAnswers,
+	setCurrentQuestionIndex,
+}: // answers,
+QuizQuestionViewProps) {
 	const currentQuestion = questions[currentQuestionIndex];
 
 	const saveCurrentQuestionState = (status: Question['status']) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[currentQuestionIndex] = {
-        ...currentQuestion,
-        status,
-        userAnswer: selectedAnswer,
-    };
-    setQuestions(updatedQuestions);
+		const updatedQuestions = [...questions];
+		updatedQuestions[currentQuestionIndex] = {
+			...currentQuestion,
+			status,
+			userAnswer: selectedAnswer,
+		};
+		setQuestions(updatedQuestions);
 
-    if (selectedAnswer) {
-        setAnswers((prev: Record<string, string>) => ({
-            ...prev,
-            [currentQuestion._id]: selectedAnswer,
-        }));
-    }
-};
+		if (selectedAnswer) {
+			setAnswers((prev: Record<string, string>) => ({
+				...prev,
+				[currentQuestion._id]: selectedAnswer,
+			}));
+		}
+	};
 
 	const handleNavigation = (direction: 'prev' | 'next') => {
 		const newIndex =
@@ -79,21 +80,21 @@ export default function QuizQuestionView({
 	};
 
 	const handleClear = () => {
-        setSelectedAnswer('');
-        const updatedQuestions = [...questions];
-        updatedQuestions[currentQuestionIndex] = {
-            ...currentQuestion,
-            status: 'not-answered',
-            userAnswer: undefined,
-        };
-        setQuestions(updatedQuestions);
+		setSelectedAnswer('');
+		const updatedQuestions = [...questions];
+		updatedQuestions[currentQuestionIndex] = {
+			...currentQuestion,
+			status: 'not-answered',
+			userAnswer: undefined,
+		};
+		setQuestions(updatedQuestions);
 
-        setAnswers((prev: Record<string, string>) => {
-            const newAnswers = { ...prev };
-            delete newAnswers[currentQuestion._id];
-            return newAnswers;
-        });
-    };
+		setAnswers((prev: Record<string, string>) => {
+			const newAnswers = { ...prev };
+			delete newAnswers[currentQuestion._id];
+			return newAnswers;
+		});
+	};
 
 	const handleMarkForReview = (saveAnswer: boolean) => {
 		saveCurrentQuestionState(
@@ -144,7 +145,7 @@ export default function QuizQuestionView({
 							{questions.length}
 						</span>
 						<h3 className="text-lg font-semibold mt-2">
-							{currentQuestion.text}
+							<MarkdownPreview content={currentQuestion.text} />
 						</h3>
 					</div>
 
@@ -168,7 +169,10 @@ export default function QuizQuestionView({
 									<span className="font-medium mr-2">
 										{OptionsMapping[option.id]}.
 									</span>
-									{option.text}
+									<MarkdownPreview
+										content={option.text}
+										className="inline"
+									/>
 								</Label>
 							</div>
 						))}

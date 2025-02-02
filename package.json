@@ -6,7 +6,8 @@
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "import-questions": "ts-node --project scripts/tsconfig.json -r tsconfig-paths/register scripts/import-questions.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -25,6 +26,7 @@
     "clsx": "^2.1.1",
     "jose": "^5.9.6",
     "jsonwebtoken": "^9.0.2",
+    "katex": "^0.16.21",
     "lucide-react": "^0.473.0",
     "mongodb": "^6.12.0",
     "mongoose": "^8.9.5",
@@ -32,6 +34,10 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
+    "react-markdown": "^9.0.3",
+    "rehype-katex": "^7.0.1",
+    "rehype-raw": "^7.0.0",
+    "remark-math": "^6.0.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.1"
@@ -39,15 +45,19 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/argon2": "^0.15.4",
+    "@types/dotenv": "^8.2.3",
     "@types/jsonwebtoken": "^9.0.8",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.4.7",
     "eslint": "^9",
     "eslint-config-next": "15.1.5",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5"
   }
 }
