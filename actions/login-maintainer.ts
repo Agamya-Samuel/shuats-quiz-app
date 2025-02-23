@@ -5,6 +5,7 @@ import { connectToDB } from '@/db';
 import Maintainer from '@/db/models/maintainer';
 import { generateToken } from '@/lib/auth';
 import { cookies } from 'next/headers';
+import type { UserJwtPayload } from '@/types/auth';
 
 export async function loginMaintainer({
 	username,
@@ -39,7 +40,7 @@ export async function loginMaintainer({
 	const userId = maintainer._id.toString();
 
 	// Create JWT payload with serializable data
-	const payload = {
+	const payload: UserJwtPayload = {
 		userId,
 		username: maintainer.username,
 		role: 'maintainer' as const,
@@ -54,16 +55,9 @@ export async function loginMaintainer({
 	cookieStore.set('token', token, {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === 'production',
-		maxAge: parseInt(process.env.JWT_MAX_AGE || '60 * 60 * 24 * 30'), // 30 days
+		maxAge: parseInt(process.env.JWT_MAX_AGE || '86400'), // 30 days
 	});
 
 	// Return only serializable data
-	return {
-		success: true,
-		payload: {
-			userId,
-			username: maintainer.username,
-			role: 'maintainer' as const,
-		},
-	};
+	return { success: true, payload };
 }

@@ -28,7 +28,7 @@ export async function loginUser({
 			branch: 1,
 			address: 1,
 		}
-	);
+	).lean(); // Use lean() to get plain JavaScript objects
 
 	if (!user) {
 		return { error: 'User not found' };
@@ -38,9 +38,12 @@ export async function loginUser({
 		return { error: 'Invalid password' };
 	}
 
-	// payload
+	// Convert _id to string explicitly
+	const userId = user._id.toString();
+
+	// Create serializable payload
 	const payload = {
-		userId: user._id as string,
+		userId,
 		name: user.name,
 		email: user.email,
 		mobile: user.mobile,
@@ -55,13 +58,14 @@ export async function loginUser({
 	const token = await generateToken(payload);
 
 	const cookieStore = await cookies();
-	
+
 	// Set the token in the cookie
 	cookieStore.set('token', token, {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === 'production',
-		maxAge: parseInt(process.env.JWT_MAX_AGE || '60 * 60 * 24 * 30'), // 30 days
+		maxAge: parseInt(process.env.JWT_MAX_AGE || '86400'), // 30 days
 	});
 
-	return { success: 'Login successful', payload };
+	// Return only serializable data
+	return { success: true, payload };
 }
