@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { loginSchema } from '@/schemas/forms/login-schema';
+import { superAdminLoginSchema } from '@/schemas/forms/login-schema';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -28,15 +28,14 @@ export function LoginForm() {
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	const form = useForm<z.infer<typeof loginSchema>>({
-		resolver: zodResolver(loginSchema),
+	const form = useForm<z.infer<typeof superAdminLoginSchema>>({
+		resolver: zodResolver(superAdminLoginSchema),
 		defaultValues: {
-			email: '',
 			password: '',
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof loginSchema>) {
+	function onSubmit(values: z.infer<typeof superAdminLoginSchema>) {
 		setIsLoading(true);
 
 		// Login super admin
@@ -55,7 +54,7 @@ export function LoginForm() {
 				} else {
 					toast({
 						title: 'Login Failed',
-						description: 'Invalid email or password.',
+						description: 'Invalid password.',
 						variant: 'destructive',
 					});
 				}
@@ -79,22 +78,7 @@ export function LoginForm() {
 						onSubmit={form.handleSubmit(onSubmit)}
 						className="space-y-1"
 					>
-						<FormField
-							control={form.control}
-							name="email"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Email</FormLabel>
-									<FormControl>
-										<Input
-											placeholder="Enter your email"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+
 						<FormField
 							control={form.control}
 							name="password"
