@@ -50,7 +50,7 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 				});
 				// Store maintainer info in localStorage with correct key
 				localStorage.setItem(
-					'maintainer',
+					'user',
 					JSON.stringify(response.payload)
 				);
 				router.push(redirect || '/admin/manage-quiz');
