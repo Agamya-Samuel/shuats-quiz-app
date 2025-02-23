@@ -1,10 +1,12 @@
 export interface UserJwtPayload {
 	userId: string;
 	role: 'user' | 'superadmin' | 'maintainer';
+	// Optional fields for Maintainer/Super Admin
+	username?: string;
+	// Optional fields for regular users
 	name?: string;
 	email?: string;
 	school?: string;
-	// Optional fields for regular users
 	mobile?: string;
 	rollNo?: string;
 	branch?: string;
