@@ -24,7 +24,7 @@ export async function generateToken(payload: UserJwtPayload): Promise<string> {
 		const token = await new jose.SignJWT(jwtPayload)
 			.setProtectedHeader({ alg: 'HS256' })
 			.setIssuedAt() // Add issued at time
-			.setExpirationTime(process.env.JWT_EXPIRATION || DEFAULT_EXPIRATION)
+			.setExpirationTime(process.env.JWT_MAX_AGE || DEFAULT_EXPIRATION)
 			.sign(JWT_SECRET);
 
 		return token;
