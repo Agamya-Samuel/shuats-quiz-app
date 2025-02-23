@@ -1,6 +1,6 @@
 'use server';
 
-import { cookies } from "next/headers";
+import { cookies } from 'next/headers';
 
 export async function loginSuperAdmin({ password }: { password: string }) {
 	if (password !== process.env.SUPER_ADMIN_PASSWORD) {
