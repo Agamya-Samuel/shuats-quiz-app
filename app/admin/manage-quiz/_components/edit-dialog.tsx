@@ -6,7 +6,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog';
-import { QuestionForm } from '@/app/admin/quiz/_components/question-form';
+import { QuestionForm } from '@/app/admin/manage-quiz/_components/question-form';
 import { updateQuestion, getAllQuestionsWithAnswers } from '@/actions/question';
 import { Question } from './question-list';
 
@@ -58,12 +58,14 @@ export function EditDialog({
 									{ id: 4, text: formData.optionD },
 								],
 								newCorrectOptionId:
-									ANSWER_OPTIONS.indexOf(formData.correctAnswer) + 1,
+									ANSWER_OPTIONS.indexOf(
+										formData.correctAnswer
+									) + 1,
 								newSubject: formData.subject,
 							});
 
 							if (response.success) {
-								const updatedQuestions = 
+								const updatedQuestions =
 									await getAllQuestionsWithAnswers();
 								if (
 									updatedQuestions.success &&

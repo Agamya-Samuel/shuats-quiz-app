@@ -1,6 +1,6 @@
 'use client';
-import { QuestionForm } from '@/app/admin/quiz/_components/question-form';
-import { QuestionList } from '@/app/admin/quiz/_components/question-list';
+import { QuestionForm } from '@/app/admin/manage-quiz/_components/question-form';
+import { QuestionList } from '@/app/admin/manage-quiz/_components/question-list';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Suspense } from 'react';
