@@ -41,6 +41,18 @@ export function AdminList() {
 		return <LoadingState />;
 	}
 
+	if (maintainers.length === 0) {
+		return (
+			<div className="container mx-auto">
+				<div className="max-w-sm">
+					<p className="text-lg font-medium">
+						No maintainers found.
+					</p>
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<div className="container mx-auto">
 			<div className="max-w-sm">
