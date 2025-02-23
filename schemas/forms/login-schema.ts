@@ -7,3 +7,14 @@ export const loginSchema = z.object({
 		.nonempty('Email field cannot be empty'),
 	password: z.string().nonempty('Password field cannot be empty.'),
 });
+
+export const maintainerLoginSchema = z.object({
+	username: z
+		.string()
+		.nonempty('Username field cannot be empty.'),
+	password: z.string().nonempty('Password field cannot be empty.'),
+});
+
+export const superAdminLoginSchema = z.object({
+	password: z.string().nonempty('Password field cannot be empty.'),
+});
