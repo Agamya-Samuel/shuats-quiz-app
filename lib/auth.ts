@@ -7,8 +7,8 @@ const JWT_SECRET = new TextEncoder().encode(
 	process.env.JWT_SECRET || 'your-secret-key'
 );
 
-// Default expiration time - 30 days
-const DEFAULT_EXPIRATION = '30d';
+// 30 days in seconds
+const THIRTY_DAYS = 60 * 60 * 24 * 30;
 
 // export function generateToken(payload: UserJwtPayload): string {
 // 	return jwt.sign(payload, JWT_SECRET, {
@@ -24,7 +24,7 @@ export async function generateToken(payload: UserJwtPayload): Promise<string> {
 		const token = await new jose.SignJWT(jwtPayload)
 			.setProtectedHeader({ alg: 'HS256' })
 			.setIssuedAt() // Add issued at time
-			.setExpirationTime(process.env.JWT_MAX_AGE || DEFAULT_EXPIRATION)
+			.setExpirationTime(`${THIRTY_DAYS}s`) // Set expiration to 30 days
 			.sign(JWT_SECRET);
 
 		return token;

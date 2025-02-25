@@ -7,6 +7,9 @@ import User from '@/db/models/user';
 import { generateToken } from '@/lib/auth';
 import { cookies } from 'next/headers';
 
+// 30 days in seconds
+const THIRTY_DAYS = 60 * 60 * 24 * 30;
+
 export async function loginUser({
 	email,
 	password,
@@ -59,11 +62,12 @@ export async function loginUser({
 
 	const cookieStore = await cookies();
 
-	// Set the token in the cookie
+	// Set the token in the cookie with proper maxAge
 	cookieStore.set('token', token, {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === 'production',
-		maxAge: parseInt(process.env.JWT_MAX_AGE || '86400'), // 30 days
+		maxAge: THIRTY_DAYS, // 30 days in seconds
+		path: '/', // Make sure cookie is available on all paths
 	});
 
 	// Return only serializable data
