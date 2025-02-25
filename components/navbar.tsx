@@ -25,9 +25,9 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 	useEffect(() => {
 		if (currentUser) {
 			setUser({
-				name: currentUser.name || '',
-				school: currentUser.school || '',
-				email: currentUser.email || '',
+				name: (currentUser.role === 'maintainer' ? currentUser.username : currentUser.name) || '',
+				school: (currentUser.role === 'maintainer' ? 'ADMIN' : currentUser.school) || '',
+				email: (currentUser.role === 'maintainer' ? 'ADMIN' : currentUser.email) || '',
 			});
 		} else {
 			setUser(null);
