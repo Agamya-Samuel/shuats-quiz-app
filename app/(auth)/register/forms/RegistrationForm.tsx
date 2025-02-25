@@ -24,8 +24,6 @@ import { useToast } from '@/hooks/use-toast';
 import { LoadingSpinner } from '@/components/loading-spinner';
 
 export function RegistrationForm() {
-	localStorage.removeItem('user');
-
 	const { toast } = useToast();
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
