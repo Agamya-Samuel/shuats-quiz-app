@@ -67,5 +67,5 @@ export async function loginUser({
 	});
 
 	// Return only serializable data
-	return { success: true, payload };
+	return { success: true };
 }

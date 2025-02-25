@@ -48,11 +48,6 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 					description: 'You have successfully logged in.',
 					variant: 'success',
 				});
-				// Store maintainer info in localStorage with correct key
-				localStorage.setItem(
-					'user',
-					JSON.stringify(response.payload)
-				);
 				router.push(redirect || '/admin/manage-quiz');
 			} else {
 				toast({

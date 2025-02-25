@@ -24,5 +24,5 @@ export async function loginSuperAdmin({ password }: { password: string }) {
 		secure: process.env.NODE_ENV === 'production',
 		maxAge: parseInt(process.env.JWT_MAX_AGE || '86400'), // 30 days
 	});
-	return { success: true, payload };
+	return { success: true };
 }
