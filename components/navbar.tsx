@@ -1,9 +1,13 @@
 // components/Navbar.tsx
 
-import { Clock } from 'lucide-react';
+import { Clock, LogOut } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useState, useEffect } from 'react';
 import { useCookies } from '@/contexts/cookie-context';
+import { Button } from '@/components/ui/button';
+import { logout } from '@/actions/logout';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 interface NavbarProps {
 	showTime?: boolean;
@@ -20,14 +24,25 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 	const [user, setUser] = useState<IUser | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const { user: currentUser } = useCookies();
+	const router = useRouter();
+	const { toast } = useToast();
 
 	// Update user data when currentUser changes
 	useEffect(() => {
 		if (currentUser) {
 			setUser({
-				name: (currentUser.role === 'maintainer' ? currentUser.username : currentUser.name) || '',
-				school: (currentUser.role === 'maintainer' ? 'ADMIN' : currentUser.school) || '',
-				email: (currentUser.role === 'maintainer' ? 'ADMIN' : currentUser.email) || '',
+				name:
+					(currentUser.role === 'maintainer'
+						? currentUser.username
+						: currentUser.name) || '',
+				school:
+					(currentUser.role === 'maintainer'
+						? 'ADMIN'
+						: currentUser.school) || '',
+				email:
+					(currentUser.role === 'maintainer'
+						? 'ADMIN'
+						: currentUser.email) || '',
 			});
 		} else {
 			setUser(null);
@@ -54,6 +69,26 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 		return `${minutes.toString().padStart(2, '0')}:${remainingSeconds
 			.toString()
 			.padStart(2, '0')}`;
+	};
+
+	const handleLogout = async () => {
+		try {
+			await logout();
+			toast({
+				title: 'Logged out successfully',
+				description: 'You have been logged out.',
+				variant: 'success',
+			});
+			router.push('/login');
+			router.refresh(); // Refresh to update cookie context
+		} catch (err) {
+			console.error('Logout error:', err);
+			toast({
+				title: 'Error',
+				description: 'Failed to logout. Please try again.',
+				variant: 'destructive',
+			});
+		}
 	};
 
 	if (isLoading) {
@@ -98,19 +133,34 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 							{user?.name || 'Guest'}
 						</h2>
 						<p className="text-sm text-gray-500">
-							{user?.school ? (user.school.length > 30 ? user.school.slice(0, 30) + '...' : user.school) : 'No School'}
+							{user?.school
+								? user.school.length > 30
+									? user.school.slice(0, 30) + '...'
+									: user.school
+								: 'No School'}
 						</p>
 						<p className="text-sm text-gray-500">
 							{user?.email || 'No Email'}
 						</p>
 					</div>
 				</div>
-				<div className="flex items-center space-x-2 text-lg font-semibold">
+				<div className="flex items-center space-x-4">
 					{showTime && (
-						<>
+						<div className="flex items-center space-x-2 text-lg font-semibold">
 							<Clock className="h-5 w-5" />
 							<span>{formatTime(timeRemaining)}</span>
-						</>
+						</div>
+					)}
+					{user && (
+						<Button
+							variant="destructive"
+							size="lg"
+							onClick={handleLogout}
+							className="text-md"
+						>
+							<LogOut className="h-5 w-5 " />
+							<span className="ml-2 hidden sm:block">Logout</span>
+						</Button>
 					)}
 				</div>
 			</div>
