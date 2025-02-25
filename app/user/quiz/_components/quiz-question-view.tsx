@@ -178,7 +178,7 @@ QuizQuestionViewProps) {
 						))}
 					</RadioGroup>
 
-					<div className="flex justify-between items-center mt-6">
+					<div className="flex gap-4 mt-6 flex-wrap">
 						<Button
 							variant="outline"
 							onClick={() => handleNavigation('prev')}
@@ -188,32 +188,30 @@ QuizQuestionViewProps) {
 							Previous
 						</Button>
 						<Button
-							variant="outline"
+							variant="destructive"
 							onClick={() => handleNavigation('next')}
 							disabled={
 								currentQuestionIndex === questions.length - 1
 							}
 						>
-							Next
+							Skip
 							<ChevronRight className="h-4 w-4 ml-2" />
 						</Button>
-					</div>
-
-					<div className="flex gap-4 mt-6 flex-wrap">
-						<Button variant="default" onClick={handleSaveAndNext}>
+						<Button variant="success" onClick={handleSaveAndNext}>
 							Save & Next
+							<ChevronRight className="h-4 w-4 mr-2" />
 						</Button>
 						<Button variant="outline" onClick={handleClear}>
 							Clear Response
 						</Button>
 						<Button
-							variant="secondary"
+							variant="yellow"
 							onClick={() => handleMarkForReview(true)}
 						>
 							Save & Mark for Review
 						</Button>
 						<Button
-							variant="secondary"
+							variant="purple"
 							onClick={() => handleMarkForReview(false)}
 						>
 							Mark for Review
