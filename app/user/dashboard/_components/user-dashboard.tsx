@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
 	Form,
@@ -27,6 +27,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { updateUser } from '@/actions/user';
 import LoadingState from '@/components/loading-component';
+import { useCookies } from '@/contexts/cookie-context';
+import { redirect } from 'next/navigation';
+import { LoadingSpinner } from '@/components/loading-spinner';
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -50,9 +53,6 @@ const formSchema = z.object({
 	address: z.string().min(5, {
 		message: 'Address must be at least 5 characters.',
 	}),
-	password: z.string().min(8, {
-		message: 'Password must be at least 8 characters.',
-	}),
 });
 
 interface IUser {
@@ -70,41 +70,114 @@ export function UserDashboard() {
 	const [isEditing, setIsEditing] = useState(false);
 	const [user, setUser] = useState<IUser | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
-
-	useEffect(() => {
-		// Read user from local storage
-		setIsLoading(true);
-		const user = localStorage.getItem('user');
-		if (user) {
-			setUser(JSON.parse(user));
-			setIsLoading(false);
-		}
-	}, []);
+	const [isSaving, setIsSaving] = useState(false);
+	const { user: currentUser } = useCookies();
+	const router = useRouter();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
-		defaultValues: user ? user : undefined,
+		defaultValues: {
+			name: '',
+			email: '',
+			mobile: '',
+			schoolName: '',
+			rollNo: '',
+			branch: '',
+			address: '',
+		},
 	});
 
-	async function onSubmit(values: z.infer<typeof formSchema>) {
-		// TODO: Implement actual update logic
-		await updateUser(user?._id as string, {
-			name: values.name,
-			email: values.email,
-			mobile: values.mobile,
-			schoolName: values.schoolName,
-			rollNo: values.rollNo,
-			branch: values.branch,
-			address: values.address,
-			_id: user?._id as string,
-		});
-
+	if (currentUser?.role === 'maintainer') {
 		toast({
-			title: 'Profile updated',
-			description: 'Your profile has been successfully updated.',
-			variant: 'success',
+			title: 'You are not authorized to access this page',
+			description: 'Please contact the administrator',
+			variant: 'destructive',
 		});
-		setIsEditing(false);
+		redirect('/admin/login');
+	}
+
+	useEffect(() => {
+		if (currentUser) {
+			const userData = {
+				_id: currentUser.userId,
+				name: currentUser.name || '',
+				school: currentUser.school || '',
+				email: currentUser.email || '',
+				mobile: currentUser.mobile || '',
+				rollNo: currentUser.rollNo || '',
+				branch: currentUser.branch || '',
+				address: currentUser.address || '',
+			};
+			setUser(userData);
+
+			// Reset form with user data
+			form.reset({
+				name: userData.name,
+				email: userData.email,
+				mobile: userData.mobile,
+				schoolName: userData.school,
+				rollNo: userData.rollNo,
+				branch: userData.branch,
+				address: userData.address,
+			});
+		} else {
+			setUser(null);
+		}
+		setIsLoading(false);
+	}, [currentUser, form]); // Add form to dependency array
+
+	async function onSubmit(values: z.infer<typeof formSchema>) {
+		setIsSaving(true);
+		try {
+			const response = await updateUser(user?._id as string, {
+				name: values.name,
+				email: values.email,
+				mobile: values.mobile,
+				schoolName: values.schoolName,
+				rollNo: values.rollNo,
+				branch: values.branch,
+				address: values.address,
+				_id: user?._id as string,
+			});
+
+			if (response.success) {
+				// Update local user state
+				setUser({
+					...user!,
+					name: values.name,
+					email: values.email,
+					mobile: values.mobile,
+					school: values.schoolName,
+					rollNo: values.rollNo,
+					branch: values.branch,
+					address: values.address,
+				});
+
+				toast({
+					title: 'Profile updated',
+					description: 'Your profile has been successfully updated.',
+					variant: 'success',
+				});
+
+				// Refresh the page to update the token and user context
+				router.refresh();
+				setIsEditing(false);
+			} else {
+				throw new Error(response.error || 'Failed to update profile');
+			}
+		} catch (err) {
+			console.error('Failed to update profile:', err);
+			toast({
+				title: 'Error',
+				description:
+					err instanceof Error
+						? err.message
+						: 'Failed to update profile. Please try again.',
+				variant: 'destructive',
+			});
+		} finally {
+			setIsSaving(false);
+		}
 	}
 
 	if (isLoading) {
@@ -122,9 +195,11 @@ export function UserDashboard() {
 						/>
 						<AvatarFallback>
 							{user?.name
-								.split(' ')
-								.map((n) => n[0])
-								.join('')}
+								? user.name
+										.split(' ')
+										.map((n) => n[0])
+										.join('')
+								: '?'}
 						</AvatarFallback>
 					</Avatar>
 					<div>
@@ -150,7 +225,6 @@ export function UserDashboard() {
 										<Input
 											{...field}
 											disabled={!isEditing}
-											value={user?.name}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -167,7 +241,6 @@ export function UserDashboard() {
 										<Input
 											{...field}
 											disabled={!isEditing}
-											value={user?.email}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -184,7 +257,6 @@ export function UserDashboard() {
 										<Input
 											{...field}
 											disabled={!isEditing}
-											value={user?.mobile}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -201,7 +273,6 @@ export function UserDashboard() {
 										<Input
 											{...field}
 											disabled={!isEditing}
-											value={user?.school}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -218,7 +289,6 @@ export function UserDashboard() {
 										<Input
 											{...field}
 											disabled={!isEditing}
-											value={user?.rollNo}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -235,10 +305,8 @@ export function UserDashboard() {
 										<Input
 											{...field}
 											disabled={!isEditing}
-											value={user?.branch}
 										/>
 									</FormControl>
-
 									<FormMessage />
 								</FormItem>
 							)}
@@ -253,7 +321,6 @@ export function UserDashboard() {
 										<Input
 											{...field}
 											disabled={!isEditing}
-											value={user?.address}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -261,7 +328,29 @@ export function UserDashboard() {
 							)}
 						/>
 						{isEditing && (
-							<Button type="submit">Save Changes</Button>
+							<div className="flex gap-2">
+								<Button type="submit" disabled={isSaving}>
+									{isSaving ? (
+										<>
+											<span>Saving</span>
+											<LoadingSpinner />
+										</>
+									) : (
+										'Save Changes'
+									)}
+								</Button>
+								<Button
+									type="button"
+									variant="outline"
+									onClick={() => {
+										setIsEditing(false);
+										form.reset(); // Reset form to original values
+									}}
+									disabled={isSaving}
+								>
+									Cancel
+								</Button>
+							</div>
 						)}
 					</form>
 				</Form>
