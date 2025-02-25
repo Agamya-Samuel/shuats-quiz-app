@@ -5,10 +5,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { getAllQuestions } from '@/actions/question';
+import { submitAnswer, submitQuiz } from '@/actions/submit-answers';
 import Legend from './legend';
 import QuizQuestionView from './quiz-question-view';
 import { cn } from '@/lib/utils';
 import LoadingState from '@/components/loading-component';
+import { useToast } from '@/hooks/use-toast';
+import { useCookies } from '@/contexts/cookie-context';
 
 // Types
 export interface Option {
@@ -58,12 +61,35 @@ const ErrorState = ({
 );
 
 export default function QuizInterface() {
+	const { toast } = useToast();
 	const [questions, setQuestions] = useState<Question[]>([]);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [selectedAnswer, setSelectedAnswer] = useState<string>('');
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [answers, setAnswers] = useState<Record<string, string>>({});
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const { user: currentUser } = useCookies();
+
+	// Load answers from localStorage on mount
+	useEffect(() => {
+		const savedAnswers = localStorage.getItem('quiz_answers');
+		if (savedAnswers) {
+			try {
+				const parsed = JSON.parse(savedAnswers);
+				setAnswers(parsed);
+			} catch (err) {
+				console.error('Error parsing saved answers:', err);
+			}
+		}
+	}, []);
+
+	// Save answers to localStorage whenever they change
+	useEffect(() => {
+		if (Object.keys(answers).length > 0) {
+			localStorage.setItem('quiz_answers', JSON.stringify(answers));
+		}
+	}, [answers]);
 
 	const fetchQuestions = useCallback(async () => {
 		try {
@@ -94,26 +120,107 @@ export default function QuizInterface() {
 		fetchQuestions();
 	}, [fetchQuestions]);
 
-	// Auto-save warning
-	useEffect(() => {
-		const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-			if (Object.keys(answers).length > 0) {
-				e.preventDefault();
-				e.returnValue = '';
+	// Auto-save answer to server
+	const autoSaveAnswer = useCallback(
+		async (questionId: string, answer: string) => {
+			if (!currentUser?.userId) return;
+
+			try {
+				const optionId = questions[currentQuestionIndex].options.find(
+					(opt) => opt.text === answer
+				)?.id;
+
+				if (!optionId) return;
+
+				const result = await submitAnswer(
+					currentUser.userId,
+					questionId,
+					optionId
+				);
+
+				if (!result.success) {
+					console.error('Auto-save failed:', result.message);
+				}
+			} catch (err) {
+				console.error('Error auto-saving answer:', err);
 			}
-		};
+		},
+		[currentUser?.userId, questions, currentQuestionIndex]
+	);
 
-		window.addEventListener('beforeunload', handleBeforeUnload);
-		return () =>
-			window.removeEventListener('beforeunload', handleBeforeUnload);
-	}, [answers]);
+	// Handle final quiz submission
+	const handleSubmit = async () => {
+		if (!currentUser?.userId) {
+			toast({
+				title: 'Error',
+				description: 'You must be logged in to submit the quiz',
+				variant: 'destructive',
+			});
+			return;
+		}
 
-	if (isLoading)
-		return (
-			<div className="max-w-7xl mx-auto px-4 py-6 flex flex-col-reverse lg:flex-row gap-6 h-[calc(100vh-20rem)]">
-				<LoadingState />
-			</div>
-		);
+		const unansweredCount = questions.filter(
+			(q) => q.status === 'not-visited' || q.status === 'not-answered'
+		).length;
+
+		if (unansweredCount > 0) {
+			const confirm = window.confirm(
+				`You have ${unansweredCount} unanswered questions. Are you sure you want to submit?`
+			);
+			if (!confirm) return;
+		}
+
+		try {
+			setIsSubmitting(true);
+
+			// Format answers for submission
+			const formattedAnswers = Object.entries(answers)
+				.map(([questionId, answer]) => {
+					const question = questions.find(
+						(q) => q._id === questionId
+					);
+					const optionId = question?.options.find(
+						(opt) => opt.text === answer
+					)?.id;
+					return {
+						questionId,
+						selectedOptionId: optionId || 0,
+					};
+				})
+				.filter((a) => a.selectedOptionId > 0);
+
+			const result = await submitQuiz(
+				currentUser.userId,
+				formattedAnswers
+			);
+
+			if (result.success) {
+				toast({
+					title: 'Quiz Submitted',
+					description:
+						'Your answers have been recorded successfully.',
+				});
+				// Clear local storage after successful submission
+				localStorage.removeItem('quiz_answers');
+			} else {
+				throw new Error(result.message);
+			}
+		} catch (err) {
+			const errorMessage =
+				err instanceof Error
+					? err.message
+					: 'An unknown error occurred';
+			toast({
+				title: 'Submission Failed',
+				description: `There was an error submitting your quiz: ${errorMessage}`,
+				variant: 'destructive',
+			});
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+
+	if (isLoading) return <LoadingState />;
 	if (error) return <ErrorState message={error} retry={fetchQuestions} />;
 	if (!questions.length) {
 		return (
@@ -171,6 +278,9 @@ export default function QuizInterface() {
 				setAnswers={setAnswers}
 				setCurrentQuestionIndex={setCurrentQuestionIndex}
 				answers={answers}
+				onAutoSave={autoSaveAnswer}
+				onSubmit={handleSubmit}
+				isSubmitting={isSubmitting}
 			/>
 		</div>
 	);

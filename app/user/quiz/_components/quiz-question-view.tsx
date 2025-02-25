@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Question, OptionsMapping } from './quiz-interface';
 import { toast } from '@/hooks/use-toast';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { MarkdownPreview } from '@/components/markdown-preview';
 
 type SetAnswersType = Dispatch<SetStateAction<Record<string, string>>>;
@@ -20,6 +20,9 @@ interface QuizQuestionViewProps {
 	setAnswers: SetAnswersType;
 	setCurrentQuestionIndex: (index: number) => void;
 	answers: Record<string, string>;
+	onAutoSave: (questionId: string, answer: string) => Promise<void>;
+	onSubmit: () => Promise<void>;
+	isSubmitting: boolean;
 }
 
 export default function QuizQuestionView({
@@ -30,11 +33,21 @@ export default function QuizQuestionView({
 	setQuestions,
 	setAnswers,
 	setCurrentQuestionIndex,
-}: // answers,
-QuizQuestionViewProps) {
+	answers,
+	onAutoSave,
+	onSubmit,
+	isSubmitting,
+}: QuizQuestionViewProps) {
 	const currentQuestion = questions[currentQuestionIndex];
 
-	const saveCurrentQuestionState = (status: Question['status']) => {
+	// Load saved answer when switching questions
+	useEffect(() => {
+		if (currentQuestion) {
+			setSelectedAnswer(answers[currentQuestion._id] || '');
+		}
+	}, [currentQuestion, answers, setSelectedAnswer]);
+
+	const saveCurrentQuestionState = async (status: Question['status']) => {
 		const updatedQuestions = [...questions];
 		updatedQuestions[currentQuestionIndex] = {
 			...currentQuestion,
@@ -44,10 +57,13 @@ QuizQuestionViewProps) {
 		setQuestions(updatedQuestions);
 
 		if (selectedAnswer) {
-			setAnswers((prev: Record<string, string>) => ({
+			setAnswers((prev) => ({
 				...prev,
 				[currentQuestion._id]: selectedAnswer,
 			}));
+
+			// Auto-save to server
+			await onAutoSave(currentQuestion._id, selectedAnswer);
 		}
 	};
 
@@ -62,13 +78,12 @@ QuizQuestionViewProps) {
 				selectedAnswer ? 'answered' : 'not-answered'
 			);
 			setCurrentQuestionIndex(newIndex);
-			setSelectedAnswer(questions[newIndex].userAnswer || '');
 		}
 	};
 
-	const handleSaveAndNext = () => {
+	const handleSaveAndNext = async () => {
 		if (selectedAnswer) {
-			saveCurrentQuestionState('answered');
+			await saveCurrentQuestionState('answered');
 			handleNavigation('next');
 		} else {
 			toast({
@@ -89,50 +104,18 @@ QuizQuestionViewProps) {
 		};
 		setQuestions(updatedQuestions);
 
-		setAnswers((prev: Record<string, string>) => {
+		setAnswers((prev) => {
 			const newAnswers = { ...prev };
 			delete newAnswers[currentQuestion._id];
 			return newAnswers;
 		});
 	};
 
-	const handleMarkForReview = (saveAnswer: boolean) => {
-		saveCurrentQuestionState(
+	const handleMarkForReview = async (saveAnswer: boolean) => {
+		await saveCurrentQuestionState(
 			saveAnswer ? 'answered-marked' : 'marked-review'
 		);
 		handleNavigation('next');
-	};
-
-	const handleSubmit = async () => {
-		const unansweredCount = questions.filter(
-			(q) => q.status === 'not-visited' || q.status === 'not-answered'
-		).length;
-
-		if (unansweredCount > 0) {
-			const confirm = window.confirm(
-				`You have ${unansweredCount} unanswered questions. Are you sure you want to submit?`
-			);
-			if (!confirm) return;
-		}
-
-		try {
-			// Implement your submission logic here
-			// await submitQuiz(answers);
-			toast({
-				title: 'Quiz Submitted',
-				description: 'Your answers have been recorded successfully.',
-			});
-		} catch (err: unknown) {
-			const errorMessage =
-				err instanceof Error
-					? err.message
-					: 'An unknown error occurred';
-			toast({
-				title: 'Submission Failed',
-				description: `There was an error submitting your quiz: ${errorMessage}`,
-				variant: 'destructive',
-			});
-		}
 	};
 
 	return (
@@ -167,7 +150,8 @@ QuizQuestionViewProps) {
 									className="flex-1 cursor-pointer flex items-center"
 								>
 									<span className="font-medium mr-2">
-										{OptionsMapping[option.id]}{')'}
+										{OptionsMapping[option.id]}
+										{')'}
 									</span>
 									<MarkdownPreview
 										content={option.text}
@@ -207,12 +191,18 @@ QuizQuestionViewProps) {
 						<Button
 							variant="yellow"
 							onClick={() => handleMarkForReview(true)}
+							disabled={
+								currentQuestionIndex === questions.length - 1
+							}
 						>
 							Save & Mark for Review
 						</Button>
 						<Button
 							variant="purple"
 							onClick={() => handleMarkForReview(false)}
+							disabled={
+								currentQuestionIndex === questions.length - 1
+							}
 						>
 							Mark for Review
 						</Button>
@@ -221,11 +211,12 @@ QuizQuestionViewProps) {
 					{currentQuestionIndex === questions.length - 1 && (
 						<div className="mt-6">
 							<Button
-								onClick={handleSubmit}
+								onClick={onSubmit}
 								className="w-full"
 								variant="default"
+								disabled={isSubmitting}
 							>
-								Submit Quiz
+								{isSubmitting ? 'Submitting...' : 'Submit Quiz'}
 							</Button>
 						</div>
 					)}
