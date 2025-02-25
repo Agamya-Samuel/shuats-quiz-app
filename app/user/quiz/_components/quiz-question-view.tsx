@@ -9,7 +9,13 @@ import { toast } from '@/hooks/use-toast';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { MarkdownPreview } from '@/components/markdown-preview';
 
-type SetAnswersType = Dispatch<SetStateAction<Record<string, string>>>;
+interface StoredAnswer {
+	questionId: string;
+	selectedOptionId: number;
+	answerText: string;
+}
+
+type SetAnswersType = Dispatch<SetStateAction<Record<string, StoredAnswer>>>;
 
 interface QuizQuestionViewProps {
 	questions: Question[];
@@ -19,7 +25,7 @@ interface QuizQuestionViewProps {
 	setQuestions: (questions: Question[]) => void;
 	setAnswers: SetAnswersType;
 	setCurrentQuestionIndex: (index: number) => void;
-	answers: Record<string, string>;
+	answers: Record<string, StoredAnswer>;
 	onAutoSave: (questionId: string, answer: string) => Promise<void>;
 	onSubmit: () => Promise<void>;
 	isSubmitting: boolean;
@@ -43,7 +49,8 @@ export default function QuizQuestionView({
 	// Load saved answer when switching questions
 	useEffect(() => {
 		if (currentQuestion) {
-			setSelectedAnswer(answers[currentQuestion._id] || '');
+			const savedAnswer = answers[currentQuestion._id];
+			setSelectedAnswer(savedAnswer?.answerText || '');
 		}
 	}, [currentQuestion, answers, setSelectedAnswer]);
 
@@ -57,13 +64,23 @@ export default function QuizQuestionView({
 		setQuestions(updatedQuestions);
 
 		if (selectedAnswer) {
-			setAnswers((prev) => ({
-				...prev,
-				[currentQuestion._id]: selectedAnswer,
-			}));
+			const option = currentQuestion.options.find(
+				(opt) => opt.text === selectedAnswer
+			);
 
-			// Auto-save to server
-			await onAutoSave(currentQuestion._id, selectedAnswer);
+			if (option) {
+				setAnswers((prev) => ({
+					...prev,
+					[currentQuestion._id]: {
+						questionId: currentQuestion._id,
+						selectedOptionId: option.id,
+						answerText: selectedAnswer,
+					},
+				}));
+
+				// Auto-save to server
+				await onAutoSave(currentQuestion._id, selectedAnswer);
+			}
 		}
 	};
 
@@ -171,6 +188,10 @@ export default function QuizQuestionView({
 							<ChevronLeft className="h-4 w-4 mr-2" />
 							Previous
 						</Button>
+						<Button variant="success" onClick={handleSaveAndNext}>
+							Save & Next
+							<ChevronRight className="h-4 w-4 ml-2" />
+						</Button>
 						<Button
 							variant="destructive"
 							onClick={() => handleNavigation('next')}
@@ -180,10 +201,6 @@ export default function QuizQuestionView({
 						>
 							Skip
 							<ChevronRight className="h-4 w-4 ml-2" />
-						</Button>
-						<Button variant="success" onClick={handleSaveAndNext}>
-							Save & Next
-							<ChevronRight className="h-4 w-4 mr-2" />
 						</Button>
 						<Button variant="outline" onClick={handleClear}>
 							Clear Response

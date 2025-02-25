@@ -32,6 +32,13 @@ export interface Question {
 	userAnswer?: string;
 }
 
+// Interface for stored answers
+export interface StoredAnswer {
+	questionId: string;
+	selectedOptionId: number;
+	answerText: string; // Keep text for UI display
+}
+
 export const OptionsMapping: Record<number, string> = {
 	1: 'A',
 	2: 'B',
@@ -67,11 +74,11 @@ export default function QuizInterface() {
 	const [selectedAnswer, setSelectedAnswer] = useState<string>('');
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [answers, setAnswers] = useState<Record<string, string>>({});
+	const [answers, setAnswers] = useState<Record<string, StoredAnswer>>({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const { user: currentUser } = useCookies();
 
-	// Load answers from localStorage on mount
+	// Load answers from localStorage on mount ONLY
 	useEffect(() => {
 		const savedAnswers = localStorage.getItem('quiz_answers');
 		if (savedAnswers) {
@@ -82,7 +89,26 @@ export default function QuizInterface() {
 				console.error('Error parsing saved answers:', err);
 			}
 		}
-	}, []);
+	}, []); // Empty dependency array - run only on mount
+
+	// Update questions when answers change
+	useEffect(() => {
+		if (questions.length > 0 && Object.keys(answers).length > 0) {
+			const updatedQuestions = questions.map((q) => {
+				const savedAnswer = answers[q._id];
+				if (savedAnswer) {
+					return {
+						...q,
+						status: 'answered' as const,
+						userAnswer: savedAnswer.answerText,
+					};
+				}
+				return q;
+			});
+			setQuestions(updatedQuestions);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [answers]); // Only run when answers change
 
 	// Save answers to localStorage whenever they change
 	useEffect(() => {
@@ -126,16 +152,17 @@ export default function QuizInterface() {
 			if (!currentUser?.userId) return;
 
 			try {
-				const optionId = questions[currentQuestionIndex].options.find(
+				const question = questions[currentQuestionIndex];
+				const option = question.options.find(
 					(opt) => opt.text === answer
-				)?.id;
+				);
 
-				if (!optionId) return;
+				if (!option) return;
 
 				const result = await submitAnswer(
 					currentUser.userId,
 					questionId,
-					optionId
+					option.id
 				);
 
 				if (!result.success) {
@@ -173,20 +200,12 @@ export default function QuizInterface() {
 		try {
 			setIsSubmitting(true);
 
-			// Format answers for submission
-			const formattedAnswers = Object.entries(answers)
-				.map(([questionId, answer]) => {
-					const question = questions.find(
-						(q) => q._id === questionId
-					);
-					const optionId = question?.options.find(
-						(opt) => opt.text === answer
-					)?.id;
-					return {
-						questionId,
-						selectedOptionId: optionId || 0,
-					};
-				})
+			// Format answers for submission using stored optionIds
+			const formattedAnswers = Object.values(answers)
+				.map(({ questionId, selectedOptionId }) => ({
+					questionId,
+					selectedOptionId,
+				}))
 				.filter((a) => a.selectedOptionId > 0);
 
 			const result = await submitQuiz(
@@ -199,9 +218,11 @@ export default function QuizInterface() {
 					title: 'Quiz Submitted',
 					description:
 						'Your answers have been recorded successfully.',
+					variant: 'success',
 				});
 				// Clear local storage after successful submission
 				localStorage.removeItem('quiz_answers');
+				setAnswers({});
 			} else {
 				throw new Error(result.message);
 			}
