@@ -23,7 +23,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { LoadingSpinner } from '@/components/loading-spinner';
 
-export function LoginForm() {
+export function LoginForm({ redirect }: { redirect?: string }) {
 	const { toast } = useToast();
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -49,9 +49,7 @@ export function LoginForm() {
 						description: 'You have successfully logged in.',
 						variant: 'success',
 					});
-					// set payload in local storage
-					localStorage.setItem('user', JSON.stringify(response.payload));
-					router.push('/user/quiz'); // Redirect to dashboard page after successful login
+					router.push(redirect || '/user/quiz'); // Redirect to quiz page after successful login
 				} else {
 					toast({
 						title: 'Login Failed',
