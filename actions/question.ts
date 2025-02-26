@@ -467,6 +467,29 @@ export async function getQuizResults(userId: string) {
 	await connectToDB();
 
 	try {
+		// Get user's submitted answers with lean()
+		const submittedAnswers = await SubmittedAnswer.find({ userId })
+			.select('questionId selectedOptionId submittedAt')
+			.lean()
+			.exec();
+
+		// If user hasn't submitted any answers, return empty results
+		if (!submittedAnswers || submittedAnswers.length === 0) {
+			return {
+				success: true,
+				data: {
+					results: [],
+					summary: {
+						totalQuestions: 0,
+						attemptedQuestions: 0,
+						correctAnswers: 0,
+						score: 0,
+						submittedAt: new Date().toISOString(),
+					},
+				},
+			};
+		}
+
 		// Get all questions with lean() to get plain objects
 		const questions = await Question.find({})
 			.select('_id text options')
@@ -476,12 +499,6 @@ export async function getQuizResults(userId: string) {
 		// Get correct answers from database with lean()
 		const correctAnswersData = await CorrectAnswer.find({})
 			.select('questionId correctOptionId')
-			.lean()
-			.exec();
-
-		// Get user's submitted answers with lean()
-		const submittedAnswers = await SubmittedAnswer.find({ userId })
-			.select('questionId selectedOptionId submittedAt')
 			.lean()
 			.exec();
 

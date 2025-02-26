@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { getAllQuestions } from '@/actions/question';
 import { submitAnswer, submitQuiz } from '@/actions/submit-answers';
+import { getQuizResults } from '@/actions/question';
 import Legend from './legend';
 import QuizQuestionView from './quiz-question-view';
 import { cn } from '@/lib/utils';
@@ -77,8 +78,31 @@ export default function QuizInterface() {
 	const [error, setError] = useState<string | null>(null);
 	const [answers, setAnswers] = useState<Record<string, StoredAnswer>>({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [hasAlreadyAttempted, setHasAlreadyAttempted] = useState(false);
 	const { user: currentUser } = useCookies();
 	const router = useRouter();
+
+	// Check if user has already attempted the quiz
+	useEffect(() => {
+		const checkAttemptStatus = async () => {
+			if (!currentUser?.userId) return;
+
+			try {
+				const response = await getQuizResults(currentUser.userId);
+				if (
+					response.success &&
+					response.data &&
+					response.data.results.length > 0
+				) {
+					setHasAlreadyAttempted(true);
+				}
+			} catch (err) {
+				console.error('Error checking attempt status:', err);
+			}
+		};
+
+		checkAttemptStatus();
+	}, [currentUser?.userId]);
 
 	// Load answers from localStorage on mount ONLY
 	useEffect(() => {
@@ -246,6 +270,36 @@ export default function QuizInterface() {
 	};
 
 	if (isLoading) return <LoadingState />;
+
+	if (hasAlreadyAttempted) {
+		return (
+			<Card>
+				<CardContent className="p-6">
+					<div className="text-center">
+						<h3 className="text-xl font-semibold mb-4">
+							Quiz Already Attempted
+						</h3>
+						<p className="mb-6 text-gray-600">
+							You have already attempted this quiz. You can only
+							take the quiz once.
+						</p>
+						<div className="flex justify-center gap-4">
+							<Button
+								variant="outline"
+								onClick={() => router.push('/user/dashboard')}
+							>
+								Return to Dashboard
+							</Button>
+							<Button onClick={() => router.push('/result')}>
+								View Results
+							</Button>
+						</div>
+					</div>
+				</CardContent>
+			</Card>
+		);
+	}
+
 	if (error) return <ErrorState message={error} retry={fetchQuestions} />;
 	if (!questions.length) {
 		return (

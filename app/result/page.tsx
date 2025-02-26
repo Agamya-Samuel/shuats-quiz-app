@@ -9,6 +9,7 @@ import LoadingState from '@/components/loading-component';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { AlertCircle } from 'lucide-react';
 
 export interface QuizResult {
 	questionId: string;
@@ -40,6 +41,7 @@ export interface ServerResponse {
 		};
 	};
 	error?: string;
+	hasAttempted?: boolean;
 }
 
 export default function ResultPage() {
@@ -49,6 +51,7 @@ export default function ResultPage() {
 	const [error, setError] = useState<string | null>(null);
 	const [results, setResults] = useState<QuizResult[]>([]);
 	const [summary, setSummary] = useState<QuizSummary | null>(null);
+	const [hasAttempted, setHasAttempted] = useState(false);
 
 	useEffect(() => {
 		const fetchResults = async () => {
@@ -61,12 +64,24 @@ export default function ResultPage() {
 				const response: ServerResponse = await getQuizResults(
 					currentUser.userId
 				);
-				if (response.success && response.data) {
+
+				if (
+					response.success &&
+					response.data &&
+					response.data.results.length > 0
+				) {
 					setResults(response.data.results);
 					setSummary({
 						...response.data.summary,
 						submittedAt: response.data.summary.submittedAt,
 					});
+					setHasAttempted(true);
+				} else if (
+					response.success &&
+					(!response.data || response.data.results.length === 0)
+				) {
+					// User hasn't attempted the quiz yet
+					setHasAttempted(false);
 				} else {
 					throw new Error(
 						response.error || 'Failed to fetch results'
@@ -106,6 +121,28 @@ export default function ResultPage() {
 		);
 	}
 
+	if (!hasAttempted) {
+		return (
+			<Card>
+				<CardContent className="p-6">
+					<div className="text-center">
+						<AlertCircle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
+						<h3 className="text-xl font-semibold mb-2">
+							No Quiz Results Available
+						</h3>
+						<p className="mb-6 text-gray-600">
+							You need to attempt the quiz first to view your
+							results.
+						</p>
+						<Button onClick={() => router.push('/user/quiz')}>
+							Take Quiz Now
+						</Button>
+					</div>
+				</CardContent>
+			</Card>
+		);
+	}
+
 	return (
 		<div className="max-w-4xl mx-auto px-4 py-8">
 			{summary && <ResultSummary summary={summary} />}
@@ -114,9 +151,9 @@ export default function ResultPage() {
 			<div className="mt-8 text-center">
 				<Button
 					variant="outline"
-					onClick={() => router.push('/user/quiz')}
+					onClick={() => router.push('/user/dashboard')}
 				>
-					Take Another Quiz
+					Return to Dashboard
 				</Button>
 			</div>
 		</div>
