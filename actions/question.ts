@@ -4,6 +4,28 @@
 import { connectToDB } from '@/db';
 import Question from '@/db/models/question';
 import CorrectAnswer from '@/db/models/correct-answer';
+import SubmittedAnswer from '@/db/models/submitted-answer';
+
+// Type for MongoDB ObjectId-like objects
+interface ObjectIdLike {
+	_bsontype: 'ObjectID';
+	toString(): string;
+}
+
+// Safely convert MongoDB ObjectIds to strings
+const safeToString = (obj: unknown): string | null => {
+	if (!obj) return null;
+	if (
+		typeof obj === 'object' &&
+		obj !== null &&
+		'toString' in obj &&
+		typeof (obj as ObjectIdLike).toString === 'function' &&
+		(obj as ObjectIdLike)._bsontype === 'ObjectID'
+	) {
+		return (obj as ObjectIdLike).toString();
+	}
+	return String(obj);
+};
 
 // Add a question and its correct answer to the database
 export async function addQuestion({
@@ -439,4 +461,103 @@ export async function deleteQuestion(questionId: string) {
 	await question.deleteOne();
 
 	return { success: 'Question deleted successfully' };
+}
+
+export async function getQuizResults(userId: string) {
+	await connectToDB();
+
+	try {
+		// Get all questions with lean() to get plain objects
+		const questions = await Question.find({})
+			.select('_id text options')
+			.lean()
+			.exec();
+
+		// Get correct answers from database with lean()
+		const correctAnswersData = await CorrectAnswer.find({})
+			.select('questionId correctOptionId')
+			.lean()
+			.exec();
+
+		// Get user's submitted answers with lean()
+		const submittedAnswers = await SubmittedAnswer.find({ userId })
+			.select('questionId selectedOptionId submittedAt')
+			.lean()
+			.exec();
+
+		// Create a map of correct answers for quick lookup
+		const correctAnswersMap = new Map(
+			correctAnswersData.map((answer) => [
+				safeToString(answer.questionId),
+				answer.correctOptionId,
+			])
+		);
+
+		// Calculate results with safe object creation
+		const results = questions.map((question) => {
+			const questionId = safeToString(question._id);
+			const userAnswer = submittedAnswers.find(
+				(answer) => safeToString(answer.questionId) === questionId
+			);
+
+			const correctOptionId = correctAnswersMap.get(questionId);
+
+			// Create a clean object with only primitive values
+			return {
+				questionId,
+				question: String(question.text || ''),
+				options: Array.isArray(question.options)
+					? question.options.map((opt) => ({
+							id: Number(opt.id),
+							text: String(opt.text || ''),
+					  }))
+					: [],
+				correctOptionId:
+					correctOptionId != null ? Number(correctOptionId) : null,
+				userSelectedOptionId:
+					userAnswer?.selectedOptionId != null
+						? Number(userAnswer.selectedOptionId)
+						: null,
+				isCorrect: userAnswer?.selectedOptionId === correctOptionId,
+			};
+		});
+
+		// Calculate overall score with safe number operations
+		const totalQuestions = questions.length;
+		const attemptedQuestions = submittedAnswers.length;
+		const numberOfCorrectAnswers = results.filter(
+			(r) => r.isCorrect
+		).length;
+		const score =
+			Math.round((numberOfCorrectAnswers / totalQuestions) * 100 * 100) /
+			100;
+
+		// Create a clean response object with primitive values
+		const cleanResponse = {
+			success: true,
+			data: {
+				results,
+				summary: {
+					totalQuestions: Number(totalQuestions),
+					attemptedQuestions: Number(attemptedQuestions),
+					correctAnswers: Number(numberOfCorrectAnswers),
+					score: Number(score),
+					submittedAt: submittedAnswers[0]?.submittedAt
+						? new Date(
+								submittedAnswers[0].submittedAt
+						  ).toISOString()
+						: new Date().toISOString(),
+				},
+			},
+		};
+
+		// Final safety check: convert to and from JSON to remove any remaining circular references
+		return JSON.parse(JSON.stringify(cleanResponse));
+	} catch (error) {
+		console.error('Error fetching quiz results:', error);
+		return {
+			success: false,
+			error: 'Failed to fetch quiz results',
+		};
+	}
 }

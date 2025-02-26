@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import LoadingState from '@/components/loading-component';
 import { useToast } from '@/hooks/use-toast';
 import { useCookies } from '@/contexts/cookie-context';
+import { useRouter } from 'next/navigation';
 
 // Types
 export interface Option {
@@ -77,6 +78,7 @@ export default function QuizInterface() {
 	const [answers, setAnswers] = useState<Record<string, StoredAnswer>>({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const { user: currentUser } = useCookies();
+	const router = useRouter();
 
 	// Load answers from localStorage on mount ONLY
 	useEffect(() => {
@@ -223,6 +225,8 @@ export default function QuizInterface() {
 				// Clear local storage after successful submission
 				localStorage.removeItem('quiz_answers');
 				setAnswers({});
+				// Redirect to results page
+				router.push('/result');
 			} else {
 				throw new Error(result.message);
 			}
