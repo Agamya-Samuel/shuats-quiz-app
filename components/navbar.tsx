@@ -1,14 +1,20 @@
 // components/Navbar.tsx
 
-import { Clock, LogOut, Trophy } from 'lucide-react';
+import { Clock, LogOut, ChevronDown, Trophy, BarChart, Timer, LayoutDashboard } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useState, useEffect } from 'react';
 import { useCookies } from '@/contexts/cookie-context';
-import { Button } from '@/components/ui/button';
 import { logout } from '@/actions/logout';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+	DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
 
 interface NavbarProps {
 	showTime?: boolean;
@@ -115,20 +121,77 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 		<div className="bg-white border-b">
 			<div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
 				<div className="flex items-center space-x-4">
-					<Avatar className="h-12 w-12">
-						<AvatarImage
-							src="/placeholder.svg?height=48&width=48"
-							alt="User"
-						/>
-						<AvatarFallback>
-							{user?.name
-								? user.name
-										.split(' ')
-										.map((n) => n[0])
-										.join('')
-								: '?'}
-						</AvatarFallback>
-					</Avatar>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<div className="flex items-center space-x-2 cursor-pointer">
+								<Avatar className="h-12 w-12">
+									<AvatarImage
+										src="/placeholder.svg?height=48&width=48"
+										alt="User"
+									/>
+									<AvatarFallback>
+										{user?.name
+											? user.name
+													.split(' ')
+													.map((n) => n[0])
+													.join('')
+											: '?'}
+									</AvatarFallback>
+								</Avatar>
+								<ChevronDown className="h-4 w-4 text-gray-500" />
+							</div>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="start" className="w-48">
+							<DropdownMenuItem asChild>
+								<Link
+									href="/user/dashboard"
+									className="w-full cursor-pointer"
+								>
+									<LayoutDashboard className="h-5 w-5 text-amber-500" />
+									Dashboard
+								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuItem asChild>
+								<Link
+									href="/user/quiz"
+									className="w-full cursor-pointer"
+								>
+									<Timer className="h-5 w-5 text-amber-500" />
+									Quiz
+								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuItem asChild>
+								<Link
+									href="/result"
+									className="w-full cursor-pointer"
+								>
+									<BarChart className="h-5 w-5 text-amber-500" />
+									Results
+								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuItem asChild>
+								<Link
+									href="/leaderboard"
+									className="w-full cursor-pointer"
+								>
+									<Trophy className="h-5 w-5 text-amber-500" />
+									Leaderboard
+								</Link>
+							</DropdownMenuItem>
+							{user && (
+								<>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem
+										className="text-red-600 cursor-pointer"
+										onClick={handleLogout}
+									>
+										<LogOut className="h-4 w-4 mr-2" />
+										Logout
+									</DropdownMenuItem>
+								</>
+							)}
+						</DropdownMenuContent>
+					</DropdownMenu>
 					<div>
 						<h2 className="font-semibold">
 							{user?.name || 'Guest'}
@@ -152,35 +215,8 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 							<span>{formatTime(timeRemaining)}</span>
 						</div>
 					)}
-					{user && (
-						<>
-							<Link href="/leaderboard">
-								<Button
-									variant="outline"
-									size="lg"
-									className="text-md"
-								>
-									<Trophy className="h-5 w-5 text-amber-500" />
-									<span className="ml-2 hidden sm:block">
-										Leaderboard
-									</span>
-								</Button>
-							</Link>
-							<Button
-								variant="destructive"
-								size="lg"
-								onClick={handleLogout}
-								className="text-md"
-							>
-								<LogOut className="h-5 w-5 " />
-								<span className="ml-2 hidden sm:block">
-									Logout
-								</span>
-							</Button>
-						</>
-					)}
 				</div>
 			</div>
 		</div>
 	);
-}
+} 

@@ -10,7 +10,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { AlertCircle } from 'lucide-react';
-import Navbar from '@/components/navbar';
 
 export interface QuizResult {
 	questionId: string;
@@ -105,7 +104,6 @@ export default function ResultPage() {
 	if (error) {
 		return (
 			<div className="min-h-screen bg-gray-50">
-				<Navbar />
 				<div className="max-w-4xl mx-auto px-4 py-8">
 					<Card>
 						<CardContent className="p-6">
@@ -132,7 +130,6 @@ export default function ResultPage() {
 	if (!hasAttempted) {
 		return (
 			<div className="min-h-screen bg-gray-50">
-				<Navbar />
 				<div className="max-w-4xl mx-auto px-4 py-8">
 					<Card>
 						<CardContent className="p-6">
@@ -160,18 +157,18 @@ export default function ResultPage() {
 
 	return (
 		<div className="min-h-screen bg-gray-50">
-			<Navbar />
-			<div className="max-w-4xl mx-auto px-4 py-8">
-				{summary && <ResultSummary summary={summary} />}
-				{results.length > 0 && <ResultDetails results={results} />}
+			<div className="max-w-7xl mx-auto px-4 py-8">
+				<h1 className="text-3xl font-bold mb-8 text-center">
+					Quiz Results
+				</h1>
 
-				<div className="mt-8 text-center">
-					<Button
-						variant="outline"
-						onClick={() => router.push('/user/dashboard')}
-					>
-						Return to Dashboard
-					</Button>
+				{summary && <ResultSummary summary={summary} />}
+
+				<div className="mt-8">
+					<h2 className="text-2xl font-semibold mb-4">
+						Detailed Results
+					</h2>
+					<ResultDetails results={results} />
 				</div>
 			</div>
 		</div>

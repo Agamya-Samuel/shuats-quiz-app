@@ -9,7 +9,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle } from 'lucide-react';
-import Navbar from '@/components/navbar';
 
 export interface LeaderboardEntry {
 	userId: string | null;
@@ -66,7 +65,6 @@ export default function LeaderboardPage() {
 	if (error) {
 		return (
 			<div className="min-h-screen bg-gray-50">
-				<Navbar />
 				<Card className="max-w-md mx-auto mt-8">
 					<CardContent className="p-6">
 						<div className="text-center text-red-500">
@@ -91,7 +89,6 @@ export default function LeaderboardPage() {
 	if (leaderboardData.length === 0) {
 		return (
 			<div className="min-h-screen bg-gray-50">
-				<Navbar />
 				<Card className="max-w-md mx-auto mt-8">
 					<CardContent className="p-6">
 						<div className="text-center">
@@ -115,7 +112,6 @@ export default function LeaderboardPage() {
 
 	return (
 		<div className="min-h-screen bg-gray-50">
-			<Navbar />
 			<div className="max-w-7xl mx-auto px-4 py-8">
 				<h1 className="text-3xl font-bold mb-8 text-center">
 					Quiz Leaderboard
