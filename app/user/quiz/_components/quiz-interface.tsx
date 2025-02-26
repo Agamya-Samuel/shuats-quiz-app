@@ -10,7 +10,7 @@ import { getQuizResults } from '@/actions/question';
 import Legend from './legend';
 import QuizQuestionView from './quiz-question-view';
 import { cn } from '@/lib/utils';
-import LoadingState from '@/components/loading-component';
+import QuizLoading from './quiz-loading';
 import { useToast } from '@/hooks/use-toast';
 import { useCookies } from '@/contexts/cookie-context';
 import { useRouter } from 'next/navigation';
@@ -56,17 +56,19 @@ const ErrorState = ({
 	message: string;
 	retry: () => void;
 }) => (
-	<Card className="w-full">
-		<CardContent className="p-6">
-			<div className="text-center text-red-500">
-				<h3 className="text-lg font-semibold mb-2">Error</h3>
-				<p>{message}</p>
-				<Button variant="outline" className="mt-4" onClick={retry}>
-					Retry
-				</Button>
-			</div>
-		</CardContent>
-	</Card>
+	<div className="w-full h-full flex items-center justify-center">
+		<Card className="max-w-lg w-full">
+			<CardContent className="p-6">
+				<div className="text-center text-red-500">
+					<h3 className="text-lg font-semibold mb-2">Error</h3>
+					<p>{message}</p>
+					<Button variant="outline" className="mt-4" onClick={retry}>
+						Retry
+					</Button>
+				</div>
+			</CardContent>
+		</Card>
+	</div>
 );
 
 export default function QuizInterface() {
@@ -269,98 +271,142 @@ export default function QuizInterface() {
 		}
 	};
 
-	if (isLoading) return <LoadingState />;
-
-	if (hasAlreadyAttempted) {
+	if (isLoading) {
 		return (
-			<Card>
-				<CardContent className="p-6">
-					<div className="text-center">
-						<h3 className="text-xl font-semibold mb-4">
-							Quiz Already Attempted
-						</h3>
-						<p className="mb-6 text-gray-600">
-							You have already attempted this quiz. You can only
-							take the quiz once.
-						</p>
-						<div className="flex justify-center gap-4">
-							<Button
-								variant="outline"
-								onClick={() => router.push('/user/dashboard')}
-							>
-								Return to Dashboard
-							</Button>
-							<Button onClick={() => router.push('/result')}>
-								View Results
-							</Button>
-						</div>
-					</div>
-				</CardContent>
-			</Card>
+			<div
+				className="max-w-7xl mx-auto w-full px-4 flex items-center justify-center"
+				style={{ minHeight: 'calc(100vh - 150px)' }}
+			>
+				<QuizLoading />
+			</div>
 		);
 	}
 
-	if (error) return <ErrorState message={error} retry={fetchQuestions} />;
+	if (hasAlreadyAttempted) {
+		return (
+			<div
+				className="max-w-7xl mx-auto w-full px-4 flex items-center justify-center"
+				style={{ minHeight: 'calc(100vh - 150px)' }}
+			>
+				<Card className="max-w-lg w-full">
+					<CardContent className="p-6">
+						<div className="text-center">
+							<h3 className="text-xl font-semibold mb-4">
+								Quiz Already Attempted
+							</h3>
+							<p className="mb-6 text-gray-600">
+								You have already attempted this quiz. You can
+								only take the quiz once.
+							</p>
+							<div className="flex justify-center gap-4">
+								<Button
+									variant="outline"
+									onClick={() =>
+										router.push('/user/dashboard')
+									}
+								>
+									Return to Dashboard
+								</Button>
+								<Button onClick={() => router.push('/result')}>
+									View Results
+								</Button>
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+			</div>
+		);
+	}
+
+	if (error) {
+		return (
+			<div
+				className="max-w-7xl mx-auto w-full px-4"
+				style={{ minHeight: 'calc(100vh - 150px)' }}
+			>
+				<ErrorState message={error} retry={fetchQuestions} />
+			</div>
+		);
+	}
+
 	if (!questions.length) {
 		return (
-			<Card>
-				<CardContent className="p-6">
-					<div className="text-center">No questions available.</div>
-				</CardContent>
-			</Card>
+			<div
+				className="max-w-7xl mx-auto w-full px-4 flex items-center justify-center"
+				style={{ minHeight: 'calc(100vh - 150px)' }}
+			>
+				<Card className="max-w-lg w-full">
+					<CardContent className="p-6">
+						<div className="text-center">
+							No questions available.
+						</div>
+					</CardContent>
+				</Card>
+			</div>
 		);
 	}
 
 	return (
-		<div className="max-w-7xl mx-auto px-4 py-6 flex flex-col-reverse lg:flex-row gap-6">
-			{/* Question Palette */}
-			<div className="w-full lg:w-64">
-				<Card>
-					<CardContent className="p-4">
-						<h3 className="font-semibold mb-4">Question Palette</h3>
-						<div className="grid grid-cols-5 gap-2">
-							{questions.map((question, index) => (
-								<Button
-									key={question._id}
-									variant="outline"
-									className={cn('h-8 w-8 p-0', {
-										'bg-green-100':
-											question.status === 'answered',
-										'bg-purple-100':
-											question.status === 'marked-review',
-										'bg-yellow-100':
-											question.status ===
-											'answered-marked',
-										'bg-red-100':
-											question.status === 'not-answered',
-									})}
-									onClick={() =>
-										setCurrentQuestionIndex(index)
-									}
-								>
-									{index + 1}
-								</Button>
-							))}
-						</div>
-						<Legend questions={questions} />
-					</CardContent>
-				</Card>
-			</div>
+		<div className="max-w-7xl mx-auto w-full px-4 py-6">
+			<div className="w-full flex flex-col">
+				<div className="flex flex-col-reverse lg:flex-row gap-6">
+					{/* Question Palette */}
+					<div className="w-full lg:w-64">
+						<Card className="h-full">
+							<CardContent className="p-4 h-full flex flex-col">
+								<h3 className="font-semibold mb-4">
+									Question Palette
+								</h3>
+								<div className="grid grid-cols-5 gap-2 mb-4">
+									{questions.map((question, index) => (
+										<Button
+											key={question._id}
+											variant="outline"
+											className={cn('h-8 w-8 p-0', {
+												'bg-green-100':
+													question.status ===
+													'answered',
+												'bg-purple-100':
+													question.status ===
+													'marked-review',
+												'bg-yellow-100':
+													question.status ===
+													'answered-marked',
+												'bg-red-100':
+													question.status ===
+													'not-answered',
+											})}
+											onClick={() =>
+												setCurrentQuestionIndex(index)
+											}
+										>
+											{index + 1}
+										</Button>
+									))}
+								</div>
+								<Legend questions={questions} />
+							</CardContent>
+						</Card>
+					</div>
 
-			{/* Quiz Question View */}
-			<QuizQuestionView
-				questions={questions}
-				currentQuestionIndex={currentQuestionIndex}
-				selectedAnswer={selectedAnswer}
-				setSelectedAnswer={setSelectedAnswer}
-				setQuestions={setQuestions}
-				setAnswers={setAnswers}
-				setCurrentQuestionIndex={setCurrentQuestionIndex}
-				answers={answers}
-				onAutoSave={autoSaveAnswer}
-				onSubmit={handleSubmit}
-				isSubmitting={isSubmitting}
-			/>
+					{/* Quiz Question View */}
+					<div className="flex-grow">
+						<QuizQuestionView
+							questions={questions}
+							currentQuestionIndex={currentQuestionIndex}
+							selectedAnswer={selectedAnswer}
+							setSelectedAnswer={setSelectedAnswer}
+							setQuestions={setQuestions}
+							setAnswers={setAnswers}
+							setCurrentQuestionIndex={setCurrentQuestionIndex}
+							answers={answers}
+							onAutoSave={autoSaveAnswer}
+							onSubmit={handleSubmit}
+							isSubmitting={isSubmitting}
+						/>
+					</div>
+				</div>
+			</div>
 		</div>
 	);
 }

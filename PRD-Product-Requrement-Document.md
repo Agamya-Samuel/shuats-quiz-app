@@ -79,3 +79,28 @@ and recommending them appropriate courses,
 - [ ] recommend course based on
 - [ ] notify user about result declaration
 - [ ] add sentry for error monitoring
+
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+---
+
+
+
+
+
+# TODO
+
+- [ ] when time is over, end the quiz and auto submit the quiz answers.
+- [ ] `/result` and `/leaderboard` mode them to `/user/result` and `/user/leaderboard`
+- [ ] make consistent user of loading spinner.
+- [ ] add shuats logo to the quiz page.
+- [ ] add shuats catalog pics carousel + image viewer to the quiz `leaderboard` page + `result` page.
+- [ ] add markdown preview in `result` page.

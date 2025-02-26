@@ -12,9 +12,9 @@ export default function UserLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<div className="min-h-screen flex flex-col">
+		<div className="flex flex-col">
 			<ClientNavbar />
-			<main className="flex-grow">{children}</main>
+			<main>{children}</main>
 		</div>
 	);
 }

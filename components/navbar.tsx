@@ -156,7 +156,7 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 									href="/user/quiz"
 									className="w-full cursor-pointer"
 								>
-									<Timer className="h-5 w-5 text-amber-500" />
+									<Timer className="h-5 w-5 text-green-600" />
 									Quiz
 								</Link>
 							</DropdownMenuItem>

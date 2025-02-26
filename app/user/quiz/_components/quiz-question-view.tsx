@@ -8,6 +8,7 @@ import { Question, OptionsMapping } from './quiz-interface';
 import { toast } from '@/hooks/use-toast';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { MarkdownPreview } from '@/components/markdown-preview';
+import { cn } from '@/lib/utils';
 
 interface StoredAnswer {
 	questionId: string;
@@ -136,22 +137,48 @@ export default function QuizQuestionView({
 	};
 
 	return (
-		<div className="flex-1">
-			<Card>
-				<CardContent className="p-6">
-					<div className="mb-6">
-						<span className="text-sm text-gray-500">
+		<Card className="flex flex-col">
+			<CardContent className="p-6 flex flex-col">
+				<div className="mb-6">
+					<div className="flex justify-between items-center mb-2">
+						<h3 className="text-lg font-semibold">
 							Question {currentQuestionIndex + 1} of{' '}
 							{questions.length}
-						</span>
-						<h3 className="text-lg font-semibold mt-2">
-							<MarkdownPreview content={currentQuestion.text} />
 						</h3>
+						<span
+							className={cn('px-2 py-1 rounded text-sm', {
+								'bg-green-100 text-green-800':
+									currentQuestion.status === 'answered',
+								'bg-purple-100 text-purple-800':
+									currentQuestion.status === 'marked-review',
+								'bg-yellow-100 text-yellow-800':
+									currentQuestion.status ===
+									'answered-marked',
+								'bg-red-100 text-red-800':
+									currentQuestion.status === 'not-answered',
+							})}
+						>
+							{currentQuestion.status === 'answered'
+								? 'Answered'
+								: currentQuestion.status === 'marked-review'
+								? 'Marked for Review'
+								: currentQuestion.status === 'answered-marked'
+								? 'Answered & Marked'
+								: 'Not Answered'}
+						</span>
+					</div>
+
+					<div className="mb-4">
+						<MarkdownPreview
+							content={currentQuestion.text}
+							className="prose max-w-none"
+						/>
 					</div>
 
 					<RadioGroup
 						value={selectedAnswer}
 						onValueChange={setSelectedAnswer}
+						className="flex-grow overflow-auto"
 					>
 						{currentQuestion.options.map((option) => (
 							<div
@@ -178,8 +205,10 @@ export default function QuizQuestionView({
 							</div>
 						))}
 					</RadioGroup>
+				</div>
 
-					<div className="flex gap-4 mt-6 flex-wrap">
+				<div className="mt-auto">
+					<div className="flex gap-4 flex-wrap">
 						<Button
 							variant="outline"
 							onClick={() => handleNavigation('prev')}
@@ -237,8 +266,8 @@ export default function QuizQuestionView({
 							</Button>
 						</div>
 					)}
-				</CardContent>
-			</Card>
-		</div>
+				</div>
+			</CardContent>
+		</Card>
 	);
 }
