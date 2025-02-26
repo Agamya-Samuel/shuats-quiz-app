@@ -252,7 +252,7 @@ export default function QuizInterface() {
 				localStorage.removeItem('quiz_answers');
 				setAnswers({});
 				// Redirect to results page
-				router.push('/result');
+				router.push('/user/result');
 			} else {
 				throw new Error(result.message);
 			}
@@ -307,7 +307,7 @@ export default function QuizInterface() {
 								>
 									Return to Dashboard
 								</Button>
-								<Button onClick={() => router.push('/result')}>
+								<Button onClick={() => router.push('/user/result')}>
 									View Results
 								</Button>
 							</div>

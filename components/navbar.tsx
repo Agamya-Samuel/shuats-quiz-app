@@ -163,7 +163,7 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 							</DropdownMenuItem>
 							<DropdownMenuItem asChild>
 								<Link
-									href="/result"
+									href="/user/result"
 									className="w-full cursor-pointer"
 								>
 									<BarChart className="h-5 w-5 text-amber-500" />
