@@ -5,6 +5,7 @@ import { connectToDB } from '@/db';
 import Question from '@/db/models/question';
 import CorrectAnswer from '@/db/models/correct-answer';
 import SubmittedAnswer from '@/db/models/submitted-answer';
+import User from '@/db/models/user';
 
 // Type for MongoDB ObjectId-like objects
 interface ObjectIdLike {
@@ -575,6 +576,124 @@ export async function getQuizResults(userId: string) {
 		return {
 			success: false,
 			error: 'Failed to fetch quiz results',
+		};
+	}
+}
+
+// Get leaderboard data with user scores and performance metrics
+export async function getLeaderboard() {
+	await connectToDB();
+
+	try {
+		// Get all users who have submitted answers
+		const userSubmissions = await SubmittedAnswer.aggregate([
+			{
+				$group: {
+					_id: '$userId',
+					submittedAt: { $max: '$submittedAt' },
+					answersCount: { $sum: 1 },
+				},
+			},
+		]).exec();
+
+		if (!userSubmissions || userSubmissions.length === 0) {
+			return {
+				success: true,
+				data: [],
+			};
+		}
+
+		// Get all questions
+		const questions = await Question.find({}).select('_id').lean().exec();
+
+		const totalQuestions = questions.length;
+
+		// Get correct answers
+		const correctAnswersData = await CorrectAnswer.find({})
+			.select('questionId correctOptionId')
+			.lean()
+			.exec();
+
+		// Create a map of correct answers for quick lookup
+		const correctAnswersMap = new Map(
+			correctAnswersData.map((answer) => [
+				safeToString(answer.questionId),
+				answer.correctOptionId,
+			])
+		);
+
+		// Calculate scores for each user
+		const leaderboardData = await Promise.all(
+			userSubmissions.map(async (submission) => {
+				const userId = submission._id;
+
+				// Get user details
+				const user = await User.findById(userId)
+					.select('name email')
+					.lean()
+					.exec();
+
+				// Get user's submitted answers
+				const userAnswers = await SubmittedAnswer.find({ userId })
+					.select('questionId selectedOptionId')
+					.lean()
+					.exec();
+
+				// Calculate correct answers
+				const correctAnswers = userAnswers.filter((answer) => {
+					const questionId = safeToString(answer.questionId);
+					const correctOptionId = correctAnswersMap.get(questionId);
+					return answer.selectedOptionId === correctOptionId;
+				}).length;
+
+				// Calculate score and other metrics
+				const attemptedQuestions = userAnswers.length;
+				const score =
+					Math.round((correctAnswers / totalQuestions) * 100 * 100) /
+					100;
+				const accuracy =
+					attemptedQuestions > 0
+						? Math.round(
+								(correctAnswers / attemptedQuestions) *
+									100 *
+									100
+						  ) / 100
+						: 0;
+
+				return {
+					userId: safeToString(userId),
+					name: user?.name || 'Anonymous User',
+					email: user?.email || 'unknown',
+					score,
+					totalQuestions,
+					attemptedQuestions,
+					correctAnswers,
+					accuracy,
+					submittedAt: submission.submittedAt,
+				};
+			})
+		);
+
+		// Sort by score (highest first)
+		const sortedLeaderboard = leaderboardData.sort(
+			(a, b) => b.score - a.score
+		);
+
+		// Add rank to each entry
+		const rankedLeaderboard = sortedLeaderboard.map((entry, index) => ({
+			...entry,
+			rank: index + 1,
+		}));
+
+		return {
+			success: true,
+			data: rankedLeaderboard,
+		};
+	} catch (error) {
+		console.error('Error fetching leaderboard data:', error);
+		return {
+			success: false,
+			error: 'Failed to fetch leaderboard data',
 		};
 	}
 }

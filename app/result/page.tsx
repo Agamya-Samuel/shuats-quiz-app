@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { AlertCircle } from 'lucide-react';
+import Navbar from '@/components/navbar';
 
 export interface QuizResult {
 	questionId: string;
@@ -103,58 +104,75 @@ export default function ResultPage() {
 
 	if (error) {
 		return (
-			<Card>
-				<CardContent className="p-6">
-					<div className="text-center text-red-500">
-						<h3 className="text-lg font-semibold mb-2">Error</h3>
-						<p>{error}</p>
-						<Button
-							variant="outline"
-							className="mt-4"
-							onClick={() => router.push('/user/quiz')}
-						>
-							Return to Quiz
-						</Button>
-					</div>
-				</CardContent>
-			</Card>
+			<div className="min-h-screen bg-gray-50">
+				<Navbar />
+				<div className="max-w-4xl mx-auto px-4 py-8">
+					<Card>
+						<CardContent className="p-6">
+							<div className="text-center text-red-500">
+								<h3 className="text-lg font-semibold mb-2">
+									Error
+								</h3>
+								<p>{error}</p>
+								<Button
+									variant="outline"
+									className="mt-4"
+									onClick={() => router.push('/user/quiz')}
+								>
+									Return to Quiz
+								</Button>
+							</div>
+						</CardContent>
+					</Card>
+				</div>
+			</div>
 		);
 	}
 
 	if (!hasAttempted) {
 		return (
-			<Card>
-				<CardContent className="p-6">
-					<div className="text-center">
-						<AlertCircle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
-						<h3 className="text-xl font-semibold mb-2">
-							No Quiz Results Available
-						</h3>
-						<p className="mb-6 text-gray-600">
-							You need to attempt the quiz first to view your
-							results.
-						</p>
-						<Button onClick={() => router.push('/user/quiz')}>
-							Take Quiz Now
-						</Button>
-					</div>
-				</CardContent>
-			</Card>
+			<div className="min-h-screen bg-gray-50">
+				<Navbar />
+				<div className="max-w-4xl mx-auto px-4 py-8">
+					<Card>
+						<CardContent className="p-6">
+							<div className="text-center">
+								<AlertCircle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
+								<h3 className="text-xl font-semibold mb-2">
+									No Quiz Results Available
+								</h3>
+								<p className="mb-6 text-gray-600">
+									You need to attempt the quiz first to view
+									your results.
+								</p>
+								<Button
+									onClick={() => router.push('/user/quiz')}
+								>
+									Take Quiz Now
+								</Button>
+							</div>
+						</CardContent>
+					</Card>
+				</div>
+			</div>
 		);
 	}
 
 	return (
-		<div className="max-w-4xl mx-auto px-4 py-8">
-			{summary && <ResultSummary summary={summary} />}
-			{results.length > 0 && <ResultDetails results={results} />}
+		<div className="min-h-screen bg-gray-50">
+			<Navbar />
+			<div className="max-w-4xl mx-auto px-4 py-8">
+				{summary && <ResultSummary summary={summary} />}
+				{results.length > 0 && <ResultDetails results={results} />}
 
-			<div className="mt-8 text-center">
-				<Button
-					variant="outline"
-					onClick={() => router.push('/user/dashboard')}
-				>
-					Return to Dashboard
-				</Button>
+				<div className="mt-8 text-center">
+					<Button
+						variant="outline"
+						onClick={() => router.push('/user/dashboard')}
+					>
+						Return to Dashboard
+					</Button>
+				</div>
 			</div>
 		</div>
 	);

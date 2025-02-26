@@ -1,6 +1,6 @@
 // components/Navbar.tsx
 
-import { Clock, LogOut } from 'lucide-react';
+import { Clock, LogOut, Trophy } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useState, useEffect } from 'react';
 import { useCookies } from '@/contexts/cookie-context';
@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { logout } from '@/actions/logout';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
+import Link from 'next/link';
 
 interface NavbarProps {
 	showTime?: boolean;
@@ -152,15 +153,31 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 						</div>
 					)}
 					{user && (
-						<Button
-							variant="destructive"
-							size="lg"
-							onClick={handleLogout}
-							className="text-md"
-						>
-							<LogOut className="h-5 w-5 " />
-							<span className="ml-2 hidden sm:block">Logout</span>
-						</Button>
+						<>
+							<Link href="/leaderboard">
+								<Button
+									variant="outline"
+									size="lg"
+									className="text-md"
+								>
+									<Trophy className="h-5 w-5 text-amber-500" />
+									<span className="ml-2 hidden sm:block">
+										Leaderboard
+									</span>
+								</Button>
+							</Link>
+							<Button
+								variant="destructive"
+								size="lg"
+								onClick={handleLogout}
+								className="text-md"
+							>
+								<LogOut className="h-5 w-5 " />
+								<span className="ml-2 hidden sm:block">
+									Logout
+								</span>
+							</Button>
+						</>
 					)}
 				</div>
 			</div>
