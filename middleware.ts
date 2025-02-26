@@ -8,6 +8,7 @@ export async function middleware(request: NextRequest) {
 		'/',
 		'/login',
 		'/register',
+		'/leaderboard',
 		'/admin/login',
 		'/super-admin/login',
 	];
