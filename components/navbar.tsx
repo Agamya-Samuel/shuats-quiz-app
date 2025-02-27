@@ -172,7 +172,7 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 							</DropdownMenuItem>
 							<DropdownMenuItem asChild>
 								<Link
-									href="/leaderboard"
+									href="/user/leaderboard"
 									className="w-full cursor-pointer"
 								>
 									<Trophy className="h-5 w-5 text-amber-500" />
