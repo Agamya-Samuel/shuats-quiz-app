@@ -2,6 +2,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { OptionsMapping } from '@/app/user/quiz/_components/quiz-interface';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { MarkdownPreview } from '@/components/markdown-preview';
 
 interface QuizResult {
 	questionId: string;
@@ -30,7 +31,11 @@ export default function ResultDetails({ results }: ResultDetailsProps) {
 								<h4 className="text-lg font-medium">
 									Question {index + 1}
 								</h4>
-								<p className="mt-2">{result.question}</p>
+								<div className="mt-2">
+									<MarkdownPreview
+										content={result.question}
+									/>
+								</div>
 							</div>
 							<div className="ml-4">
 								{result.isCorrect ? (
@@ -73,7 +78,10 @@ export default function ResultDetails({ results }: ResultDetailsProps) {
 														!isCorrect,
 												})}
 											>
-												{option.text}
+												<MarkdownPreview
+													content={option.text}
+													className="inline"
+												/>
 											</span>
 										</div>
 									</div>
