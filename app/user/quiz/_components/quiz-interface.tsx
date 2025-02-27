@@ -21,6 +21,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog';
+import ImageCarousel from '@/components/image-carousel';
 
 // Types
 export interface Option {
@@ -527,6 +528,18 @@ export default function QuizInterface() {
 								isSubmitting={isSubmitting}
 							/>
 						</div>
+					</div>
+					
+					{/* SHUATS Image Carousel */}
+					<div className="my-8">
+						<h2 className="text-xl font-semibold mb-4">
+							SHUATS Campus Highlights
+						</h2>
+						<ImageCarousel
+							category={['env', 'hostel', 'sports', 'cultural']}
+							className="shadow-md"
+							autoSlideInterval={4000}
+						/>
 					</div>
 				</div>
 			</div>
