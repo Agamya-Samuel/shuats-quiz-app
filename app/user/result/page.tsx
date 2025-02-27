@@ -195,7 +195,7 @@ export default function ResultPage() {
 
 				<div className="mt-8">
 					<h2 className="text-2xl font-semibold mb-4">
-						Detailed Results
+						Question Analysis
 					</h2>
 					<ResultDetails results={results} />
 				</div>
