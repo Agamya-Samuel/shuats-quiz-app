@@ -1,7 +1,13 @@
 // components/Navbar.tsx
 
-import { Clock, LogOut, ChevronDown, Trophy, BarChart, Timer, LayoutDashboard } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+	LogOut,
+	Trophy,
+	BarChart,
+	Timer,
+	LayoutDashboard,
+} from 'lucide-react';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useState, useEffect } from 'react';
 import { useCookies } from '@/contexts/cookie-context';
 import { logout } from '@/actions/logout';
@@ -15,10 +21,8 @@ import {
 	DropdownMenuTrigger,
 	DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-
-interface NavbarProps {
-	showTime?: boolean;
-}
+import { logo } from '@/public/images';
+import Image from 'next/image';
 
 interface IUser {
 	name: string;
@@ -26,8 +30,7 @@ interface IUser {
 	email: string;
 }
 
-export default function Navbar({ showTime = false }: NavbarProps) {
-	const maxTimeInHours = 0.01;
+export default function Navbar() {
 	const [user, setUser] = useState<IUser | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const { user: currentUser } = useCookies();
@@ -57,27 +60,6 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 		setIsLoading(false);
 	}, [currentUser]); // Add currentUser to dependency array
 
-	const [timeRemaining, setTimeRemaining] = useState(
-		maxTimeInHours * 60 * 60
-	); // 30 seconds in seconds
-
-	useEffect(() => {
-		if (showTime) {
-			const timer = setInterval(() => {
-				setTimeRemaining((prev) => (prev > 0 ? prev - 1 : 0));
-			}, 1000);
-			return () => clearInterval(timer);
-		}
-	}, [showTime]);
-
-	const formatTime = (seconds: number) => {
-		const minutes = Math.floor(seconds / 60);
-		const remainingSeconds = seconds % 60;
-		return `${minutes.toString().padStart(2, '0')}:${remainingSeconds
-			.toString()
-			.padStart(2, '0')}`;
-	};
-
 	const handleLogout = async () => {
 		try {
 			await logout();
@@ -103,15 +85,15 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 		return (
 			<div className="bg-white border-b">
 				<div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+					<div className="h-20 w-20 bg-gray-200 rounded-full animate-pulse"></div>
 					<div className="flex items-center space-x-4">
-						<div className="h-12 w-12 bg-gray-200 rounded-full animate-pulse"></div>
 						<div className="flex flex-col gap-1">
-							<div className="h-5 w-32 bg-gray-200 rounded-sm animate-pulse"></div>
-							<div className="h-5 w-24 bg-gray-200 rounded-sm animate-pulse"></div>
-							<div className="h-5 w-24 bg-gray-200 rounded-sm animate-pulse"></div>
+							<div className="h-5 w-40 bg-gray-200 rounded-sm animate-pulse"></div>
+							<div className="h-5 w-52 bg-gray-200 rounded-sm animate-pulse"></div>
+							<div className="h-5 w-52 bg-gray-200 rounded-sm animate-pulse"></div>
 						</div>
+						<div className="h-12 w-12 bg-gray-200 rounded-full animate-pulse"></div>
 					</div>
-					<div className="h-8 w-24 bg-gray-200 rounded-sm animate-pulse"></div>
 				</div>
 			</div>
 		);
@@ -120,25 +102,49 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 	return (
 		<div className="bg-white border-b">
 			<div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+				<div>
+					<Image
+						src={logo}
+						alt="SHIATS Logo"
+						width={75}
+						height={75}
+						priority
+						quality={60}	
+						style={{
+							width: '75px',
+							height: 'auto',
+						}}
+					/>
+				</div>
 				<div className="flex items-center space-x-4">
+					<div>
+						<h2 className="font-semibold">
+							{user?.name || 'Guest'}
+						</h2>
+						<p className="text-sm text-gray-500">
+							{user?.school
+								? user.school.length > 30
+									? user.school.slice(0, 30) + '...'
+									: user.school
+								: 'No School'}
+						</p>
+						<p className="text-sm text-gray-500">
+							{user?.email || 'No Email'}
+						</p>
+					</div>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<div className="flex items-center space-x-2 cursor-pointer">
 								<Avatar className="h-12 w-12">
-									<AvatarImage
-										src="/placeholder.svg?height=48&width=48"
-										alt="User"
-									/>
-									<AvatarFallback>
+									<AvatarFallback className="bg-amber-100 text-amber-800">
 										{user?.name
 											? user.name
 													.split(' ')
 													.map((n) => n[0])
 													.join('')
-											: '?'}
+											: 'U'}
 									</AvatarFallback>
 								</Avatar>
-								<ChevronDown className="h-4 w-4 text-gray-500" />
 							</div>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="start" className="w-48">
@@ -193,31 +199,8 @@ export default function Navbar({ showTime = false }: NavbarProps) {
 							)}
 						</DropdownMenuContent>
 					</DropdownMenu>
-					<div>
-						<h2 className="font-semibold">
-							{user?.name || 'Guest'}
-						</h2>
-						<p className="text-sm text-gray-500">
-							{user?.school
-								? user.school.length > 30
-									? user.school.slice(0, 30) + '...'
-									: user.school
-								: 'No School'}
-						</p>
-						<p className="text-sm text-gray-500">
-							{user?.email || 'No Email'}
-						</p>
-					</div>
-				</div>
-				<div className="flex items-center space-x-4">
-					{showTime && (
-						<div className="flex items-center space-x-2 text-lg font-semibold">
-							<Clock className="h-5 w-5" />
-							<span>{formatTime(timeRemaining)}</span>
-						</div>
-					)}
 				</div>
 			</div>
 		</div>
 	);
-} 
+}
