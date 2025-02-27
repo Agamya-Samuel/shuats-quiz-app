@@ -106,23 +106,25 @@ export default function LeaderboardPage() {
 	if (leaderboardData.length === 0) {
 		return (
 			<div className="min-h-screen bg-gray-50">
-				<Card className="max-w-md mx-auto mt-8">
-					<CardContent className="p-6">
-						<div className="text-center">
-							<AlertTriangle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
-							<h3 className="text-xl font-semibold mb-2">
-								No Data Available
-							</h3>
-							<p className="mb-6 text-gray-600">
-								No one has attempted the quiz yet. Be the first
-								to take the quiz and appear on the leaderboard!
-							</p>
-							<Button onClick={() => router.push('/user/quiz')}>
-								Take Quiz Now
-							</Button>
-						</div>
-					</CardContent>
-				</Card>
+				<div className="max-w-4xl mx-auto px-4 py-8">
+					<Card>
+						<CardContent className="p-6">
+							<div className="text-center">
+								<AlertTriangle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
+								<h3 className="text-xl font-semibold mb-2">
+									No Data Available
+								</h3>
+								<p className="mb-6 text-gray-600">
+									No one has attempted the quiz yet. Be the first
+									to take the quiz and appear on the leaderboard!
+								</p>
+								<Button onClick={() => router.push('/user/quiz')}>
+									Take Quiz Now
+								</Button>
+							</div>
+						</CardContent>
+					</Card>
+				</div>
 			</div>
 		);
 	}
