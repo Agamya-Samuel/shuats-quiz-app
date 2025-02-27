@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle } from 'lucide-react';
+import ImageCarousel from '@/components/image-carousel';
 
 export interface LeaderboardEntry {
 	userId: string | null;
@@ -132,6 +133,17 @@ export default function LeaderboardPage() {
 				<h1 className="text-3xl font-bold mb-8 text-center">
 					Quiz Leaderboard
 				</h1>
+
+				{/* SHUATS Image Carousel */}
+				<div className="mb-8">
+					<h2 className="text-xl font-semibold mb-4">
+						SHUATS Campus Gallery
+					</h2>
+					<ImageCarousel
+						category={['cultural', 'dept', 'lab']}
+						className="shadow-md"
+					/>
+				</div>
 
 				{/* Top performers stats */}
 				<LeaderboardStats leaderboardData={leaderboardData} />

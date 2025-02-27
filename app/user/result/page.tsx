@@ -9,6 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { AlertCircle } from 'lucide-react';
+import ImageCarousel from '@/components/image-carousel';
 
 export interface QuizResult {
 	questionId: string;
@@ -52,7 +53,9 @@ function ResultLoading() {
 		<div className="min-h-screen bg-gray-50 flex items-center justify-center">
 			<div className="flex flex-col items-center gap-4">
 				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-				<p className="text-gray-500 font-medium">Loading quiz results...</p>
+				<p className="text-gray-500 font-medium">
+					Loading quiz results...
+				</p>
 			</div>
 		</div>
 	);
@@ -175,6 +178,18 @@ export default function ResultPage() {
 				<h1 className="text-3xl font-bold mb-8 text-center">
 					Quiz Results
 				</h1>
+
+				{/* SHUATS Image Carousel */}
+				<div className="mb-8">
+					<h2 className="text-xl font-semibold mb-4">
+						SHUATS Campus Highlights
+					</h2>
+					<ImageCarousel
+						category={['env', 'hostel', 'sports']}
+						className="shadow-md"
+						autoSlideInterval={4000}
+					/>
+				</div>
 
 				{summary && <ResultSummary summary={summary} />}
 
