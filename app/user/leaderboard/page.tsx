@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { getLeaderboard } from '@/actions/question';
 import LeaderboardTable from './_components/leaderboard-table';
 import LeaderboardStats from './_components/leaderboard-stats';
-import LoadingState from '@/components/loading-component';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
@@ -27,6 +26,23 @@ interface LeaderboardResponse {
 	success: boolean;
 	data?: LeaderboardEntry[];
 	error?: string;
+}
+
+/**
+ * Custom loading component for the leaderboard page
+ * Displays a centered spinner with text
+ */
+function LeaderboardLoading() {
+	return (
+		<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+			<div className="flex flex-col items-center gap-4">
+				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+				<p className="text-gray-500 font-medium">
+					Loading leaderboard data...
+				</p>
+			</div>
+		</div>
+	);
 }
 
 export default function LeaderboardPage() {
@@ -60,7 +76,7 @@ export default function LeaderboardPage() {
 		fetchLeaderboard();
 	}, []);
 
-	if (isLoading) return <LoadingState />;
+	if (isLoading) return <LeaderboardLoading />;
 
 	if (error) {
 		return (

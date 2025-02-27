@@ -5,7 +5,6 @@ import { getQuizResults } from '@/actions/question';
 import { useCookies } from '@/contexts/cookie-context';
 import ResultSummary from './_components/result-summary';
 import ResultDetails from './_components/result-details';
-import LoadingState from '@/components/loading-component';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
@@ -42,6 +41,21 @@ export interface ServerResponse {
 	};
 	error?: string;
 	hasAttempted?: boolean;
+}
+
+/**
+ * Custom loading component for the result page
+ * Displays a centered spinner with text
+ */
+function ResultLoading() {
+	return (
+		<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+			<div className="flex flex-col items-center gap-4">
+				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+				<p className="text-gray-500 font-medium">Loading quiz results...</p>
+			</div>
+		</div>
+	);
 }
 
 export default function ResultPage() {
@@ -99,7 +113,7 @@ export default function ResultPage() {
 		fetchResults();
 	}, [currentUser?.userId, router]);
 
-	if (isLoading) return <LoadingState />;
+	if (isLoading) return <ResultLoading />;
 
 	if (error) {
 		return (
