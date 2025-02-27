@@ -1,50 +1,43 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Navbar from '@/components/navbar';
 import { useCookies } from '@/contexts/cookie-context';
 import { getQuizResults } from '@/actions/question';
 
 /**
  * Client component wrapper for Navbar
- * Handles path-based logic to determine when to show the timer
+ * Note: Timer has been moved to the quiz interface and removed from navbar
  */
 export default function ClientNavbar() {
-	const pathname = usePathname();
-	const [showTimer, setShowTimer] = useState(false);
 	const { user: currentUser } = useCookies();
-	const [hasAttemptedQuiz, setHasAttemptedQuiz] = useState(false);
 
-	// Check if user has already attempted the quiz
+	// Check if user has already attempted the quiz - kept for future reference
 	useEffect(() => {
 		const checkAttemptStatus = async () => {
 			if (!currentUser?.userId) return;
 
 			try {
 				const response = await getQuizResults(currentUser.userId);
+				// We're not using this state anymore, but keeping the check for future reference
 				if (
 					response.success &&
 					response.data &&
 					response.data.results.length > 0
 				) {
-					setHasAttemptedQuiz(true);
+					// User has attempted the quiz
 				} else {
-					setHasAttemptedQuiz(false);
+					// User has not attempted the quiz
 				}
 			} catch (err) {
 				console.error('Error checking attempt status:', err);
-				setHasAttemptedQuiz(false);
 			}
 		};
 
 		checkAttemptStatus();
 	}, [currentUser?.userId]);
 
-	useEffect(() => {
-		// Only show timer if on quiz page AND user hasn't attempted the quiz yet
-		setShowTimer(pathname === '/user/quiz' && !hasAttemptedQuiz);
-	}, [pathname, hasAttemptedQuiz]);
-
-	return <Navbar showTime={showTimer} />;
+	// Always pass false for showTime to never show the timer in the navbar
+	// The timer is now displayed directly in the quiz interface
+	return <Navbar showTime={false} />;
 }

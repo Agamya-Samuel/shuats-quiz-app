@@ -14,6 +14,13 @@ import QuizLoading from './quiz-loading';
 import { useToast } from '@/hooks/use-toast';
 import { useCookies } from '@/contexts/cookie-context';
 import { useRouter } from 'next/navigation';
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+} from '@/components/ui/dialog';
 
 // Types
 export interface Option {
@@ -71,6 +78,15 @@ const ErrorState = ({
 	</div>
 );
 
+// Format time function
+const formatTime = (seconds: number): string => {
+	const minutes = Math.floor(seconds / 60);
+	const remainingSeconds = seconds % 60;
+	return `${minutes.toString().padStart(2, '0')}:${remainingSeconds
+		.toString()
+		.padStart(2, '0')}`;
+};
+
 export default function QuizInterface() {
 	const { toast } = useToast();
 	const [questions, setQuestions] = useState<Question[]>([]);
@@ -83,6 +99,11 @@ export default function QuizInterface() {
 	const [hasAlreadyAttempted, setHasAlreadyAttempted] = useState(false);
 	const { user: currentUser } = useCookies();
 	const router = useRouter();
+
+	// Timer state
+	const [timeRemaining, setTimeRemaining] = useState(30 * 60); // 30 minutes in seconds
+	const [showTimeUpDialog, setShowTimeUpDialog] = useState(false);
+	const [isTimeUp, setIsTimeUp] = useState(false);
 
 	// Check if user has already attempted the quiz
 	useEffect(() => {
@@ -105,6 +126,79 @@ export default function QuizInterface() {
 
 		checkAttemptStatus();
 	}, [currentUser?.userId]);
+
+	// Timer effect
+	useEffect(() => {
+		// Only start the timer if the quiz is loaded and not already attempted
+		if (isLoading || hasAlreadyAttempted || isTimeUp) return;
+
+		const timerId = setInterval(() => {
+			setTimeRemaining((prev) => {
+				if (prev <= 1) {
+					clearInterval(timerId);
+					setIsTimeUp(true);
+					return 0;
+				}
+				return prev - 1;
+			});
+		}, 1000);
+
+		return () => clearInterval(timerId);
+	}, [isLoading, hasAlreadyAttempted, isTimeUp]);
+
+	// Handle time up
+	useEffect(() => {
+		if (isTimeUp && !isSubmitting && !showTimeUpDialog) {
+			handleTimeUp();
+		}
+	}, [isTimeUp, isSubmitting, showTimeUpDialog]);
+
+	// Handle time up function
+	const handleTimeUp = async () => {
+		if (isSubmitting) return;
+
+		try {
+			setIsSubmitting(true);
+			setShowTimeUpDialog(true);
+
+			// Format answers for submission using stored optionIds
+			const formattedAnswers = Object.values(answers)
+				.map(({ questionId, selectedOptionId }) => ({
+					questionId,
+					selectedOptionId,
+				}))
+				.filter((a) => a.selectedOptionId > 0);
+
+			if (!currentUser?.userId) {
+				throw new Error('You must be logged in to submit the quiz');
+			}
+
+			const result = await submitQuiz(
+				currentUser.userId,
+				formattedAnswers
+			);
+
+			if (result.success) {
+				// Clear local storage after successful submission
+				localStorage.removeItem('quiz_answers');
+				setAnswers({});
+			} else {
+				throw new Error(result.message);
+			}
+		} catch (err) {
+			const errorMessage =
+				err instanceof Error
+					? err.message
+					: 'An unknown error occurred';
+			toast({
+				title: 'Submission Failed',
+				description: `There was an error submitting your quiz: ${errorMessage}`,
+				variant: 'destructive',
+			});
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
 
 	// Load answers from localStorage on mount ONLY
 	useEffect(() => {
@@ -271,6 +365,11 @@ export default function QuizInterface() {
 		}
 	};
 
+	// Handle time up dialog close
+	const handleTimeUpDialogClose = () => {
+		router.push('/user/result');
+	};
+
 	if (isLoading) {
 		return (
 			<div
@@ -307,7 +406,9 @@ export default function QuizInterface() {
 								>
 									Return to Dashboard
 								</Button>
-								<Button onClick={() => router.push('/user/result')}>
+								<Button
+									onClick={() => router.push('/user/result')}
+								>
 									View Results
 								</Button>
 							</div>
@@ -347,66 +448,105 @@ export default function QuizInterface() {
 	}
 
 	return (
-		<div className="max-w-7xl mx-auto w-full px-4 py-6">
-			<div className="w-full flex flex-col">
-				<div className="flex flex-col-reverse lg:flex-row gap-6">
-					{/* Question Palette */}
-					<div className="w-full lg:w-64">
-						<Card className="h-full">
-							<CardContent className="p-4 h-full flex flex-col">
-								<h3 className="font-semibold mb-4">
-									Question Palette
-								</h3>
-								<div className="grid grid-cols-5 gap-2 mb-4">
-									{questions.map((question, index) => (
-										<Button
-											key={question._id}
-											variant="outline"
-											className={cn('h-8 w-8 p-0', {
-												'bg-green-100':
-													question.status ===
-													'answered',
-												'bg-purple-100':
-													question.status ===
-													'marked-review',
-												'bg-yellow-100':
-													question.status ===
-													'answered-marked',
-												'bg-red-100':
-													question.status ===
-													'not-answered',
-											})}
-											onClick={() =>
-												setCurrentQuestionIndex(index)
-											}
-										>
-											{index + 1}
-										</Button>
-									))}
-								</div>
-								<Legend questions={questions} />
-							</CardContent>
-						</Card>
+		<>
+			<div className="max-w-7xl mx-auto w-full px-4 py-6">
+				{/* Timer Display */}
+				<div className="mb-4 flex justify-end">
+					<div
+						className={`px-4 py-2 rounded-md font-mono text-lg font-bold ${
+							timeRemaining < 60
+								? 'bg-red-100 text-red-800 animate-pulse'
+								: timeRemaining < 300
+								? 'bg-yellow-100 text-yellow-800'
+								: 'bg-blue-100 text-blue-800'
+						}`}
+					>
+						Time Remaining: {formatTime(timeRemaining)}
 					</div>
+				</div>
 
-					{/* Quiz Question View */}
-					<div className="flex-grow">
-						<QuizQuestionView
-							questions={questions}
-							currentQuestionIndex={currentQuestionIndex}
-							selectedAnswer={selectedAnswer}
-							setSelectedAnswer={setSelectedAnswer}
-							setQuestions={setQuestions}
-							setAnswers={setAnswers}
-							setCurrentQuestionIndex={setCurrentQuestionIndex}
-							answers={answers}
-							onAutoSave={autoSaveAnswer}
-							onSubmit={handleSubmit}
-							isSubmitting={isSubmitting}
-						/>
+				<div className="w-full flex flex-col">
+					<div className="flex flex-col-reverse lg:flex-row gap-6">
+						{/* Question Palette */}
+						<div className="w-full lg:w-64">
+							<Card className="h-full">
+								<CardContent className="p-4 h-full flex flex-col">
+									<h3 className="font-semibold mb-4">
+										Question Palette
+									</h3>
+									<div className="grid grid-cols-5 gap-2 mb-4">
+										{questions.map((question, index) => (
+											<Button
+												key={question._id}
+												variant="outline"
+												className={cn('h-8 w-8 p-0', {
+													'bg-green-100':
+														question.status ===
+														'answered',
+													'bg-purple-100':
+														question.status ===
+														'marked-review',
+													'bg-yellow-100':
+														question.status ===
+														'answered-marked',
+													'bg-red-100':
+														question.status ===
+														'not-answered',
+												})}
+												onClick={() =>
+													setCurrentQuestionIndex(
+														index
+													)
+												}
+											>
+												{index + 1}
+											</Button>
+										))}
+									</div>
+									<Legend questions={questions} />
+								</CardContent>
+							</Card>
+						</div>
+
+						{/* Quiz Question View */}
+						<div className="flex-grow">
+							<QuizQuestionView
+								questions={questions}
+								currentQuestionIndex={currentQuestionIndex}
+								selectedAnswer={selectedAnswer}
+								setSelectedAnswer={setSelectedAnswer}
+								setQuestions={setQuestions}
+								setAnswers={setAnswers}
+								setCurrentQuestionIndex={
+									setCurrentQuestionIndex
+								}
+								answers={answers}
+								onAutoSave={autoSaveAnswer}
+								onSubmit={handleSubmit}
+								isSubmitting={isSubmitting}
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+
+			{/* Time Up Dialog */}
+			<Dialog open={showTimeUpDialog} onOpenChange={() => {}}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Time&apos;s Up!</DialogTitle>
+						<DialogDescription>
+							Your time has expired and your quiz has been
+							automatically submitted.
+						</DialogDescription>
+					</DialogHeader>
+					<div className="mt-6 flex justify-center">
+						<Button onClick={handleTimeUpDialogClose}>
+							View Results
+						</Button>
+					</div>
+				</DialogContent>
+			</Dialog>
+		</>
 	);
 }
