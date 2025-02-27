@@ -151,6 +151,7 @@ export default function QuizInterface() {
 		if (isTimeUp && !isSubmitting && !showTimeUpDialog) {
 			handleTimeUp();
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isTimeUp, isSubmitting, showTimeUpDialog]);
 
 	// Handle time up function
