@@ -6,9 +6,17 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Question, OptionsMapping } from './quiz-interface';
 import { toast } from '@/hooks/use-toast';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { MarkdownPreview } from '@/components/markdown-preview';
 import { cn } from '@/lib/utils';
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@/components/ui/dialog';
 
 interface StoredAnswer {
 	questionId: string;
@@ -46,6 +54,8 @@ export default function QuizQuestionView({
 	isSubmitting,
 }: QuizQuestionViewProps) {
 	const currentQuestion = questions[currentQuestionIndex];
+	const [showSubmitDialog, setShowSubmitDialog] = useState(false);
+	const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
 	// Load saved answer when switching questions
 	useEffect(() => {
@@ -102,7 +112,13 @@ export default function QuizQuestionView({
 	const handleSaveAndNext = async () => {
 		if (selectedAnswer) {
 			await saveCurrentQuestionState('answered');
-			handleNavigation('next');
+
+			// If it's the last question, show the confirmation dialog
+			if (isLastQuestion) {
+				setShowSubmitDialog(true);
+			} else {
+				handleNavigation('next');
+			}
 		} else {
 			toast({
 				title: 'No Answer Selected',
@@ -137,137 +153,171 @@ export default function QuizQuestionView({
 	};
 
 	return (
-		<Card className="flex flex-col">
-			<CardContent className="p-6 flex flex-col">
-				<div className="mb-6">
-					<div className="flex justify-between items-center mb-2">
-						<h3 className="text-lg font-semibold">
-							Question {currentQuestionIndex + 1} of{' '}
-							{questions.length}
-						</h3>
-						<span
-							className={cn('px-2 py-1 rounded text-sm', {
-								'bg-green-100 text-green-800':
-									currentQuestion.status === 'answered',
-								'bg-purple-100 text-purple-800':
-									currentQuestion.status === 'marked-review',
-								'bg-yellow-100 text-yellow-800':
-									currentQuestion.status ===
-									'answered-marked',
-								'bg-red-100 text-red-800':
-									currentQuestion.status === 'not-answered',
-							})}
-						>
-							{currentQuestion.status === 'answered'
-								? 'Answered'
-								: currentQuestion.status === 'marked-review'
-								? 'Marked for Review'
-								: currentQuestion.status === 'answered-marked'
-								? 'Answered & Marked'
-								: 'Not Answered'}
-						</span>
-					</div>
-
-					<div className="mb-4">
-						<MarkdownPreview
-							content={currentQuestion.text}
-							className="prose max-w-none"
-						/>
-					</div>
-
-					<RadioGroup
-						value={selectedAnswer}
-						onValueChange={setSelectedAnswer}
-						className="flex-grow overflow-auto"
-					>
-						{currentQuestion.options.map((option) => (
-							<div
-								key={option.id}
-								className="flex items-center space-x-2 p-4 rounded-lg hover:bg-gray-50"
+		<>
+			<Card className="flex flex-col">
+				<CardContent className="p-6 flex flex-col">
+					<div className="mb-6">
+						<div className="flex justify-between items-center mb-2">
+							<h3 className="text-lg font-semibold">
+								Question {currentQuestionIndex + 1} of{' '}
+								{questions.length}
+							</h3>
+							<span
+								className={cn('px-2 py-1 rounded text-sm', {
+									'bg-green-100 text-green-800':
+										currentQuestion.status === 'answered',
+									'bg-purple-100 text-purple-800':
+										currentQuestion.status ===
+										'marked-review',
+									'bg-yellow-100 text-yellow-800':
+										currentQuestion.status ===
+										'answered-marked',
+									'bg-red-100 text-red-800':
+										currentQuestion.status ===
+										'not-answered',
+								})}
 							>
-								<RadioGroupItem
-									value={option.text}
-									id={`option-${option.id}`}
-								/>
-								<Label
-									htmlFor={`option-${option.id}`}
-									className="flex-1 cursor-pointer flex items-center"
+								{currentQuestion.status === 'answered'
+									? 'Answered'
+									: currentQuestion.status === 'marked-review'
+									? 'Marked for Review'
+									: currentQuestion.status ===
+									  'answered-marked'
+									? 'Answered & Marked'
+									: 'Not Answered'}
+							</span>
+						</div>
+
+						<div className="mb-4">
+							<MarkdownPreview
+								content={currentQuestion.text}
+								className="prose max-w-none"
+							/>
+						</div>
+
+						<RadioGroup
+							value={selectedAnswer}
+							onValueChange={setSelectedAnswer}
+							className="flex-grow overflow-auto"
+						>
+							{currentQuestion.options.map((option) => (
+								<div
+									key={option.id}
+									className="flex items-center space-x-2 p-4 rounded-lg hover:bg-gray-50"
 								>
-									<span className="font-medium mr-2">
-										{OptionsMapping[option.id]}
-										{')'}
-									</span>
-									<MarkdownPreview
-										content={option.text}
-										className="flex pt-3.5"
+									<RadioGroupItem
+										value={option.text}
+										id={`option-${option.id}`}
 									/>
-								</Label>
-							</div>
-						))}
-					</RadioGroup>
-				</div>
-
-				<div className="mt-auto">
-					<div className="flex gap-4 flex-wrap">
-						<Button
-							variant="outline"
-							onClick={() => handleNavigation('prev')}
-							disabled={currentQuestionIndex === 0}
-						>
-							<ChevronLeft className="h-4 w-4 mr-2" />
-							Previous
-						</Button>
-						<Button variant="success" onClick={handleSaveAndNext}>
-							Save & Next
-							<ChevronRight className="h-4 w-4 ml-2" />
-						</Button>
-						<Button
-							variant="destructive"
-							onClick={() => handleNavigation('next')}
-							disabled={
-								currentQuestionIndex === questions.length - 1
-							}
-						>
-							Skip
-							<ChevronRight className="h-4 w-4 ml-2" />
-						</Button>
-						<Button variant="outline" onClick={handleClear}>
-							Clear Response
-						</Button>
-						<Button
-							variant="yellow"
-							onClick={() => handleMarkForReview(true)}
-							disabled={
-								currentQuestionIndex === questions.length - 1
-							}
-						>
-							Save & Mark for Review
-						</Button>
-						<Button
-							variant="purple"
-							onClick={() => handleMarkForReview(false)}
-							disabled={
-								currentQuestionIndex === questions.length - 1
-							}
-						>
-							Mark for Review
-						</Button>
+									<Label
+										htmlFor={`option-${option.id}`}
+										className="flex-1 cursor-pointer flex items-center"
+									>
+										<span className="font-medium mr-2">
+											{OptionsMapping[option.id]}
+											{')'}
+										</span>
+										<MarkdownPreview
+											content={option.text}
+											className="flex pt-3.5"
+										/>
+									</Label>
+								</div>
+							))}
+						</RadioGroup>
 					</div>
 
-					{currentQuestionIndex === questions.length - 1 && (
-						<div className="mt-6">
+					<div className="mt-auto">
+						<div className="flex gap-4 flex-wrap">
 							<Button
-								onClick={onSubmit}
-								className="w-full"
-								variant="default"
-								disabled={isSubmitting}
+								variant="outline"
+								onClick={() => handleNavigation('prev')}
+								disabled={currentQuestionIndex === 0}
 							>
-								{isSubmitting ? 'Submitting...' : 'Submit Quiz'}
+								<ChevronLeft className="h-4 w-4 mr-2" />
+								Previous
+							</Button>
+							<Button
+								variant="success"
+								onClick={handleSaveAndNext}
+							>
+								{isLastQuestion
+									? 'Save & Submit'
+									: 'Save & Next'}
+								{!isLastQuestion && (
+									<ChevronRight className="h-4 w-4 ml-2" />
+								)}
+							</Button>
+							<Button
+								variant="destructive"
+								onClick={() => handleNavigation('next')}
+								disabled={
+									currentQuestionIndex ===
+									questions.length - 1
+								}
+							>
+								Skip
+								<ChevronRight className="h-4 w-4 ml-2" />
+							</Button>
+							<Button variant="outline" onClick={handleClear}>
+								Clear Response
+							</Button>
+							<Button
+								variant="yellow"
+								onClick={() => handleMarkForReview(true)}
+								disabled={
+									currentQuestionIndex ===
+									questions.length - 1
+								}
+							>
+								Save & Mark for Review
+							</Button>
+							<Button
+								variant="purple"
+								onClick={() => handleMarkForReview(false)}
+								disabled={
+									currentQuestionIndex ===
+									questions.length - 1
+								}
+							>
+								Mark for Review
 							</Button>
 						</div>
-					)}
-				</div>
-			</CardContent>
-		</Card>
+					</div>
+				</CardContent>
+			</Card>
+
+			{/* Confirmation Dialog */}
+			<Dialog open={showSubmitDialog} onOpenChange={setShowSubmitDialog}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Submit Quiz</DialogTitle>
+						<DialogDescription>
+							Are you sure you want to submit your quiz? This
+							action cannot be undone.
+						</DialogDescription>
+					</DialogHeader>
+					<DialogFooter className="mt-4">
+						<Button
+							variant="outline"
+							onClick={() => setShowSubmitDialog(false)}
+						>
+							Cancel
+						</Button>
+						<Button
+							onClick={() => {
+								setShowSubmitDialog(false);
+								onSubmit();
+							}}
+							disabled={isSubmitting}
+						>
+							{isSubmitting
+								? 'Submitting...'
+								: 'Yes, Submit Quiz'}
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
+		</>
 	);
 }
