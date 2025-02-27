@@ -104,4 +104,6 @@ const cataloguePics = {
 	],
 };
 
+export const logo = `${s3BucketBaseUrl}/SHIATS_LOGO_hq.png`;
+
 export default cataloguePics;
