@@ -185,7 +185,7 @@ export default function ResultPage() {
 						SHUATS Campus Highlights
 					</h2>
 					<ImageCarousel
-						category={['env', 'hostel', 'sports']}
+						category={['env', 'hostel', 'sports', 'cultural']}
 						className="shadow-md"
 						autoSlideInterval={4000}
 					/>
