@@ -1,8 +1,9 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { OptionsMapping } from '@/app/user/quiz/_components/quiz-interface';
-import { CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, XCircle, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MarkdownPreview } from '@/components/markdown-preview';
+import { subjects } from '@/lib/constants';
 
 interface QuizResult {
 	questionId: string;
@@ -11,11 +12,18 @@ interface QuizResult {
 	correctOptionId: number | null;
 	userSelectedOptionId: number | null;
 	isCorrect: boolean;
+	subject?: string;
 }
 
 interface ResultDetailsProps {
 	results: QuizResult[];
 }
+
+// Helper function to get subject name from key
+const getSubjectName = (subjectKey: string): string => {
+	const subject = subjects.find(s => s.key === subjectKey);
+	return subject ? subject.value : subjectKey;
+};
 
 export default function ResultDetails({ results }: ResultDetailsProps) {
 	return (
@@ -40,6 +48,12 @@ export default function ResultDetails({ results }: ResultDetailsProps) {
 											)}
 										</span>
 									</h4>
+									{result.subject && (
+										<div className="flex items-center text-xs text-muted-foreground mt-1">
+											<BookOpen className="w-3 h-3 mr-1" />
+											<span>{getSubjectName(result.subject)}</span>
+										</div>
+									)}
 								</div>
 							</div>
 

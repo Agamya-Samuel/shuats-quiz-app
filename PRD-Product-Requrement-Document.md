@@ -80,27 +80,17 @@ and recommending them appropriate courses,
 - [ ] notify user about result declaration
 - [ ] add sentry for error monitoring
 
----
----
----
----
----
----
----
----
----
----
----
-
-
-
-
-
 # TODO
 
-- [ ] when time is over, end the quiz and auto submit the quiz answers.
-- [ ] `/result` and `/leaderboard` mode them to `/user/result` and `/user/leaderboard`
-- [ ] make consistent user of loading spinner.
-- [ ] add shuats logo to the quiz page.
-- [ ] add shuats catalog pics carousel + image viewer to the quiz `leaderboard` page + `result` page.
-- [ ] add markdown preview in `result` page.
+- [x] when on last question, show `Save & Next` button, when clicked, it should show a Dialog box to confirm if user wants to submit the quiz.
+- [x] when time is over, end the quiz and auto submit the quiz answers.
+- [X] `/result` and `/leaderboard` mode them to `/user/result` and `/user/leaderboard`
+- [x] make consistent use of loading spinner.
+- [x] add shuats logo to the quiz page.
+- [x] add shuats catalog pics carousel + image viewer to the quiz `leaderboard` page + `result` page.
+- [x] add markdown preview in `result` page.
+- [x] make result page grid view.
+- [ ] remove `Mark for Review` button from the quiz page.
+- [X] add choice of subject before quiz starts.
+- [ ] randomize the question order in quiz.
+- [ ] when quiz starts, record the start time in database and based in the start time, make the timer run accordingly, and end time in database, and calculate the time taken by the user to complete the quiz.

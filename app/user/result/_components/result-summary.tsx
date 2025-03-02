@@ -1,4 +1,14 @@
 import { Card, CardContent } from '@/components/ui/card';
+import { subjects } from '@/lib/constants';
+import { QuizResult } from '../page';
+import {
+	PieChart,
+	Pie,
+	Cell,
+	ResponsiveContainer,
+	Legend,
+	Tooltip,
+} from 'recharts';
 
 export interface ResultSummaryProps {
 	summary: {
@@ -8,9 +18,31 @@ export interface ResultSummaryProps {
 		score: number;
 		submittedAt: string;
 	};
+	results?: QuizResult[]; // Add results prop to calculate subject stats
 }
 
-export default function ResultSummary({ summary }: ResultSummaryProps) {
+// Helper function to get subject name from key
+const getSubjectName = (subjectKey: string): string => {
+	const subject = subjects.find((s) => s.key === subjectKey);
+	return subject ? subject.value : subjectKey;
+};
+
+// Colors for the pie chart
+const COLORS = [
+	'#0088FE',
+	'#00C49F',
+	'#FFBB28',
+	'#FF8042',
+	'#8884d8',
+	'#82ca9d',
+	'#ffc658',
+	'#8dd1e1',
+];
+
+export default function ResultSummary({
+	summary,
+	results = [],
+}: ResultSummaryProps) {
 	const {
 		totalQuestions,
 		attemptedQuestions,
@@ -20,6 +52,10 @@ export default function ResultSummary({ summary }: ResultSummaryProps) {
 	} = summary;
 	const attemptedPercentage = (attemptedQuestions / totalQuestions) * 100;
 	const accuracy = (correctAnswers / attemptedQuestions) * 100;
+
+	// Calculate subject statistics if results are provided
+	const subjectStats =
+		results.length > 0 ? calculateSubjectStats(results) : [];
 
 	return (
 		<Card className="mb-8">
@@ -71,7 +107,76 @@ export default function ResultSummary({ summary }: ResultSummaryProps) {
 						</p>
 					</div>
 				</div>
+
+				{/* Subject Performance Chart */}
+				{subjectStats.length > 0 && (
+					<div className="mt-8">
+						<h3 className="text-lg font-semibold mb-4 text-center">
+							Performance by Subject
+						</h3>
+						<div className="h-64">
+							<ResponsiveContainer width="100%" height="100%">
+								<PieChart>
+									<Pie
+										data={subjectStats}
+										cx="50%"
+										cy="50%"
+										labelLine={false}
+										outerRadius={80}
+										fill="#8884d8"
+										dataKey="count"
+										nameKey="name"
+										label={({ name, percent }) =>
+											`${name} ${(percent * 100).toFixed(
+												0
+											)}%`
+										}
+									>
+										{subjectStats.map((entry, index) => (
+											<Cell
+												key={`cell-${index}`}
+												fill={
+													COLORS[
+														index % COLORS.length
+													]
+												}
+											/>
+										))}
+									</Pie>
+									<Tooltip
+										formatter={(value, name) => [
+											`${value} questions`,
+											name,
+										]}
+									/>
+									<Legend />
+								</PieChart>
+							</ResponsiveContainer>
+						</div>
+					</div>
+				)}
 			</CardContent>
 		</Card>
 	);
+}
+
+// Function to calculate subject statistics
+function calculateSubjectStats(results: QuizResult[]) {
+	// Count questions by subject
+	const subjectCounts: Record<string, number> = {};
+
+	results.forEach((result) => {
+		if (result.subject) {
+			const subjectName = getSubjectName(result.subject);
+			subjectCounts[subjectName] = (subjectCounts[subjectName] || 0) + 1;
+		} else {
+			subjectCounts['Unknown'] = (subjectCounts['Unknown'] || 0) + 1;
+		}
+	});
+
+	// Convert to array format for the chart
+	return Object.entries(subjectCounts).map(([name, count]) => ({
+		name,
+		count,
+	}));
 }

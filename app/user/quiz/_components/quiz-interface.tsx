@@ -22,6 +22,8 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog';
 import ImageCarousel from '@/components/image-carousel';
+import SubjectSelector from './subject-selector';
+import { subjects } from '@/lib/constants';
 
 // Types
 export interface Option {
@@ -33,6 +35,7 @@ export interface Question {
 	_id: string;
 	text: string;
 	options: Option[];
+	subject: string;
 	status:
 		| 'not-visited'
 		| 'not-answered'
@@ -98,8 +101,14 @@ export default function QuizInterface() {
 	const [answers, setAnswers] = useState<Record<string, StoredAnswer>>({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [hasAlreadyAttempted, setHasAlreadyAttempted] = useState(false);
+	const [isCheckingAttemptStatus, setIsCheckingAttemptStatus] =
+		useState(true);
 	const { user: currentUser } = useCookies();
 	const router = useRouter();
+
+	// Subject selection state
+	const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+	const [showSubjectSelector, setShowSubjectSelector] = useState(false);
 
 	// Timer state
 	const [timeRemaining, setTimeRemaining] = useState(30 * 60); // 30 minutes in seconds
@@ -111,6 +120,8 @@ export default function QuizInterface() {
 		const checkAttemptStatus = async () => {
 			if (!currentUser?.userId) return;
 
+			setIsCheckingAttemptStatus(true);
+
 			try {
 				const response = await getQuizResults(currentUser.userId);
 				if (
@@ -119,9 +130,19 @@ export default function QuizInterface() {
 					response.data.results.length > 0
 				) {
 					setHasAlreadyAttempted(true);
+					setShowSubjectSelector(false);
+				} else {
+					// User hasn't attempted the quiz, show subject selector
+					setHasAlreadyAttempted(false);
+					setShowSubjectSelector(true);
 				}
 			} catch (err) {
 				console.error('Error checking attempt status:', err);
+				setError(
+					'Failed to check quiz attempt status. Please try again.'
+				);
+			} finally {
+				setIsCheckingAttemptStatus(false);
 			}
 		};
 
@@ -130,8 +151,9 @@ export default function QuizInterface() {
 
 	// Timer effect
 	useEffect(() => {
-		// Only start the timer if the quiz is loaded and not already attempted
-		if (isLoading || hasAlreadyAttempted || isTimeUp) return;
+		// Only start the timer if the quiz is loaded, not already attempted, and subject is selected
+		if (isLoading || hasAlreadyAttempted || isTimeUp || showSubjectSelector)
+			return;
 
 		const timerId = setInterval(() => {
 			setTimeRemaining((prev) => {
@@ -145,14 +167,14 @@ export default function QuizInterface() {
 		}, 1000);
 
 		return () => clearInterval(timerId);
-	}, [isLoading, hasAlreadyAttempted, isTimeUp]);
+	}, [isLoading, hasAlreadyAttempted, isTimeUp, showSubjectSelector]);
 
 	// Handle time up
 	useEffect(() => {
 		if (isTimeUp && !isSubmitting && !showTimeUpDialog) {
 			handleTimeUp();
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isTimeUp, isSubmitting, showTimeUpDialog]);
 
 	// Handle time up function
@@ -241,21 +263,41 @@ export default function QuizInterface() {
 		}
 	}, [answers]);
 
-	const fetchQuestions = useCallback(async () => {
+	// Handle subject selection
+	const handleSubjectSelect = (subject: string) => {
+		setSelectedSubject(subject);
+		setShowSubjectSelector(false);
+		fetchQuestions(subject);
+	};
+
+	// Fetch and prioritize questions based on selected subject
+	const fetchQuestions = useCallback(async (subject?: string) => {
 		try {
 			setIsLoading(true);
 			setError(null);
 			const response = await getAllQuestions();
 
 			if (response.success && Array.isArray(response.questions)) {
-				const initializedQuestions = response.questions.map(
+				// Sort questions to prioritize the selected subject
+				let sortedQuestions = [...response.questions];
+
+				if (subject) {
+					// Put questions from the selected subject first
+					sortedQuestions = [
+						...sortedQuestions.filter((q) => q.subject === subject),
+						...sortedQuestions.filter((q) => q.subject !== subject),
+					];
+				}
+
+				// Initialize question status
+				const initializedQuestions = sortedQuestions.map(
 					(q, index) => ({
 						...q,
 						status: index === 0 ? 'not-answered' : 'not-visited',
-						userAnswer: undefined,
 					})
-				);
-				setQuestions(initializedQuestions as Question[]);
+				) as Question[];
+
+				setQuestions(initializedQuestions);
 			} else {
 				throw new Error(response.error || 'Failed to fetch questions');
 			}
@@ -265,10 +307,6 @@ export default function QuizInterface() {
 			setIsLoading(false);
 		}
 	}, []);
-
-	useEffect(() => {
-		fetchQuestions();
-	}, [fetchQuestions]);
 
 	// Auto-save answer to server
 	const autoSaveAnswer = useCallback(
@@ -372,51 +410,62 @@ export default function QuizInterface() {
 		router.push('/user/result');
 	};
 
+	// Show loading state while checking attempt status
+	if (isCheckingAttemptStatus) {
+		return (
+			<div
+				className="max-w-7xl mx-auto w-full px-4 flex items-center justify-center"
+				style={{ minHeight: 'calc(100vh - 150px)' }}
+			>
+				<QuizLoading message="Checking quiz status..." />
+			</div>
+		);
+	}
+
+	// If user has already attempted the quiz, show a message
+	if (hasAlreadyAttempted) {
+		return (
+			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+				<Card className="max-w-lg w-full">
+					<CardContent className="p-6">
+						<div className="text-center">
+							<h3 className="text-xl font-semibold mb-2">
+								Quiz Already Attempted
+							</h3>
+							<p className="mb-6">
+								You have already attempted this quiz. You can
+								view your results below.
+							</p>
+							<Button onClick={() => router.push('/user/result')}>
+								View Results
+							</Button>
+						</div>
+					</CardContent>
+				</Card>
+			</div>
+		);
+	}
+
+	// Show subject selector before starting the quiz
+	if (showSubjectSelector) {
+		return <SubjectSelector onSubjectSelect={handleSubjectSelect} />;
+	}
+
+	// Show loading state while fetching questions
 	if (isLoading) {
 		return (
 			<div
 				className="max-w-7xl mx-auto w-full px-4 flex items-center justify-center"
 				style={{ minHeight: 'calc(100vh - 150px)' }}
 			>
-				<QuizLoading />
-			</div>
-		);
-	}
-
-	if (hasAlreadyAttempted) {
-		return (
-			<div
-				className="max-w-7xl mx-auto w-full px-4 flex items-center justify-center"
-				style={{ minHeight: 'calc(100vh - 150px)' }}
-			>
-				<Card className="max-w-lg w-full">
-					<CardContent className="p-6">
-						<div className="text-center">
-							<h3 className="text-xl font-semibold mb-4">
-								Quiz Already Attempted
-							</h3>
-							<p className="mb-6 text-gray-600">
-								You have already attempted this quiz. You can
-								only take the quiz once.
-							</p>
-							<div className="flex justify-center gap-4">
-								<Button
-									variant="outline"
-									onClick={() =>
-										router.push('/user/dashboard')
-									}
-								>
-									Return to Dashboard
-								</Button>
-								<Button
-									onClick={() => router.push('/user/result')}
-								>
-									View Results
-								</Button>
-							</div>
-						</div>
-					</CardContent>
-				</Card>
+				<QuizLoading
+					message={`Loading ${
+						selectedSubject
+							? subjects.find((s) => s.key === selectedSubject)
+									?.value
+							: ''
+					} questions...`}
+				/>
 			</div>
 		);
 	}
@@ -427,7 +476,10 @@ export default function QuizInterface() {
 				className="max-w-7xl mx-auto w-full px-4"
 				style={{ minHeight: 'calc(100vh - 150px)' }}
 			>
-				<ErrorState message={error} retry={fetchQuestions} />
+				<ErrorState
+					message={error}
+					retry={() => fetchQuestions(selectedSubject || undefined)}
+				/>
 			</div>
 		);
 	}
@@ -450,20 +502,33 @@ export default function QuizInterface() {
 	}
 
 	return (
-		<>
-			<div className="max-w-7xl mx-auto w-full px-4 py-6">
-				{/* Timer Display */}
-				<div className="mb-4 flex justify-end">
-					<div
-						className={`px-4 py-2 rounded-md font-mono text-lg font-bold ${
-							timeRemaining < 60
-								? 'bg-red-100 text-red-800 animate-pulse'
-								: timeRemaining < 300
-								? 'bg-yellow-100 text-yellow-800'
-								: 'bg-blue-100 text-blue-800'
-						}`}
-					>
-						Time Remaining: {formatTime(timeRemaining)}
+		<div className="min-h-screen bg-gray-50 py-8">
+			<div className="max-w-7xl mx-auto px-4">
+				{/* Quiz Header */}
+				<div className="flex flex-col md:flex-row justify-between items-center mb-6">
+					<div>
+						{selectedSubject && (
+							<div className="flex items-center">
+								<span className="text-sm font-medium bg-primary/10 text-primary px-3 py-1 rounded-full">
+									Prioritizing:{' '}
+									{subjects.find(
+										(s) => s.key === selectedSubject
+									)?.value || selectedSubject}
+								</span>
+							</div>
+						)}
+					</div>
+					<div className="mt-4 md:mt-0 flex items-center">
+						<div
+							className={cn(
+								'text-lg font-semibold px-4 py-2 rounded-md',
+								timeRemaining < 300
+									? 'bg-red-100 text-red-700'
+									: 'bg-blue-100 text-blue-700'
+							)}
+						>
+							Time: {formatTime(timeRemaining)}
+						</div>
 					</div>
 				</div>
 
@@ -529,7 +594,7 @@ export default function QuizInterface() {
 							/>
 						</div>
 					</div>
-					
+
 					{/* SHUATS Image Carousel */}
 					<div className="my-8">
 						<h2 className="text-xl font-semibold mb-4">
@@ -561,6 +626,6 @@ export default function QuizInterface() {
 					</div>
 				</DialogContent>
 			</Dialog>
-		</>
+		</div>
 	);
 }

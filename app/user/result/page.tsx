@@ -18,6 +18,7 @@ export interface QuizResult {
 	correctOptionId: number | null;
 	userSelectedOptionId: number | null;
 	isCorrect: boolean;
+	subject?: string;
 }
 
 export interface QuizSummary {
@@ -148,7 +149,7 @@ export default function ResultPage() {
 		return (
 			<div className="min-h-screen bg-gray-50">
 				<div className="max-w-4xl mx-auto px-4 py-8">
-					<Card>
+					<Card className="shadow-md">
 						<CardContent className="p-6">
 							<div className="text-center">
 								<AlertCircle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
@@ -159,11 +160,25 @@ export default function ResultPage() {
 									You need to attempt the quiz first to view
 									your results.
 								</p>
-								<Button
-									onClick={() => router.push('/user/quiz')}
-								>
-									Take Quiz Now
-								</Button>
+								<div className="flex flex-col sm:flex-row justify-center gap-4">
+									<Button
+										onClick={() =>
+											router.push('/user/quiz')
+										}
+										className="flex items-center gap-2"
+									>
+										Take Quiz Now
+									</Button>
+									<Button
+										variant="outline"
+										onClick={() =>
+											router.push('/user/dashboard')
+										}
+										className="flex items-center gap-2"
+									>
+										Return to Dashboard
+									</Button>
+								</div>
 							</div>
 						</CardContent>
 					</Card>
@@ -191,7 +206,9 @@ export default function ResultPage() {
 					/>
 				</div>
 
-				{summary && <ResultSummary summary={summary} />}
+				{summary && (
+					<ResultSummary summary={summary} results={results} />
+				)}
 
 				<div className="mt-8">
 					<h2 className="text-2xl font-semibold mb-4">

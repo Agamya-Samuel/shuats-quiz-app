@@ -491,9 +491,9 @@ export async function getQuizResults(userId: string) {
 			};
 		}
 
-		// Get all questions with lean() to get plain objects
+		// Get all questions with lean() to get plain objects - include subject field
 		const questions = await Question.find({})
-			.select('_id text options')
+			.select('_id text options subject')
 			.lean()
 			.exec();
 
@@ -537,6 +537,7 @@ export async function getQuizResults(userId: string) {
 						? Number(userAnswer.selectedOptionId)
 						: null,
 				isCorrect: userAnswer?.selectedOptionId === correctOptionId,
+				subject: question.subject ? String(question.subject) : undefined, // Include subject information
 			};
 		});
 
