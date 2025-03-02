@@ -72,7 +72,7 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<div className="max-w-md mx-auto">
-				<h1 className="text-2xl font-bold mb-6">Maintainer Login</h1>
+				<h1 className="text-2xl font-bold mb-6">Admin Login</h1>
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(onSubmit)}
