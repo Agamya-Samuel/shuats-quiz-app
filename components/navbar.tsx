@@ -1,12 +1,6 @@
 // components/Navbar.tsx
 
-import {
-	LogOut,
-	Trophy,
-	BarChart,
-	Timer,
-	LayoutDashboard,
-} from 'lucide-react';
+import { LogOut, Trophy, BarChart, Timer, LayoutDashboard } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useState, useEffect } from 'react';
 import { useCookies } from '@/contexts/cookie-context';
@@ -30,7 +24,12 @@ interface IUser {
 	email: string;
 }
 
-export default function Navbar() {
+// Define props interface for Navbar component
+interface NavbarProps {
+	showTime?: boolean; // Optional prop with default value
+}
+
+export default function Navbar({ showTime = true }: NavbarProps) {
 	const [user, setUser] = useState<IUser | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const { user: currentUser } = useCookies();
@@ -109,7 +108,7 @@ export default function Navbar() {
 						width={75}
 						height={75}
 						priority
-						quality={60}	
+						quality={60}
 						style={{
 							width: '75px',
 							height: 'auto',
@@ -153,7 +152,11 @@ export default function Navbar() {
 									href="/user/quiz"
 									className="w-full cursor-pointer"
 								>
-									<Timer className="h-5 w-5 text-green-600" />
+									{showTime ? (
+										<Timer className="h-5 w-5 text-green-600" />
+									) : (
+										<LayoutDashboard className="h-5 w-5 text-green-600" />
+									)}
 									Quiz
 								</Link>
 							</DropdownMenuItem>
