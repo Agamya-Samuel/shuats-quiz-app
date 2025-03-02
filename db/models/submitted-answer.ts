@@ -6,7 +6,9 @@ interface SubmittedAnswer extends Document {
 	questionId: Schema.Types.ObjectId;
 	userId: Schema.Types.ObjectId;
 	selectedOptionId: number;
-	submittedAt: Date;
+	startTime: Date;      // When the user started the quiz
+	submittedAt: Date;    // When the user submitted the answer
+	timeTakenSeconds: Number; // Time taken to complete the quiz in seconds
 }
 
 // Create the SubmittedAnswer schema
@@ -24,7 +26,9 @@ const SubmittedAnswerSchema = new Schema<SubmittedAnswer>(
 			index: true,
 		},
 		selectedOptionId: { type: Number, required: true },
+		startTime: { type: Date, default: null },
 		submittedAt: { type: Date, default: Date.now },
+		timeTakenSeconds: { type: Number, default: null },
 	},
 	{
 		versionKey: false,

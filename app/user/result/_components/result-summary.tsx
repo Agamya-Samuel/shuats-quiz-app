@@ -17,6 +17,7 @@ export interface ResultSummaryProps {
 		correctAnswers: number;
 		score: number;
 		submittedAt: string;
+		timeTaken: number | null;
 	};
 	results?: QuizResult[]; // Add results prop to calculate subject stats
 }
@@ -25,6 +26,20 @@ export interface ResultSummaryProps {
 const getSubjectName = (subjectKey: string): string => {
 	const subject = subjects.find((s) => s.key === subjectKey);
 	return subject ? subject.value : subjectKey;
+};
+
+// Helper function to format time in minutes and seconds
+const formatTime = (seconds: number | null): string => {
+	if (seconds === null) return 'Not available';
+
+	const minutes = Math.floor(seconds / 60);
+	const remainingSeconds = seconds % 60;
+
+	if (minutes === 0) {
+		return `${remainingSeconds} seconds`;
+	}
+
+	return `${minutes} min ${remainingSeconds} sec`;
 };
 
 // Colors for the pie chart
@@ -49,6 +64,7 @@ export default function ResultSummary({
 		correctAnswers,
 		score,
 		submittedAt,
+		timeTaken,
 	} = summary;
 	const attemptedPercentage = (attemptedQuestions / totalQuestions) * 100;
 	const accuracy = (correctAnswers / attemptedQuestions) * 100;
@@ -100,10 +116,18 @@ export default function ResultSummary({
 					</div>
 					<div className="text-center p-4 bg-gray-50 rounded-lg">
 						<h3 className="text-lg font-semibold mb-2">
-							Submitted At
+							Submission Time
 						</h3>
-						<p className="text-lg">
+						<p className="text-lg font-medium">
 							{new Date(submittedAt).toLocaleString()}
+						</p>
+					</div>
+					<div className="text-center p-4 bg-gray-50 rounded-lg">
+						<h3 className="text-lg font-semibold mb-2">
+							Time Taken
+						</h3>
+						<p className="text-lg font-medium">
+							{formatTime(timeTaken)}
 						</p>
 					</div>
 				</div>

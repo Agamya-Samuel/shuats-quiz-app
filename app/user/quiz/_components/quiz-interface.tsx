@@ -5,7 +5,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { getAllQuestions } from '@/actions/question';
-import { submitAnswer, submitQuiz } from '@/actions/submit-answers';
+import {
+	submitAnswer,
+	submitQuiz,
+	recordQuizStartTime,
+} from '@/actions/submit-answers';
 import { getQuizResults } from '@/actions/question';
 import Legend from './legend';
 import QuizQuestionView from './quiz-question-view';
@@ -115,6 +119,9 @@ export default function QuizInterface() {
 	const [showTimeUpDialog, setShowTimeUpDialog] = useState(false);
 	const [isTimeUp, setIsTimeUp] = useState(false);
 
+	// Quiz start time state
+	const [quizStartTime, setQuizStartTime] = useState<Date | null>(null);
+
 	// Check if user has already attempted the quiz
 	useEffect(() => {
 		const checkAttemptStatus = async () => {
@@ -199,7 +206,8 @@ export default function QuizInterface() {
 
 			const result = await submitQuiz(
 				currentUser.userId,
-				formattedAnswers
+				formattedAnswers,
+				quizStartTime
 			);
 
 			if (result.success) {
@@ -235,6 +243,17 @@ export default function QuizInterface() {
 				console.error('Error parsing saved answers:', err);
 			}
 		}
+
+		// Load quiz start time from localStorage if it exists
+		const savedStartTime = localStorage.getItem('quiz_start_time');
+		if (savedStartTime) {
+			try {
+				const startTime = new Date(JSON.parse(savedStartTime));
+				setQuizStartTime(startTime);
+			} catch (err) {
+				console.error('Error parsing saved start time:', err);
+			}
+		}
 	}, []); // Empty dependency array - run only on mount
 
 	// Update questions when answers change
@@ -264,9 +283,28 @@ export default function QuizInterface() {
 	}, [answers]);
 
 	// Handle subject selection
-	const handleSubjectSelect = (subject: string) => {
+	const handleSubjectSelect = async (subject: string) => {
 		setSelectedSubject(subject);
 		setShowSubjectSelector(false);
+
+		// Record quiz start time when user selects a subject
+		if (currentUser?.userId) {
+			try {
+				const response = await recordQuizStartTime(currentUser.userId);
+				if (response.success && response.startTime) {
+					const startTime = new Date(response.startTime);
+					setQuizStartTime(startTime);
+					// Save start time to localStorage
+					localStorage.setItem(
+						'quiz_start_time',
+						JSON.stringify(startTime)
+					);
+				}
+			} catch (err) {
+				console.error('Error recording quiz start time:', err);
+			}
+		}
+
 		fetchQuestions(subject);
 	};
 
@@ -299,43 +337,73 @@ export default function QuizInterface() {
 
 				setQuestions(initializedQuestions);
 			} else {
-				throw new Error(response.error || 'Failed to fetch questions');
+				throw new Error('Failed to fetch questions');
 			}
 		} catch (err) {
-			setError(err instanceof Error ? err.message : 'An error occurred');
+			console.error('Error fetching questions:', err);
+			setError(
+				'Failed to load questions. Please refresh the page and try again.'
+			);
 		} finally {
 			setIsLoading(false);
 		}
 	}, []);
 
-	// Auto-save answer to server
-	const autoSaveAnswer = useCallback(
-		async (questionId: string, answer: string) => {
-			if (!currentUser?.userId) return;
+	// Handle answer selection
+	const handleAnswerSelect = async (optionId: number, optionText: string) => {
+		if (isSubmitting) return;
 
+		const currentQuestion = questions[currentQuestionIndex];
+		if (!currentQuestion) return;
+
+		// Store the answer
+		const updatedAnswers = {
+			...answers,
+			[currentQuestion._id]: {
+				questionId: currentQuestion._id,
+				selectedOptionId: optionId,
+				answerText: optionText,
+			},
+		};
+		setAnswers(updatedAnswers);
+
+		// Update the current question's status
+		const updatedQuestions = [...questions];
+		updatedQuestions[currentQuestionIndex] = {
+			...currentQuestion,
+			status: 'answered',
+			userAnswer: optionText,
+		};
+		setQuestions(updatedQuestions);
+
+		// Auto-save the answer to the server
+		if (currentUser?.userId) {
 			try {
-				const question = questions[currentQuestionIndex];
-				const option = question.options.find(
-					(opt) => opt.text === answer
-				);
-
-				if (!option) return;
-
-				const result = await submitAnswer(
+				await submitAnswer(
 					currentUser.userId,
-					questionId,
-					option.id
+					currentQuestion._id,
+					optionId,
+					quizStartTime
 				);
-
-				if (!result.success) {
-					console.error('Auto-save failed:', result.message);
-				}
 			} catch (err) {
 				console.error('Error auto-saving answer:', err);
 			}
-		},
-		[currentUser?.userId, questions, currentQuestionIndex]
-	);
+		}
+	};
+
+	// Adapter function to match the expected onAutoSave signature
+	const handleAutoSave = async (questionId: string, answerText: string) => {
+		// Find the question
+		const question = questions.find((q) => q._id === questionId);
+		if (!question) return;
+
+		// Find the option that matches the answer text
+		const option = question.options.find((opt) => opt.text === answerText);
+		if (!option) return;
+
+		// Call handleAnswerSelect with the correct parameters
+		await handleAnswerSelect(option.id, answerText);
+	};
 
 	// Handle final quiz submission
 	const handleSubmit = async () => {
@@ -372,7 +440,8 @@ export default function QuizInterface() {
 
 			const result = await submitQuiz(
 				currentUser.userId,
-				formattedAnswers
+				formattedAnswers,
+				quizStartTime
 			);
 
 			if (result.success) {
@@ -384,6 +453,7 @@ export default function QuizInterface() {
 				});
 				// Clear local storage after successful submission
 				localStorage.removeItem('quiz_answers');
+				localStorage.removeItem('quiz_start_time');
 				setAnswers({});
 				// Redirect to results page
 				router.push('/user/result');
@@ -588,7 +658,7 @@ export default function QuizInterface() {
 									setCurrentQuestionIndex
 								}
 								answers={answers}
-								onAutoSave={autoSaveAnswer}
+								onAutoSave={handleAutoSave}
 								onSubmit={handleSubmit}
 								isSubmitting={isSubmitting}
 							/>

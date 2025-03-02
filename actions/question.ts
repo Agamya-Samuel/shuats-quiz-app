@@ -482,7 +482,9 @@ export async function getQuizResults(userId: string) {
 	try {
 		// Get user's submitted answers with lean()
 		const submittedAnswers = await SubmittedAnswer.find({ userId })
-			.select('questionId selectedOptionId submittedAt')
+			.select(
+				'questionId selectedOptionId submittedAt startTime timeTakenSeconds'
+			)
 			.lean()
 			.exec();
 
@@ -498,6 +500,7 @@ export async function getQuizResults(userId: string) {
 						correctAnswers: 0,
 						score: 0,
 						submittedAt: new Date().toISOString(),
+						timeTaken: null,
 					},
 				},
 			};
@@ -565,6 +568,9 @@ export async function getQuizResults(userId: string) {
 			Math.round((numberOfCorrectAnswers / totalQuestions) * 100 * 100) /
 			100;
 
+		// Get time taken from the first answer (all answers should have the same time taken)
+		const timeTaken = submittedAnswers[0]?.timeTakenSeconds || null;
+
 		// Create a clean response object with primitive values
 		const cleanResponse = {
 			success: true,
@@ -580,6 +586,7 @@ export async function getQuizResults(userId: string) {
 								submittedAnswers[0].submittedAt
 						  ).toISOString()
 						: new Date().toISOString(),
+					timeTaken: timeTaken ? Number(timeTaken) : null,
 				},
 			},
 		};

@@ -27,6 +27,7 @@ export interface QuizSummary {
 	correctAnswers: number;
 	score: number;
 	submittedAt: string;
+	timeTaken: number | null;
 }
 
 export interface ServerResponse {
@@ -39,6 +40,7 @@ export interface ServerResponse {
 			correctAnswers: number;
 			score: number;
 			submittedAt: string;
+			timeTaken: number | null;
 		};
 	};
 	error?: string;
