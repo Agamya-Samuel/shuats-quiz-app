@@ -145,6 +145,18 @@ export async function getAllQuestions() {
 			};
 		});
 
+		// Randomize the order of questions using Fisher-Yates (Knuth) shuffle algorithm
+		// This ensures an unbiased, random permutation of the questions array
+		for (let i = formattedQuestions.length - 1; i > 0; i--) {
+			// Generate a random index between 0 and i (inclusive)
+			const j = Math.floor(Math.random() * (i + 1));
+			// Swap elements at indices i and j
+			[formattedQuestions[i], formattedQuestions[j]] = [
+				formattedQuestions[j],
+				formattedQuestions[i],
+			];
+		}
+
 		return {
 			success: true,
 			questions: formattedQuestions,
@@ -537,7 +549,9 @@ export async function getQuizResults(userId: string) {
 						? Number(userAnswer.selectedOptionId)
 						: null,
 				isCorrect: userAnswer?.selectedOptionId === correctOptionId,
-				subject: question.subject ? String(question.subject) : undefined, // Include subject information
+				subject: question.subject
+					? String(question.subject)
+					: undefined, // Include subject information
 			};
 		});
 

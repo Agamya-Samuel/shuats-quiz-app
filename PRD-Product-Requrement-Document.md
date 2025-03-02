@@ -92,5 +92,5 @@ and recommending them appropriate courses,
 - [x] make result page grid view.
 - [ ] remove `Mark for Review` button from the quiz page.
 - [X] add choice of subject before quiz starts.
-- [ ] randomize the question order in quiz.
+- [x] randomize the question order in quiz.
 - [ ] when quiz starts, record the start time in database and based in the start time, make the timer run accordingly, and end time in database, and calculate the time taken by the user to complete the quiz.
