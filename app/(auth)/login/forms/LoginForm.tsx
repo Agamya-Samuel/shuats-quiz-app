@@ -22,6 +22,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { LoadingSpinner } from '@/components/loading-spinner';
+import Link from 'next/link';
 
 export function LoginForm({ redirect }: { redirect?: string }) {
 	const { toast } = useToast();
@@ -126,6 +127,15 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 						</Button>
 					</form>
 				</Form>
+				<p className="mt-4 text-sm text-gray-500">
+					Don&apos;t have an account?{' '}
+					<Link
+						href="/register"
+						className="text-indigo-600 hover:text-indigo-700"
+					>
+						Register
+					</Link>
+				</p>
 			</div>
 		</div>
 	);
