@@ -102,6 +102,9 @@ export function QuestionForm({
 		if (onSubmitProp) {
 			onSubmitProp(values);
 		}
+
+		// reload page
+		window.location.reload();
 	};
 
 	return (
