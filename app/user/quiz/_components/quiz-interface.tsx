@@ -620,12 +620,6 @@ export default function QuizInterface() {
 													'bg-green-100':
 														question.status ===
 														'answered',
-													'bg-purple-100':
-														question.status ===
-														'marked-review',
-													'bg-yellow-100':
-														question.status ===
-														'answered-marked',
 													'bg-red-100':
 														question.status ===
 														'not-answered',

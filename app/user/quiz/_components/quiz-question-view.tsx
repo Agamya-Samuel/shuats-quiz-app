@@ -145,13 +145,6 @@ export default function QuizQuestionView({
 		});
 	};
 
-	const handleMarkForReview = async (saveAnswer: boolean) => {
-		await saveCurrentQuestionState(
-			saveAnswer ? 'answered-marked' : 'marked-review'
-		);
-		handleNavigation('next');
-	};
-
 	return (
 		<>
 			<Card className="flex flex-col">
@@ -166,12 +159,6 @@ export default function QuizQuestionView({
 								className={cn('px-2 py-1 rounded text-sm', {
 									'bg-green-100 text-green-800':
 										currentQuestion.status === 'answered',
-									'bg-purple-100 text-purple-800':
-										currentQuestion.status ===
-										'marked-review',
-									'bg-yellow-100 text-yellow-800':
-										currentQuestion.status ===
-										'answered-marked',
 									'bg-red-100 text-red-800':
 										currentQuestion.status ===
 										'not-answered',
@@ -179,11 +166,6 @@ export default function QuizQuestionView({
 							>
 								{currentQuestion.status === 'answered'
 									? 'Answered'
-									: currentQuestion.status === 'marked-review'
-									? 'Marked for Review'
-									: currentQuestion.status ===
-									  'answered-marked'
-									? 'Answered & Marked'
 									: 'Not Answered'}
 							</span>
 						</div>
@@ -261,26 +243,6 @@ export default function QuizQuestionView({
 							</Button>
 							<Button variant="outline" onClick={handleClear}>
 								Clear Response
-							</Button>
-							<Button
-								variant="yellow"
-								onClick={() => handleMarkForReview(true)}
-								disabled={
-									currentQuestionIndex ===
-									questions.length - 1
-								}
-							>
-								Save & Mark for Review
-							</Button>
-							<Button
-								variant="purple"
-								onClick={() => handleMarkForReview(false)}
-								disabled={
-									currentQuestionIndex ===
-									questions.length - 1
-								}
-							>
-								Mark for Review
 							</Button>
 						</div>
 					</div>
