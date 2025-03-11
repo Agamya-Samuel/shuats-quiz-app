@@ -22,6 +22,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { LoadingSpinner } from '@/components/loading-spinner';
+import Link from 'next/link';
 
 export function RegistrationForm() {
 	const { toast } = useToast();
@@ -257,6 +258,15 @@ export function RegistrationForm() {
 						</Button>
 					</form>
 				</Form>
+				<p className="mt-4 text-sm text-gray-500">
+					Already have an account?{' '}
+					<Link
+						href="/login"
+						className="text-indigo-600 hover:text-indigo-700"
+					>
+						Login
+					</Link>
+				</p>
 			</div>
 		</div>
 	);
