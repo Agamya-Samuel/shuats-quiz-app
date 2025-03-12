@@ -4,6 +4,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AdminForm } from './_components/admin-form';
 import { AdminList } from './_components/admin-list';
+import { UserSubmissions } from './_components/user-submissions';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function SuperAdminPage() {
@@ -22,6 +23,9 @@ export default function SuperAdminPage() {
 				<TabsList>
 					<TabsTrigger value="create">Create Admin</TabsTrigger>
 					<TabsTrigger value="list">Admin List</TabsTrigger>
+					<TabsTrigger value="submissions">
+						User Submissions
+					</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value="create">
@@ -42,6 +46,17 @@ export default function SuperAdminPage() {
 						</CardHeader>
 						<CardContent>
 							<AdminList />
+						</CardContent>
+					</Card>
+				</TabsContent>
+
+				<TabsContent value="submissions">
+					<Card>
+						<CardHeader>
+							<CardTitle>Manage User Submissions</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<UserSubmissions />
 						</CardContent>
 					</Card>
 				</TabsContent>
