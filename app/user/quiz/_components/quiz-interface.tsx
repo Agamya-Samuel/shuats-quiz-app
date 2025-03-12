@@ -28,6 +28,7 @@ import {
 import ImageCarousel from '@/components/image-carousel';
 import SubjectSelector from './subject-selector';
 import { subjects } from '@/lib/constants';
+import { useAntiCheat } from '@/hooks/use-anti-cheat';
 
 // Types
 export interface Option {
@@ -122,6 +123,12 @@ export default function QuizInterface() {
 	// Quiz start time state
 	const [quizStartTime, setQuizStartTime] = useState<Date | null>(null);
 
+	// Anti-cheat state
+	const [quizStarted, setQuizStarted] = useState(false);
+
+	// Enable anti-cheat measures when quiz is active
+	useAntiCheat(quizStarted);
+
 	// Check if user has already attempted the quiz
 	useEffect(() => {
 		const checkAttemptStatus = async () => {
@@ -214,6 +221,7 @@ export default function QuizInterface() {
 				// Clear local storage after successful submission
 				localStorage.removeItem('quiz_answers');
 				setAnswers({});
+				setQuizStarted(false); // Set quiz as ended
 			} else {
 				throw new Error(result.message);
 			}
@@ -287,6 +295,9 @@ export default function QuizInterface() {
 		setSelectedSubjects(subjects);
 		setShowSubjectSelector(false);
 		await fetchQuestions(subjects);
+
+		// Set quiz as started to enable anti-cheat
+		setQuizStarted(true);
 
 		// Record quiz start time after subject selection
 		const startTime = new Date();
@@ -466,6 +477,7 @@ export default function QuizInterface() {
 				setAnswers({});
 				// Redirect to results page
 				router.push('/user/result');
+				setQuizStarted(false); // Set quiz as ended
 			} else {
 				throw new Error(result.message);
 			}

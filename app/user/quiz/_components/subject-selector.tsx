@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { subjects } from '@/lib/constants';
 import { Label } from '@/components/ui/label';
-import { BookOpen, ChevronRight, Info } from 'lucide-react';
+import { BookOpen, ChevronRight, Info, ShieldAlert } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
 
@@ -58,6 +58,15 @@ export default function SubjectSelector({
 							Only questions from your selected subjects will be
 							shown in the quiz. Questions will be ordered based
 							on the subjects you select.
+						</AlertDescription>
+					</Alert>
+
+					<Alert className="mb-6 bg-amber-50 border-amber-200">
+						<ShieldAlert className="h-4 w-4 text-amber-500" />
+						<AlertDescription className="text-sm text-amber-700">
+							<strong>Anti-Cheating Measures:</strong> Copy and
+							paste functionality will be disabled during the quiz
+							to maintain academic integrity.
 						</AlertDescription>
 					</Alert>
 
