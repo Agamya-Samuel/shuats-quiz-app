@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { subjects } from '@/lib/constants';
 import { Label } from '@/components/ui/label';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { BookOpen, ChevronRight, Info, ShieldAlert, Code } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
