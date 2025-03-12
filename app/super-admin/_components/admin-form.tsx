@@ -76,7 +76,6 @@ export function AdminForm() {
 							<FormControl>
 								<Input
 									type="text"
-									placeholder="johnDoe"
 									{...field}
 								/>
 							</FormControl>
