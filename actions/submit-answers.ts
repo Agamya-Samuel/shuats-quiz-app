@@ -7,25 +7,27 @@ import SubmittedAnswer from '@/db/models/submitted-answer';
 import { revalidatePath } from 'next/cache';
 
 // Record quiz start time for a user
-export async function recordQuizStartTime(userId: string) {
+export async function recordQuizStartTime(userId: string, startTime?: Date) {
 	await connectToDB();
-	
+
 	try {
-		const startTime = new Date();
-		
+		// Use provided startTime or create a new one
+		const quizStartTime = startTime || new Date();
+
 		// Store the start time in session storage or database
 		// We'll store it in the database for each answer the user will submit
-		
-		return { 
-			success: true, 
+		// Note: userId is passed but currently only used for future database integration
+
+		return {
+			success: true,
 			message: 'Quiz start time recorded successfully',
-			startTime: startTime 
+			startTime: quizStartTime,
 		};
 	} catch (error) {
 		console.error('Error recording quiz start time:', error);
-		return { 
-			success: false, 
-			message: 'Failed to record quiz start time' 
+		return {
+			success: false,
+			message: 'Failed to record quiz start time',
 		};
 	}
 }
@@ -43,9 +45,9 @@ export async function submitAnswer(
 		// Upsert the answer (update if exists, insert if not)
 		await SubmittedAnswer.findOneAndUpdate(
 			{ userId, questionId },
-			{ 
+			{
 				selectedOptionId,
-				...(startTime && { startTime })
+				...(startTime && { startTime }),
 			},
 			{ upsert: true, new: true }
 		);
@@ -68,22 +70,24 @@ export async function submitQuiz(
 	try {
 		const submittedAt = new Date();
 		let timeTakenSeconds = null;
-		
+
 		// Calculate time taken if startTime is provided
 		if (startTime) {
-			timeTakenSeconds = Math.floor((submittedAt.getTime() - new Date(startTime).getTime()) / 1000);
+			timeTakenSeconds = Math.floor(
+				(submittedAt.getTime() - new Date(startTime).getTime()) / 1000
+			);
 		}
-		
+
 		// Use Promise.all to submit all answers in parallel
 		await Promise.all(
 			answers.map(({ questionId, selectedOptionId }) =>
 				SubmittedAnswer.findOneAndUpdate(
 					{ userId, questionId },
-					{ 
+					{
 						selectedOptionId,
 						...(startTime && { startTime }),
 						submittedAt,
-						...(timeTakenSeconds !== null && { timeTakenSeconds })
+						...(timeTakenSeconds !== null && { timeTakenSeconds }),
 					},
 					{ upsert: true, new: true }
 				)
@@ -96,7 +100,7 @@ export async function submitQuiz(
 		return {
 			success: true,
 			message: 'Quiz submitted successfully',
-			timeTakenSeconds
+			timeTakenSeconds,
 		};
 	} catch (error) {
 		console.error('Error submitting quiz:', error);
