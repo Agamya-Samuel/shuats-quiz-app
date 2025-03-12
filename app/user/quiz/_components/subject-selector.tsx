@@ -10,27 +10,32 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { subjects } from '@/lib/constants';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { BookOpen, ChevronRight, Info } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface SubjectSelectorProps {
-	onSubjectSelect: (subject: string) => void;
+	onSubjectSelect: (subjects: string[]) => void;
 }
 
 export default function SubjectSelector({
 	onSubjectSelect,
 }: SubjectSelectorProps) {
-	const [selectedSubject, setSelectedSubject] = useState<string>('');
+	const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
 
-	const handleSubjectChange = (value: string) => {
-		setSelectedSubject(value);
+	const handleSubjectToggle = (value: string) => {
+		setSelectedSubjects((prev) => {
+			if (prev.includes(value)) {
+				return prev.filter((s) => s !== value);
+			}
+			return [...prev, value];
+		});
 	};
 
 	const handleStartQuiz = () => {
-		if (selectedSubject) {
-			onSubjectSelect(selectedSubject);
+		if (selectedSubjects.length > 0) {
+			onSubjectSelect(selectedSubjects);
 		}
 	};
 
@@ -43,31 +48,33 @@ export default function SubjectSelector({
 						<span>SHUATS Quiz - Subject Selection</span>
 					</CardTitle>
 					<CardDescription className="text-center">
-						Choose your preferred subject to begin the quiz
+						Choose your preferred subjects to begin the quiz
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="p-6">
 					<Alert className="mb-6 bg-blue-50 border-blue-200">
 						<Info className="h-4 w-4 text-blue-500" />
 						<AlertDescription className="text-sm text-blue-700">
-							Questions from your selected subject will appear
-							first, followed by questions from other subjects.
+							Only questions from your selected subjects will be
+							shown in the quiz. Questions will be ordered based
+							on the subjects you select.
 						</AlertDescription>
 					</Alert>
 
-					<RadioGroup
-						value={selectedSubject}
-						onValueChange={handleSubjectChange}
-						className="space-y-3"
-					>
+					<div className="space-y-3">
 						{subjects.map((subject) => (
 							<div
 								key={subject.key}
 								className="flex items-center space-x-2 border rounded-md p-3 hover:bg-muted/50 transition-colors"
 							>
-								<RadioGroupItem
-									value={subject.key}
+								<Checkbox
 									id={subject.key}
+									checked={selectedSubjects.includes(
+										subject.key
+									)}
+									onCheckedChange={() =>
+										handleSubjectToggle(subject.key)
+									}
 								/>
 								<Label
 									htmlFor={subject.key}
@@ -77,12 +84,12 @@ export default function SubjectSelector({
 								</Label>
 							</div>
 						))}
-					</RadioGroup>
+					</div>
 
 					<div className="mt-8 flex justify-end">
 						<Button
 							onClick={handleStartQuiz}
-							disabled={!selectedSubject}
+							disabled={selectedSubjects.length === 0}
 							className="w-full sm:w-auto"
 						>
 							Start Quiz
