@@ -65,8 +65,9 @@ export default function SubjectSelector({
 						<ShieldAlert className="h-4 w-4 text-amber-500" />
 						<AlertDescription className="text-sm text-amber-700">
 							<strong>Anti-Cheating Measures:</strong> Copy and
-							paste functionality will be disabled during the quiz
-							to maintain academic integrity.
+							paste functionality and text selection will be
+							disabled during the quiz to maintain academic
+							integrity.
 						</AlertDescription>
 					</Alert>
 
