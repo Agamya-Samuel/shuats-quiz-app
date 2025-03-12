@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { subjects } from '@/lib/constants';
 import { Label } from '@/components/ui/label';
-import { BookOpen, ChevronRight, Info, ShieldAlert } from 'lucide-react';
+import { BookOpen, ChevronRight, Info, ShieldAlert, Code } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
 
@@ -61,7 +61,7 @@ export default function SubjectSelector({
 						</AlertDescription>
 					</Alert>
 
-					<Alert className="mb-6 bg-amber-50 border-amber-200">
+					{/* <Alert className="mb-6 bg-amber-50 border-amber-200">
 						<ShieldAlert className="h-4 w-4 text-amber-500" />
 						<AlertDescription className="text-sm text-amber-700">
 							<strong>Anti-Cheating Measures:</strong> Copy and
@@ -70,6 +70,15 @@ export default function SubjectSelector({
 							integrity.
 						</AlertDescription>
 					</Alert>
+					
+					<Alert className="mb-6 bg-amber-50 border-amber-200">
+						<Code className="h-4 w-4 text-amber-500" />
+						<AlertDescription className="text-sm text-amber-700">
+							<strong>Developer Tools Restriction:</strong> Browser developer tools, 
+							inspect element, and right-click menu will be disabled during the quiz 
+							to prevent unauthorized access to quiz content.
+						</AlertDescription>
+					</Alert> */}
 
 					<div className="space-y-3">
 						{subjects.map((subject) => (
