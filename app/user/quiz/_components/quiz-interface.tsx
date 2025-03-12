@@ -582,8 +582,19 @@ export default function QuizInterface() {
 	return (
 		<div className="min-h-screen bg-gray-50 py-8">
 			<div className="max-w-7xl mx-auto px-4">
+				{/* SHUATS Image Carousel */}
+				<div>
+					{/* <h2 className="text-xl font-semibold mb-4">
+						SHUATS Campus Highlights
+					</h2> */}
+					<ImageCarousel
+						category={['env', 'hostel', 'sports', 'cultural']}
+						className="shadow-md"
+						autoSlideInterval={4000}
+					/>
+				</div>
 				{/* Quiz Header */}
-				<div className="flex flex-col md:flex-row justify-between items-center mb-6">
+				<div className="flex flex-col md:flex-row justify-between items-center mb-6 my-6">
 					<div className="flex flex-wrap gap-2">
 						{selectedSubjects.map((subject, index) => (
 							<div key={subject} className="flex items-center">
@@ -664,18 +675,6 @@ export default function QuizInterface() {
 								isSubmitting={isSubmitting}
 							/>
 						</div>
-					</div>
-
-					{/* SHUATS Image Carousel */}
-					<div className="my-8">
-						<h2 className="text-xl font-semibold mb-4">
-							SHUATS Campus Highlights
-						</h2>
-						<ImageCarousel
-							category={['env', 'hostel', 'sports', 'cultural']}
-							className="shadow-md"
-							autoSlideInterval={4000}
-						/>
 					</div>
 				</div>
 			</div>
