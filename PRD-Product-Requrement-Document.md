@@ -7,7 +7,7 @@ Helping student to find the courses they should take up, based upon their -
 - their academic knowledge (quiz)
 and recommending them appropriate courses,
 
-## Parameters to Consider when declaring RESULT ANALYSIS -
+## Parameters to Consider when declaring RESULT ANALYSIS
 - job roles/position opportunities for the respective courses
 - private and govt job opportunities in India
 - Opportunities within India, and Foreign Opportunities
