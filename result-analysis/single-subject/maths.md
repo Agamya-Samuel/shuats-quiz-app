@@ -1,4 +1,3 @@
-```markdown
 # Mathematics: Career and Academic Insights
 
 ## Job Roles and Position Opportunities
@@ -67,4 +66,3 @@ SHUATS offers undergraduate and postgraduate programs in Mathematics:
 - **Communication Skills:** Enhancing the ability to present complex information clearly.
 
 By integrating these additional skills with their mathematical knowledge, students can significantly boost their employability and value in the job market.
-``` 
