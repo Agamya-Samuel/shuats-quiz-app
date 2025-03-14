@@ -6,11 +6,14 @@ Helping student to find the courses they should take up, based upon their -
 - their skill-sets (survey)
 - their academic knowledge (quiz)
 and recommending them appropriate courses,
+
+## Parameters to Consider when declaring RESULT ANALYSIS -
 - job roles/position opportunities for the respective courses
-- private and govt job opportunities
+- private and govt job opportunities in India
+- Opportunities within India, and Foreign Opportunities
 - salaries range they can expect after doing the courses
-- what course our college has to offer
-- what course structure we can follow
+- what course our college (SHUATS) has to offer
+- what course structure we follow in out curriculum
 - what extra +1 skill they can learn with their academic course (like BSc + Excel + AI) to boost their skills and increase their value in the market
 
 ## Database Requirements
