@@ -150,7 +150,7 @@ export default function ResultSummary({
 							Attempted Subjects
 						</h3>
 						<div className="flex flex-wrap justify-center gap-2">
-							{attemptedSubjects.map((subject, index) => (
+							{attemptedSubjects.map((subject) => (
 								<div
 									key={subject}
 									className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium"
