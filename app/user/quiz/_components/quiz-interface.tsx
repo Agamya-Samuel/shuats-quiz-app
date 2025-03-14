@@ -220,8 +220,11 @@ export default function QuizInterface() {
 			if (result.success) {
 				// Clear local storage after successful submission
 				localStorage.removeItem('quiz_answers');
+				localStorage.removeItem('quiz_start_time');
 				setAnswers({});
-				setQuizStarted(false); // Set quiz as ended
+
+				// Disable anti-cheat measures
+				setQuizStarted(false);
 			} else {
 				throw new Error(result.message);
 			}
@@ -302,7 +305,17 @@ export default function QuizInterface() {
 		// Record quiz start time after subject selection
 		const startTime = new Date();
 		setQuizStartTime(startTime);
+		localStorage.setItem('quiz_start_time', JSON.stringify(startTime));
 		await recordQuizStartTime(currentUser?.userId || '', startTime);
+
+		// Show toast notification about anti-cheat measures
+		toast({
+			title: 'Anti-Cheat Measures Enabled',
+			description:
+				'Copy/paste, text selection, and developer tools are now disabled for this quiz session.',
+			duration: 5000,
+			variant: 'destructive'
+		});
 	};
 
 	// Fetch questions only from selected subjects
@@ -475,9 +488,12 @@ export default function QuizInterface() {
 				localStorage.removeItem('quiz_answers');
 				localStorage.removeItem('quiz_start_time');
 				setAnswers({});
+
+				// Disable anti-cheat measures
+				setQuizStarted(false);
+
 				// Redirect to results page
 				router.push('/user/result');
-				setQuizStarted(false); // Set quiz as ended
 			} else {
 				throw new Error(result.message);
 			}
