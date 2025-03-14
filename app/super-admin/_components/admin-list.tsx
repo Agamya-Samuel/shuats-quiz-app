@@ -45,9 +45,7 @@ export function AdminList() {
 		return (
 			<div className="container mx-auto">
 				<div className="max-w-sm">
-					<p className="text-lg font-medium">
-						No maintainers found.
-					</p>
+					<p className="text-lg font-medium">No maintainers found.</p>
 				</div>
 			</div>
 		);
@@ -62,7 +60,7 @@ export function AdminList() {
 							key={index}
 							className="text-lg font-medium bg-gray-100 p-2 rounded-md"
 						>
-							{index + 1}. {maintainer.username}
+							{maintainer.username}
 						</li>
 					))}
 				</ul>

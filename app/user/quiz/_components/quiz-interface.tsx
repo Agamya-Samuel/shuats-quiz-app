@@ -28,6 +28,7 @@ import {
 import ImageCarousel from '@/components/image-carousel';
 import SubjectSelector from './subject-selector';
 import { subjects } from '@/lib/constants';
+import { useAntiCheat } from '@/hooks/use-anti-cheat';
 
 // Types
 export interface Option {
@@ -111,7 +112,7 @@ export default function QuizInterface() {
 	const router = useRouter();
 
 	// Subject selection state
-	const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+	const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
 	const [showSubjectSelector, setShowSubjectSelector] = useState(false);
 
 	// Timer state
@@ -121,6 +122,12 @@ export default function QuizInterface() {
 
 	// Quiz start time state
 	const [quizStartTime, setQuizStartTime] = useState<Date | null>(null);
+
+	// Anti-cheat state
+	const [quizStarted, setQuizStarted] = useState(false);
+
+	// Enable anti-cheat measures when quiz is active
+	useAntiCheat(quizStarted);
 
 	// Check if user has already attempted the quiz
 	useEffect(() => {
@@ -213,7 +220,11 @@ export default function QuizInterface() {
 			if (result.success) {
 				// Clear local storage after successful submission
 				localStorage.removeItem('quiz_answers');
+				localStorage.removeItem('quiz_start_time');
 				setAnswers({});
+
+				// Disable anti-cheat measures
+				setQuizStarted(false);
 			} else {
 				throw new Error(result.message);
 			}
@@ -283,52 +294,74 @@ export default function QuizInterface() {
 	}, [answers]);
 
 	// Handle subject selection
-	const handleSubjectSelect = async (subject: string) => {
-		setSelectedSubject(subject);
+	const handleSubjectSelect = async (subjects: string[]) => {
+		setSelectedSubjects(subjects);
 		setShowSubjectSelector(false);
+		await fetchQuestions(subjects);
 
-		// Record quiz start time when user selects a subject
-		if (currentUser?.userId) {
-			try {
-				const response = await recordQuizStartTime(currentUser.userId);
-				if (response.success && response.startTime) {
-					const startTime = new Date(response.startTime);
-					setQuizStartTime(startTime);
-					// Save start time to localStorage
-					localStorage.setItem(
-						'quiz_start_time',
-						JSON.stringify(startTime)
-					);
-				}
-			} catch (err) {
-				console.error('Error recording quiz start time:', err);
-			}
-		}
+		// Set quiz as started to enable anti-cheat
+		setQuizStarted(true);
 
-		fetchQuestions(subject);
+		// Record quiz start time after subject selection
+		const startTime = new Date();
+		setQuizStartTime(startTime);
+		localStorage.setItem('quiz_start_time', JSON.stringify(startTime));
+		await recordQuizStartTime(currentUser?.userId || '', startTime);
+
+		// Show toast notification about anti-cheat measures
+		// toast({
+		// 	title: 'Anti-Cheat Measures Enabled',
+		// 	description:
+		// 		'Copy/paste, text selection, and developer tools are now disabled for this quiz session.',
+		// 	duration: 5000,
+		// 	variant: 'destructive'
+		// });
 	};
 
-	// Fetch and prioritize questions based on selected subject
-	const fetchQuestions = useCallback(async (subject?: string) => {
+	// Fetch questions only from selected subjects
+	const fetchQuestions = useCallback(async (selectedSubjects?: string[]) => {
 		try {
 			setIsLoading(true);
 			setError(null);
 			const response = await getAllQuestions();
 
 			if (response.success && Array.isArray(response.questions)) {
-				// Sort questions to prioritize the selected subject
-				let sortedQuestions = [...response.questions];
+				let filteredQuestions = [...response.questions];
 
-				if (subject) {
-					// Put questions from the selected subject first
-					sortedQuestions = [
-						...sortedQuestions.filter((q) => q.subject === subject),
-						...sortedQuestions.filter((q) => q.subject !== subject),
-					];
+				// Filter questions to only include those from selected subjects
+				if (selectedSubjects && selectedSubjects.length > 0) {
+					// Only keep questions from selected subjects
+					filteredQuestions = filteredQuestions.filter((q) =>
+						selectedSubjects.includes(q.subject)
+					);
+
+					// Create a map for subject priority (lower index = higher priority)
+					const subjectPriority = new Map(
+						selectedSubjects.map((subject, index) => [
+							subject,
+							index,
+						])
+					);
+
+					// Sort questions based on subject priority
+					filteredQuestions.sort((a, b) => {
+						const aPriority = subjectPriority.get(a.subject) || 0;
+						const bPriority = subjectPriority.get(b.subject) || 0;
+						return aPriority - bPriority;
+					});
+				}
+
+				// If no questions match the selected subjects, show an error
+				if (filteredQuestions.length === 0) {
+					setError(
+						'No questions available for the selected subjects. Please select different subjects.'
+					);
+					setIsLoading(false);
+					return;
 				}
 
 				// Initialize question status
-				const initializedQuestions = sortedQuestions.map(
+				const initializedQuestions = filteredQuestions.map(
 					(q, index) => ({
 						...q,
 						status: index === 0 ? 'not-answered' : 'not-visited',
@@ -455,6 +488,10 @@ export default function QuizInterface() {
 				localStorage.removeItem('quiz_answers');
 				localStorage.removeItem('quiz_start_time');
 				setAnswers({});
+
+				// Disable anti-cheat measures
+				setQuizStarted(false);
+
 				// Redirect to results page
 				router.push('/user/result');
 			} else {
@@ -530,11 +567,10 @@ export default function QuizInterface() {
 			>
 				<QuizLoading
 					message={`Loading ${
-						selectedSubject
-							? subjects.find((s) => s.key === selectedSubject)
-									?.value
-							: ''
-					} questions...`}
+						selectedSubjects.length > 0
+							? selectedSubjects.join(', ')
+							: 'questions'
+					}...`}
 				/>
 			</div>
 		);
@@ -548,7 +584,7 @@ export default function QuizInterface() {
 			>
 				<ErrorState
 					message={error}
-					retry={() => fetchQuestions(selectedSubject || undefined)}
+					retry={() => fetchQuestions(selectedSubjects)}
 				/>
 			</div>
 		);
@@ -574,19 +610,29 @@ export default function QuizInterface() {
 	return (
 		<div className="min-h-screen bg-gray-50 py-8">
 			<div className="max-w-7xl mx-auto px-4">
+				{/* SHUATS Image Carousel */}
+				<div>
+					{/* <h2 className="text-xl font-semibold mb-4">
+						SHUATS Campus Highlights
+					</h2> */}
+					<ImageCarousel
+						category={['env', 'hostel', 'sports', 'cultural']}
+						className="shadow-md"
+						autoSlideInterval={4000}
+					/>
+				</div>
 				{/* Quiz Header */}
-				<div className="flex flex-col md:flex-row justify-between items-center mb-6">
-					<div>
-						{selectedSubject && (
-							<div className="flex items-center">
+				<div className="flex flex-col md:flex-row justify-between items-center mb-6 my-6">
+					<div className="flex flex-wrap gap-2">
+						{selectedSubjects.map((subject, index) => (
+							<div key={subject} className="flex items-center">
 								<span className="text-sm font-medium bg-primary/10 text-primary px-3 py-1 rounded-full">
-									Prioritizing:{' '}
-									{subjects.find(
-										(s) => s.key === selectedSubject
-									)?.value || selectedSubject}
+									{index + 1}.{' '}
+									{subjects.find((s) => s.key === subject)
+										?.value || subject}
 								</span>
 							</div>
-						)}
+						))}
 					</div>
 					<div className="mt-4 md:mt-0 flex items-center">
 						<div
@@ -657,18 +703,6 @@ export default function QuizInterface() {
 								isSubmitting={isSubmitting}
 							/>
 						</div>
-					</div>
-
-					{/* SHUATS Image Carousel */}
-					<div className="my-8">
-						<h2 className="text-xl font-semibold mb-4">
-							SHUATS Campus Highlights
-						</h2>
-						<ImageCarousel
-							category={['env', 'hostel', 'sports', 'cultural']}
-							className="shadow-md"
-							autoSlideInterval={4000}
-						/>
 					</div>
 				</div>
 			</div>

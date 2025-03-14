@@ -526,8 +526,34 @@ export async function getQuizResults(userId: string) {
 			])
 		);
 
+		// Create a map of questions by ID for quick lookup
+		const questionsMap = new Map(
+			questions.map((question) => [safeToString(question._id), question])
+		);
+
+		// Get the list of question IDs that the user attempted
+		const attemptedQuestionIds = submittedAnswers.map((answer) =>
+			safeToString(answer.questionId)
+		);
+
+		// Get the subjects that the user attempted
+		const attemptedSubjects = new Set();
+		attemptedQuestionIds.forEach((questionId) => {
+			const question = questionsMap.get(questionId);
+			if (question && question.subject) {
+				attemptedSubjects.add(String(question.subject));
+			}
+		});
+
+		// Filter questions to only include those from attempted subjects
+		const filteredQuestions = questions.filter(
+			(question) =>
+				question.subject &&
+				attemptedSubjects.has(String(question.subject))
+		);
+
 		// Calculate results with safe object creation
-		const results = questions.map((question) => {
+		const results = filteredQuestions.map((question) => {
 			const questionId = safeToString(question._id);
 			const userAnswer = submittedAnswers.find(
 				(answer) => safeToString(answer.questionId) === questionId
@@ -559,10 +585,10 @@ export async function getQuizResults(userId: string) {
 		});
 
 		// Calculate overall score with safe number operations
-		const totalQuestions = questions.length;
+		const totalQuestions = filteredQuestions.length;
 		const attemptedQuestions = submittedAnswers.length;
 		const numberOfCorrectAnswers = results.filter(
-			(r) => r.isCorrect
+			(r) => r.isCorrect && r.userSelectedOptionId !== null
 		).length;
 		const score =
 			Math.round((numberOfCorrectAnswers / totalQuestions) * 100 * 100) /
@@ -587,6 +613,8 @@ export async function getQuizResults(userId: string) {
 						  ).toISOString()
 						: new Date().toISOString(),
 					timeTaken: timeTaken ? Number(timeTaken) : null,
+					attemptedSubjects:
+						Array.from(attemptedSubjects).map(String), // Include the attempted subjects in the response
 				},
 			},
 		};
@@ -625,10 +653,16 @@ export async function getLeaderboard() {
 			};
 		}
 
-		// Get all questions
-		const questions = await Question.find({}).select('_id').lean().exec();
+		// Get all questions with subjects
+		const questions = await Question.find({})
+			.select('_id subject')
+			.lean()
+			.exec();
 
-		const totalQuestions = questions.length;
+		// Create a map of questions by ID for quick lookup
+		const questionsMap = new Map(
+			questions.map((question) => [safeToString(question._id), question])
+		);
 
 		// Get correct answers
 		const correctAnswersData = await CorrectAnswer.find({})
@@ -661,6 +695,27 @@ export async function getLeaderboard() {
 					.lean()
 					.exec();
 
+				// Get the list of question IDs that the user attempted
+				const attemptedQuestionIds = userAnswers.map((answer) =>
+					safeToString(answer.questionId)
+				);
+
+				// Get the subjects that the user attempted
+				const attemptedSubjects = new Set();
+				attemptedQuestionIds.forEach((questionId) => {
+					const question = questionsMap.get(questionId);
+					if (question && question.subject) {
+						attemptedSubjects.add(String(question.subject));
+					}
+				});
+
+				// Filter questions to only include those from attempted subjects
+				const filteredQuestions = questions.filter(
+					(question) =>
+						question.subject &&
+						attemptedSubjects.has(String(question.subject))
+				);
+
 				// Calculate correct answers
 				const correctAnswers = userAnswers.filter((answer) => {
 					const questionId = safeToString(answer.questionId);
@@ -669,10 +724,14 @@ export async function getLeaderboard() {
 				}).length;
 
 				// Calculate score and other metrics
+				const totalQuestions = filteredQuestions.length;
 				const attemptedQuestions = userAnswers.length;
 				const score =
-					Math.round((correctAnswers / totalQuestions) * 100 * 100) /
-					100;
+					totalQuestions > 0
+						? Math.round(
+								(correctAnswers / totalQuestions) * 100 * 100
+						  ) / 100
+						: 0;
 				const accuracy =
 					attemptedQuestions > 0
 						? Math.round(
@@ -696,23 +755,20 @@ export async function getLeaderboard() {
 			})
 		);
 
-		// Sort by score (highest first)
-		const sortedLeaderboard = leaderboardData.sort(
-			(a, b) => b.score - a.score
-		);
-
-		// Add rank to each entry
-		const rankedLeaderboard = sortedLeaderboard.map((entry, index) => ({
-			...entry,
-			rank: index + 1,
-		}));
+		// Sort by score (descending) and add rank
+		const rankedLeaderboard = leaderboardData
+			.sort((a, b) => b.score - a.score)
+			.map((entry, index) => ({
+				...entry,
+				rank: index + 1,
+			}));
 
 		return {
 			success: true,
 			data: rankedLeaderboard,
 		};
 	} catch (error) {
-		console.error('Error fetching leaderboard data:', error);
+		console.error('Error fetching leaderboard:', error);
 		return {
 			success: false,
 			error: 'Failed to fetch leaderboard data',

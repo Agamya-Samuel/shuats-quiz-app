@@ -4,6 +4,8 @@ import { cookies } from 'next/headers';
 import { generateToken } from '@/lib/auth';
 import type { UserJwtPayload } from '@/types/auth';
 
+const THIRTY_DAYS = 60 * 60 * 24 * 30;
+
 export async function loginSuperAdmin({ password }: { password: string }) {
 	if (password !== process.env.SUPER_ADMIN_PASSWORD) {
 		return { error: 'Invalid password' };
@@ -22,7 +24,8 @@ export async function loginSuperAdmin({ password }: { password: string }) {
 	cookieStore.set('token', token, {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === 'production',
-		maxAge: parseInt(process.env.JWT_MAX_AGE || '86400'), // 30 days
+		maxAge: THIRTY_DAYS, // 30 days in seconds
+		path: '/', // Make sure cookie is available on all paths
 	});
 	return { success: true };
 }
