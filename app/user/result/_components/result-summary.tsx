@@ -18,6 +18,7 @@ export interface ResultSummaryProps {
 		score: number;
 		submittedAt: string;
 		timeTaken: number | null;
+		attemptedSubjects?: string[]; // Add attempted subjects
 	};
 	results?: QuizResult[]; // Add results prop to calculate subject stats
 }
@@ -65,6 +66,7 @@ export default function ResultSummary({
 		score,
 		submittedAt,
 		timeTaken,
+		attemptedSubjects = [],
 	} = summary;
 	const attemptedPercentage = (attemptedQuestions / totalQuestions) * 100;
 	const accuracy = (correctAnswers / attemptedQuestions) * 100;
@@ -85,6 +87,12 @@ export default function ResultSummary({
 							Total Questions
 						</h3>
 						<p className="text-3xl font-bold">{totalQuestions}</p>
+						{attemptedSubjects.length > 0 && (
+							<p className="text-sm text-gray-600 mt-1">
+								From {attemptedSubjects.length} subject
+								{attemptedSubjects.length !== 1 ? 's' : ''}
+							</p>
+						)}
 					</div>
 					<div className="text-center p-4 bg-gray-50 rounded-lg">
 						<h3 className="text-lg font-semibold mb-2">
@@ -112,7 +120,10 @@ export default function ResultSummary({
 						<h3 className="text-lg font-semibold mb-2">
 							Final Score
 						</h3>
-						<p className="text-3xl font-bold">{score}</p>
+						<p className="text-3xl font-bold">{score}%</p>
+						<p className="text-sm text-gray-600">
+							Based on attempted subjects only
+						</p>
 					</div>
 					<div className="text-center p-4 bg-gray-50 rounded-lg">
 						<h3 className="text-lg font-semibold mb-2">
@@ -131,6 +142,25 @@ export default function ResultSummary({
 						</p>
 					</div>
 				</div>
+
+				{/* Attempted Subjects */}
+				{attemptedSubjects.length > 0 && (
+					<div className="mt-8">
+						<h3 className="text-lg font-semibold mb-4 text-center">
+							Attempted Subjects
+						</h3>
+						<div className="flex flex-wrap justify-center gap-2">
+							{attemptedSubjects.map((subject, index) => (
+								<div
+									key={subject}
+									className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium"
+								>
+									{getSubjectName(subject)}
+								</div>
+							))}
+						</div>
+					</div>
+				)}
 
 				{/* Subject Performance Chart */}
 				{subjectStats.length > 0 && (
