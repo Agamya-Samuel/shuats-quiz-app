@@ -184,7 +184,7 @@ export function RegistrationForm() {
 									<FormLabel>Preferred Branch</FormLabel>
 									<FormControl>
 										<Input
-											placeholder="Enter your preferred branch"
+											placeholder="Enter your Preferred Branch"
 											{...field}
 										/>
 									</FormControl>

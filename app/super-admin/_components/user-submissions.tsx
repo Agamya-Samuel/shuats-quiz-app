@@ -54,7 +54,7 @@ export function UserSubmissions() {
 		} finally {
 			setIsLoading(false);
 		}
-	}, []);
+	}, [toast]);
 
 	useEffect(() => {
 		loadUsers();

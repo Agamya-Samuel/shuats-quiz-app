@@ -7,6 +7,7 @@ export const subjects = [
 	{ key: 'english', value: 'English Languages' },
 	{ key: 'gk', value: 'General Knowledge' },
 	{ key: 'computer', value: 'Computer Science' },
+	{ key: 'commerce', value: 'Commerce' },
 ] as const;
 
 export const subjectKeys = subjects.map((subject) => subject.key);

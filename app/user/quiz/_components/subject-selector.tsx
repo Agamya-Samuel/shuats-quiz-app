@@ -11,13 +11,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { subjects } from '@/lib/constants';
 import { Label } from '@/components/ui/label';
-import {
-	BookOpen,
-	ChevronRight,
-	Info,
-	ShieldAlert,
-	Maximize,
-} from 'lucide-react';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { BookOpen, ChevronRight, Info, ShieldAlert, Code , Maximize} from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
 
@@ -67,7 +62,7 @@ export default function SubjectSelector({
 						</AlertDescription>
 					</Alert>
 
-					<Alert className="mb-6 bg-amber-50 border-amber-200">
+					{/* <Alert className="mb-6 bg-amber-50 border-amber-200">
 						<ShieldAlert className="h-4 w-4 text-amber-500" />
 						<AlertDescription className="text-sm text-amber-700">
 							<strong>Anti-Cheating Measures:</strong> Copy and
@@ -75,18 +70,27 @@ export default function SubjectSelector({
 							disabled during the quiz to maintain academic
 							integrity.
 						</AlertDescription>
-					</Alert>
+					</Alert> */}
+					
+					{/* <Alert className="mb-6 bg-amber-50 border-amber-200">
+						<Code className="h-4 w-4 text-amber-500" />
+						<AlertDescription className="text-sm text-amber-700">
+							<strong>Developer Tools Restriction:</strong> Browser developer tools, 
+							inspect element, and right-click menu will be disabled during the quiz 
+							to prevent unauthorized access to quiz content.
+						</AlertDescription>
+					</Alert> */}
 
-					<Alert className="mb-6 bg-amber-50 border-amber-200">
+					{/* <Alert className="mb-6 bg-amber-50 border-amber-200">
 						<Maximize className="h-4 w-4 text-amber-500" />
 						<AlertDescription className="text-sm text-amber-700">
 							<strong>Full-Screen Mode:</strong> The quiz will run
 							in full-screen mode. You must remain in full-screen
 							until the quiz is completed.
 						</AlertDescription>
-					</Alert>
+					</Alert> */}
 
-					<Alert className="mb-6 bg-blue-50 border-blue-200">
+					{/* <Alert className="mb-6 bg-blue-50 border-blue-200">
 						<Info className="h-4 w-4 text-blue-500" />
 						<AlertDescription className="text-sm text-blue-700">
 							<strong>Browser Note:</strong> Some browsers may
@@ -95,7 +99,7 @@ export default function SubjectSelector({
 							is denied, you can still take the quiz, but you'll
 							receive warnings about staying in the quiz window.
 						</AlertDescription>
-					</Alert>
+					</Alert> */}
 
 					<div className="space-y-3">
 						{subjects.map((subject) => (
