@@ -309,13 +309,13 @@ export default function QuizInterface() {
 		await recordQuizStartTime(currentUser?.userId || '', startTime);
 
 		// Show toast notification about anti-cheat measures
-		toast({
-			title: 'Anti-Cheat Measures Enabled',
-			description:
-				'Copy/paste, text selection, and developer tools are now disabled for this quiz session.',
-			duration: 5000,
-			variant: 'destructive'
-		});
+		// toast({
+		// 	title: 'Anti-Cheat Measures Enabled',
+		// 	description:
+		// 		'Copy/paste, text selection, and developer tools are now disabled for this quiz session.',
+		// 	duration: 5000,
+		// 	variant: 'destructive'
+		// });
 	};
 
 	// Fetch questions only from selected subjects
