@@ -16,7 +16,8 @@ import QuizQuestionView from './quiz-question-view';
 import { cn } from '@/lib/utils';
 import QuizLoading from './quiz-loading';
 import { useToast } from '@/hooks/use-toast';
-import { useCookies } from '@/contexts/cookie-context';
+import { useCookies as useAuthCookies } from '@/contexts/cookie-context';
+import { useCookies } from '@/hooks/use-cookies';
 import { useRouter } from 'next/navigation';
 import {
 	Dialog,
@@ -108,7 +109,8 @@ export default function QuizInterface() {
 	const [hasAlreadyAttempted, setHasAlreadyAttempted] = useState(false);
 	const [isCheckingAttemptStatus, setIsCheckingAttemptStatus] =
 		useState(true);
-	const { user: currentUser } = useCookies();
+	const { user: currentUser } = useAuthCookies();
+	const { setCookie } = useCookies();
 	const router = useRouter();
 
 	// Subject selection state
@@ -302,20 +304,18 @@ export default function QuizInterface() {
 		// Set quiz as started to enable anti-cheat
 		setQuizStarted(true);
 
+		// Save selected subjects to cookies for Career Guidance feature
+		setCookie(
+			'selectedSubjects',
+			encodeURIComponent(JSON.stringify(subjects)),
+			{ expires: 7 }
+		);
+
 		// Record quiz start time after subject selection
 		const startTime = new Date();
 		setQuizStartTime(startTime);
 		localStorage.setItem('quiz_start_time', JSON.stringify(startTime));
 		await recordQuizStartTime(currentUser?.userId || '', startTime);
-
-		// Show toast notification about anti-cheat measures
-		// toast({
-		// 	title: 'Anti-Cheat Measures Enabled',
-		// 	description:
-		// 		'Copy/paste, text selection, and developer tools are now disabled for this quiz session.',
-		// 	duration: 5000,
-		// 	variant: 'destructive'
-		// });
 	};
 
 	// Fetch questions only from selected subjects
