@@ -37,7 +37,7 @@ export default function CareerGuidancePage() {
 		const interval = setInterval(() => {
 			if (index <= content.length) {
 				setStreamedContent(content.slice(0, index));
-				index += 3; // Adjust speed by changing this value
+				index += 5; // Adjust speed by changing this value
 			} else {
 				clearInterval(interval);
 			}
