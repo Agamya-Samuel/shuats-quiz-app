@@ -1,6 +1,14 @@
 // components/Navbar.tsx
 
-import { LogOut, Trophy, BarChart, Timer, LayoutDashboard } from 'lucide-react';
+import {
+	LogOut,
+	Trophy,
+	BarChart,
+	Timer,
+	LayoutDashboard,
+	Briefcase,
+	User,
+} from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useState, useEffect } from 'react';
 import { useCookies } from '@/contexts/cookie-context';
@@ -166,8 +174,8 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 									href="/user/dashboard"
 									className="w-full cursor-pointer"
 								>
-									<LayoutDashboard className="h-5 w-5 text-amber-500" />
-									Dashboard
+									<User className="h-5 w-5 text-amber-500" />
+									Edit Profile
 								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem asChild>
@@ -186,6 +194,15 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 								>
 									<Trophy className="h-5 w-5 text-amber-500" />
 									Leaderboard
+								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuItem asChild>
+								<Link
+									href="/user/career-guidance"
+									className="w-full cursor-pointer"
+								>
+									<Briefcase className="h-5 w-5 text-amber-500" />
+									Career Guidance
 								</Link>
 							</DropdownMenuItem>
 							{user && (

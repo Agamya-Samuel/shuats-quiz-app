@@ -16,7 +16,8 @@ import QuizQuestionView from './quiz-question-view';
 import { cn } from '@/lib/utils';
 import QuizLoading from './quiz-loading';
 import { useToast } from '@/hooks/use-toast';
-import { useCookies } from '@/contexts/cookie-context';
+import { useCookies as useAuthCookies } from '@/contexts/cookie-context';
+import { useCookies } from '@/hooks/use-cookies';
 import { useRouter } from 'next/navigation';
 import {
 	Dialog,
@@ -28,7 +29,7 @@ import {
 import ImageCarousel from '@/components/image-carousel';
 import SubjectSelector from './subject-selector';
 import { subjects } from '@/lib/constants';
-import { useAntiCheat } from '@/hooks/use-anti-cheat';
+import { useAntiCheat, safeExitFullscreen } from '@/hooks/use-anti-cheat';
 
 // Types
 export interface Option {
@@ -108,7 +109,8 @@ export default function QuizInterface() {
 	const [hasAlreadyAttempted, setHasAlreadyAttempted] = useState(false);
 	const [isCheckingAttemptStatus, setIsCheckingAttemptStatus] =
 		useState(true);
-	const { user: currentUser } = useCookies();
+	const { user: currentUser } = useAuthCookies();
+	const { setCookie } = useCookies();
 	const router = useRouter();
 
 	// Subject selection state
@@ -127,7 +129,7 @@ export default function QuizInterface() {
 	const [quizStarted, setQuizStarted] = useState(false);
 
 	// Enable anti-cheat measures when quiz is active
-	useAntiCheat(quizStarted);
+	const antiCheat = useAntiCheat(quizStarted);
 
 	// Check if user has already attempted the quiz
 	useEffect(() => {
@@ -223,8 +225,18 @@ export default function QuizInterface() {
 				localStorage.removeItem('quiz_start_time');
 				setAnswers({});
 
-				// Disable anti-cheat measures
+				// IMPORTANT: First mark that we're intentionally exiting fullscreen
+				if (antiCheat.setIntentionallyExiting) {
+					antiCheat.setIntentionallyExiting(true);
+				}
+
+				// Then disable anti-cheat measures
 				setQuizStarted(false);
+
+				// Wait a moment for the anti-cheat to fully disable before exiting fullscreen
+				setTimeout(() => {
+					safeExitFullscreen();
+				}, 100);
 			} else {
 				throw new Error(result.message);
 			}
@@ -302,20 +314,18 @@ export default function QuizInterface() {
 		// Set quiz as started to enable anti-cheat
 		setQuizStarted(true);
 
+		// Save selected subjects to cookies for Career Guidance feature
+		setCookie(
+			'selectedSubjects',
+			encodeURIComponent(JSON.stringify(subjects)),
+			{ expires: 7 }
+		);
+
 		// Record quiz start time after subject selection
 		const startTime = new Date();
 		setQuizStartTime(startTime);
 		localStorage.setItem('quiz_start_time', JSON.stringify(startTime));
 		await recordQuizStartTime(currentUser?.userId || '', startTime);
-
-		// Show toast notification about anti-cheat measures
-		// toast({
-		// 	title: 'Anti-Cheat Measures Enabled',
-		// 	description:
-		// 		'Copy/paste, text selection, and developer tools are now disabled for this quiz session.',
-		// 	duration: 5000,
-		// 	variant: 'destructive'
-		// });
 	};
 
 	// Fetch questions only from selected subjects
@@ -489,11 +499,22 @@ export default function QuizInterface() {
 				localStorage.removeItem('quiz_start_time');
 				setAnswers({});
 
-				// Disable anti-cheat measures
+				// IMPORTANT: First mark that we're intentionally exiting fullscreen
+				if (antiCheat.setIntentionallyExiting) {
+					antiCheat.setIntentionallyExiting(true);
+				}
+
+				// Then disable anti-cheat measures
 				setQuizStarted(false);
 
-				// Redirect to results page
-				router.push('/user/result');
+				// Wait a moment for the anti-cheat to fully disable before exiting fullscreen
+				setTimeout(() => {
+					safeExitFullscreen();
+					// Redirect to results page after a short delay
+					setTimeout(() => {
+						router.push('/user/result');
+					}, 100);
+				}, 100);
 			} else {
 				throw new Error(result.message);
 			}

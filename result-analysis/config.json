@@ -1,0 +1,33 @@
+{
+	"single_subjects": {
+		"biology": "one-subject/biology.md",
+		"chemistry": "one-subject/chemistry.md",
+		"physics": "one-subject/physics.md",
+		"mathematics": "one-subject/math.md",
+		"computer_science": "one-subject/computer-science.md",
+		"english": "one-subject/english.md",
+		"commerce": "one-subject/commerce.md",
+		"social_science": "one-subject/social-science.md",
+		"general_knowledge": "one-subject/gk.md"
+	},
+	"combined_subjects": {
+		"biology,chemistry": "combine-subject/bc.md",
+		"biology,chemistry,mathematics": "combine-subject/bcm.md",
+		"physics,chemistry,biology": "combine-subject/pcb.md",
+		"physics,chemistry,mathematics": "combine-subject/pcm.md",
+		"physics,chemistry,mathematics,biology": "combine-subject/pcmb.md",
+		"physics,chemistry,mathematics,computer_science": "combine-subject/pcmc_s.md",
+		"physics,mathematics,computer_science": "combine-subject/pmc_s.md"
+	},
+	"subject_display_names": {
+		"biology": "Biology",
+		"chemistry": "Chemistry",
+		"physics": "Physics",
+		"mathematics": "Mathematics",
+		"computer_science": "Computer Science",
+		"english": "English",
+		"commerce": "Commerce",
+		"social_science": "Social Science",
+		"general_knowledge": "General Knowledge"
+	}
+}

@@ -7,7 +7,7 @@ import LeaderboardStats from './_components/leaderboard-stats';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Printer } from 'lucide-react';
 import ImageCarousel from '@/components/image-carousel';
 
 export interface LeaderboardEntry {
@@ -53,6 +53,11 @@ export default function LeaderboardPage() {
 	const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>(
 		[]
 	);
+
+	// Handle print functionality
+	const handlePrint = () => {
+		window.print();
+	};
 
 	useEffect(() => {
 		const fetchLeaderboard = async () => {
@@ -115,10 +120,13 @@ export default function LeaderboardPage() {
 									No Data Available
 								</h3>
 								<p className="mb-6 text-gray-600">
-									No one has attempted the quiz yet. Be the first
-									to take the quiz and appear on the leaderboard!
+									No one has attempted the quiz yet. Be the
+									first to take the quiz and appear on the
+									leaderboard!
 								</p>
-								<Button onClick={() => router.push('/user/quiz')}>
+								<Button
+									onClick={() => router.push('/user/quiz')}
+								>
 									Take Quiz Now
 								</Button>
 							</div>
@@ -132,12 +140,22 @@ export default function LeaderboardPage() {
 	return (
 		<div className="min-h-screen bg-gray-50">
 			<div className="max-w-7xl mx-auto px-4 py-8">
-				<h1 className="text-3xl font-bold mb-8 text-center">
-					Quiz Leaderboard
-				</h1>
+				<div className="flex justify-between items-center mb-8">
+					<h1 className="text-3xl font-bold text-center">
+						Quiz Leaderboard
+					</h1>
+					<Button
+						onClick={handlePrint}
+						variant="outline"
+						className="flex items-center gap-2 print:hidden"
+					>
+						<Printer className="h-4 w-4" />
+						Print Leaderboard
+					</Button>
+				</div>
 
 				{/* SHUATS Image Carousel */}
-				<div className="mb-8">
+				<div className="mb-8 print:hidden">
 					<h2 className="text-xl font-semibold mb-4">
 						SHUATS Campus Gallery
 					</h2>
