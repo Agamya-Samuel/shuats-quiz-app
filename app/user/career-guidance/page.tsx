@@ -55,9 +55,9 @@ export default function CareerGuidancePage() {
 		<div className="container mx-auto py-8 px-4">
 			<div className="flex justify-between items-center mb-6">
 				<h1 className="text-3xl font-bold">Career Guidance</h1>
-				<Button 
-					onClick={handlePrint} 
-					variant="outline" 
+				<Button
+					onClick={handlePrint}
+					variant="outline"
 					className="flex items-center gap-2 print:hidden"
 				>
 					<Printer className="h-4 w-4" />
