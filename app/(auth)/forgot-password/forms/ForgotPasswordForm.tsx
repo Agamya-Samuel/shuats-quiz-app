@@ -68,7 +68,7 @@ export function ForgotPasswordForm() {
 		} catch (error) {
 			toast({
 				title: 'Error',
-				description: 'An unexpected error occurred. Please try again.',
+				description: `An unexpected error occurred. Please try again. ${error}`,
 				variant: 'destructive',
 			});
 		} finally {
@@ -87,7 +87,7 @@ export function ForgotPasswordForm() {
 							Check your email
 						</h3>
 						<p className="text-green-700 mt-2">
-							If an account exists with this email, we've sent
+							If an account exists with this email, we&apos;ve sent
 							instructions to reset your password.
 						</p>
 						<div className="mt-4">
@@ -102,7 +102,7 @@ export function ForgotPasswordForm() {
 				) : (
 					<>
 						<p className="mb-4 text-gray-600">
-							Enter your email address and we'll send you a link
+							Enter your email address and we&apos;ll send you a link
 							to reset your password.
 						</p>
 						<Form {...form}>

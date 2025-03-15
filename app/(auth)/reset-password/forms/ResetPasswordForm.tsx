@@ -5,7 +5,6 @@ import { resetPassword } from '@/actions/reset-password';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -37,7 +36,6 @@ const resetPasswordSchema = z
 
 export function ResetPasswordForm({ token }: { token: string }) {
 	const { toast } = useToast();
-	const router = useRouter();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [resetComplete, setResetComplete] = useState<boolean>(false);
 
@@ -80,7 +78,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
 		} catch (error) {
 			toast({
 				title: 'Error',
-				description: 'An unexpected error occurred. Please try again.',
+				description: `An unexpected error occurred. Please try again. ${error}`,
 				variant: 'destructive',
 			});
 		} finally {
