@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useToast } from './use-toast';
+import React from 'react';
 
 // Define interfaces for browser-specific document and element properties
 interface DocumentWithFullscreen extends Document {
@@ -18,6 +19,10 @@ interface HTMLElementWithFullscreen extends HTMLElement {
 	mozRequestFullScreen?: () => Promise<void>;
 	msRequestFullscreen?: () => Promise<void>;
 }
+
+// Global variable to track intentional fullscreen exit
+// This is needed because the safeExitFullscreen function is called outside the hook
+let isIntentionallyExiting = false;
 
 /**
  * A hook that implements anti-cheating measures for quizzes
@@ -37,6 +42,8 @@ export const useAntiCheat = (isEnabled: boolean = false) => {
 	const [fullscreenPermissionDenied, setFullscreenPermissionDenied] =
 		useState(false);
 	const [fullscreenExitAttempts, setFullscreenExitAttempts] = useState(0);
+	// Add a ref to track when we're intentionally exiting fullscreen
+	const intentionallyExitingRef = React.useRef(false);
 
 	useEffect(() => {
 		// Only apply anti-cheat measures if enabled
@@ -240,38 +247,67 @@ export const useAntiCheat = (isEnabled: boolean = false) => {
 
 			// Function to handle full-screen change attempts
 			const handleFullScreenChange = () => {
-				// Check if we're still in full-screen mode
-				if (
-					!doc.fullscreenElement &&
-					!doc.webkitFullscreenElement &&
-					!doc.mozFullScreenElement &&
-					!doc.msFullscreenElement
-				) {
-					// If fullscreen permission was previously denied, don't try again
-					if (fullscreenPermissionDenied) {
-						showFullscreenWarning();
+				try {
+					// If we're intentionally exiting, don't try to re-enter
+					if (
+						intentionallyExitingRef.current ||
+						isIntentionallyExiting
+					) {
 						return;
 					}
 
-					// Track exit attempts
-					setFullscreenExitAttempts((prev) => prev + 1);
-
-					// If user has tried to exit too many times, show a stronger warning
-					if (fullscreenExitAttempts >= 2) {
-						showFullscreenWarning(true);
-						return;
-					}
-
-					// Try to go back to full-screen with a slight delay to avoid permission errors
-					setTimeout(() => {
-						try {
-							requestFullScreen(document.documentElement);
-						} catch (err) {
-							console.error('Error re-entering fullscreen:', err);
-							setFullscreenPermissionDenied(true);
-							showFullscreenWarning();
+					// Check if we're still in full-screen mode
+					if (
+						!doc.fullscreenElement &&
+						!doc.webkitFullscreenElement &&
+						!doc.mozFullScreenElement &&
+						!doc.msFullscreenElement
+					) {
+						// If anti-cheat is disabled or being disabled, don't try to re-enter fullscreen
+						if (!isEnabled) {
+							return;
 						}
-					}, 500);
+
+						// If fullscreen permission was previously denied, don't try again
+						if (fullscreenPermissionDenied) {
+							showFullscreenWarning();
+							return;
+						}
+
+						// Track exit attempts
+						setFullscreenExitAttempts((prev) => prev + 1);
+
+						// If user has tried to exit too many times, show a stronger warning
+						if (fullscreenExitAttempts >= 2) {
+							showFullscreenWarning(true);
+							return;
+						}
+
+						// Try to go back to full-screen with a slight delay to avoid permission errors
+						setTimeout(() => {
+							try {
+								// Double-check that anti-cheat is still enabled before requesting fullscreen
+								if (
+									isEnabled &&
+									!intentionallyExitingRef.current &&
+									!isIntentionallyExiting
+								) {
+									requestFullScreen(document.documentElement);
+								}
+							} catch (err) {
+								console.error(
+									'Error re-entering fullscreen:',
+									err
+								);
+								setFullscreenPermissionDenied(true);
+								showFullscreenWarning();
+							}
+						}, 500);
+					}
+				} catch (err) {
+					console.error('Error in handleFullScreenChange:', err);
+					// Mark as denied to prevent further attempts that might cause errors
+					setFullscreenPermissionDenied(true);
 				}
 			};
 
@@ -291,24 +327,72 @@ export const useAntiCheat = (isEnabled: boolean = false) => {
 
 			// Function to request full-screen mode with cross-browser support
 			const requestFullScreen = (element: HTMLElement) => {
+				// If anti-cheat is disabled, don't try to enter fullscreen
+				if (!isEnabled) {
+					return;
+				}
+
+				// If permission was already denied, don't try again
+				if (fullscreenPermissionDenied) {
+					return;
+				}
+
 				const el = element as HTMLElementWithFullscreen;
 
 				try {
 					if (el.requestFullscreen) {
-						el.requestFullscreen().catch((err) => {
+						// Wrap in try-catch to handle permission errors
+						try {
+							el.requestFullscreen().catch((err) => {
+								console.error(
+									'Error enabling full-screen mode:',
+									err
+								);
+								// Mark as denied to prevent further attempts
+								setFullscreenPermissionDenied(true);
+								showFullscreenWarning();
+							});
+						} catch (err) {
 							console.error(
-								'Error enabling full-screen mode:',
+								'Permission error requesting fullscreen:',
 								err
 							);
 							setFullscreenPermissionDenied(true);
 							showFullscreenWarning();
-						});
+						}
 					} else if (el.webkitRequestFullscreen) {
-						el.webkitRequestFullscreen();
+						try {
+							el.webkitRequestFullscreen();
+						} catch (err) {
+							console.error(
+								'Permission error with webkitRequestFullscreen:',
+								err
+							);
+							setFullscreenPermissionDenied(true);
+							showFullscreenWarning();
+						}
 					} else if (el.mozRequestFullScreen) {
-						el.mozRequestFullScreen();
+						try {
+							el.mozRequestFullScreen();
+						} catch (err) {
+							console.error(
+								'Permission error with mozRequestFullScreen:',
+								err
+							);
+							setFullscreenPermissionDenied(true);
+							showFullscreenWarning();
+						}
 					} else if (el.msRequestFullscreen) {
-						el.msRequestFullscreen();
+						try {
+							el.msRequestFullscreen();
+						} catch (err) {
+							console.error(
+								'Permission error with msRequestFullscreen:',
+								err
+							);
+							setFullscreenPermissionDenied(true);
+							showFullscreenWarning();
+						}
 					}
 				} catch (err) {
 					console.error('Error requesting fullscreen:', err);
@@ -437,6 +521,9 @@ export const useAntiCheat = (isEnabled: boolean = false) => {
 							doc.mozFullScreenElement ||
 							doc.msFullscreenElement
 						) {
+							// Set the flag to indicate we're intentionally exiting
+							intentionallyExitingRef.current = true;
+
 							if (doc.exitFullscreen) {
 								doc.exitFullscreen().catch((err) => {
 									console.error(
@@ -471,5 +558,83 @@ export const useAntiCheat = (isEnabled: boolean = false) => {
 	return {
 		isAntiCheatEnabled: isEnabled,
 		fullscreenPermissionDenied,
+		setIntentionallyExiting: (value: boolean) => {
+			intentionallyExitingRef.current = value;
+		},
 	};
+};
+
+/**
+ * Helper function to safely exit fullscreen mode
+ * This can be called directly when the quiz is submitted
+ */
+export const safeExitFullscreen = () => {
+	try {
+		// Set the global flag to indicate we're intentionally exiting
+		isIntentionallyExiting = true;
+
+		const doc = document as DocumentWithFullscreen;
+
+		// Check if document is defined (for SSR safety)
+		if (typeof document === 'undefined') {
+			return;
+		}
+
+		// Check if we're in fullscreen mode
+		const isInFullscreen = !!(
+			doc.fullscreenElement ||
+			doc.webkitFullscreenElement ||
+			doc.mozFullScreenElement ||
+			doc.msFullscreenElement
+		);
+
+		if (!isInFullscreen) {
+			// Already not in fullscreen, no need to exit
+			return;
+		}
+
+		// Try to exit fullscreen with the appropriate method
+		if (doc.exitFullscreen) {
+			try {
+				doc.exitFullscreen().catch((err) => {
+					// Silently catch the error to prevent it from bubbling up
+					console.error('Error exiting full-screen mode:', err);
+					isIntentionallyExiting = false;
+				});
+			} catch (err) {
+				console.error('Error calling exitFullscreen:', err);
+				isIntentionallyExiting = false;
+			}
+		} else if (doc.webkitExitFullscreen) {
+			try {
+				doc.webkitExitFullscreen();
+			} catch (err) {
+				console.error('Error calling webkitExitFullscreen:', err);
+				isIntentionallyExiting = false;
+			}
+		} else if (doc.mozCancelFullScreen) {
+			try {
+				doc.mozCancelFullScreen();
+			} catch (err) {
+				console.error('Error calling mozCancelFullScreen:', err);
+				isIntentionallyExiting = false;
+			}
+		} else if (doc.msExitFullscreen) {
+			try {
+				doc.msExitFullscreen();
+			} catch (err) {
+				console.error('Error calling msExitFullscreen:', err);
+				isIntentionallyExiting = false;
+			}
+		}
+
+		// Reset the flag after a short delay
+		setTimeout(() => {
+			isIntentionallyExiting = false;
+		}, 1000);
+	} catch (err) {
+		// Catch any unexpected errors
+		console.error('Unexpected error exiting fullscreen:', err);
+		isIntentionallyExiting = false;
+	}
 };

@@ -29,7 +29,7 @@ import {
 import ImageCarousel from '@/components/image-carousel';
 import SubjectSelector from './subject-selector';
 import { subjects } from '@/lib/constants';
-import { useAntiCheat } from '@/hooks/use-anti-cheat';
+import { useAntiCheat, safeExitFullscreen } from '@/hooks/use-anti-cheat';
 
 // Types
 export interface Option {
@@ -129,7 +129,7 @@ export default function QuizInterface() {
 	const [quizStarted, setQuizStarted] = useState(false);
 
 	// Enable anti-cheat measures when quiz is active
-	useAntiCheat(quizStarted);
+	const antiCheat = useAntiCheat(quizStarted);
 
 	// Check if user has already attempted the quiz
 	useEffect(() => {
@@ -225,8 +225,18 @@ export default function QuizInterface() {
 				localStorage.removeItem('quiz_start_time');
 				setAnswers({});
 
-				// Disable anti-cheat measures
+				// IMPORTANT: First mark that we're intentionally exiting fullscreen
+				if (antiCheat.setIntentionallyExiting) {
+					antiCheat.setIntentionallyExiting(true);
+				}
+
+				// Then disable anti-cheat measures
 				setQuizStarted(false);
+
+				// Wait a moment for the anti-cheat to fully disable before exiting fullscreen
+				setTimeout(() => {
+					safeExitFullscreen();
+				}, 100);
 			} else {
 				throw new Error(result.message);
 			}
@@ -489,11 +499,22 @@ export default function QuizInterface() {
 				localStorage.removeItem('quiz_start_time');
 				setAnswers({});
 
-				// Disable anti-cheat measures
+				// IMPORTANT: First mark that we're intentionally exiting fullscreen
+				if (antiCheat.setIntentionallyExiting) {
+					antiCheat.setIntentionallyExiting(true);
+				}
+
+				// Then disable anti-cheat measures
 				setQuizStarted(false);
 
-				// Redirect to results page
-				router.push('/user/result');
+				// Wait a moment for the anti-cheat to fully disable before exiting fullscreen
+				setTimeout(() => {
+					safeExitFullscreen();
+					// Redirect to results page after a short delay
+					setTimeout(() => {
+						router.push('/user/result');
+					}, 100);
+				}, 100);
 			} else {
 				throw new Error(result.message);
 			}
