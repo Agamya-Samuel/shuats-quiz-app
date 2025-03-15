@@ -7,6 +7,7 @@ import {
 	Timer,
 	LayoutDashboard,
 	Briefcase,
+	User,
 } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useState, useEffect } from 'react';
@@ -173,8 +174,8 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 									href="/user/dashboard"
 									className="w-full cursor-pointer"
 								>
-									<LayoutDashboard className="h-5 w-5 text-amber-500" />
-									Dashboard
+									<User className="h-5 w-5 text-amber-500" />
+									Edit Profile
 								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem asChild>

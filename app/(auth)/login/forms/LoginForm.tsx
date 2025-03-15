@@ -108,12 +108,20 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 										/>
 									</FormControl>
 									<FormMessage />
+									<div className="text-right">
+										<Link
+											href="/forgot-password"
+											className="text-sm text-indigo-600 hover:text-indigo-700"
+										>
+											Forgot password?
+										</Link>
+									</div>
 								</FormItem>
 							)}
 						/>
 						<Button
 							type="submit"
-							className="w-full"
+							className="w-full mt-4"
 							disabled={isLoading}
 						>
 							{isLoading ? (

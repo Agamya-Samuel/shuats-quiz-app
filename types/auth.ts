@@ -11,6 +11,8 @@ export interface UserJwtPayload {
 	rollNo?: string;
 	branch?: string;
 	address?: string;
+	// Optional field for password reset
+	purpose?: 'password-reset';
 }
 
 export interface AuthResponse {
