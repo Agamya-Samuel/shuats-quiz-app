@@ -8,7 +8,7 @@ import ResultDetails from './_components/result-details';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Printer } from 'lucide-react';
 import ImageCarousel from '@/components/image-carousel';
 
 export interface QuizResult {
@@ -121,6 +121,11 @@ export default function ResultPage() {
 		fetchResults();
 	}, [currentUser?.userId, router]);
 
+	// Handle print functionality
+	const handlePrint = () => {
+		window.print();
+	};
+
 	if (isLoading) return <ResultLoading />;
 
 	if (error) {
@@ -194,12 +199,22 @@ export default function ResultPage() {
 	return (
 		<div className="min-h-screen bg-gray-50">
 			<div className="max-w-7xl mx-auto px-4 py-8">
-				<h1 className="text-3xl font-bold mb-8 text-center">
-					Quiz Results
-				</h1>
+				<div className="flex justify-between items-center mb-8">
+					<h1 className="text-3xl font-bold text-center">
+						Quiz Results
+					</h1>
+					<Button
+						onClick={handlePrint}
+						variant="outline"
+						className="flex items-center gap-2 print:hidden"
+					>
+						<Printer className="h-4 w-4" />
+						Print Results
+					</Button>
+				</div>
 
 				{/* SHUATS Image Carousel */}
-				<div className="mb-8">
+				<div className="mb-8 print:hidden">
 					<h2 className="text-xl font-semibold mb-4">
 						SHUATS Campus Highlights
 					</h2>
@@ -211,7 +226,7 @@ export default function ResultPage() {
 				</div>
 
 				{/* Career Guidance CTA */}
-				<div className="my-8">
+				<div className="my-8 print:hidden">
 					<Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 shadow-md overflow-hidden">
 						<CardContent className="p-6">
 							<div className="flex flex-col md:flex-row items-center gap-6">
