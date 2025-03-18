@@ -1,72 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎓 Online Examination System
 
-## Getting Started
+A secure and seamless platform for conducting online exams.
 
-### Prerequisites
+## 📋 Overview
 
-- Node.js (v14.x or higher)
-- yarn
-- MongoDB (v5.x or higher)
+This online examination system provides educational institutions with a robust platform to conduct secure online exams. The system is designed to ensure academic integrity while offering an intuitive experience for both administrators and students.
 
-### Installation
+## ✨ Features
 
-1. Clone the repository
+### 👨‍💼 For Administrators
+
+-   👥 User management (add, edit, delete users)
+-   📝 Exam creation and scheduling
+-   🗃️ Question bank management
+-   👁️ Real-time monitoring
+-   📊 Comprehensive reporting and analytics
+-   🔐 Secure authentication
+
+### 👨‍🎓 For Students
+
+-   🖱️ Simple exam access and navigation
+-   ⏱️ Clear instructions and time tracking
+-   ❓ Support for various question types (MCQ, written, file upload)
+-   ⚡ Instant feedback (for automated assessments)
+-   🔒 Secure login and session management
+
+## 🛠️ Technology Stack
+
+-   🌐 **Frontend**: React.js, Next.js, Tailwind CSS
+-   🖥️ **Backend**: Node.js, Express
+-   🗄️ **Database**: MongoDB
+-   🔑 **Authentication**: JWT
+-   🛡️ **Security**: Data encryption, anti-cheating measures
+
+## 🔒 Security Measures
+
+-   🔐 Secure authentication and authorization
+-   📡 Session management
+-   🔍 Browser lockdown capabilities
+-   🕵️ Plagiarism detection
+-   🔀 Randomized question order
+-   ⏲️ Time restrictions
+-   📹 Webcam proctoring options
+
+## 📥 Installation
 
 ```bash
-git clone https://github.com/agamya-samuel/shuats-quiz-app.git
+# Clone the repository
+git clone https://github.com/yourusername/online-examination-system.git
+
+# Navigate to project directory
+cd online-examination-system
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your configuration
+
+# Run development server
+npm run dev
 ```
 
-2. Install dependencies
+## 📚 Usage
 
-```bash
-cd shuats-quiz-app
-```
+1. 👤 Set up administrator account
+2. 🏫 Create courses and enroll students
+3. 📋 Create question banks
+4. 📅 Schedule exams
+5. 📊 Monitor exams in real-time
+6. 📈 Generate and review reports
 
-install yarn
+## 📷 Screenshots
 
-```bash
-npm install -g yarn
-```
+### HomePage
 
-install dependencies
+![HomePage](./screenshots/homepage.png)
 
-```bash
-yarn
-```
+### SubjectSelection
 
-3. Set up environment variables
+![SubjectSelection](./screenshots/subject-selection.png)
 
-Create a `.env` file in the root directory with the following variables:
+### QuestionPage
 
-```bash
-MONGODB_URI=your_mongodb_connection_string
-```
+![QuestionPage](./screenshots/quiz.png)
 
-4. Start the development server
+### ResultPage
 
-```bash
-yarn dev
-```
+![ResultPage](./screenshots/result.png)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Leaderboard
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+![Leaderboard](./screenshots/leaderboard.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Career Guidance
 
-## Learn More
+![Career Guidance](./screenshots/career-guidance.png)
 
-To learn more about Next.js, take a look at the following resources:
+### Admin Dashboard Add Question
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+![Admin Dashboard Add Question](./screenshots/admin-add-question.png)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Admin Dashboard List User
 
-## Deploy on Vercel
+![Admin Dashboard List User](./screenshots/admin-list-question.png)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-other things will update soon 
+
+
+
+
+## 🤝 Contributing
+
+1. 🍴 Fork the repository
+2. 🌿 Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. 💾 Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. 📤 Push to the branch (`git push origin feature/amazing-feature`)
+5. 📩 Open a Pull Request
+
+## 📜 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 👏 Acknowledgments
+
+-   👨‍💻 All contributors and testers
+-   📦 Open source libraries used in this project
