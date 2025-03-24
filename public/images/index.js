@@ -2,7 +2,8 @@ import csdept from './csdept1.jpg';
 
 export { csdept };
 
-const s3BucketBaseUrl = 'https://s3.tebi.io/shuats-quiz-app/catalogue-pics';
+const s3BucketBaseUrl =
+	'https://cdn-shuatsquiz.agamya.dev/catalogue-pics';
 
 const cataloguePics = {
 	admin: [`${s3BucketBaseUrl}/admin/admin0.jpg`],

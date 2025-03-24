@@ -5,9 +5,9 @@ const nextConfig: NextConfig = {
 		remotePatterns: [
 			{
 				protocol: 'https',
-				hostname: 's3.tebi.io',
+				hostname: 'cdn-shuatsquiz.agamya.dev',
 				port: '',
-				pathname: '/shuats-quiz-app/catalogue-pics/**',
+				pathname: '/catalogue-pics/**',
 			},
 		],
 	},
