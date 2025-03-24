@@ -84,7 +84,7 @@ export default function LeaderboardStats({
 											{performer.name}
 										</h3>
 										<p className="text-sm text-muted-foreground">
-											{performer.email}
+											{performer.school}
 										</p>
 									</div>
 									<div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary/10">
