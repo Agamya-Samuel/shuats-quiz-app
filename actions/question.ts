@@ -685,7 +685,7 @@ export async function getLeaderboard() {
 
 				// Get user details
 				const user = await User.findById(userId)
-					.select('name email')
+					.select('name schoolName')
 					.lean()
 					.exec();
 
@@ -744,7 +744,7 @@ export async function getLeaderboard() {
 				return {
 					userId: safeToString(userId),
 					name: user?.name || 'Anonymous User',
-					email: user?.email || 'unknown',
+					school: user?.schoolName || 'unknown',
 					score,
 					totalQuestions,
 					attemptedQuestions,

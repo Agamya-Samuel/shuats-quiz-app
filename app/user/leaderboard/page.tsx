@@ -13,7 +13,7 @@ import ImageCarousel from '@/components/image-carousel';
 export interface LeaderboardEntry {
 	userId: string | null;
 	name: string;
-	email: string;
+	school: string;
 	rank: number;
 	score: number;
 	totalQuestions: number;

@@ -36,7 +36,7 @@ export default function LeaderboardTable({
 	const filteredData = leaderboardData.filter(
 		(entry) =>
 			entry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			entry.email.toLowerCase().includes(searchTerm.toLowerCase())
+			entry.school.toLowerCase().includes(searchTerm.toLowerCase())
 	);
 
 	// Sort data based on selected column and order
@@ -224,7 +224,11 @@ export default function LeaderboardTable({
 												{entry.name}
 											</div>
 											<div className="text-sm text-muted-foreground">
-												{entry.email}
+												{entry.school
+												? entry.school.length > 40
+													? entry.school.slice(0, 40) + '...'
+													: entry.school
+												: 'No School'}
 											</div>
 										</div>
 									</TableCell>
