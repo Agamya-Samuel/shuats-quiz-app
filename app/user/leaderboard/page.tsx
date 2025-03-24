@@ -20,7 +20,7 @@ export interface LeaderboardEntry {
 	attemptedQuestions: number;
 	correctAnswers: number;
 	accuracy: number;
-	submittedAt: string | Date;
+	submittedAt: string;
 }
 
 interface LeaderboardResponse {
@@ -63,8 +63,8 @@ export default function LeaderboardPage() {
 		const fetchLeaderboard = async () => {
 			try {
 				const response: LeaderboardResponse = await getLeaderboard();
-				if (response.success && response.data) {
-					setLeaderboardData(response.data);
+				if (response.success) {
+					setLeaderboardData(response.data || []);
 				} else {
 					throw new Error(
 						response.error || 'Failed to fetch leaderboard data'
