@@ -15,14 +15,15 @@ import { resetUserSubmissions } from '@/actions/admin';
 interface LeaderboardEntry {
 	userId: string | null;
 	name: string;
-	email: string;
+	email?: string;
+	school: string;
 	rank: number;
 	score: number;
 	totalQuestions: number;
 	attemptedQuestions: number;
 	correctAnswers: number;
 	accuracy: number;
-	submittedAt: string;
+	submittedAt: string | Date;
 }
 
 export function UserSubmissions() {
@@ -61,6 +62,15 @@ export function UserSubmissions() {
 	}, [loadUsers]);
 
 	const handleReset = async (email: string) => {
+		if (!email) {
+			toast({
+				variant: 'destructive',
+				title: 'Error',
+				description: 'Email is required to reset user submissions',
+			});
+			return;
+		}
+
 		setResetLoading(email);
 		try {
 			const response = await resetUserSubmissions(email);
@@ -121,7 +131,7 @@ export function UserSubmissions() {
 						{users.map((user) => (
 							<TableRow key={user.userId || user.email}>
 								<TableCell>{user.name}</TableCell>
-								<TableCell>{user.email}</TableCell>
+								<TableCell>{user.email || 'N/A'}</TableCell>
 								<TableCell>{user.score}%</TableCell>
 								<TableCell>{user.attemptedQuestions}</TableCell>
 								<TableCell>{user.correctAnswers}</TableCell>
@@ -130,7 +140,9 @@ export function UserSubmissions() {
 									<Button
 										variant="destructive"
 										size="sm"
-										onClick={() => handleReset(user.email)}
+										onClick={() =>
+											handleReset(user.email || '')
+										}
 										disabled={resetLoading === user.email}
 									>
 										{resetLoading === user.email
