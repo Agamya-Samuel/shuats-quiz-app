@@ -1,8 +1,10 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import fs from 'fs/promises';
-import path from 'path';
+import { loadMarkdownContent } from '@/lib/markdown-loader';
+
+// Import guidance content directly
+import configJson from '@/result-analysis/config.json';
 
 // Type definitions
 type ConfigType = {
@@ -23,6 +25,23 @@ const subjectKeyMapping: Record<string, string> = {
 	computer: 'computer_science',
 	commerce: 'commerce',
 };
+
+// Load markdown files using dynamic imports
+async function loadMarkdownFile(filePath: string): Promise<string> {
+	try {
+		// Remove leading path parts to get the relative path from result-analysis
+		const relativePath = filePath.replace(/^.*?result-analysis\//, '');
+
+		// Use dynamic import for the markdown file
+		const importedContent = await import(
+			`@/result-analysis/${relativePath}`
+		);
+		return loadMarkdownContent(importedContent);
+	} catch (error) {
+		console.error(`Error loading markdown file ${filePath}:`, error);
+		return `Error loading content for ${filePath}. Please try again later.`;
+	}
+}
 
 /**
  * Gets the career guidance content based on user's selected subjects
@@ -50,14 +69,8 @@ export async function getCareerGuidance(): Promise<string> {
 			(subject) => subjectKeyMapping[subject] || subject
 		);
 
-		// Read the config file
-		const configPath = path.join(
-			process.cwd(),
-			'result-analysis',
-			'config.json'
-		);
-		const configContent = await fs.readFile(configPath, 'utf-8');
-		const config = JSON.parse(configContent) as ConfigType;
+		// Use the imported config
+		const config = configJson as ConfigType;
 
 		// Sort subjects alphabetically to match the format in config.json
 		const sortedSubjects = [...mappedSubjects].sort();
@@ -67,12 +80,8 @@ export async function getCareerGuidance(): Promise<string> {
 
 		// Check if the exact combination exists in combined_subjects
 		if (config.combined_subjects[subjectsKey]) {
-			const filePath = path.join(
-				process.cwd(),
-				'result-analysis',
-				config.combined_subjects[subjectsKey]
-			);
-			const content = await fs.readFile(filePath, 'utf-8');
+			const filePath = config.combined_subjects[subjectsKey];
+			const content = await loadMarkdownFile(filePath);
 			return content;
 		}
 		// If not, use individual subject analysis
@@ -96,12 +105,8 @@ export async function getCareerGuidance(): Promise<string> {
 			// Get content for each selected subject
 			for (const subject of mappedSubjects) {
 				if (config.single_subjects[subject]) {
-					const filePath = path.join(
-						process.cwd(),
-						'result-analysis',
-						config.single_subjects[subject]
-					);
-					const content = await fs.readFile(filePath, 'utf-8');
+					const filePath = config.single_subjects[subject];
+					const content = await loadMarkdownFile(filePath);
 
 					// Add a separator between subjects if there are multiple
 					if (mappedSubjects.length > 1) {

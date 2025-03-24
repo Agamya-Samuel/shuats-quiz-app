@@ -11,6 +11,16 @@ const nextConfig: NextConfig = {
 			},
 		],
 	},
+	// Add webpack configuration to handle markdown files
+	webpack: (config) => {
+		// Add rule for markdown files
+		config.module.rules.push({
+			test: /\.md$/,
+			use: 'raw-loader',
+		});
+
+		return config;
+	},
 };
 
 export default nextConfig;
