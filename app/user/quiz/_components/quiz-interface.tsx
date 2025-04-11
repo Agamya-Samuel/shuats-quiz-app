@@ -236,6 +236,10 @@ export default function QuizInterface() {
 				// Wait a moment for the anti-cheat to fully disable before exiting fullscreen
 				setTimeout(() => {
 					safeExitFullscreen();
+					// Redirect to completion page after a short delay
+					setTimeout(() => {
+						router.push('/user/quiz/completion');
+					}, 100);
 				}, 100);
 			} else {
 				throw new Error(result.message);
@@ -510,9 +514,9 @@ export default function QuizInterface() {
 				// Wait a moment for the anti-cheat to fully disable before exiting fullscreen
 				setTimeout(() => {
 					safeExitFullscreen();
-					// Redirect to results page after a short delay
+					// Redirect to completion page after a short delay
 					setTimeout(() => {
-						router.push('/user/result');
+						router.push('/user/quiz/completion');
 					}, 100);
 				}, 100);
 			} else {
@@ -535,7 +539,7 @@ export default function QuizInterface() {
 
 	// Handle time up dialog close
 	const handleTimeUpDialogClose = () => {
-		router.push('/user/result');
+		router.push('/user/quiz/completion');
 	};
 
 	// Show loading state while checking attempt status
