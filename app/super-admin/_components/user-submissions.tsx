@@ -62,7 +62,7 @@ export function UserSubmissions() {
 	}, [loadUsers]);
 
 	const handleReset = async (email: string) => {
-		if (!email) {
+		if (!email || email.trim() === '') {
 			toast({
 				variant: 'destructive',
 				title: 'Error',
@@ -140,10 +140,22 @@ export function UserSubmissions() {
 									<Button
 										variant="destructive"
 										size="sm"
-										onClick={() =>
-											handleReset(user.email || '')
+										onClick={() => {
+											if (user.email) {
+												handleReset(user.email);
+											} else {
+												toast({
+													variant: 'destructive',
+													title: 'Error',
+													description:
+														'User has no email address',
+												});
+											}
+										}}
+										disabled={
+											resetLoading === user.email ||
+											!user.email
 										}
-										disabled={resetLoading === user.email}
 									>
 										{resetLoading === user.email
 											? 'Resetting...'

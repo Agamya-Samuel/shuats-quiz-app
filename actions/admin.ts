@@ -10,6 +10,14 @@ import { revalidatePath } from 'next/cache';
  * @param userEmail - The email of the user whose submissions should be reset
  */
 export async function resetUserSubmissions(userEmail: string) {
+	// Validate that an email was provided
+	if (!userEmail || userEmail.trim() === '') {
+		return {
+			success: false,
+			message: 'Email is required to reset user submissions',
+		};
+	}
+
 	await connectToDB();
 
 	try {
