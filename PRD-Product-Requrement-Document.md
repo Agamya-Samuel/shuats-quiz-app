@@ -97,3 +97,104 @@ and recommending them appropriate courses,
 - [X] add choice of subject before quiz starts.
 - [x] randomize the question order in quiz.
 - [ ] when quiz starts, record the start time in database and based in the start time, make the timer run accordingly, and end time in database, and calculate the time taken by the user to complete the quiz.
+
+# TODO (Stage 2)
+
+- [ ] Migrate to DB from, MongoDB to PostgreSQL
+- [ ] Add Sentry for error monitoring
+
+---
+
+- ## User Registration Flow - Update
+	- [ ] User Basic Details - Signup Page (Page 1)
+		- [ ] Name, Email, Mobile, Password
+	- [ ] User Academic Details - Dashboard (Page 2)
+			- [ ] School Name, Address, Roll Number, Class, Stream, Subjects
+	- [ ] User Document Verification Upload (Page 3)	
+		- [ ] Upload Documents (10th Marksheet, 12th Marksheet, Aadhar Card)
+	- [ ] After Registration, show the details to the user for confirmation
+	- [ ] Send Email Confirmation to the user with the details
+	- If user closes the page at any point, and logs back in, show "Fill Registration Form" button.
+	- [ ] If user has already filled the form, show "The Quiz Date is on DD/MM/YYYY Time - HH:MM".
+
+---
+
+- [ ] Protect all Server Actions with Data Access Layer (DAL) and Middleware
+	- [ ] For every Request from users, add a log to the database with the following details (Middleware or Data Access Layer):
+		- [ ] User ID
+		- [ ] Request Type (Login, Registration, Quiz, Survey, etc.)
+		- [ ] Request Time
+		- [ ] Request Status (Success, Failed, Pending)
+		- [ ] Request IP Address
+		- [ ] Request User Agent 
+- [ ] For every Request from users, add a log to the database with the following details (Middleware or Data Access Layer):
+	- [ ] User ID
+	- [ ] Request Type (Login, Registration, Quiz, Survey, etc.)
+	- [ ] Request Time
+	- [ ] Request Status (Success, Failed, Pending)
+	- [ ] Request IP Address
+	- [ ] Request User Agent
+
+---
+
+- ## User Quiz
+	- [ ] Quiz Starting Page
+		- [ ] Show Quiz Instructions
+			- [ ] Subjects: [Subject 1, Subject 2, Subject 3]
+			- [ ] Total Questions: xx Questions
+			- [ ] Total Time: xx Minutes
+			- [ ] Total Marks: xx Marks
+			- Marking Scheme
+				- [ ] Correct Answer: +1 Mark
+				- [ ] Wrong Answer: -0.25 Mark
+				- [ ] Unattempted Question: 0 Mark
+			- [ ] Show "Start Quiz" Button
+	- [ ] Quiz Page -> No Update
+	- Timer Should be Server Side, and should be in sync with the server time. (Use Socket.io or WebSockets, Only Allow delay {upto 1 min delay} at the end, when submitting the quiz)
+
+---
+
+- ## Admin Dashboard
+	- [ ] Separate Admin Dashboard, from User Quiz for Security Concerns
+	- Features
+		- Dashboard Overview Page
+			- [ ] Total Users Registered (Use Graphs and Charts)
+			- [ ] Total Questions Created
+			- [ ] Set Quiz Date and Time
+			- [ ] Set Quiz Duration
+			- [ ] Start Quiz Button
+		- User Management
+			- [ ] View All Users
+			- [ ] View User Details
+				- [ ] View User Documents for Verification
+			- [ ] Edit User Details
+			- [ ] Delete User
+		- Question Management
+			- [ ] View All Questions
+			- [ ] Add Questions
+			- [ ] Edit Questions
+			- [ ] Delete Question
+
+---
+
+- [ ] For Analytics, use Google Analytics, Mixpanel or Amplitude
+- [ ] For tracking events use Segment or Mixpanel
+
+---
+
+- [ ] For user session recording use Hotjar or FullStory
+- [ ] For A/B testing use Optimizely or Google Optimize
+
+---
+
+- [ ] For user heatmap use Hotjar or Crazy Egg
+
+---
+
+- [ ] For user SMS use Twilio or Plivo
+- In App Notification
+	- [ ] For user feedback in-app notification use Socket.io or WebSockets
+	- [ ] For user feedback push notification use OneSignal or Pushwoosh
+	- [ ] For user feedback in-app notification use Intercom or Drift
+
+---
