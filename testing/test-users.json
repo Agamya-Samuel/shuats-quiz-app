@@ -1,0 +1,5002 @@
+[
+  {
+    "email": "user1@test.com",
+    "name": "User1 Test1",
+    "mobile": "9123456789",
+    "rollNo": "R1001",
+    "schoolName": "SHUATS University",
+    "branch": "Computer Science",
+    "address": "123 New Delhi Street, New Delhi, India",
+    "password": "Test@1"
+  },
+  {
+    "email": "user2@test.com",
+    "name": "User2 Test2",
+    "mobile": "9234567890",
+    "rollNo": "R1002",
+    "schoolName": "Delhi Public School",
+    "branch": "Electronics",
+    "address": "45 Mumbai Street, Mumbai, India",
+    "password": "Test@2"
+  },
+  {
+    "email": "user3@test.com",
+    "name": "User3 Test3",
+    "mobile": "9345678901",
+    "rollNo": "R1003",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Mechanical",
+    "address": "78 Bangalore Street, Bangalore, India",
+    "password": "Test@3"
+  },
+  {
+    "email": "user4@test.com",
+    "name": "User4 Test4",
+    "mobile": "9456789012",
+    "rollNo": "R1004",
+    "schoolName": "St. Xavier's School",
+    "branch": "Civil",
+    "address": "90 Hyderabad Street, Hyderabad, India",
+    "password": "Test@4"
+  },
+  {
+    "email": "user5@test.com",
+    "name": "User5 Test5",
+    "mobile": "9567890123",
+    "rollNo": "R1005",
+    "schoolName": "Modern Public School",
+    "branch": "Electrical",
+    "address": "34 Chennai Street, Chennai, India",
+    "password": "Test@5"
+  },
+  {
+    "email": "user6@test.com",
+    "name": "User6 Test6",
+    "mobile": "9678901234",
+    "rollNo": "R1006",
+    "schoolName": "Central Academy",
+    "branch": "Information Technology",
+    "address": "56 Kolkata Street, Kolkata, India",
+    "password": "Test@6"
+  },
+  {
+    "email": "user7@test.com",
+    "name": "User7 Test7",
+    "mobile": "9789012345",
+    "rollNo": "R1007",
+    "schoolName": "Sunshine International School",
+    "branch": "Biotechnology",
+    "address": "89 Pune Street, Pune, India",
+    "password": "Test@7"
+  },
+  {
+    "email": "user8@test.com",
+    "name": "User8 Test8",
+    "mobile": "9890123456",
+    "rollNo": "R1008",
+    "schoolName": "Global Public School",
+    "branch": "Chemical",
+    "address": "12 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@8"
+  },
+  {
+    "email": "user9@test.com",
+    "name": "User9 Test9",
+    "mobile": "9901234567",
+    "rollNo": "R1009",
+    "schoolName": "Bright Future Academy",
+    "branch": "Aerospace",
+    "address": "67 Jaipur Street, Jaipur, India",
+    "password": "Test@9"
+  },
+  {
+    "email": "user10@test.com",
+    "name": "User10 Test10",
+    "mobile": "9012345678",
+    "rollNo": "R1010",
+    "schoolName": "Elite International School",
+    "branch": "Environmental",
+    "address": "23 Lucknow Street, Lucknow, India",
+    "password": "Test@10"
+  },
+  {
+    "email": "user11@test.com",
+    "name": "User11 Test11",
+    "mobile": "9312756253",
+    "rollNo": "R1011",
+    "schoolName": "Modern Public School",
+    "branch": "Information Technology",
+    "address": "70 Pune Street, Pune, India",
+    "password": "Test@11"
+  },
+  {
+    "email": "user12@test.com",
+    "name": "User12 Test12",
+    "mobile": "9549450901",
+    "rollNo": "R1012",
+    "schoolName": "Bright Future Academy",
+    "branch": "Aerospace",
+    "address": "70 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@12"
+  },
+  {
+    "email": "user13@test.com",
+    "name": "User13 Test13",
+    "mobile": "9722192032",
+    "rollNo": "R1013",
+    "schoolName": "Central Academy",
+    "branch": "Chemical",
+    "address": "35 Mumbai Street, Mumbai, India",
+    "password": "Test@13"
+  },
+  {
+    "email": "user14@test.com",
+    "name": "User14 Test14",
+    "mobile": "9305564819",
+    "rollNo": "R1014",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Chemical",
+    "address": "1 New Delhi Street, New Delhi, India",
+    "password": "Test@14"
+  },
+  {
+    "email": "user15@test.com",
+    "name": "User15 Test15",
+    "mobile": "9954183619",
+    "rollNo": "R1015",
+    "schoolName": "SHUATS University",
+    "branch": "Civil",
+    "address": "54 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@15"
+  },
+  {
+    "email": "user16@test.com",
+    "name": "User16 Test16",
+    "mobile": "9552392023",
+    "rollNo": "R1016",
+    "schoolName": "Sunshine International School",
+    "branch": "Electrical",
+    "address": "96 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@16"
+  },
+  {
+    "email": "user17@test.com",
+    "name": "User17 Test17",
+    "mobile": "9654870947",
+    "rollNo": "R1017",
+    "schoolName": "Bright Future Academy",
+    "branch": "Electronics",
+    "address": "55 Pune Street, Pune, India",
+    "password": "Test@17"
+  },
+  {
+    "email": "user18@test.com",
+    "name": "User18 Test18",
+    "mobile": "9372917854",
+    "rollNo": "R1018",
+    "schoolName": "Bright Future Academy",
+    "branch": "Chemical",
+    "address": "38 Bangalore Street, Bangalore, India",
+    "password": "Test@18"
+  },
+  {
+    "email": "user19@test.com",
+    "name": "User19 Test19",
+    "mobile": "9183674215",
+    "rollNo": "R1019",
+    "schoolName": "Central Academy",
+    "branch": "Computer Science",
+    "address": "4 Mumbai Street, Mumbai, India",
+    "password": "Test@19"
+  },
+  {
+    "email": "user20@test.com",
+    "name": "User20 Test20",
+    "mobile": "9288842544",
+    "rollNo": "R1020",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Environmental",
+    "address": "91 Jaipur Street, Jaipur, India",
+    "password": "Test@20"
+  },
+  {
+    "email": "user21@test.com",
+    "name": "User21 Test21",
+    "mobile": "9760404222",
+    "rollNo": "R1021",
+    "schoolName": "St. Xavier's School",
+    "branch": "Information Technology",
+    "address": "96 Bangalore Street, Bangalore, India",
+    "password": "Test@21"
+  },
+  {
+    "email": "user22@test.com",
+    "name": "User22 Test22",
+    "mobile": "9410902246",
+    "rollNo": "R1022",
+    "schoolName": "Delhi Public School",
+    "branch": "Electrical",
+    "address": "45 Jaipur Street, Jaipur, India",
+    "password": "Test@22"
+  },
+  {
+    "email": "user23@test.com",
+    "name": "User23 Test23",
+    "mobile": "9675488745",
+    "rollNo": "R1023",
+    "schoolName": "Global Public School",
+    "branch": "Chemical",
+    "address": "23 Kolkata Street, Kolkata, India",
+    "password": "Test@23"
+  },
+  {
+    "email": "user24@test.com",
+    "name": "User24 Test24",
+    "mobile": "9164859798",
+    "rollNo": "R1024",
+    "schoolName": "St. Xavier's School",
+    "branch": "Aerospace",
+    "address": "27 Jaipur Street, Jaipur, India",
+    "password": "Test@24"
+  },
+  {
+    "email": "user25@test.com",
+    "name": "User25 Test25",
+    "mobile": "9585502848",
+    "rollNo": "R1025",
+    "schoolName": "SHUATS University",
+    "branch": "Environmental",
+    "address": "85 Lucknow Street, Lucknow, India",
+    "password": "Test@25"
+  },
+  {
+    "email": "user26@test.com",
+    "name": "User26 Test26",
+    "mobile": "9597914129",
+    "rollNo": "R1026",
+    "schoolName": "Bright Future Academy",
+    "branch": "Electronics",
+    "address": "60 Kolkata Street, Kolkata, India",
+    "password": "Test@26"
+  },
+  {
+    "email": "user27@test.com",
+    "name": "User27 Test27",
+    "mobile": "9836074676",
+    "rollNo": "R1027",
+    "schoolName": "Sunshine International School",
+    "branch": "Civil",
+    "address": "27 Pune Street, Pune, India",
+    "password": "Test@27"
+  },
+  {
+    "email": "user28@test.com",
+    "name": "User28 Test28",
+    "mobile": "9402264328",
+    "rollNo": "R1028",
+    "schoolName": "St. Xavier's School",
+    "branch": "Electrical",
+    "address": "45 Pune Street, Pune, India",
+    "password": "Test@28"
+  },
+  {
+    "email": "user29@test.com",
+    "name": "User29 Test29",
+    "mobile": "9740936575",
+    "rollNo": "R1029",
+    "schoolName": "Modern Public School",
+    "branch": "Civil",
+    "address": "99 Bangalore Street, Bangalore, India",
+    "password": "Test@29"
+  },
+  {
+    "email": "user30@test.com",
+    "name": "User30 Test30",
+    "mobile": "9359355437",
+    "rollNo": "R1030",
+    "schoolName": "Elite International School",
+    "branch": "Information Technology",
+    "address": "31 Mumbai Street, Mumbai, India",
+    "password": "Test@30"
+  },
+  {
+    "email": "user31@test.com",
+    "name": "User31 Test31",
+    "mobile": "9869643577",
+    "rollNo": "R1031",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Chemical",
+    "address": "35 New Delhi Street, New Delhi, India",
+    "password": "Test@31"
+  },
+  {
+    "email": "user32@test.com",
+    "name": "User32 Test32",
+    "mobile": "9699950115",
+    "rollNo": "R1032",
+    "schoolName": "SHUATS University",
+    "branch": "Mechanical",
+    "address": "53 Kolkata Street, Kolkata, India",
+    "password": "Test@32"
+  },
+  {
+    "email": "user33@test.com",
+    "name": "User33 Test33",
+    "mobile": "9153192718",
+    "rollNo": "R1033",
+    "schoolName": "SHUATS University",
+    "branch": "Mechanical",
+    "address": "51 Mumbai Street, Mumbai, India",
+    "password": "Test@33"
+  },
+  {
+    "email": "user34@test.com",
+    "name": "User34 Test34",
+    "mobile": "9239503279",
+    "rollNo": "R1034",
+    "schoolName": "Sunshine International School",
+    "branch": "Civil",
+    "address": "84 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@34"
+  },
+  {
+    "email": "user35@test.com",
+    "name": "User35 Test35",
+    "mobile": "9114194873",
+    "rollNo": "R1035",
+    "schoolName": "Bright Future Academy",
+    "branch": "Electrical",
+    "address": "56 Pune Street, Pune, India",
+    "password": "Test@35"
+  },
+  {
+    "email": "user36@test.com",
+    "name": "User36 Test36",
+    "mobile": "9510794688",
+    "rollNo": "R1036",
+    "schoolName": "SHUATS University",
+    "branch": "Electrical",
+    "address": "70 New Delhi Street, New Delhi, India",
+    "password": "Test@36"
+  },
+  {
+    "email": "user37@test.com",
+    "name": "User37 Test37",
+    "mobile": "9977413266",
+    "rollNo": "R1037",
+    "schoolName": "Modern Public School",
+    "branch": "Environmental",
+    "address": "25 Chennai Street, Chennai, India",
+    "password": "Test@37"
+  },
+  {
+    "email": "user38@test.com",
+    "name": "User38 Test38",
+    "mobile": "9787327061",
+    "rollNo": "R1038",
+    "schoolName": "Bright Future Academy",
+    "branch": "Electrical",
+    "address": "98 Mumbai Street, Mumbai, India",
+    "password": "Test@38"
+  },
+  {
+    "email": "user39@test.com",
+    "name": "User39 Test39",
+    "mobile": "9511647815",
+    "rollNo": "R1039",
+    "schoolName": "St. Xavier's School",
+    "branch": "Chemical",
+    "address": "31 New Delhi Street, New Delhi, India",
+    "password": "Test@39"
+  },
+  {
+    "email": "user40@test.com",
+    "name": "User40 Test40",
+    "mobile": "9350889547",
+    "rollNo": "R1040",
+    "schoolName": "SHUATS University",
+    "branch": "Information Technology",
+    "address": "12 Jaipur Street, Jaipur, India",
+    "password": "Test@40"
+  },
+  {
+    "email": "user41@test.com",
+    "name": "User41 Test41",
+    "mobile": "9975856104",
+    "rollNo": "R1041",
+    "schoolName": "Global Public School",
+    "branch": "Chemical",
+    "address": "16 Pune Street, Pune, India",
+    "password": "Test@41"
+  },
+  {
+    "email": "user42@test.com",
+    "name": "User42 Test42",
+    "mobile": "9626425497",
+    "rollNo": "R1042",
+    "schoolName": "Sunshine International School",
+    "branch": "Biotechnology",
+    "address": "43 Chennai Street, Chennai, India",
+    "password": "Test@42"
+  },
+  {
+    "email": "user43@test.com",
+    "name": "User43 Test43",
+    "mobile": "9103256709",
+    "rollNo": "R1043",
+    "schoolName": "Bright Future Academy",
+    "branch": "Electrical",
+    "address": "71 Jaipur Street, Jaipur, India",
+    "password": "Test@43"
+  },
+  {
+    "email": "user44@test.com",
+    "name": "User44 Test44",
+    "mobile": "9865176965",
+    "rollNo": "R1044",
+    "schoolName": "St. Xavier's School",
+    "branch": "Environmental",
+    "address": "2 New Delhi Street, New Delhi, India",
+    "password": "Test@44"
+  },
+  {
+    "email": "user45@test.com",
+    "name": "User45 Test45",
+    "mobile": "9866759055",
+    "rollNo": "R1045",
+    "schoolName": "St. Xavier's School",
+    "branch": "Electrical",
+    "address": "73 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@45"
+  },
+  {
+    "email": "user46@test.com",
+    "name": "User46 Test46",
+    "mobile": "9513353176",
+    "rollNo": "R1046",
+    "schoolName": "Global Public School",
+    "branch": "Information Technology",
+    "address": "92 Mumbai Street, Mumbai, India",
+    "password": "Test@46"
+  },
+  {
+    "email": "user47@test.com",
+    "name": "User47 Test47",
+    "mobile": "9430066727",
+    "rollNo": "R1047",
+    "schoolName": "Central Academy",
+    "branch": "Biotechnology",
+    "address": "7 Mumbai Street, Mumbai, India",
+    "password": "Test@47"
+  },
+  {
+    "email": "user48@test.com",
+    "name": "User48 Test48",
+    "mobile": "9139653515",
+    "rollNo": "R1048",
+    "schoolName": "SHUATS University",
+    "branch": "Electrical",
+    "address": "89 Lucknow Street, Lucknow, India",
+    "password": "Test@48"
+  },
+  {
+    "email": "user49@test.com",
+    "name": "User49 Test49",
+    "mobile": "9401050410",
+    "rollNo": "R1049",
+    "schoolName": "Delhi Public School",
+    "branch": "Biotechnology",
+    "address": "60 Jaipur Street, Jaipur, India",
+    "password": "Test@49"
+  },
+  {
+    "email": "user50@test.com",
+    "name": "User50 Test50",
+    "mobile": "9913141650",
+    "rollNo": "R1050",
+    "schoolName": "SHUATS University",
+    "branch": "Electronics",
+    "address": "29 Hyderabad Street, Hyderabad, India",
+    "password": "Test@50"
+  },
+  {
+    "email": "user51@test.com",
+    "name": "User51 Test51",
+    "mobile": "9882485178",
+    "rollNo": "R1051",
+    "schoolName": "Central Academy",
+    "branch": "Information Technology",
+    "address": "15 Mumbai Street, Mumbai, India",
+    "password": "Test@51"
+  },
+  {
+    "email": "user52@test.com",
+    "name": "User52 Test52",
+    "mobile": "9703905096",
+    "rollNo": "R1052",
+    "schoolName": "St. Xavier's School",
+    "branch": "Information Technology",
+    "address": "64 Hyderabad Street, Hyderabad, India",
+    "password": "Test@52"
+  },
+  {
+    "email": "user53@test.com",
+    "name": "User53 Test53",
+    "mobile": "9480729111",
+    "rollNo": "R1053",
+    "schoolName": "Global Public School",
+    "branch": "Environmental",
+    "address": "10 Mumbai Street, Mumbai, India",
+    "password": "Test@53"
+  },
+  {
+    "email": "user54@test.com",
+    "name": "User54 Test54",
+    "mobile": "9917417704",
+    "rollNo": "R1054",
+    "schoolName": "Elite International School",
+    "branch": "Computer Science",
+    "address": "26 Jaipur Street, Jaipur, India",
+    "password": "Test@54"
+  },
+  {
+    "email": "user55@test.com",
+    "name": "User55 Test55",
+    "mobile": "9825971268",
+    "rollNo": "R1055",
+    "schoolName": "Elite International School",
+    "branch": "Aerospace",
+    "address": "26 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@55"
+  },
+  {
+    "email": "user56@test.com",
+    "name": "User56 Test56",
+    "mobile": "9326676140",
+    "rollNo": "R1056",
+    "schoolName": "Elite International School",
+    "branch": "Mechanical",
+    "address": "50 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@56"
+  },
+  {
+    "email": "user57@test.com",
+    "name": "User57 Test57",
+    "mobile": "9874537582",
+    "rollNo": "R1057",
+    "schoolName": "SHUATS University",
+    "branch": "Civil",
+    "address": "57 New Delhi Street, New Delhi, India",
+    "password": "Test@57"
+  },
+  {
+    "email": "user58@test.com",
+    "name": "User58 Test58",
+    "mobile": "9221547892",
+    "rollNo": "R1058",
+    "schoolName": "SHUATS University",
+    "branch": "Mechanical",
+    "address": "61 Hyderabad Street, Hyderabad, India",
+    "password": "Test@58"
+  },
+  {
+    "email": "user59@test.com",
+    "name": "User59 Test59",
+    "mobile": "9873516357",
+    "rollNo": "R1059",
+    "schoolName": "St. Xavier's School",
+    "branch": "Electronics",
+    "address": "43 Lucknow Street, Lucknow, India",
+    "password": "Test@59"
+  },
+  {
+    "email": "user60@test.com",
+    "name": "User60 Test60",
+    "mobile": "9381073629",
+    "rollNo": "R1060",
+    "schoolName": "Global Public School",
+    "branch": "Environmental",
+    "address": "51 Pune Street, Pune, India",
+    "password": "Test@60"
+  },
+  {
+    "email": "user61@test.com",
+    "name": "User61 Test61",
+    "mobile": "9441057954",
+    "rollNo": "R1061",
+    "schoolName": "Delhi Public School",
+    "branch": "Civil",
+    "address": "8 Kolkata Street, Kolkata, India",
+    "password": "Test@61"
+  },
+  {
+    "email": "user62@test.com",
+    "name": "User62 Test62",
+    "mobile": "9371984998",
+    "rollNo": "R1062",
+    "schoolName": "St. Xavier's School",
+    "branch": "Aerospace",
+    "address": "99 Chennai Street, Chennai, India",
+    "password": "Test@62"
+  },
+  {
+    "email": "user63@test.com",
+    "name": "User63 Test63",
+    "mobile": "9126571246",
+    "rollNo": "R1063",
+    "schoolName": "Central Academy",
+    "branch": "Chemical",
+    "address": "10 Bangalore Street, Bangalore, India",
+    "password": "Test@63"
+  },
+  {
+    "email": "user64@test.com",
+    "name": "User64 Test64",
+    "mobile": "9553781144",
+    "rollNo": "R1064",
+    "schoolName": "Sunshine International School",
+    "branch": "Computer Science",
+    "address": "74 Bangalore Street, Bangalore, India",
+    "password": "Test@64"
+  },
+  {
+    "email": "user65@test.com",
+    "name": "User65 Test65",
+    "mobile": "9250173289",
+    "rollNo": "R1065",
+    "schoolName": "Global Public School",
+    "branch": "Environmental",
+    "address": "44 Bangalore Street, Bangalore, India",
+    "password": "Test@65"
+  },
+  {
+    "email": "user66@test.com",
+    "name": "User66 Test66",
+    "mobile": "9917610770",
+    "rollNo": "R1066",
+    "schoolName": "Modern Public School",
+    "branch": "Mechanical",
+    "address": "9 New Delhi Street, New Delhi, India",
+    "password": "Test@66"
+  },
+  {
+    "email": "user67@test.com",
+    "name": "User67 Test67",
+    "mobile": "9477311388",
+    "rollNo": "R1067",
+    "schoolName": "SHUATS University",
+    "branch": "Environmental",
+    "address": "62 Pune Street, Pune, India",
+    "password": "Test@67"
+  },
+  {
+    "email": "user68@test.com",
+    "name": "User68 Test68",
+    "mobile": "9404933267",
+    "rollNo": "R1068",
+    "schoolName": "Modern Public School",
+    "branch": "Chemical",
+    "address": "57 Lucknow Street, Lucknow, India",
+    "password": "Test@68"
+  },
+  {
+    "email": "user69@test.com",
+    "name": "User69 Test69",
+    "mobile": "9481220026",
+    "rollNo": "R1069",
+    "schoolName": "SHUATS University",
+    "branch": "Electrical",
+    "address": "5 Bangalore Street, Bangalore, India",
+    "password": "Test@69"
+  },
+  {
+    "email": "user70@test.com",
+    "name": "User70 Test70",
+    "mobile": "9565815035",
+    "rollNo": "R1070",
+    "schoolName": "Sunshine International School",
+    "branch": "Chemical",
+    "address": "25 Lucknow Street, Lucknow, India",
+    "password": "Test@70"
+  },
+  {
+    "email": "user71@test.com",
+    "name": "User71 Test71",
+    "mobile": "9879298185",
+    "rollNo": "R1071",
+    "schoolName": "Global Public School",
+    "branch": "Computer Science",
+    "address": "1 Hyderabad Street, Hyderabad, India",
+    "password": "Test@71"
+  },
+  {
+    "email": "user72@test.com",
+    "name": "User72 Test72",
+    "mobile": "9670778344",
+    "rollNo": "R1072",
+    "schoolName": "Elite International School",
+    "branch": "Computer Science",
+    "address": "51 Hyderabad Street, Hyderabad, India",
+    "password": "Test@72"
+  },
+  {
+    "email": "user73@test.com",
+    "name": "User73 Test73",
+    "mobile": "9901137821",
+    "rollNo": "R1073",
+    "schoolName": "Modern Public School",
+    "branch": "Computer Science",
+    "address": "100 Hyderabad Street, Hyderabad, India",
+    "password": "Test@73"
+  },
+  {
+    "email": "user74@test.com",
+    "name": "User74 Test74",
+    "mobile": "9346990996",
+    "rollNo": "R1074",
+    "schoolName": "Elite International School",
+    "branch": "Environmental",
+    "address": "75 Hyderabad Street, Hyderabad, India",
+    "password": "Test@74"
+  },
+  {
+    "email": "user75@test.com",
+    "name": "User75 Test75",
+    "mobile": "9852918981",
+    "rollNo": "R1075",
+    "schoolName": "Modern Public School",
+    "branch": "Mechanical",
+    "address": "5 Hyderabad Street, Hyderabad, India",
+    "password": "Test@75"
+  },
+  {
+    "email": "user76@test.com",
+    "name": "User76 Test76",
+    "mobile": "9813719957",
+    "rollNo": "R1076",
+    "schoolName": "SHUATS University",
+    "branch": "Computer Science",
+    "address": "49 Lucknow Street, Lucknow, India",
+    "password": "Test@76"
+  },
+  {
+    "email": "user77@test.com",
+    "name": "User77 Test77",
+    "mobile": "9786527161",
+    "rollNo": "R1077",
+    "schoolName": "Bright Future Academy",
+    "branch": "Mechanical",
+    "address": "68 Chennai Street, Chennai, India",
+    "password": "Test@77"
+  },
+  {
+    "email": "user78@test.com",
+    "name": "User78 Test78",
+    "mobile": "9854391495",
+    "rollNo": "R1078",
+    "schoolName": "St. Xavier's School",
+    "branch": "Computer Science",
+    "address": "74 Kolkata Street, Kolkata, India",
+    "password": "Test@78"
+  },
+  {
+    "email": "user79@test.com",
+    "name": "User79 Test79",
+    "mobile": "9746790789",
+    "rollNo": "R1079",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Mechanical",
+    "address": "20 Pune Street, Pune, India",
+    "password": "Test@79"
+  },
+  {
+    "email": "user80@test.com",
+    "name": "User80 Test80",
+    "mobile": "9770370457",
+    "rollNo": "R1080",
+    "schoolName": "SHUATS University",
+    "branch": "Mechanical",
+    "address": "67 New Delhi Street, New Delhi, India",
+    "password": "Test@80"
+  },
+  {
+    "email": "user81@test.com",
+    "name": "User81 Test81",
+    "mobile": "9175673252",
+    "rollNo": "R1081",
+    "schoolName": "Modern Public School",
+    "branch": "Mechanical",
+    "address": "17 Lucknow Street, Lucknow, India",
+    "password": "Test@81"
+  },
+  {
+    "email": "user82@test.com",
+    "name": "User82 Test82",
+    "mobile": "9592220361",
+    "rollNo": "R1082",
+    "schoolName": "Elite International School",
+    "branch": "Electronics",
+    "address": "14 Lucknow Street, Lucknow, India",
+    "password": "Test@82"
+  },
+  {
+    "email": "user83@test.com",
+    "name": "User83 Test83",
+    "mobile": "9553683011",
+    "rollNo": "R1083",
+    "schoolName": "Elite International School",
+    "branch": "Civil",
+    "address": "66 Lucknow Street, Lucknow, India",
+    "password": "Test@83"
+  },
+  {
+    "email": "user84@test.com",
+    "name": "User84 Test84",
+    "mobile": "9539867066",
+    "rollNo": "R1084",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Environmental",
+    "address": "87 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@84"
+  },
+  {
+    "email": "user85@test.com",
+    "name": "User85 Test85",
+    "mobile": "9684812440",
+    "rollNo": "R1085",
+    "schoolName": "Sunshine International School",
+    "branch": "Electronics",
+    "address": "28 Kolkata Street, Kolkata, India",
+    "password": "Test@85"
+  },
+  {
+    "email": "user86@test.com",
+    "name": "User86 Test86",
+    "mobile": "9615312058",
+    "rollNo": "R1086",
+    "schoolName": "Modern Public School",
+    "branch": "Environmental",
+    "address": "54 Lucknow Street, Lucknow, India",
+    "password": "Test@86"
+  },
+  {
+    "email": "user87@test.com",
+    "name": "User87 Test87",
+    "mobile": "9509612031",
+    "rollNo": "R1087",
+    "schoolName": "Bright Future Academy",
+    "branch": "Aerospace",
+    "address": "11 Chennai Street, Chennai, India",
+    "password": "Test@87"
+  },
+  {
+    "email": "user88@test.com",
+    "name": "User88 Test88",
+    "mobile": "9531402232",
+    "rollNo": "R1088",
+    "schoolName": "Sunshine International School",
+    "branch": "Mechanical",
+    "address": "15 New Delhi Street, New Delhi, India",
+    "password": "Test@88"
+  },
+  {
+    "email": "user89@test.com",
+    "name": "User89 Test89",
+    "mobile": "9672565868",
+    "rollNo": "R1089",
+    "schoolName": "Delhi Public School",
+    "branch": "Electrical",
+    "address": "6 Chennai Street, Chennai, India",
+    "password": "Test@89"
+  },
+  {
+    "email": "user90@test.com",
+    "name": "User90 Test90",
+    "mobile": "9376844278",
+    "rollNo": "R1090",
+    "schoolName": "St. Xavier's School",
+    "branch": "Electrical",
+    "address": "52 Kolkata Street, Kolkata, India",
+    "password": "Test@90"
+  },
+  {
+    "email": "user91@test.com",
+    "name": "User91 Test91",
+    "mobile": "9373582672",
+    "rollNo": "R1091",
+    "schoolName": "Delhi Public School",
+    "branch": "Aerospace",
+    "address": "92 Lucknow Street, Lucknow, India",
+    "password": "Test@91"
+  },
+  {
+    "email": "user92@test.com",
+    "name": "User92 Test92",
+    "mobile": "9721388075",
+    "rollNo": "R1092",
+    "schoolName": "St. Xavier's School",
+    "branch": "Computer Science",
+    "address": "96 New Delhi Street, New Delhi, India",
+    "password": "Test@92"
+  },
+  {
+    "email": "user93@test.com",
+    "name": "User93 Test93",
+    "mobile": "9577527652",
+    "rollNo": "R1093",
+    "schoolName": "Modern Public School",
+    "branch": "Environmental",
+    "address": "7 Bangalore Street, Bangalore, India",
+    "password": "Test@93"
+  },
+  {
+    "email": "user94@test.com",
+    "name": "User94 Test94",
+    "mobile": "9227168027",
+    "rollNo": "R1094",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Aerospace",
+    "address": "14 New Delhi Street, New Delhi, India",
+    "password": "Test@94"
+  },
+  {
+    "email": "user95@test.com",
+    "name": "User95 Test95",
+    "mobile": "9310635054",
+    "rollNo": "R1095",
+    "schoolName": "Modern Public School",
+    "branch": "Information Technology",
+    "address": "95 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@95"
+  },
+  {
+    "email": "user96@test.com",
+    "name": "User96 Test96",
+    "mobile": "9600129634",
+    "rollNo": "R1096",
+    "schoolName": "Bright Future Academy",
+    "branch": "Aerospace",
+    "address": "67 Hyderabad Street, Hyderabad, India",
+    "password": "Test@96"
+  },
+  {
+    "email": "user97@test.com",
+    "name": "User97 Test97",
+    "mobile": "9881709334",
+    "rollNo": "R1097",
+    "schoolName": "St. Xavier's School",
+    "branch": "Computer Science",
+    "address": "82 Jaipur Street, Jaipur, India",
+    "password": "Test@97"
+  },
+  {
+    "email": "user98@test.com",
+    "name": "User98 Test98",
+    "mobile": "9465919967",
+    "rollNo": "R1098",
+    "schoolName": "St. Xavier's School",
+    "branch": "Chemical",
+    "address": "73 Kolkata Street, Kolkata, India",
+    "password": "Test@98"
+  },
+  {
+    "email": "user99@test.com",
+    "name": "User99 Test99",
+    "mobile": "9484162365",
+    "rollNo": "R1099",
+    "schoolName": "Elite International School",
+    "branch": "Electronics",
+    "address": "11 Kolkata Street, Kolkata, India",
+    "password": "Test@99"
+  },
+  {
+    "email": "user100@test.com",
+    "name": "User100 Test100",
+    "mobile": "9483645070",
+    "rollNo": "R1100",
+    "schoolName": "Global Public School",
+    "branch": "Chemical",
+    "address": "95 Lucknow Street, Lucknow, India",
+    "password": "Test@100"
+  },
+  {
+    "email": "user101@test.com",
+    "name": "User101 Test101",
+    "mobile": "9179071455",
+    "rollNo": "R1101",
+    "schoolName": "St. Xavier's School",
+    "branch": "Information Technology",
+    "address": "1 Lucknow Street, Lucknow, India",
+    "password": "Test@101"
+  },
+  {
+    "email": "user102@test.com",
+    "name": "User102 Test102",
+    "mobile": "9176173737",
+    "rollNo": "R1102",
+    "schoolName": "Delhi Public School",
+    "branch": "Chemical",
+    "address": "93 Chennai Street, Chennai, India",
+    "password": "Test@102"
+  },
+  {
+    "email": "user103@test.com",
+    "name": "User103 Test103",
+    "mobile": "9229946778",
+    "rollNo": "R1103",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Mechanical",
+    "address": "79 Jaipur Street, Jaipur, India",
+    "password": "Test@103"
+  },
+  {
+    "email": "user104@test.com",
+    "name": "User104 Test104",
+    "mobile": "9938400349",
+    "rollNo": "R1104",
+    "schoolName": "Elite International School",
+    "branch": "Electronics",
+    "address": "61 Hyderabad Street, Hyderabad, India",
+    "password": "Test@104"
+  },
+  {
+    "email": "user105@test.com",
+    "name": "User105 Test105",
+    "mobile": "9898262759",
+    "rollNo": "R1105",
+    "schoolName": "Delhi Public School",
+    "branch": "Mechanical",
+    "address": "46 Kolkata Street, Kolkata, India",
+    "password": "Test@105"
+  },
+  {
+    "email": "user106@test.com",
+    "name": "User106 Test106",
+    "mobile": "9793327988",
+    "rollNo": "R1106",
+    "schoolName": "Central Academy",
+    "branch": "Environmental",
+    "address": "27 New Delhi Street, New Delhi, India",
+    "password": "Test@106"
+  },
+  {
+    "email": "user107@test.com",
+    "name": "User107 Test107",
+    "mobile": "9866672681",
+    "rollNo": "R1107",
+    "schoolName": "Bright Future Academy",
+    "branch": "Electrical",
+    "address": "4 Lucknow Street, Lucknow, India",
+    "password": "Test@107"
+  },
+  {
+    "email": "user108@test.com",
+    "name": "User108 Test108",
+    "mobile": "9545495575",
+    "rollNo": "R1108",
+    "schoolName": "Delhi Public School",
+    "branch": "Aerospace",
+    "address": "35 New Delhi Street, New Delhi, India",
+    "password": "Test@108"
+  },
+  {
+    "email": "user109@test.com",
+    "name": "User109 Test109",
+    "mobile": "9859661237",
+    "rollNo": "R1109",
+    "schoolName": "St. Xavier's School",
+    "branch": "Chemical",
+    "address": "23 Kolkata Street, Kolkata, India",
+    "password": "Test@109"
+  },
+  {
+    "email": "user110@test.com",
+    "name": "User110 Test110",
+    "mobile": "9188860313",
+    "rollNo": "R1110",
+    "schoolName": "Modern Public School",
+    "branch": "Electronics",
+    "address": "6 New Delhi Street, New Delhi, India",
+    "password": "Test@110"
+  },
+  {
+    "email": "user111@test.com",
+    "name": "User111 Test111",
+    "mobile": "9460436152",
+    "rollNo": "R1111",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Chemical",
+    "address": "28 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@111"
+  },
+  {
+    "email": "user112@test.com",
+    "name": "User112 Test112",
+    "mobile": "9574442594",
+    "rollNo": "R1112",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Mechanical",
+    "address": "35 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@112"
+  },
+  {
+    "email": "user113@test.com",
+    "name": "User113 Test113",
+    "mobile": "9105560682",
+    "rollNo": "R1113",
+    "schoolName": "SHUATS University",
+    "branch": "Civil",
+    "address": "14 Kolkata Street, Kolkata, India",
+    "password": "Test@113"
+  },
+  {
+    "email": "user114@test.com",
+    "name": "User114 Test114",
+    "mobile": "9652384282",
+    "rollNo": "R1114",
+    "schoolName": "Global Public School",
+    "branch": "Biotechnology",
+    "address": "16 Kolkata Street, Kolkata, India",
+    "password": "Test@114"
+  },
+  {
+    "email": "user115@test.com",
+    "name": "User115 Test115",
+    "mobile": "9164063035",
+    "rollNo": "R1115",
+    "schoolName": "St. Xavier's School",
+    "branch": "Mechanical",
+    "address": "42 Pune Street, Pune, India",
+    "password": "Test@115"
+  },
+  {
+    "email": "user116@test.com",
+    "name": "User116 Test116",
+    "mobile": "9625117622",
+    "rollNo": "R1116",
+    "schoolName": "St. Xavier's School",
+    "branch": "Aerospace",
+    "address": "57 Pune Street, Pune, India",
+    "password": "Test@116"
+  },
+  {
+    "email": "user117@test.com",
+    "name": "User117 Test117",
+    "mobile": "9510535937",
+    "rollNo": "R1117",
+    "schoolName": "Sunshine International School",
+    "branch": "Civil",
+    "address": "72 Chennai Street, Chennai, India",
+    "password": "Test@117"
+  },
+  {
+    "email": "user118@test.com",
+    "name": "User118 Test118",
+    "mobile": "9428626684",
+    "rollNo": "R1118",
+    "schoolName": "Delhi Public School",
+    "branch": "Computer Science",
+    "address": "86 Jaipur Street, Jaipur, India",
+    "password": "Test@118"
+  },
+  {
+    "email": "user119@test.com",
+    "name": "User119 Test119",
+    "mobile": "9499477274",
+    "rollNo": "R1119",
+    "schoolName": "Sunshine International School",
+    "branch": "Computer Science",
+    "address": "91 Chennai Street, Chennai, India",
+    "password": "Test@119"
+  },
+  {
+    "email": "user120@test.com",
+    "name": "User120 Test120",
+    "mobile": "9206716140",
+    "rollNo": "R1120",
+    "schoolName": "Modern Public School",
+    "branch": "Information Technology",
+    "address": "61 New Delhi Street, New Delhi, India",
+    "password": "Test@120"
+  },
+  {
+    "email": "user121@test.com",
+    "name": "User121 Test121",
+    "mobile": "9712658602",
+    "rollNo": "R1121",
+    "schoolName": "Sunshine International School",
+    "branch": "Biotechnology",
+    "address": "13 Bangalore Street, Bangalore, India",
+    "password": "Test@121"
+  },
+  {
+    "email": "user122@test.com",
+    "name": "User122 Test122",
+    "mobile": "9142409347",
+    "rollNo": "R1122",
+    "schoolName": "St. Xavier's School",
+    "branch": "Biotechnology",
+    "address": "6 Hyderabad Street, Hyderabad, India",
+    "password": "Test@122"
+  },
+  {
+    "email": "user123@test.com",
+    "name": "User123 Test123",
+    "mobile": "9879077741",
+    "rollNo": "R1123",
+    "schoolName": "St. Xavier's School",
+    "branch": "Environmental",
+    "address": "40 Lucknow Street, Lucknow, India",
+    "password": "Test@123"
+  },
+  {
+    "email": "user124@test.com",
+    "name": "User124 Test124",
+    "mobile": "9418069216",
+    "rollNo": "R1124",
+    "schoolName": "Global Public School",
+    "branch": "Biotechnology",
+    "address": "34 New Delhi Street, New Delhi, India",
+    "password": "Test@124"
+  },
+  {
+    "email": "user125@test.com",
+    "name": "User125 Test125",
+    "mobile": "9575560490",
+    "rollNo": "R1125",
+    "schoolName": "St. Xavier's School",
+    "branch": "Electrical",
+    "address": "15 Lucknow Street, Lucknow, India",
+    "password": "Test@125"
+  },
+  {
+    "email": "user126@test.com",
+    "name": "User126 Test126",
+    "mobile": "9834548384",
+    "rollNo": "R1126",
+    "schoolName": "Modern Public School",
+    "branch": "Electronics",
+    "address": "78 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@126"
+  },
+  {
+    "email": "user127@test.com",
+    "name": "User127 Test127",
+    "mobile": "9973962387",
+    "rollNo": "R1127",
+    "schoolName": "Central Academy",
+    "branch": "Civil",
+    "address": "55 Chennai Street, Chennai, India",
+    "password": "Test@127"
+  },
+  {
+    "email": "user128@test.com",
+    "name": "User128 Test128",
+    "mobile": "9335862212",
+    "rollNo": "R1128",
+    "schoolName": "Bright Future Academy",
+    "branch": "Biotechnology",
+    "address": "3 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@128"
+  },
+  {
+    "email": "user129@test.com",
+    "name": "User129 Test129",
+    "mobile": "9373960220",
+    "rollNo": "R1129",
+    "schoolName": "Delhi Public School",
+    "branch": "Computer Science",
+    "address": "94 New Delhi Street, New Delhi, India",
+    "password": "Test@129"
+  },
+  {
+    "email": "user130@test.com",
+    "name": "User130 Test130",
+    "mobile": "9862275976",
+    "rollNo": "R1130",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Electrical",
+    "address": "24 Pune Street, Pune, India",
+    "password": "Test@130"
+  },
+  {
+    "email": "user131@test.com",
+    "name": "User131 Test131",
+    "mobile": "9730873133",
+    "rollNo": "R1131",
+    "schoolName": "Delhi Public School",
+    "branch": "Civil",
+    "address": "45 Mumbai Street, Mumbai, India",
+    "password": "Test@131"
+  },
+  {
+    "email": "user132@test.com",
+    "name": "User132 Test132",
+    "mobile": "9481989679",
+    "rollNo": "R1132",
+    "schoolName": "Global Public School",
+    "branch": "Environmental",
+    "address": "70 Bangalore Street, Bangalore, India",
+    "password": "Test@132"
+  },
+  {
+    "email": "user133@test.com",
+    "name": "User133 Test133",
+    "mobile": "9489996207",
+    "rollNo": "R1133",
+    "schoolName": "SHUATS University",
+    "branch": "Computer Science",
+    "address": "19 Chennai Street, Chennai, India",
+    "password": "Test@133"
+  },
+  {
+    "email": "user134@test.com",
+    "name": "User134 Test134",
+    "mobile": "9734995609",
+    "rollNo": "R1134",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Computer Science",
+    "address": "99 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@134"
+  },
+  {
+    "email": "user135@test.com",
+    "name": "User135 Test135",
+    "mobile": "9485616830",
+    "rollNo": "R1135",
+    "schoolName": "Bright Future Academy",
+    "branch": "Information Technology",
+    "address": "28 Pune Street, Pune, India",
+    "password": "Test@135"
+  },
+  {
+    "email": "user136@test.com",
+    "name": "User136 Test136",
+    "mobile": "9219226701",
+    "rollNo": "R1136",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Electrical",
+    "address": "97 Bangalore Street, Bangalore, India",
+    "password": "Test@136"
+  },
+  {
+    "email": "user137@test.com",
+    "name": "User137 Test137",
+    "mobile": "9722514895",
+    "rollNo": "R1137",
+    "schoolName": "Global Public School",
+    "branch": "Mechanical",
+    "address": "88 Jaipur Street, Jaipur, India",
+    "password": "Test@137"
+  },
+  {
+    "email": "user138@test.com",
+    "name": "User138 Test138",
+    "mobile": "9229343829",
+    "rollNo": "R1138",
+    "schoolName": "SHUATS University",
+    "branch": "Electrical",
+    "address": "77 Kolkata Street, Kolkata, India",
+    "password": "Test@138"
+  },
+  {
+    "email": "user139@test.com",
+    "name": "User139 Test139",
+    "mobile": "9171596313",
+    "rollNo": "R1139",
+    "schoolName": "Bright Future Academy",
+    "branch": "Biotechnology",
+    "address": "57 Pune Street, Pune, India",
+    "password": "Test@139"
+  },
+  {
+    "email": "user140@test.com",
+    "name": "User140 Test140",
+    "mobile": "9631903205",
+    "rollNo": "R1140",
+    "schoolName": "Central Academy",
+    "branch": "Information Technology",
+    "address": "30 Mumbai Street, Mumbai, India",
+    "password": "Test@140"
+  },
+  {
+    "email": "user141@test.com",
+    "name": "User141 Test141",
+    "mobile": "9233885539",
+    "rollNo": "R1141",
+    "schoolName": "St. Xavier's School",
+    "branch": "Chemical",
+    "address": "84 Bangalore Street, Bangalore, India",
+    "password": "Test@141"
+  },
+  {
+    "email": "user142@test.com",
+    "name": "User142 Test142",
+    "mobile": "9792039573",
+    "rollNo": "R1142",
+    "schoolName": "St. Xavier's School",
+    "branch": "Computer Science",
+    "address": "30 Kolkata Street, Kolkata, India",
+    "password": "Test@142"
+  },
+  {
+    "email": "user143@test.com",
+    "name": "User143 Test143",
+    "mobile": "9183077548",
+    "rollNo": "R1143",
+    "schoolName": "Central Academy",
+    "branch": "Civil",
+    "address": "74 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@143"
+  },
+  {
+    "email": "user144@test.com",
+    "name": "User144 Test144",
+    "mobile": "9222213105",
+    "rollNo": "R1144",
+    "schoolName": "Global Public School",
+    "branch": "Electronics",
+    "address": "99 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@144"
+  },
+  {
+    "email": "user145@test.com",
+    "name": "User145 Test145",
+    "mobile": "9437279073",
+    "rollNo": "R1145",
+    "schoolName": "St. Xavier's School",
+    "branch": "Biotechnology",
+    "address": "30 Bangalore Street, Bangalore, India",
+    "password": "Test@145"
+  },
+  {
+    "email": "user146@test.com",
+    "name": "User146 Test146",
+    "mobile": "9716728817",
+    "rollNo": "R1146",
+    "schoolName": "Sunshine International School",
+    "branch": "Information Technology",
+    "address": "37 Mumbai Street, Mumbai, India",
+    "password": "Test@146"
+  },
+  {
+    "email": "user147@test.com",
+    "name": "User147 Test147",
+    "mobile": "9852705593",
+    "rollNo": "R1147",
+    "schoolName": "Global Public School",
+    "branch": "Biotechnology",
+    "address": "41 Jaipur Street, Jaipur, India",
+    "password": "Test@147"
+  },
+  {
+    "email": "user148@test.com",
+    "name": "User148 Test148",
+    "mobile": "9779138639",
+    "rollNo": "R1148",
+    "schoolName": "Delhi Public School",
+    "branch": "Computer Science",
+    "address": "57 Mumbai Street, Mumbai, India",
+    "password": "Test@148"
+  },
+  {
+    "email": "user149@test.com",
+    "name": "User149 Test149",
+    "mobile": "9926040791",
+    "rollNo": "R1149",
+    "schoolName": "Global Public School",
+    "branch": "Environmental",
+    "address": "51 Mumbai Street, Mumbai, India",
+    "password": "Test@149"
+  },
+  {
+    "email": "user150@test.com",
+    "name": "User150 Test150",
+    "mobile": "9947138216",
+    "rollNo": "R1150",
+    "schoolName": "Modern Public School",
+    "branch": "Computer Science",
+    "address": "42 Kolkata Street, Kolkata, India",
+    "password": "Test@150"
+  },
+  {
+    "email": "user151@test.com",
+    "name": "User151 Test151",
+    "mobile": "9552107897",
+    "rollNo": "R1151",
+    "schoolName": "Global Public School",
+    "branch": "Electrical",
+    "address": "6 Lucknow Street, Lucknow, India",
+    "password": "Test@151"
+  },
+  {
+    "email": "user152@test.com",
+    "name": "User152 Test152",
+    "mobile": "9440455480",
+    "rollNo": "R1152",
+    "schoolName": "Elite International School",
+    "branch": "Computer Science",
+    "address": "80 Chennai Street, Chennai, India",
+    "password": "Test@152"
+  },
+  {
+    "email": "user153@test.com",
+    "name": "User153 Test153",
+    "mobile": "9640803020",
+    "rollNo": "R1153",
+    "schoolName": "Bright Future Academy",
+    "branch": "Electrical",
+    "address": "66 Kolkata Street, Kolkata, India",
+    "password": "Test@153"
+  },
+  {
+    "email": "user154@test.com",
+    "name": "User154 Test154",
+    "mobile": "9364668028",
+    "rollNo": "R1154",
+    "schoolName": "Sunshine International School",
+    "branch": "Chemical",
+    "address": "19 Mumbai Street, Mumbai, India",
+    "password": "Test@154"
+  },
+  {
+    "email": "user155@test.com",
+    "name": "User155 Test155",
+    "mobile": "9564698663",
+    "rollNo": "R1155",
+    "schoolName": "SHUATS University",
+    "branch": "Electronics",
+    "address": "13 Jaipur Street, Jaipur, India",
+    "password": "Test@155"
+  },
+  {
+    "email": "user156@test.com",
+    "name": "User156 Test156",
+    "mobile": "9390795931",
+    "rollNo": "R1156",
+    "schoolName": "Sunshine International School",
+    "branch": "Biotechnology",
+    "address": "61 Chennai Street, Chennai, India",
+    "password": "Test@156"
+  },
+  {
+    "email": "user157@test.com",
+    "name": "User157 Test157",
+    "mobile": "9761994202",
+    "rollNo": "R1157",
+    "schoolName": "Bright Future Academy",
+    "branch": "Electrical",
+    "address": "61 Jaipur Street, Jaipur, India",
+    "password": "Test@157"
+  },
+  {
+    "email": "user158@test.com",
+    "name": "User158 Test158",
+    "mobile": "9704852935",
+    "rollNo": "R1158",
+    "schoolName": "Elite International School",
+    "branch": "Electrical",
+    "address": "56 Bangalore Street, Bangalore, India",
+    "password": "Test@158"
+  },
+  {
+    "email": "user159@test.com",
+    "name": "User159 Test159",
+    "mobile": "9388660115",
+    "rollNo": "R1159",
+    "schoolName": "Elite International School",
+    "branch": "Biotechnology",
+    "address": "18 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@159"
+  },
+  {
+    "email": "user160@test.com",
+    "name": "User160 Test160",
+    "mobile": "9628586490",
+    "rollNo": "R1160",
+    "schoolName": "SHUATS University",
+    "branch": "Electronics",
+    "address": "51 Pune Street, Pune, India",
+    "password": "Test@160"
+  },
+  {
+    "email": "user161@test.com",
+    "name": "User161 Test161",
+    "mobile": "9549125744",
+    "rollNo": "R1161",
+    "schoolName": "Delhi Public School",
+    "branch": "Computer Science",
+    "address": "39 Mumbai Street, Mumbai, India",
+    "password": "Test@161"
+  },
+  {
+    "email": "user162@test.com",
+    "name": "User162 Test162",
+    "mobile": "9404470004",
+    "rollNo": "R1162",
+    "schoolName": "St. Xavier's School",
+    "branch": "Civil",
+    "address": "96 Mumbai Street, Mumbai, India",
+    "password": "Test@162"
+  },
+  {
+    "email": "user163@test.com",
+    "name": "User163 Test163",
+    "mobile": "9931455297",
+    "rollNo": "R1163",
+    "schoolName": "Central Academy",
+    "branch": "Civil",
+    "address": "91 Pune Street, Pune, India",
+    "password": "Test@163"
+  },
+  {
+    "email": "user164@test.com",
+    "name": "User164 Test164",
+    "mobile": "9608993487",
+    "rollNo": "R1164",
+    "schoolName": "St. Xavier's School",
+    "branch": "Environmental",
+    "address": "62 New Delhi Street, New Delhi, India",
+    "password": "Test@164"
+  },
+  {
+    "email": "user165@test.com",
+    "name": "User165 Test165",
+    "mobile": "9332393945",
+    "rollNo": "R1165",
+    "schoolName": "SHUATS University",
+    "branch": "Environmental",
+    "address": "9 Mumbai Street, Mumbai, India",
+    "password": "Test@165"
+  },
+  {
+    "email": "user166@test.com",
+    "name": "User166 Test166",
+    "mobile": "9409288939",
+    "rollNo": "R1166",
+    "schoolName": "SHUATS University",
+    "branch": "Environmental",
+    "address": "27 Hyderabad Street, Hyderabad, India",
+    "password": "Test@166"
+  },
+  {
+    "email": "user167@test.com",
+    "name": "User167 Test167",
+    "mobile": "9773199631",
+    "rollNo": "R1167",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Mechanical",
+    "address": "70 Jaipur Street, Jaipur, India",
+    "password": "Test@167"
+  },
+  {
+    "email": "user168@test.com",
+    "name": "User168 Test168",
+    "mobile": "9300664529",
+    "rollNo": "R1168",
+    "schoolName": "Delhi Public School",
+    "branch": "Information Technology",
+    "address": "19 Bangalore Street, Bangalore, India",
+    "password": "Test@168"
+  },
+  {
+    "email": "user169@test.com",
+    "name": "User169 Test169",
+    "mobile": "9783138467",
+    "rollNo": "R1169",
+    "schoolName": "SHUATS University",
+    "branch": "Computer Science",
+    "address": "10 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@169"
+  },
+  {
+    "email": "user170@test.com",
+    "name": "User170 Test170",
+    "mobile": "9295974372",
+    "rollNo": "R1170",
+    "schoolName": "Modern Public School",
+    "branch": "Aerospace",
+    "address": "66 Chennai Street, Chennai, India",
+    "password": "Test@170"
+  },
+  {
+    "email": "user171@test.com",
+    "name": "User171 Test171",
+    "mobile": "9906698791",
+    "rollNo": "R1171",
+    "schoolName": "Central Academy",
+    "branch": "Computer Science",
+    "address": "70 Hyderabad Street, Hyderabad, India",
+    "password": "Test@171"
+  },
+  {
+    "email": "user172@test.com",
+    "name": "User172 Test172",
+    "mobile": "9870835911",
+    "rollNo": "R1172",
+    "schoolName": "Bright Future Academy",
+    "branch": "Environmental",
+    "address": "39 Hyderabad Street, Hyderabad, India",
+    "password": "Test@172"
+  },
+  {
+    "email": "user173@test.com",
+    "name": "User173 Test173",
+    "mobile": "9566993599",
+    "rollNo": "R1173",
+    "schoolName": "Bright Future Academy",
+    "branch": "Chemical",
+    "address": "88 Kolkata Street, Kolkata, India",
+    "password": "Test@173"
+  },
+  {
+    "email": "user174@test.com",
+    "name": "User174 Test174",
+    "mobile": "9784530083",
+    "rollNo": "R1174",
+    "schoolName": "Global Public School",
+    "branch": "Mechanical",
+    "address": "10 Hyderabad Street, Hyderabad, India",
+    "password": "Test@174"
+  },
+  {
+    "email": "user175@test.com",
+    "name": "User175 Test175",
+    "mobile": "9342923334",
+    "rollNo": "R1175",
+    "schoolName": "SHUATS University",
+    "branch": "Environmental",
+    "address": "83 Mumbai Street, Mumbai, India",
+    "password": "Test@175"
+  },
+  {
+    "email": "user176@test.com",
+    "name": "User176 Test176",
+    "mobile": "9230774403",
+    "rollNo": "R1176",
+    "schoolName": "St. Xavier's School",
+    "branch": "Electronics",
+    "address": "47 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@176"
+  },
+  {
+    "email": "user177@test.com",
+    "name": "User177 Test177",
+    "mobile": "9630591005",
+    "rollNo": "R1177",
+    "schoolName": "Global Public School",
+    "branch": "Chemical",
+    "address": "61 Mumbai Street, Mumbai, India",
+    "password": "Test@177"
+  },
+  {
+    "email": "user178@test.com",
+    "name": "User178 Test178",
+    "mobile": "9696865422",
+    "rollNo": "R1178",
+    "schoolName": "Global Public School",
+    "branch": "Biotechnology",
+    "address": "52 Lucknow Street, Lucknow, India",
+    "password": "Test@178"
+  },
+  {
+    "email": "user179@test.com",
+    "name": "User179 Test179",
+    "mobile": "9473258635",
+    "rollNo": "R1179",
+    "schoolName": "Modern Public School",
+    "branch": "Civil",
+    "address": "89 Pune Street, Pune, India",
+    "password": "Test@179"
+  },
+  {
+    "email": "user180@test.com",
+    "name": "User180 Test180",
+    "mobile": "9966276120",
+    "rollNo": "R1180",
+    "schoolName": "Elite International School",
+    "branch": "Information Technology",
+    "address": "83 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@180"
+  },
+  {
+    "email": "user181@test.com",
+    "name": "User181 Test181",
+    "mobile": "9580957890",
+    "rollNo": "R1181",
+    "schoolName": "Global Public School",
+    "branch": "Environmental",
+    "address": "92 Mumbai Street, Mumbai, India",
+    "password": "Test@181"
+  },
+  {
+    "email": "user182@test.com",
+    "name": "User182 Test182",
+    "mobile": "9967931474",
+    "rollNo": "R1182",
+    "schoolName": "Modern Public School",
+    "branch": "Electrical",
+    "address": "61 Mumbai Street, Mumbai, India",
+    "password": "Test@182"
+  },
+  {
+    "email": "user183@test.com",
+    "name": "User183 Test183",
+    "mobile": "9908416744",
+    "rollNo": "R1183",
+    "schoolName": "St. Xavier's School",
+    "branch": "Electronics",
+    "address": "15 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@183"
+  },
+  {
+    "email": "user184@test.com",
+    "name": "User184 Test184",
+    "mobile": "9159264755",
+    "rollNo": "R1184",
+    "schoolName": "Global Public School",
+    "branch": "Computer Science",
+    "address": "90 Pune Street, Pune, India",
+    "password": "Test@184"
+  },
+  {
+    "email": "user185@test.com",
+    "name": "User185 Test185",
+    "mobile": "9348304191",
+    "rollNo": "R1185",
+    "schoolName": "Sunshine International School",
+    "branch": "Electronics",
+    "address": "34 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@185"
+  },
+  {
+    "email": "user186@test.com",
+    "name": "User186 Test186",
+    "mobile": "9359938455",
+    "rollNo": "R1186",
+    "schoolName": "St. Xavier's School",
+    "branch": "Environmental",
+    "address": "93 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@186"
+  },
+  {
+    "email": "user187@test.com",
+    "name": "User187 Test187",
+    "mobile": "9392300098",
+    "rollNo": "R1187",
+    "schoolName": "Central Academy",
+    "branch": "Environmental",
+    "address": "25 Jaipur Street, Jaipur, India",
+    "password": "Test@187"
+  },
+  {
+    "email": "user188@test.com",
+    "name": "User188 Test188",
+    "mobile": "9790391624",
+    "rollNo": "R1188",
+    "schoolName": "Sunshine International School",
+    "branch": "Chemical",
+    "address": "34 Mumbai Street, Mumbai, India",
+    "password": "Test@188"
+  },
+  {
+    "email": "user189@test.com",
+    "name": "User189 Test189",
+    "mobile": "9299967317",
+    "rollNo": "R1189",
+    "schoolName": "St. Xavier's School",
+    "branch": "Biotechnology",
+    "address": "83 Lucknow Street, Lucknow, India",
+    "password": "Test@189"
+  },
+  {
+    "email": "user190@test.com",
+    "name": "User190 Test190",
+    "mobile": "9380043797",
+    "rollNo": "R1190",
+    "schoolName": "St. Xavier's School",
+    "branch": "Computer Science",
+    "address": "48 New Delhi Street, New Delhi, India",
+    "password": "Test@190"
+  },
+  {
+    "email": "user191@test.com",
+    "name": "User191 Test191",
+    "mobile": "9351107992",
+    "rollNo": "R1191",
+    "schoolName": "Bright Future Academy",
+    "branch": "Mechanical",
+    "address": "83 Mumbai Street, Mumbai, India",
+    "password": "Test@191"
+  },
+  {
+    "email": "user192@test.com",
+    "name": "User192 Test192",
+    "mobile": "9636515199",
+    "rollNo": "R1192",
+    "schoolName": "Bright Future Academy",
+    "branch": "Biotechnology",
+    "address": "13 Mumbai Street, Mumbai, India",
+    "password": "Test@192"
+  },
+  {
+    "email": "user193@test.com",
+    "name": "User193 Test193",
+    "mobile": "9878162102",
+    "rollNo": "R1193",
+    "schoolName": "SHUATS University",
+    "branch": "Electrical",
+    "address": "2 Jaipur Street, Jaipur, India",
+    "password": "Test@193"
+  },
+  {
+    "email": "user194@test.com",
+    "name": "User194 Test194",
+    "mobile": "9441653352",
+    "rollNo": "R1194",
+    "schoolName": "Elite International School",
+    "branch": "Information Technology",
+    "address": "18 Jaipur Street, Jaipur, India",
+    "password": "Test@194"
+  },
+  {
+    "email": "user195@test.com",
+    "name": "User195 Test195",
+    "mobile": "9144212702",
+    "rollNo": "R1195",
+    "schoolName": "Sunshine International School",
+    "branch": "Information Technology",
+    "address": "77 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@195"
+  },
+  {
+    "email": "user196@test.com",
+    "name": "User196 Test196",
+    "mobile": "9637828132",
+    "rollNo": "R1196",
+    "schoolName": "SHUATS University",
+    "branch": "Biotechnology",
+    "address": "98 Pune Street, Pune, India",
+    "password": "Test@196"
+  },
+  {
+    "email": "user197@test.com",
+    "name": "User197 Test197",
+    "mobile": "9972691207",
+    "rollNo": "R1197",
+    "schoolName": "Delhi Public School",
+    "branch": "Aerospace",
+    "address": "17 Pune Street, Pune, India",
+    "password": "Test@197"
+  },
+  {
+    "email": "user198@test.com",
+    "name": "User198 Test198",
+    "mobile": "9249594313",
+    "rollNo": "R1198",
+    "schoolName": "St. Xavier's School",
+    "branch": "Chemical",
+    "address": "75 Kolkata Street, Kolkata, India",
+    "password": "Test@198"
+  },
+  {
+    "email": "user199@test.com",
+    "name": "User199 Test199",
+    "mobile": "9658583202",
+    "rollNo": "R1199",
+    "schoolName": "Modern Public School",
+    "branch": "Electronics",
+    "address": "38 Chennai Street, Chennai, India",
+    "password": "Test@199"
+  },
+  {
+    "email": "user200@test.com",
+    "name": "User200 Test200",
+    "mobile": "9903992948",
+    "rollNo": "R1200",
+    "schoolName": "Central Academy",
+    "branch": "Electrical",
+    "address": "64 Jaipur Street, Jaipur, India",
+    "password": "Test@200"
+  },
+  {
+    "email": "user201@test.com",
+    "name": "User201 Test201",
+    "mobile": "9109811651",
+    "rollNo": "R1201",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Mechanical",
+    "address": "95 New Delhi Street, New Delhi, India",
+    "password": "Test@201"
+  },
+  {
+    "email": "user202@test.com",
+    "name": "User202 Test202",
+    "mobile": "9285058539",
+    "rollNo": "R1202",
+    "schoolName": "SHUATS University",
+    "branch": "Chemical",
+    "address": "14 New Delhi Street, New Delhi, India",
+    "password": "Test@202"
+  },
+  {
+    "email": "user203@test.com",
+    "name": "User203 Test203",
+    "mobile": "9831569470",
+    "rollNo": "R1203",
+    "schoolName": "Global Public School",
+    "branch": "Electronics",
+    "address": "92 Hyderabad Street, Hyderabad, India",
+    "password": "Test@203"
+  },
+  {
+    "email": "user204@test.com",
+    "name": "User204 Test204",
+    "mobile": "9473517416",
+    "rollNo": "R1204",
+    "schoolName": "SHUATS University",
+    "branch": "Aerospace",
+    "address": "45 Mumbai Street, Mumbai, India",
+    "password": "Test@204"
+  },
+  {
+    "email": "user205@test.com",
+    "name": "User205 Test205",
+    "mobile": "9953656289",
+    "rollNo": "R1205",
+    "schoolName": "SHUATS University",
+    "branch": "Computer Science",
+    "address": "94 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@205"
+  },
+  {
+    "email": "user206@test.com",
+    "name": "User206 Test206",
+    "mobile": "9249954530",
+    "rollNo": "R1206",
+    "schoolName": "SHUATS University",
+    "branch": "Biotechnology",
+    "address": "1 Mumbai Street, Mumbai, India",
+    "password": "Test@206"
+  },
+  {
+    "email": "user207@test.com",
+    "name": "User207 Test207",
+    "mobile": "9397316714",
+    "rollNo": "R1207",
+    "schoolName": "Delhi Public School",
+    "branch": "Environmental",
+    "address": "37 New Delhi Street, New Delhi, India",
+    "password": "Test@207"
+  },
+  {
+    "email": "user208@test.com",
+    "name": "User208 Test208",
+    "mobile": "9792028928",
+    "rollNo": "R1208",
+    "schoolName": "Bright Future Academy",
+    "branch": "Computer Science",
+    "address": "47 Jaipur Street, Jaipur, India",
+    "password": "Test@208"
+  },
+  {
+    "email": "user209@test.com",
+    "name": "User209 Test209",
+    "mobile": "9865266674",
+    "rollNo": "R1209",
+    "schoolName": "Central Academy",
+    "branch": "Civil",
+    "address": "53 Lucknow Street, Lucknow, India",
+    "password": "Test@209"
+  },
+  {
+    "email": "user210@test.com",
+    "name": "User210 Test210",
+    "mobile": "9490040297",
+    "rollNo": "R1210",
+    "schoolName": "Central Academy",
+    "branch": "Environmental",
+    "address": "77 Kolkata Street, Kolkata, India",
+    "password": "Test@210"
+  },
+  {
+    "email": "user211@test.com",
+    "name": "User211 Test211",
+    "mobile": "9432832312",
+    "rollNo": "R1211",
+    "schoolName": "St. Xavier's School",
+    "branch": "Mechanical",
+    "address": "31 New Delhi Street, New Delhi, India",
+    "password": "Test@211"
+  },
+  {
+    "email": "user212@test.com",
+    "name": "User212 Test212",
+    "mobile": "9403952046",
+    "rollNo": "R1212",
+    "schoolName": "St. Xavier's School",
+    "branch": "Information Technology",
+    "address": "14 Pune Street, Pune, India",
+    "password": "Test@212"
+  },
+  {
+    "email": "user213@test.com",
+    "name": "User213 Test213",
+    "mobile": "9694358796",
+    "rollNo": "R1213",
+    "schoolName": "Global Public School",
+    "branch": "Biotechnology",
+    "address": "89 Kolkata Street, Kolkata, India",
+    "password": "Test@213"
+  },
+  {
+    "email": "user214@test.com",
+    "name": "User214 Test214",
+    "mobile": "9942602348",
+    "rollNo": "R1214",
+    "schoolName": "Global Public School",
+    "branch": "Aerospace",
+    "address": "71 New Delhi Street, New Delhi, India",
+    "password": "Test@214"
+  },
+  {
+    "email": "user215@test.com",
+    "name": "User215 Test215",
+    "mobile": "9452952637",
+    "rollNo": "R1215",
+    "schoolName": "SHUATS University",
+    "branch": "Civil",
+    "address": "43 Bangalore Street, Bangalore, India",
+    "password": "Test@215"
+  },
+  {
+    "email": "user216@test.com",
+    "name": "User216 Test216",
+    "mobile": "9865735283",
+    "rollNo": "R1216",
+    "schoolName": "Sunshine International School",
+    "branch": "Environmental",
+    "address": "11 New Delhi Street, New Delhi, India",
+    "password": "Test@216"
+  },
+  {
+    "email": "user217@test.com",
+    "name": "User217 Test217",
+    "mobile": "9630885907",
+    "rollNo": "R1217",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Electronics",
+    "address": "77 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@217"
+  },
+  {
+    "email": "user218@test.com",
+    "name": "User218 Test218",
+    "mobile": "9439596818",
+    "rollNo": "R1218",
+    "schoolName": "Sunshine International School",
+    "branch": "Aerospace",
+    "address": "59 Chennai Street, Chennai, India",
+    "password": "Test@218"
+  },
+  {
+    "email": "user219@test.com",
+    "name": "User219 Test219",
+    "mobile": "9116901694",
+    "rollNo": "R1219",
+    "schoolName": "Sunshine International School",
+    "branch": "Chemical",
+    "address": "21 Kolkata Street, Kolkata, India",
+    "password": "Test@219"
+  },
+  {
+    "email": "user220@test.com",
+    "name": "User220 Test220",
+    "mobile": "9113954608",
+    "rollNo": "R1220",
+    "schoolName": "Delhi Public School",
+    "branch": "Computer Science",
+    "address": "12 Chennai Street, Chennai, India",
+    "password": "Test@220"
+  },
+  {
+    "email": "user221@test.com",
+    "name": "User221 Test221",
+    "mobile": "9859834344",
+    "rollNo": "R1221",
+    "schoolName": "Bright Future Academy",
+    "branch": "Electronics",
+    "address": "94 Kolkata Street, Kolkata, India",
+    "password": "Test@221"
+  },
+  {
+    "email": "user222@test.com",
+    "name": "User222 Test222",
+    "mobile": "9827580879",
+    "rollNo": "R1222",
+    "schoolName": "SHUATS University",
+    "branch": "Computer Science",
+    "address": "63 Kolkata Street, Kolkata, India",
+    "password": "Test@222"
+  },
+  {
+    "email": "user223@test.com",
+    "name": "User223 Test223",
+    "mobile": "9855385592",
+    "rollNo": "R1223",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Chemical",
+    "address": "82 New Delhi Street, New Delhi, India",
+    "password": "Test@223"
+  },
+  {
+    "email": "user224@test.com",
+    "name": "User224 Test224",
+    "mobile": "9425270346",
+    "rollNo": "R1224",
+    "schoolName": "Sunshine International School",
+    "branch": "Biotechnology",
+    "address": "74 Pune Street, Pune, India",
+    "password": "Test@224"
+  },
+  {
+    "email": "user225@test.com",
+    "name": "User225 Test225",
+    "mobile": "9651231651",
+    "rollNo": "R1225",
+    "schoolName": "St. Xavier's School",
+    "branch": "Civil",
+    "address": "23 Pune Street, Pune, India",
+    "password": "Test@225"
+  },
+  {
+    "email": "user226@test.com",
+    "name": "User226 Test226",
+    "mobile": "9929069606",
+    "rollNo": "R1226",
+    "schoolName": "Global Public School",
+    "branch": "Computer Science",
+    "address": "7 Bangalore Street, Bangalore, India",
+    "password": "Test@226"
+  },
+  {
+    "email": "user227@test.com",
+    "name": "User227 Test227",
+    "mobile": "9199076436",
+    "rollNo": "R1227",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Electrical",
+    "address": "18 Bangalore Street, Bangalore, India",
+    "password": "Test@227"
+  },
+  {
+    "email": "user228@test.com",
+    "name": "User228 Test228",
+    "mobile": "9894384196",
+    "rollNo": "R1228",
+    "schoolName": "SHUATS University",
+    "branch": "Information Technology",
+    "address": "24 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@228"
+  },
+  {
+    "email": "user229@test.com",
+    "name": "User229 Test229",
+    "mobile": "9957351949",
+    "rollNo": "R1229",
+    "schoolName": "Modern Public School",
+    "branch": "Biotechnology",
+    "address": "51 Bangalore Street, Bangalore, India",
+    "password": "Test@229"
+  },
+  {
+    "email": "user230@test.com",
+    "name": "User230 Test230",
+    "mobile": "9855674320",
+    "rollNo": "R1230",
+    "schoolName": "Delhi Public School",
+    "branch": "Aerospace",
+    "address": "17 Mumbai Street, Mumbai, India",
+    "password": "Test@230"
+  },
+  {
+    "email": "user231@test.com",
+    "name": "User231 Test231",
+    "mobile": "9556719785",
+    "rollNo": "R1231",
+    "schoolName": "Sunshine International School",
+    "branch": "Biotechnology",
+    "address": "25 Jaipur Street, Jaipur, India",
+    "password": "Test@231"
+  },
+  {
+    "email": "user232@test.com",
+    "name": "User232 Test232",
+    "mobile": "9724384437",
+    "rollNo": "R1232",
+    "schoolName": "Bright Future Academy",
+    "branch": "Biotechnology",
+    "address": "25 Jaipur Street, Jaipur, India",
+    "password": "Test@232"
+  },
+  {
+    "email": "user233@test.com",
+    "name": "User233 Test233",
+    "mobile": "9306735393",
+    "rollNo": "R1233",
+    "schoolName": "St. Xavier's School",
+    "branch": "Biotechnology",
+    "address": "16 Mumbai Street, Mumbai, India",
+    "password": "Test@233"
+  },
+  {
+    "email": "user234@test.com",
+    "name": "User234 Test234",
+    "mobile": "9597996474",
+    "rollNo": "R1234",
+    "schoolName": "St. Xavier's School",
+    "branch": "Aerospace",
+    "address": "50 Lucknow Street, Lucknow, India",
+    "password": "Test@234"
+  },
+  {
+    "email": "user235@test.com",
+    "name": "User235 Test235",
+    "mobile": "9252936469",
+    "rollNo": "R1235",
+    "schoolName": "Delhi Public School",
+    "branch": "Biotechnology",
+    "address": "25 Pune Street, Pune, India",
+    "password": "Test@235"
+  },
+  {
+    "email": "user236@test.com",
+    "name": "User236 Test236",
+    "mobile": "9380469437",
+    "rollNo": "R1236",
+    "schoolName": "Elite International School",
+    "branch": "Chemical",
+    "address": "63 Mumbai Street, Mumbai, India",
+    "password": "Test@236"
+  },
+  {
+    "email": "user237@test.com",
+    "name": "User237 Test237",
+    "mobile": "9962563860",
+    "rollNo": "R1237",
+    "schoolName": "Central Academy",
+    "branch": "Chemical",
+    "address": "78 Jaipur Street, Jaipur, India",
+    "password": "Test@237"
+  },
+  {
+    "email": "user238@test.com",
+    "name": "User238 Test238",
+    "mobile": "9268773277",
+    "rollNo": "R1238",
+    "schoolName": "Modern Public School",
+    "branch": "Information Technology",
+    "address": "66 Hyderabad Street, Hyderabad, India",
+    "password": "Test@238"
+  },
+  {
+    "email": "user239@test.com",
+    "name": "User239 Test239",
+    "mobile": "9503164114",
+    "rollNo": "R1239",
+    "schoolName": "Delhi Public School",
+    "branch": "Biotechnology",
+    "address": "41 New Delhi Street, New Delhi, India",
+    "password": "Test@239"
+  },
+  {
+    "email": "user240@test.com",
+    "name": "User240 Test240",
+    "mobile": "9870345114",
+    "rollNo": "R1240",
+    "schoolName": "SHUATS University",
+    "branch": "Environmental",
+    "address": "41 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@240"
+  },
+  {
+    "email": "user241@test.com",
+    "name": "User241 Test241",
+    "mobile": "9879277811",
+    "rollNo": "R1241",
+    "schoolName": "Global Public School",
+    "branch": "Biotechnology",
+    "address": "86 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@241"
+  },
+  {
+    "email": "user242@test.com",
+    "name": "User242 Test242",
+    "mobile": "9419853396",
+    "rollNo": "R1242",
+    "schoolName": "Delhi Public School",
+    "branch": "Biotechnology",
+    "address": "3 Chennai Street, Chennai, India",
+    "password": "Test@242"
+  },
+  {
+    "email": "user243@test.com",
+    "name": "User243 Test243",
+    "mobile": "9172573300",
+    "rollNo": "R1243",
+    "schoolName": "Global Public School",
+    "branch": "Chemical",
+    "address": "41 Kolkata Street, Kolkata, India",
+    "password": "Test@243"
+  },
+  {
+    "email": "user244@test.com",
+    "name": "User244 Test244",
+    "mobile": "9725466214",
+    "rollNo": "R1244",
+    "schoolName": "Global Public School",
+    "branch": "Biotechnology",
+    "address": "97 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@244"
+  },
+  {
+    "email": "user245@test.com",
+    "name": "User245 Test245",
+    "mobile": "9896215578",
+    "rollNo": "R1245",
+    "schoolName": "Delhi Public School",
+    "branch": "Information Technology",
+    "address": "27 Hyderabad Street, Hyderabad, India",
+    "password": "Test@245"
+  },
+  {
+    "email": "user246@test.com",
+    "name": "User246 Test246",
+    "mobile": "9789679948",
+    "rollNo": "R1246",
+    "schoolName": "Elite International School",
+    "branch": "Chemical",
+    "address": "12 New Delhi Street, New Delhi, India",
+    "password": "Test@246"
+  },
+  {
+    "email": "user247@test.com",
+    "name": "User247 Test247",
+    "mobile": "9596728729",
+    "rollNo": "R1247",
+    "schoolName": "Delhi Public School",
+    "branch": "Mechanical",
+    "address": "17 Pune Street, Pune, India",
+    "password": "Test@247"
+  },
+  {
+    "email": "user248@test.com",
+    "name": "User248 Test248",
+    "mobile": "9227426139",
+    "rollNo": "R1248",
+    "schoolName": "Delhi Public School",
+    "branch": "Mechanical",
+    "address": "21 Jaipur Street, Jaipur, India",
+    "password": "Test@248"
+  },
+  {
+    "email": "user249@test.com",
+    "name": "User249 Test249",
+    "mobile": "9196920963",
+    "rollNo": "R1249",
+    "schoolName": "Central Academy",
+    "branch": "Biotechnology",
+    "address": "91 Chennai Street, Chennai, India",
+    "password": "Test@249"
+  },
+  {
+    "email": "user250@test.com",
+    "name": "User250 Test250",
+    "mobile": "9635661145",
+    "rollNo": "R1250",
+    "schoolName": "Bright Future Academy",
+    "branch": "Computer Science",
+    "address": "4 Mumbai Street, Mumbai, India",
+    "password": "Test@250"
+  },
+  {
+    "email": "user251@test.com",
+    "name": "User251 Test251",
+    "mobile": "9951245232",
+    "rollNo": "R1251",
+    "schoolName": "Sunshine International School",
+    "branch": "Mechanical",
+    "address": "1 Chennai Street, Chennai, India",
+    "password": "Test@251"
+  },
+  {
+    "email": "user252@test.com",
+    "name": "User252 Test252",
+    "mobile": "9177295375",
+    "rollNo": "R1252",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Electronics",
+    "address": "99 New Delhi Street, New Delhi, India",
+    "password": "Test@252"
+  },
+  {
+    "email": "user253@test.com",
+    "name": "User253 Test253",
+    "mobile": "9926110746",
+    "rollNo": "R1253",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Environmental",
+    "address": "13 Mumbai Street, Mumbai, India",
+    "password": "Test@253"
+  },
+  {
+    "email": "user254@test.com",
+    "name": "User254 Test254",
+    "mobile": "9956600703",
+    "rollNo": "R1254",
+    "schoolName": "Sunshine International School",
+    "branch": "Environmental",
+    "address": "19 Mumbai Street, Mumbai, India",
+    "password": "Test@254"
+  },
+  {
+    "email": "user255@test.com",
+    "name": "User255 Test255",
+    "mobile": "9775683239",
+    "rollNo": "R1255",
+    "schoolName": "Central Academy",
+    "branch": "Environmental",
+    "address": "33 Chennai Street, Chennai, India",
+    "password": "Test@255"
+  },
+  {
+    "email": "user256@test.com",
+    "name": "User256 Test256",
+    "mobile": "9735933355",
+    "rollNo": "R1256",
+    "schoolName": "Delhi Public School",
+    "branch": "Information Technology",
+    "address": "14 Bangalore Street, Bangalore, India",
+    "password": "Test@256"
+  },
+  {
+    "email": "user257@test.com",
+    "name": "User257 Test257",
+    "mobile": "9386250310",
+    "rollNo": "R1257",
+    "schoolName": "Central Academy",
+    "branch": "Mechanical",
+    "address": "65 Hyderabad Street, Hyderabad, India",
+    "password": "Test@257"
+  },
+  {
+    "email": "user258@test.com",
+    "name": "User258 Test258",
+    "mobile": "9380547195",
+    "rollNo": "R1258",
+    "schoolName": "Elite International School",
+    "branch": "Biotechnology",
+    "address": "25 Kolkata Street, Kolkata, India",
+    "password": "Test@258"
+  },
+  {
+    "email": "user259@test.com",
+    "name": "User259 Test259",
+    "mobile": "9785321068",
+    "rollNo": "R1259",
+    "schoolName": "Delhi Public School",
+    "branch": "Computer Science",
+    "address": "89 Kolkata Street, Kolkata, India",
+    "password": "Test@259"
+  },
+  {
+    "email": "user260@test.com",
+    "name": "User260 Test260",
+    "mobile": "9640438354",
+    "rollNo": "R1260",
+    "schoolName": "SHUATS University",
+    "branch": "Electrical",
+    "address": "93 Chennai Street, Chennai, India",
+    "password": "Test@260"
+  },
+  {
+    "email": "user261@test.com",
+    "name": "User261 Test261",
+    "mobile": "9133662521",
+    "rollNo": "R1261",
+    "schoolName": "St. Xavier's School",
+    "branch": "Aerospace",
+    "address": "7 Kolkata Street, Kolkata, India",
+    "password": "Test@261"
+  },
+  {
+    "email": "user262@test.com",
+    "name": "User262 Test262",
+    "mobile": "9567040149",
+    "rollNo": "R1262",
+    "schoolName": "St. Xavier's School",
+    "branch": "Electrical",
+    "address": "58 Hyderabad Street, Hyderabad, India",
+    "password": "Test@262"
+  },
+  {
+    "email": "user263@test.com",
+    "name": "User263 Test263",
+    "mobile": "9555805541",
+    "rollNo": "R1263",
+    "schoolName": "SHUATS University",
+    "branch": "Civil",
+    "address": "92 Bangalore Street, Bangalore, India",
+    "password": "Test@263"
+  },
+  {
+    "email": "user264@test.com",
+    "name": "User264 Test264",
+    "mobile": "9428456471",
+    "rollNo": "R1264",
+    "schoolName": "Global Public School",
+    "branch": "Electronics",
+    "address": "62 Bangalore Street, Bangalore, India",
+    "password": "Test@264"
+  },
+  {
+    "email": "user265@test.com",
+    "name": "User265 Test265",
+    "mobile": "9779139939",
+    "rollNo": "R1265",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Environmental",
+    "address": "13 Bangalore Street, Bangalore, India",
+    "password": "Test@265"
+  },
+  {
+    "email": "user266@test.com",
+    "name": "User266 Test266",
+    "mobile": "9496128354",
+    "rollNo": "R1266",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Aerospace",
+    "address": "74 Chennai Street, Chennai, India",
+    "password": "Test@266"
+  },
+  {
+    "email": "user267@test.com",
+    "name": "User267 Test267",
+    "mobile": "9360244712",
+    "rollNo": "R1267",
+    "schoolName": "Delhi Public School",
+    "branch": "Chemical",
+    "address": "62 Chennai Street, Chennai, India",
+    "password": "Test@267"
+  },
+  {
+    "email": "user268@test.com",
+    "name": "User268 Test268",
+    "mobile": "9975946753",
+    "rollNo": "R1268",
+    "schoolName": "Bright Future Academy",
+    "branch": "Environmental",
+    "address": "57 Chennai Street, Chennai, India",
+    "password": "Test@268"
+  },
+  {
+    "email": "user269@test.com",
+    "name": "User269 Test269",
+    "mobile": "9353494698",
+    "rollNo": "R1269",
+    "schoolName": "Sunshine International School",
+    "branch": "Electrical",
+    "address": "26 Jaipur Street, Jaipur, India",
+    "password": "Test@269"
+  },
+  {
+    "email": "user270@test.com",
+    "name": "User270 Test270",
+    "mobile": "9505024300",
+    "rollNo": "R1270",
+    "schoolName": "Modern Public School",
+    "branch": "Information Technology",
+    "address": "51 Lucknow Street, Lucknow, India",
+    "password": "Test@270"
+  },
+  {
+    "email": "user271@test.com",
+    "name": "User271 Test271",
+    "mobile": "9922047859",
+    "rollNo": "R1271",
+    "schoolName": "SHUATS University",
+    "branch": "Aerospace",
+    "address": "65 Hyderabad Street, Hyderabad, India",
+    "password": "Test@271"
+  },
+  {
+    "email": "user272@test.com",
+    "name": "User272 Test272",
+    "mobile": "9254588616",
+    "rollNo": "R1272",
+    "schoolName": "Delhi Public School",
+    "branch": "Aerospace",
+    "address": "65 Pune Street, Pune, India",
+    "password": "Test@272"
+  },
+  {
+    "email": "user273@test.com",
+    "name": "User273 Test273",
+    "mobile": "9429218728",
+    "rollNo": "R1273",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Computer Science",
+    "address": "35 Pune Street, Pune, India",
+    "password": "Test@273"
+  },
+  {
+    "email": "user274@test.com",
+    "name": "User274 Test274",
+    "mobile": "9525702631",
+    "rollNo": "R1274",
+    "schoolName": "Delhi Public School",
+    "branch": "Computer Science",
+    "address": "79 Chennai Street, Chennai, India",
+    "password": "Test@274"
+  },
+  {
+    "email": "user275@test.com",
+    "name": "User275 Test275",
+    "mobile": "9919299674",
+    "rollNo": "R1275",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Computer Science",
+    "address": "39 Kolkata Street, Kolkata, India",
+    "password": "Test@275"
+  },
+  {
+    "email": "user276@test.com",
+    "name": "User276 Test276",
+    "mobile": "9980958995",
+    "rollNo": "R1276",
+    "schoolName": "Sunshine International School",
+    "branch": "Biotechnology",
+    "address": "85 Kolkata Street, Kolkata, India",
+    "password": "Test@276"
+  },
+  {
+    "email": "user277@test.com",
+    "name": "User277 Test277",
+    "mobile": "9565805549",
+    "rollNo": "R1277",
+    "schoolName": "Elite International School",
+    "branch": "Mechanical",
+    "address": "80 Jaipur Street, Jaipur, India",
+    "password": "Test@277"
+  },
+  {
+    "email": "user278@test.com",
+    "name": "User278 Test278",
+    "mobile": "9163821675",
+    "rollNo": "R1278",
+    "schoolName": "SHUATS University",
+    "branch": "Civil",
+    "address": "12 Hyderabad Street, Hyderabad, India",
+    "password": "Test@278"
+  },
+  {
+    "email": "user279@test.com",
+    "name": "User279 Test279",
+    "mobile": "9776959403",
+    "rollNo": "R1279",
+    "schoolName": "Central Academy",
+    "branch": "Civil",
+    "address": "99 Hyderabad Street, Hyderabad, India",
+    "password": "Test@279"
+  },
+  {
+    "email": "user280@test.com",
+    "name": "User280 Test280",
+    "mobile": "9554686958",
+    "rollNo": "R1280",
+    "schoolName": "Central Academy",
+    "branch": "Civil",
+    "address": "79 Chennai Street, Chennai, India",
+    "password": "Test@280"
+  },
+  {
+    "email": "user281@test.com",
+    "name": "User281 Test281",
+    "mobile": "9877893704",
+    "rollNo": "R1281",
+    "schoolName": "Central Academy",
+    "branch": "Information Technology",
+    "address": "70 Kolkata Street, Kolkata, India",
+    "password": "Test@281"
+  },
+  {
+    "email": "user282@test.com",
+    "name": "User282 Test282",
+    "mobile": "9902113842",
+    "rollNo": "R1282",
+    "schoolName": "Global Public School",
+    "branch": "Aerospace",
+    "address": "73 Jaipur Street, Jaipur, India",
+    "password": "Test@282"
+  },
+  {
+    "email": "user283@test.com",
+    "name": "User283 Test283",
+    "mobile": "9198709299",
+    "rollNo": "R1283",
+    "schoolName": "Bright Future Academy",
+    "branch": "Environmental",
+    "address": "82 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@283"
+  },
+  {
+    "email": "user284@test.com",
+    "name": "User284 Test284",
+    "mobile": "9152211208",
+    "rollNo": "R1284",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Information Technology",
+    "address": "33 Mumbai Street, Mumbai, India",
+    "password": "Test@284"
+  },
+  {
+    "email": "user285@test.com",
+    "name": "User285 Test285",
+    "mobile": "9312900362",
+    "rollNo": "R1285",
+    "schoolName": "Delhi Public School",
+    "branch": "Civil",
+    "address": "94 Hyderabad Street, Hyderabad, India",
+    "password": "Test@285"
+  },
+  {
+    "email": "user286@test.com",
+    "name": "User286 Test286",
+    "mobile": "9637995359",
+    "rollNo": "R1286",
+    "schoolName": "Elite International School",
+    "branch": "Chemical",
+    "address": "42 Hyderabad Street, Hyderabad, India",
+    "password": "Test@286"
+  },
+  {
+    "email": "user287@test.com",
+    "name": "User287 Test287",
+    "mobile": "9875780464",
+    "rollNo": "R1287",
+    "schoolName": "Sunshine International School",
+    "branch": "Environmental",
+    "address": "42 Mumbai Street, Mumbai, India",
+    "password": "Test@287"
+  },
+  {
+    "email": "user288@test.com",
+    "name": "User288 Test288",
+    "mobile": "9631612631",
+    "rollNo": "R1288",
+    "schoolName": "Modern Public School",
+    "branch": "Aerospace",
+    "address": "35 Pune Street, Pune, India",
+    "password": "Test@288"
+  },
+  {
+    "email": "user289@test.com",
+    "name": "User289 Test289",
+    "mobile": "9390136996",
+    "rollNo": "R1289",
+    "schoolName": "Bright Future Academy",
+    "branch": "Biotechnology",
+    "address": "30 Mumbai Street, Mumbai, India",
+    "password": "Test@289"
+  },
+  {
+    "email": "user290@test.com",
+    "name": "User290 Test290",
+    "mobile": "9793741235",
+    "rollNo": "R1290",
+    "schoolName": "Elite International School",
+    "branch": "Computer Science",
+    "address": "65 Mumbai Street, Mumbai, India",
+    "password": "Test@290"
+  },
+  {
+    "email": "user291@test.com",
+    "name": "User291 Test291",
+    "mobile": "9541607665",
+    "rollNo": "R1291",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Information Technology",
+    "address": "52 Bangalore Street, Bangalore, India",
+    "password": "Test@291"
+  },
+  {
+    "email": "user292@test.com",
+    "name": "User292 Test292",
+    "mobile": "9951990686",
+    "rollNo": "R1292",
+    "schoolName": "St. Xavier's School",
+    "branch": "Chemical",
+    "address": "73 Hyderabad Street, Hyderabad, India",
+    "password": "Test@292"
+  },
+  {
+    "email": "user293@test.com",
+    "name": "User293 Test293",
+    "mobile": "9638452014",
+    "rollNo": "R1293",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Biotechnology",
+    "address": "80 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@293"
+  },
+  {
+    "email": "user294@test.com",
+    "name": "User294 Test294",
+    "mobile": "9678567054",
+    "rollNo": "R1294",
+    "schoolName": "Central Academy",
+    "branch": "Aerospace",
+    "address": "4 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@294"
+  },
+  {
+    "email": "user295@test.com",
+    "name": "User295 Test295",
+    "mobile": "9673733760",
+    "rollNo": "R1295",
+    "schoolName": "Modern Public School",
+    "branch": "Mechanical",
+    "address": "31 Jaipur Street, Jaipur, India",
+    "password": "Test@295"
+  },
+  {
+    "email": "user296@test.com",
+    "name": "User296 Test296",
+    "mobile": "9458778183",
+    "rollNo": "R1296",
+    "schoolName": "Modern Public School",
+    "branch": "Information Technology",
+    "address": "13 Lucknow Street, Lucknow, India",
+    "password": "Test@296"
+  },
+  {
+    "email": "user297@test.com",
+    "name": "User297 Test297",
+    "mobile": "9997505435",
+    "rollNo": "R1297",
+    "schoolName": "SHUATS University",
+    "branch": "Mechanical",
+    "address": "50 Bangalore Street, Bangalore, India",
+    "password": "Test@297"
+  },
+  {
+    "email": "user298@test.com",
+    "name": "User298 Test298",
+    "mobile": "9592731728",
+    "rollNo": "R1298",
+    "schoolName": "St. Xavier's School",
+    "branch": "Biotechnology",
+    "address": "24 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@298"
+  },
+  {
+    "email": "user299@test.com",
+    "name": "User299 Test299",
+    "mobile": "9481207340",
+    "rollNo": "R1299",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Chemical",
+    "address": "33 Hyderabad Street, Hyderabad, India",
+    "password": "Test@299"
+  },
+  {
+    "email": "user300@test.com",
+    "name": "User300 Test300",
+    "mobile": "9268856740",
+    "rollNo": "R1300",
+    "schoolName": "Elite International School",
+    "branch": "Electrical",
+    "address": "48 Pune Street, Pune, India",
+    "password": "Test@300"
+  },
+  {
+    "email": "user301@test.com",
+    "name": "User301 Test301",
+    "mobile": "9784607220",
+    "rollNo": "R1301",
+    "schoolName": "Central Academy",
+    "branch": "Chemical",
+    "address": "47 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@301"
+  },
+  {
+    "email": "user302@test.com",
+    "name": "User302 Test302",
+    "mobile": "9131526895",
+    "rollNo": "R1302",
+    "schoolName": "SHUATS University",
+    "branch": "Electronics",
+    "address": "58 Jaipur Street, Jaipur, India",
+    "password": "Test@302"
+  },
+  {
+    "email": "user303@test.com",
+    "name": "User303 Test303",
+    "mobile": "9427019847",
+    "rollNo": "R1303",
+    "schoolName": "Global Public School",
+    "branch": "Mechanical",
+    "address": "74 Kolkata Street, Kolkata, India",
+    "password": "Test@303"
+  },
+  {
+    "email": "user304@test.com",
+    "name": "User304 Test304",
+    "mobile": "9227361555",
+    "rollNo": "R1304",
+    "schoolName": "Sunshine International School",
+    "branch": "Biotechnology",
+    "address": "73 Bangalore Street, Bangalore, India",
+    "password": "Test@304"
+  },
+  {
+    "email": "user305@test.com",
+    "name": "User305 Test305",
+    "mobile": "9186280192",
+    "rollNo": "R1305",
+    "schoolName": "SHUATS University",
+    "branch": "Electronics",
+    "address": "51 Kolkata Street, Kolkata, India",
+    "password": "Test@305"
+  },
+  {
+    "email": "user306@test.com",
+    "name": "User306 Test306",
+    "mobile": "9462920384",
+    "rollNo": "R1306",
+    "schoolName": "Central Academy",
+    "branch": "Computer Science",
+    "address": "4 Bangalore Street, Bangalore, India",
+    "password": "Test@306"
+  },
+  {
+    "email": "user307@test.com",
+    "name": "User307 Test307",
+    "mobile": "9915529950",
+    "rollNo": "R1307",
+    "schoolName": "Central Academy",
+    "branch": "Environmental",
+    "address": "81 New Delhi Street, New Delhi, India",
+    "password": "Test@307"
+  },
+  {
+    "email": "user308@test.com",
+    "name": "User308 Test308",
+    "mobile": "9448543020",
+    "rollNo": "R1308",
+    "schoolName": "Central Academy",
+    "branch": "Electronics",
+    "address": "2 Mumbai Street, Mumbai, India",
+    "password": "Test@308"
+  },
+  {
+    "email": "user309@test.com",
+    "name": "User309 Test309",
+    "mobile": "9696177167",
+    "rollNo": "R1309",
+    "schoolName": "Sunshine International School",
+    "branch": "Chemical",
+    "address": "70 Pune Street, Pune, India",
+    "password": "Test@309"
+  },
+  {
+    "email": "user310@test.com",
+    "name": "User310 Test310",
+    "mobile": "9891193468",
+    "rollNo": "R1310",
+    "schoolName": "Modern Public School",
+    "branch": "Mechanical",
+    "address": "72 Bangalore Street, Bangalore, India",
+    "password": "Test@310"
+  },
+  {
+    "email": "user311@test.com",
+    "name": "User311 Test311",
+    "mobile": "9820250450",
+    "rollNo": "R1311",
+    "schoolName": "Bright Future Academy",
+    "branch": "Electrical",
+    "address": "42 Chennai Street, Chennai, India",
+    "password": "Test@311"
+  },
+  {
+    "email": "user312@test.com",
+    "name": "User312 Test312",
+    "mobile": "9285048822",
+    "rollNo": "R1312",
+    "schoolName": "Sunshine International School",
+    "branch": "Electrical",
+    "address": "1 Bangalore Street, Bangalore, India",
+    "password": "Test@312"
+  },
+  {
+    "email": "user313@test.com",
+    "name": "User313 Test313",
+    "mobile": "9881891845",
+    "rollNo": "R1313",
+    "schoolName": "Sunshine International School",
+    "branch": "Civil",
+    "address": "67 Pune Street, Pune, India",
+    "password": "Test@313"
+  },
+  {
+    "email": "user314@test.com",
+    "name": "User314 Test314",
+    "mobile": "9680258001",
+    "rollNo": "R1314",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Biotechnology",
+    "address": "78 Pune Street, Pune, India",
+    "password": "Test@314"
+  },
+  {
+    "email": "user315@test.com",
+    "name": "User315 Test315",
+    "mobile": "9377105257",
+    "rollNo": "R1315",
+    "schoolName": "Delhi Public School",
+    "branch": "Environmental",
+    "address": "1 Kolkata Street, Kolkata, India",
+    "password": "Test@315"
+  },
+  {
+    "email": "user316@test.com",
+    "name": "User316 Test316",
+    "mobile": "9586845794",
+    "rollNo": "R1316",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Environmental",
+    "address": "93 Jaipur Street, Jaipur, India",
+    "password": "Test@316"
+  },
+  {
+    "email": "user317@test.com",
+    "name": "User317 Test317",
+    "mobile": "9927951890",
+    "rollNo": "R1317",
+    "schoolName": "Bright Future Academy",
+    "branch": "Information Technology",
+    "address": "50 Kolkata Street, Kolkata, India",
+    "password": "Test@317"
+  },
+  {
+    "email": "user318@test.com",
+    "name": "User318 Test318",
+    "mobile": "9100566770",
+    "rollNo": "R1318",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Environmental",
+    "address": "16 Bangalore Street, Bangalore, India",
+    "password": "Test@318"
+  },
+  {
+    "email": "user319@test.com",
+    "name": "User319 Test319",
+    "mobile": "9434521824",
+    "rollNo": "R1319",
+    "schoolName": "Sunshine International School",
+    "branch": "Electronics",
+    "address": "99 New Delhi Street, New Delhi, India",
+    "password": "Test@319"
+  },
+  {
+    "email": "user320@test.com",
+    "name": "User320 Test320",
+    "mobile": "9627123064",
+    "rollNo": "R1320",
+    "schoolName": "Modern Public School",
+    "branch": "Environmental",
+    "address": "2 Hyderabad Street, Hyderabad, India",
+    "password": "Test@320"
+  },
+  {
+    "email": "user321@test.com",
+    "name": "User321 Test321",
+    "mobile": "9652301787",
+    "rollNo": "R1321",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Information Technology",
+    "address": "33 Jaipur Street, Jaipur, India",
+    "password": "Test@321"
+  },
+  {
+    "email": "user322@test.com",
+    "name": "User322 Test322",
+    "mobile": "9545915707",
+    "rollNo": "R1322",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Information Technology",
+    "address": "97 Hyderabad Street, Hyderabad, India",
+    "password": "Test@322"
+  },
+  {
+    "email": "user323@test.com",
+    "name": "User323 Test323",
+    "mobile": "9646285622",
+    "rollNo": "R1323",
+    "schoolName": "Delhi Public School",
+    "branch": "Aerospace",
+    "address": "4 Bangalore Street, Bangalore, India",
+    "password": "Test@323"
+  },
+  {
+    "email": "user324@test.com",
+    "name": "User324 Test324",
+    "mobile": "9522966869",
+    "rollNo": "R1324",
+    "schoolName": "Sunshine International School",
+    "branch": "Computer Science",
+    "address": "25 Pune Street, Pune, India",
+    "password": "Test@324"
+  },
+  {
+    "email": "user325@test.com",
+    "name": "User325 Test325",
+    "mobile": "9748173841",
+    "rollNo": "R1325",
+    "schoolName": "Modern Public School",
+    "branch": "Electrical",
+    "address": "34 Jaipur Street, Jaipur, India",
+    "password": "Test@325"
+  },
+  {
+    "email": "user326@test.com",
+    "name": "User326 Test326",
+    "mobile": "9838147935",
+    "rollNo": "R1326",
+    "schoolName": "Elite International School",
+    "branch": "Electrical",
+    "address": "68 Jaipur Street, Jaipur, India",
+    "password": "Test@326"
+  },
+  {
+    "email": "user327@test.com",
+    "name": "User327 Test327",
+    "mobile": "9153040600",
+    "rollNo": "R1327",
+    "schoolName": "Modern Public School",
+    "branch": "Chemical",
+    "address": "81 Lucknow Street, Lucknow, India",
+    "password": "Test@327"
+  },
+  {
+    "email": "user328@test.com",
+    "name": "User328 Test328",
+    "mobile": "9607445789",
+    "rollNo": "R1328",
+    "schoolName": "Central Academy",
+    "branch": "Biotechnology",
+    "address": "62 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@328"
+  },
+  {
+    "email": "user329@test.com",
+    "name": "User329 Test329",
+    "mobile": "9474850242",
+    "rollNo": "R1329",
+    "schoolName": "Delhi Public School",
+    "branch": "Biotechnology",
+    "address": "22 Kolkata Street, Kolkata, India",
+    "password": "Test@329"
+  },
+  {
+    "email": "user330@test.com",
+    "name": "User330 Test330",
+    "mobile": "9767547385",
+    "rollNo": "R1330",
+    "schoolName": "Delhi Public School",
+    "branch": "Environmental",
+    "address": "25 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@330"
+  },
+  {
+    "email": "user331@test.com",
+    "name": "User331 Test331",
+    "mobile": "9513844378",
+    "rollNo": "R1331",
+    "schoolName": "Bright Future Academy",
+    "branch": "Mechanical",
+    "address": "27 Mumbai Street, Mumbai, India",
+    "password": "Test@331"
+  },
+  {
+    "email": "user332@test.com",
+    "name": "User332 Test332",
+    "mobile": "9648348445",
+    "rollNo": "R1332",
+    "schoolName": "Sunshine International School",
+    "branch": "Environmental",
+    "address": "87 Kolkata Street, Kolkata, India",
+    "password": "Test@332"
+  },
+  {
+    "email": "user333@test.com",
+    "name": "User333 Test333",
+    "mobile": "9570834641",
+    "rollNo": "R1333",
+    "schoolName": "SHUATS University",
+    "branch": "Biotechnology",
+    "address": "89 Jaipur Street, Jaipur, India",
+    "password": "Test@333"
+  },
+  {
+    "email": "user334@test.com",
+    "name": "User334 Test334",
+    "mobile": "9794431588",
+    "rollNo": "R1334",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Environmental",
+    "address": "90 Pune Street, Pune, India",
+    "password": "Test@334"
+  },
+  {
+    "email": "user335@test.com",
+    "name": "User335 Test335",
+    "mobile": "9477042012",
+    "rollNo": "R1335",
+    "schoolName": "Modern Public School",
+    "branch": "Mechanical",
+    "address": "28 Hyderabad Street, Hyderabad, India",
+    "password": "Test@335"
+  },
+  {
+    "email": "user336@test.com",
+    "name": "User336 Test336",
+    "mobile": "9382690911",
+    "rollNo": "R1336",
+    "schoolName": "Elite International School",
+    "branch": "Biotechnology",
+    "address": "87 Kolkata Street, Kolkata, India",
+    "password": "Test@336"
+  },
+  {
+    "email": "user337@test.com",
+    "name": "User337 Test337",
+    "mobile": "9692159465",
+    "rollNo": "R1337",
+    "schoolName": "Elite International School",
+    "branch": "Computer Science",
+    "address": "8 Jaipur Street, Jaipur, India",
+    "password": "Test@337"
+  },
+  {
+    "email": "user338@test.com",
+    "name": "User338 Test338",
+    "mobile": "9442194962",
+    "rollNo": "R1338",
+    "schoolName": "Modern Public School",
+    "branch": "Aerospace",
+    "address": "81 Kolkata Street, Kolkata, India",
+    "password": "Test@338"
+  },
+  {
+    "email": "user339@test.com",
+    "name": "User339 Test339",
+    "mobile": "9676324881",
+    "rollNo": "R1339",
+    "schoolName": "Delhi Public School",
+    "branch": "Aerospace",
+    "address": "41 Bangalore Street, Bangalore, India",
+    "password": "Test@339"
+  },
+  {
+    "email": "user340@test.com",
+    "name": "User340 Test340",
+    "mobile": "9504156600",
+    "rollNo": "R1340",
+    "schoolName": "Delhi Public School",
+    "branch": "Electronics",
+    "address": "42 Jaipur Street, Jaipur, India",
+    "password": "Test@340"
+  },
+  {
+    "email": "user341@test.com",
+    "name": "User341 Test341",
+    "mobile": "9624416866",
+    "rollNo": "R1341",
+    "schoolName": "Global Public School",
+    "branch": "Electronics",
+    "address": "64 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@341"
+  },
+  {
+    "email": "user342@test.com",
+    "name": "User342 Test342",
+    "mobile": "9282215025",
+    "rollNo": "R1342",
+    "schoolName": "Central Academy",
+    "branch": "Electronics",
+    "address": "86 New Delhi Street, New Delhi, India",
+    "password": "Test@342"
+  },
+  {
+    "email": "user343@test.com",
+    "name": "User343 Test343",
+    "mobile": "9860232446",
+    "rollNo": "R1343",
+    "schoolName": "Delhi Public School",
+    "branch": "Electronics",
+    "address": "52 Bangalore Street, Bangalore, India",
+    "password": "Test@343"
+  },
+  {
+    "email": "user344@test.com",
+    "name": "User344 Test344",
+    "mobile": "9347892478",
+    "rollNo": "R1344",
+    "schoolName": "Delhi Public School",
+    "branch": "Information Technology",
+    "address": "24 Pune Street, Pune, India",
+    "password": "Test@344"
+  },
+  {
+    "email": "user345@test.com",
+    "name": "User345 Test345",
+    "mobile": "9313440816",
+    "rollNo": "R1345",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Civil",
+    "address": "62 Lucknow Street, Lucknow, India",
+    "password": "Test@345"
+  },
+  {
+    "email": "user346@test.com",
+    "name": "User346 Test346",
+    "mobile": "9792334446",
+    "rollNo": "R1346",
+    "schoolName": "Elite International School",
+    "branch": "Electronics",
+    "address": "22 Mumbai Street, Mumbai, India",
+    "password": "Test@346"
+  },
+  {
+    "email": "user347@test.com",
+    "name": "User347 Test347",
+    "mobile": "9668491194",
+    "rollNo": "R1347",
+    "schoolName": "SHUATS University",
+    "branch": "Civil",
+    "address": "57 New Delhi Street, New Delhi, India",
+    "password": "Test@347"
+  },
+  {
+    "email": "user348@test.com",
+    "name": "User348 Test348",
+    "mobile": "9144615544",
+    "rollNo": "R1348",
+    "schoolName": "Modern Public School",
+    "branch": "Aerospace",
+    "address": "84 Jaipur Street, Jaipur, India",
+    "password": "Test@348"
+  },
+  {
+    "email": "user349@test.com",
+    "name": "User349 Test349",
+    "mobile": "9791548750",
+    "rollNo": "R1349",
+    "schoolName": "Delhi Public School",
+    "branch": "Electrical",
+    "address": "87 Bangalore Street, Bangalore, India",
+    "password": "Test@349"
+  },
+  {
+    "email": "user350@test.com",
+    "name": "User350 Test350",
+    "mobile": "9102421754",
+    "rollNo": "R1350",
+    "schoolName": "Central Academy",
+    "branch": "Environmental",
+    "address": "86 Pune Street, Pune, India",
+    "password": "Test@350"
+  },
+  {
+    "email": "user351@test.com",
+    "name": "User351 Test351",
+    "mobile": "9393824443",
+    "rollNo": "R1351",
+    "schoolName": "Bright Future Academy",
+    "branch": "Electrical",
+    "address": "42 Chennai Street, Chennai, India",
+    "password": "Test@351"
+  },
+  {
+    "email": "user352@test.com",
+    "name": "User352 Test352",
+    "mobile": "9929074950",
+    "rollNo": "R1352",
+    "schoolName": "Central Academy",
+    "branch": "Information Technology",
+    "address": "42 Lucknow Street, Lucknow, India",
+    "password": "Test@352"
+  },
+  {
+    "email": "user353@test.com",
+    "name": "User353 Test353",
+    "mobile": "9283409358",
+    "rollNo": "R1353",
+    "schoolName": "St. Xavier's School",
+    "branch": "Electronics",
+    "address": "25 New Delhi Street, New Delhi, India",
+    "password": "Test@353"
+  },
+  {
+    "email": "user354@test.com",
+    "name": "User354 Test354",
+    "mobile": "9715728141",
+    "rollNo": "R1354",
+    "schoolName": "Elite International School",
+    "branch": "Information Technology",
+    "address": "54 New Delhi Street, New Delhi, India",
+    "password": "Test@354"
+  },
+  {
+    "email": "user355@test.com",
+    "name": "User355 Test355",
+    "mobile": "9503363456",
+    "rollNo": "R1355",
+    "schoolName": "Modern Public School",
+    "branch": "Electronics",
+    "address": "70 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@355"
+  },
+  {
+    "email": "user356@test.com",
+    "name": "User356 Test356",
+    "mobile": "9279758898",
+    "rollNo": "R1356",
+    "schoolName": "Delhi Public School",
+    "branch": "Aerospace",
+    "address": "71 Jaipur Street, Jaipur, India",
+    "password": "Test@356"
+  },
+  {
+    "email": "user357@test.com",
+    "name": "User357 Test357",
+    "mobile": "9326537520",
+    "rollNo": "R1357",
+    "schoolName": "Central Academy",
+    "branch": "Chemical",
+    "address": "70 Bangalore Street, Bangalore, India",
+    "password": "Test@357"
+  },
+  {
+    "email": "user358@test.com",
+    "name": "User358 Test358",
+    "mobile": "9468142270",
+    "rollNo": "R1358",
+    "schoolName": "Elite International School",
+    "branch": "Information Technology",
+    "address": "17 Hyderabad Street, Hyderabad, India",
+    "password": "Test@358"
+  },
+  {
+    "email": "user359@test.com",
+    "name": "User359 Test359",
+    "mobile": "9132498867",
+    "rollNo": "R1359",
+    "schoolName": "Global Public School",
+    "branch": "Biotechnology",
+    "address": "6 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@359"
+  },
+  {
+    "email": "user360@test.com",
+    "name": "User360 Test360",
+    "mobile": "9604605141",
+    "rollNo": "R1360",
+    "schoolName": "Bright Future Academy",
+    "branch": "Civil",
+    "address": "95 New Delhi Street, New Delhi, India",
+    "password": "Test@360"
+  },
+  {
+    "email": "user361@test.com",
+    "name": "User361 Test361",
+    "mobile": "9509076784",
+    "rollNo": "R1361",
+    "schoolName": "Central Academy",
+    "branch": "Electronics",
+    "address": "81 Kolkata Street, Kolkata, India",
+    "password": "Test@361"
+  },
+  {
+    "email": "user362@test.com",
+    "name": "User362 Test362",
+    "mobile": "9700683948",
+    "rollNo": "R1362",
+    "schoolName": "Modern Public School",
+    "branch": "Aerospace",
+    "address": "86 Bangalore Street, Bangalore, India",
+    "password": "Test@362"
+  },
+  {
+    "email": "user363@test.com",
+    "name": "User363 Test363",
+    "mobile": "9632967732",
+    "rollNo": "R1363",
+    "schoolName": "Bright Future Academy",
+    "branch": "Mechanical",
+    "address": "33 Kolkata Street, Kolkata, India",
+    "password": "Test@363"
+  },
+  {
+    "email": "user364@test.com",
+    "name": "User364 Test364",
+    "mobile": "9831114279",
+    "rollNo": "R1364",
+    "schoolName": "Sunshine International School",
+    "branch": "Electrical",
+    "address": "86 Bangalore Street, Bangalore, India",
+    "password": "Test@364"
+  },
+  {
+    "email": "user365@test.com",
+    "name": "User365 Test365",
+    "mobile": "9122878271",
+    "rollNo": "R1365",
+    "schoolName": "Modern Public School",
+    "branch": "Electrical",
+    "address": "60 Kolkata Street, Kolkata, India",
+    "password": "Test@365"
+  },
+  {
+    "email": "user366@test.com",
+    "name": "User366 Test366",
+    "mobile": "9907017652",
+    "rollNo": "R1366",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Chemical",
+    "address": "11 Lucknow Street, Lucknow, India",
+    "password": "Test@366"
+  },
+  {
+    "email": "user367@test.com",
+    "name": "User367 Test367",
+    "mobile": "9539036368",
+    "rollNo": "R1367",
+    "schoolName": "Central Academy",
+    "branch": "Environmental",
+    "address": "98 New Delhi Street, New Delhi, India",
+    "password": "Test@367"
+  },
+  {
+    "email": "user368@test.com",
+    "name": "User368 Test368",
+    "mobile": "9275155810",
+    "rollNo": "R1368",
+    "schoolName": "Global Public School",
+    "branch": "Computer Science",
+    "address": "69 Bangalore Street, Bangalore, India",
+    "password": "Test@368"
+  },
+  {
+    "email": "user369@test.com",
+    "name": "User369 Test369",
+    "mobile": "9887911748",
+    "rollNo": "R1369",
+    "schoolName": "Elite International School",
+    "branch": "Chemical",
+    "address": "62 Hyderabad Street, Hyderabad, India",
+    "password": "Test@369"
+  },
+  {
+    "email": "user370@test.com",
+    "name": "User370 Test370",
+    "mobile": "9855210535",
+    "rollNo": "R1370",
+    "schoolName": "SHUATS University",
+    "branch": "Computer Science",
+    "address": "21 Pune Street, Pune, India",
+    "password": "Test@370"
+  },
+  {
+    "email": "user371@test.com",
+    "name": "User371 Test371",
+    "mobile": "9564053482",
+    "rollNo": "R1371",
+    "schoolName": "Delhi Public School",
+    "branch": "Electrical",
+    "address": "70 Mumbai Street, Mumbai, India",
+    "password": "Test@371"
+  },
+  {
+    "email": "user372@test.com",
+    "name": "User372 Test372",
+    "mobile": "9438548006",
+    "rollNo": "R1372",
+    "schoolName": "Sunshine International School",
+    "branch": "Environmental",
+    "address": "84 Pune Street, Pune, India",
+    "password": "Test@372"
+  },
+  {
+    "email": "user373@test.com",
+    "name": "User373 Test373",
+    "mobile": "9685813863",
+    "rollNo": "R1373",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Computer Science",
+    "address": "48 Bangalore Street, Bangalore, India",
+    "password": "Test@373"
+  },
+  {
+    "email": "user374@test.com",
+    "name": "User374 Test374",
+    "mobile": "9111397921",
+    "rollNo": "R1374",
+    "schoolName": "Bright Future Academy",
+    "branch": "Information Technology",
+    "address": "5 Jaipur Street, Jaipur, India",
+    "password": "Test@374"
+  },
+  {
+    "email": "user375@test.com",
+    "name": "User375 Test375",
+    "mobile": "9974562108",
+    "rollNo": "R1375",
+    "schoolName": "SHUATS University",
+    "branch": "Information Technology",
+    "address": "60 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@375"
+  },
+  {
+    "email": "user376@test.com",
+    "name": "User376 Test376",
+    "mobile": "9525950404",
+    "rollNo": "R1376",
+    "schoolName": "Modern Public School",
+    "branch": "Environmental",
+    "address": "23 New Delhi Street, New Delhi, India",
+    "password": "Test@376"
+  },
+  {
+    "email": "user377@test.com",
+    "name": "User377 Test377",
+    "mobile": "9309600672",
+    "rollNo": "R1377",
+    "schoolName": "Global Public School",
+    "branch": "Civil",
+    "address": "69 Kolkata Street, Kolkata, India",
+    "password": "Test@377"
+  },
+  {
+    "email": "user378@test.com",
+    "name": "User378 Test378",
+    "mobile": "9420144382",
+    "rollNo": "R1378",
+    "schoolName": "St. Xavier's School",
+    "branch": "Electronics",
+    "address": "68 Kolkata Street, Kolkata, India",
+    "password": "Test@378"
+  },
+  {
+    "email": "user379@test.com",
+    "name": "User379 Test379",
+    "mobile": "9858477373",
+    "rollNo": "R1379",
+    "schoolName": "St. Xavier's School",
+    "branch": "Civil",
+    "address": "85 New Delhi Street, New Delhi, India",
+    "password": "Test@379"
+  },
+  {
+    "email": "user380@test.com",
+    "name": "User380 Test380",
+    "mobile": "9838376072",
+    "rollNo": "R1380",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Environmental",
+    "address": "84 Jaipur Street, Jaipur, India",
+    "password": "Test@380"
+  },
+  {
+    "email": "user381@test.com",
+    "name": "User381 Test381",
+    "mobile": "9899938690",
+    "rollNo": "R1381",
+    "schoolName": "Elite International School",
+    "branch": "Biotechnology",
+    "address": "20 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@381"
+  },
+  {
+    "email": "user382@test.com",
+    "name": "User382 Test382",
+    "mobile": "9742508421",
+    "rollNo": "R1382",
+    "schoolName": "St. Xavier's School",
+    "branch": "Civil",
+    "address": "27 Hyderabad Street, Hyderabad, India",
+    "password": "Test@382"
+  },
+  {
+    "email": "user383@test.com",
+    "name": "User383 Test383",
+    "mobile": "9390771621",
+    "rollNo": "R1383",
+    "schoolName": "Bright Future Academy",
+    "branch": "Electronics",
+    "address": "11 Kolkata Street, Kolkata, India",
+    "password": "Test@383"
+  },
+  {
+    "email": "user384@test.com",
+    "name": "User384 Test384",
+    "mobile": "9984527229",
+    "rollNo": "R1384",
+    "schoolName": "Elite International School",
+    "branch": "Biotechnology",
+    "address": "75 Bangalore Street, Bangalore, India",
+    "password": "Test@384"
+  },
+  {
+    "email": "user385@test.com",
+    "name": "User385 Test385",
+    "mobile": "9606292049",
+    "rollNo": "R1385",
+    "schoolName": "Elite International School",
+    "branch": "Electronics",
+    "address": "99 Hyderabad Street, Hyderabad, India",
+    "password": "Test@385"
+  },
+  {
+    "email": "user386@test.com",
+    "name": "User386 Test386",
+    "mobile": "9906810146",
+    "rollNo": "R1386",
+    "schoolName": "Sunshine International School",
+    "branch": "Chemical",
+    "address": "43 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@386"
+  },
+  {
+    "email": "user387@test.com",
+    "name": "User387 Test387",
+    "mobile": "9917510745",
+    "rollNo": "R1387",
+    "schoolName": "Global Public School",
+    "branch": "Chemical",
+    "address": "99 Bangalore Street, Bangalore, India",
+    "password": "Test@387"
+  },
+  {
+    "email": "user388@test.com",
+    "name": "User388 Test388",
+    "mobile": "9904772735",
+    "rollNo": "R1388",
+    "schoolName": "Delhi Public School",
+    "branch": "Electrical",
+    "address": "100 New Delhi Street, New Delhi, India",
+    "password": "Test@388"
+  },
+  {
+    "email": "user389@test.com",
+    "name": "User389 Test389",
+    "mobile": "9967918622",
+    "rollNo": "R1389",
+    "schoolName": "Central Academy",
+    "branch": "Biotechnology",
+    "address": "72 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@389"
+  },
+  {
+    "email": "user390@test.com",
+    "name": "User390 Test390",
+    "mobile": "9905059081",
+    "rollNo": "R1390",
+    "schoolName": "Modern Public School",
+    "branch": "Electronics",
+    "address": "75 Bangalore Street, Bangalore, India",
+    "password": "Test@390"
+  },
+  {
+    "email": "user391@test.com",
+    "name": "User391 Test391",
+    "mobile": "9448511720",
+    "rollNo": "R1391",
+    "schoolName": "SHUATS University",
+    "branch": "Mechanical",
+    "address": "94 Kolkata Street, Kolkata, India",
+    "password": "Test@391"
+  },
+  {
+    "email": "user392@test.com",
+    "name": "User392 Test392",
+    "mobile": "9703808392",
+    "rollNo": "R1392",
+    "schoolName": "Sunshine International School",
+    "branch": "Mechanical",
+    "address": "79 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@392"
+  },
+  {
+    "email": "user393@test.com",
+    "name": "User393 Test393",
+    "mobile": "9958815429",
+    "rollNo": "R1393",
+    "schoolName": "Central Academy",
+    "branch": "Chemical",
+    "address": "75 Pune Street, Pune, India",
+    "password": "Test@393"
+  },
+  {
+    "email": "user394@test.com",
+    "name": "User394 Test394",
+    "mobile": "9677698742",
+    "rollNo": "R1394",
+    "schoolName": "Central Academy",
+    "branch": "Aerospace",
+    "address": "49 Lucknow Street, Lucknow, India",
+    "password": "Test@394"
+  },
+  {
+    "email": "user395@test.com",
+    "name": "User395 Test395",
+    "mobile": "9345360586",
+    "rollNo": "R1395",
+    "schoolName": "Elite International School",
+    "branch": "Computer Science",
+    "address": "81 Mumbai Street, Mumbai, India",
+    "password": "Test@395"
+  },
+  {
+    "email": "user396@test.com",
+    "name": "User396 Test396",
+    "mobile": "9550582423",
+    "rollNo": "R1396",
+    "schoolName": "Bright Future Academy",
+    "branch": "Environmental",
+    "address": "81 Lucknow Street, Lucknow, India",
+    "password": "Test@396"
+  },
+  {
+    "email": "user397@test.com",
+    "name": "User397 Test397",
+    "mobile": "9562939128",
+    "rollNo": "R1397",
+    "schoolName": "Modern Public School",
+    "branch": "Electrical",
+    "address": "55 Pune Street, Pune, India",
+    "password": "Test@397"
+  },
+  {
+    "email": "user398@test.com",
+    "name": "User398 Test398",
+    "mobile": "9666728257",
+    "rollNo": "R1398",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Chemical",
+    "address": "83 Hyderabad Street, Hyderabad, India",
+    "password": "Test@398"
+  },
+  {
+    "email": "user399@test.com",
+    "name": "User399 Test399",
+    "mobile": "9276338356",
+    "rollNo": "R1399",
+    "schoolName": "Central Academy",
+    "branch": "Information Technology",
+    "address": "60 Mumbai Street, Mumbai, India",
+    "password": "Test@399"
+  },
+  {
+    "email": "user400@test.com",
+    "name": "User400 Test400",
+    "mobile": "9813868582",
+    "rollNo": "R1400",
+    "schoolName": "Sunshine International School",
+    "branch": "Electronics",
+    "address": "14 Kolkata Street, Kolkata, India",
+    "password": "Test@400"
+  },
+  {
+    "email": "user401@test.com",
+    "name": "User401 Test401",
+    "mobile": "9284436006",
+    "rollNo": "R1401",
+    "schoolName": "Delhi Public School",
+    "branch": "Civil",
+    "address": "34 Hyderabad Street, Hyderabad, India",
+    "password": "Test@401"
+  },
+  {
+    "email": "user402@test.com",
+    "name": "User402 Test402",
+    "mobile": "9608335056",
+    "rollNo": "R1402",
+    "schoolName": "Central Academy",
+    "branch": "Biotechnology",
+    "address": "13 Mumbai Street, Mumbai, India",
+    "password": "Test@402"
+  },
+  {
+    "email": "user403@test.com",
+    "name": "User403 Test403",
+    "mobile": "9780159388",
+    "rollNo": "R1403",
+    "schoolName": "Sunshine International School",
+    "branch": "Aerospace",
+    "address": "48 Lucknow Street, Lucknow, India",
+    "password": "Test@403"
+  },
+  {
+    "email": "user404@test.com",
+    "name": "User404 Test404",
+    "mobile": "9794175744",
+    "rollNo": "R1404",
+    "schoolName": "Elite International School",
+    "branch": "Electronics",
+    "address": "73 New Delhi Street, New Delhi, India",
+    "password": "Test@404"
+  },
+  {
+    "email": "user405@test.com",
+    "name": "User405 Test405",
+    "mobile": "9700650838",
+    "rollNo": "R1405",
+    "schoolName": "SHUATS University",
+    "branch": "Biotechnology",
+    "address": "96 Pune Street, Pune, India",
+    "password": "Test@405"
+  },
+  {
+    "email": "user406@test.com",
+    "name": "User406 Test406",
+    "mobile": "9512311883",
+    "rollNo": "R1406",
+    "schoolName": "Modern Public School",
+    "branch": "Biotechnology",
+    "address": "26 Kolkata Street, Kolkata, India",
+    "password": "Test@406"
+  },
+  {
+    "email": "user407@test.com",
+    "name": "User407 Test407",
+    "mobile": "9562616541",
+    "rollNo": "R1407",
+    "schoolName": "Central Academy",
+    "branch": "Electronics",
+    "address": "92 Mumbai Street, Mumbai, India",
+    "password": "Test@407"
+  },
+  {
+    "email": "user408@test.com",
+    "name": "User408 Test408",
+    "mobile": "9537196888",
+    "rollNo": "R1408",
+    "schoolName": "Delhi Public School",
+    "branch": "Environmental",
+    "address": "25 Jaipur Street, Jaipur, India",
+    "password": "Test@408"
+  },
+  {
+    "email": "user409@test.com",
+    "name": "User409 Test409",
+    "mobile": "9119658001",
+    "rollNo": "R1409",
+    "schoolName": "Global Public School",
+    "branch": "Aerospace",
+    "address": "15 New Delhi Street, New Delhi, India",
+    "password": "Test@409"
+  },
+  {
+    "email": "user410@test.com",
+    "name": "User410 Test410",
+    "mobile": "9228712809",
+    "rollNo": "R1410",
+    "schoolName": "Sunshine International School",
+    "branch": "Electrical",
+    "address": "20 Mumbai Street, Mumbai, India",
+    "password": "Test@410"
+  },
+  {
+    "email": "user411@test.com",
+    "name": "User411 Test411",
+    "mobile": "9908418440",
+    "rollNo": "R1411",
+    "schoolName": "Central Academy",
+    "branch": "Environmental",
+    "address": "36 Jaipur Street, Jaipur, India",
+    "password": "Test@411"
+  },
+  {
+    "email": "user412@test.com",
+    "name": "User412 Test412",
+    "mobile": "9650831235",
+    "rollNo": "R1412",
+    "schoolName": "Elite International School",
+    "branch": "Civil",
+    "address": "63 Lucknow Street, Lucknow, India",
+    "password": "Test@412"
+  },
+  {
+    "email": "user413@test.com",
+    "name": "User413 Test413",
+    "mobile": "9754435545",
+    "rollNo": "R1413",
+    "schoolName": "Central Academy",
+    "branch": "Chemical",
+    "address": "83 Hyderabad Street, Hyderabad, India",
+    "password": "Test@413"
+  },
+  {
+    "email": "user414@test.com",
+    "name": "User414 Test414",
+    "mobile": "9546574368",
+    "rollNo": "R1414",
+    "schoolName": "Central Academy",
+    "branch": "Environmental",
+    "address": "87 Bangalore Street, Bangalore, India",
+    "password": "Test@414"
+  },
+  {
+    "email": "user415@test.com",
+    "name": "User415 Test415",
+    "mobile": "9510384668",
+    "rollNo": "R1415",
+    "schoolName": "Bright Future Academy",
+    "branch": "Civil",
+    "address": "82 Chennai Street, Chennai, India",
+    "password": "Test@415"
+  },
+  {
+    "email": "user416@test.com",
+    "name": "User416 Test416",
+    "mobile": "9597040263",
+    "rollNo": "R1416",
+    "schoolName": "Bright Future Academy",
+    "branch": "Information Technology",
+    "address": "62 New Delhi Street, New Delhi, India",
+    "password": "Test@416"
+  },
+  {
+    "email": "user417@test.com",
+    "name": "User417 Test417",
+    "mobile": "9366390557",
+    "rollNo": "R1417",
+    "schoolName": "Central Academy",
+    "branch": "Information Technology",
+    "address": "39 Mumbai Street, Mumbai, India",
+    "password": "Test@417"
+  },
+  {
+    "email": "user418@test.com",
+    "name": "User418 Test418",
+    "mobile": "9174786891",
+    "rollNo": "R1418",
+    "schoolName": "Bright Future Academy",
+    "branch": "Mechanical",
+    "address": "12 Chennai Street, Chennai, India",
+    "password": "Test@418"
+  },
+  {
+    "email": "user419@test.com",
+    "name": "User419 Test419",
+    "mobile": "9446297461",
+    "rollNo": "R1419",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Chemical",
+    "address": "84 Kolkata Street, Kolkata, India",
+    "password": "Test@419"
+  },
+  {
+    "email": "user420@test.com",
+    "name": "User420 Test420",
+    "mobile": "9922507092",
+    "rollNo": "R1420",
+    "schoolName": "Central Academy",
+    "branch": "Environmental",
+    "address": "89 Pune Street, Pune, India",
+    "password": "Test@420"
+  },
+  {
+    "email": "user421@test.com",
+    "name": "User421 Test421",
+    "mobile": "9569028573",
+    "rollNo": "R1421",
+    "schoolName": "Global Public School",
+    "branch": "Environmental",
+    "address": "21 Hyderabad Street, Hyderabad, India",
+    "password": "Test@421"
+  },
+  {
+    "email": "user422@test.com",
+    "name": "User422 Test422",
+    "mobile": "9921438640",
+    "rollNo": "R1422",
+    "schoolName": "Modern Public School",
+    "branch": "Electronics",
+    "address": "63 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@422"
+  },
+  {
+    "email": "user423@test.com",
+    "name": "User423 Test423",
+    "mobile": "9768743639",
+    "rollNo": "R1423",
+    "schoolName": "Central Academy",
+    "branch": "Mechanical",
+    "address": "42 Kolkata Street, Kolkata, India",
+    "password": "Test@423"
+  },
+  {
+    "email": "user424@test.com",
+    "name": "User424 Test424",
+    "mobile": "9806530838",
+    "rollNo": "R1424",
+    "schoolName": "Modern Public School",
+    "branch": "Computer Science",
+    "address": "34 Chennai Street, Chennai, India",
+    "password": "Test@424"
+  },
+  {
+    "email": "user425@test.com",
+    "name": "User425 Test425",
+    "mobile": "9874791919",
+    "rollNo": "R1425",
+    "schoolName": "Central Academy",
+    "branch": "Civil",
+    "address": "91 Pune Street, Pune, India",
+    "password": "Test@425"
+  },
+  {
+    "email": "user426@test.com",
+    "name": "User426 Test426",
+    "mobile": "9667363606",
+    "rollNo": "R1426",
+    "schoolName": "Bright Future Academy",
+    "branch": "Aerospace",
+    "address": "32 Chennai Street, Chennai, India",
+    "password": "Test@426"
+  },
+  {
+    "email": "user427@test.com",
+    "name": "User427 Test427",
+    "mobile": "9718851205",
+    "rollNo": "R1427",
+    "schoolName": "Elite International School",
+    "branch": "Biotechnology",
+    "address": "7 Hyderabad Street, Hyderabad, India",
+    "password": "Test@427"
+  },
+  {
+    "email": "user428@test.com",
+    "name": "User428 Test428",
+    "mobile": "9150683200",
+    "rollNo": "R1428",
+    "schoolName": "Bright Future Academy",
+    "branch": "Environmental",
+    "address": "49 Hyderabad Street, Hyderabad, India",
+    "password": "Test@428"
+  },
+  {
+    "email": "user429@test.com",
+    "name": "User429 Test429",
+    "mobile": "9325276609",
+    "rollNo": "R1429",
+    "schoolName": "Elite International School",
+    "branch": "Computer Science",
+    "address": "58 Chennai Street, Chennai, India",
+    "password": "Test@429"
+  },
+  {
+    "email": "user430@test.com",
+    "name": "User430 Test430",
+    "mobile": "9608296792",
+    "rollNo": "R1430",
+    "schoolName": "Bright Future Academy",
+    "branch": "Chemical",
+    "address": "23 Mumbai Street, Mumbai, India",
+    "password": "Test@430"
+  },
+  {
+    "email": "user431@test.com",
+    "name": "User431 Test431",
+    "mobile": "9891561503",
+    "rollNo": "R1431",
+    "schoolName": "St. Xavier's School",
+    "branch": "Mechanical",
+    "address": "50 Hyderabad Street, Hyderabad, India",
+    "password": "Test@431"
+  },
+  {
+    "email": "user432@test.com",
+    "name": "User432 Test432",
+    "mobile": "9983527586",
+    "rollNo": "R1432",
+    "schoolName": "Global Public School",
+    "branch": "Environmental",
+    "address": "94 Lucknow Street, Lucknow, India",
+    "password": "Test@432"
+  },
+  {
+    "email": "user433@test.com",
+    "name": "User433 Test433",
+    "mobile": "9641035618",
+    "rollNo": "R1433",
+    "schoolName": "SHUATS University",
+    "branch": "Biotechnology",
+    "address": "41 Kolkata Street, Kolkata, India",
+    "password": "Test@433"
+  },
+  {
+    "email": "user434@test.com",
+    "name": "User434 Test434",
+    "mobile": "9228745689",
+    "rollNo": "R1434",
+    "schoolName": "Central Academy",
+    "branch": "Electrical",
+    "address": "22 Kolkata Street, Kolkata, India",
+    "password": "Test@434"
+  },
+  {
+    "email": "user435@test.com",
+    "name": "User435 Test435",
+    "mobile": "9313200300",
+    "rollNo": "R1435",
+    "schoolName": "Global Public School",
+    "branch": "Biotechnology",
+    "address": "44 Chennai Street, Chennai, India",
+    "password": "Test@435"
+  },
+  {
+    "email": "user436@test.com",
+    "name": "User436 Test436",
+    "mobile": "9316758647",
+    "rollNo": "R1436",
+    "schoolName": "Global Public School",
+    "branch": "Mechanical",
+    "address": "34 Chennai Street, Chennai, India",
+    "password": "Test@436"
+  },
+  {
+    "email": "user437@test.com",
+    "name": "User437 Test437",
+    "mobile": "9489878774",
+    "rollNo": "R1437",
+    "schoolName": "St. Xavier's School",
+    "branch": "Computer Science",
+    "address": "38 Lucknow Street, Lucknow, India",
+    "password": "Test@437"
+  },
+  {
+    "email": "user438@test.com",
+    "name": "User438 Test438",
+    "mobile": "9640564030",
+    "rollNo": "R1438",
+    "schoolName": "Delhi Public School",
+    "branch": "Electrical",
+    "address": "25 New Delhi Street, New Delhi, India",
+    "password": "Test@438"
+  },
+  {
+    "email": "user439@test.com",
+    "name": "User439 Test439",
+    "mobile": "9939492535",
+    "rollNo": "R1439",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Environmental",
+    "address": "3 Pune Street, Pune, India",
+    "password": "Test@439"
+  },
+  {
+    "email": "user440@test.com",
+    "name": "User440 Test440",
+    "mobile": "9621044508",
+    "rollNo": "R1440",
+    "schoolName": "St. Xavier's School",
+    "branch": "Aerospace",
+    "address": "64 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@440"
+  },
+  {
+    "email": "user441@test.com",
+    "name": "User441 Test441",
+    "mobile": "9125962742",
+    "rollNo": "R1441",
+    "schoolName": "Modern Public School",
+    "branch": "Chemical",
+    "address": "11 Kolkata Street, Kolkata, India",
+    "password": "Test@441"
+  },
+  {
+    "email": "user442@test.com",
+    "name": "User442 Test442",
+    "mobile": "9504825821",
+    "rollNo": "R1442",
+    "schoolName": "Modern Public School",
+    "branch": "Information Technology",
+    "address": "87 Jaipur Street, Jaipur, India",
+    "password": "Test@442"
+  },
+  {
+    "email": "user443@test.com",
+    "name": "User443 Test443",
+    "mobile": "9854522487",
+    "rollNo": "R1443",
+    "schoolName": "Central Academy",
+    "branch": "Civil",
+    "address": "11 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@443"
+  },
+  {
+    "email": "user444@test.com",
+    "name": "User444 Test444",
+    "mobile": "9746248898",
+    "rollNo": "R1444",
+    "schoolName": "Central Academy",
+    "branch": "Chemical",
+    "address": "5 Mumbai Street, Mumbai, India",
+    "password": "Test@444"
+  },
+  {
+    "email": "user445@test.com",
+    "name": "User445 Test445",
+    "mobile": "9313530544",
+    "rollNo": "R1445",
+    "schoolName": "Elite International School",
+    "branch": "Environmental",
+    "address": "62 Bangalore Street, Bangalore, India",
+    "password": "Test@445"
+  },
+  {
+    "email": "user446@test.com",
+    "name": "User446 Test446",
+    "mobile": "9687457097",
+    "rollNo": "R1446",
+    "schoolName": "Global Public School",
+    "branch": "Electronics",
+    "address": "30 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@446"
+  },
+  {
+    "email": "user447@test.com",
+    "name": "User447 Test447",
+    "mobile": "9249120420",
+    "rollNo": "R1447",
+    "schoolName": "Modern Public School",
+    "branch": "Chemical",
+    "address": "4 Jaipur Street, Jaipur, India",
+    "password": "Test@447"
+  },
+  {
+    "email": "user448@test.com",
+    "name": "User448 Test448",
+    "mobile": "9423687122",
+    "rollNo": "R1448",
+    "schoolName": "Bright Future Academy",
+    "branch": "Environmental",
+    "address": "47 New Delhi Street, New Delhi, India",
+    "password": "Test@448"
+  },
+  {
+    "email": "user449@test.com",
+    "name": "User449 Test449",
+    "mobile": "9891669360",
+    "rollNo": "R1449",
+    "schoolName": "Modern Public School",
+    "branch": "Electrical",
+    "address": "82 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@449"
+  },
+  {
+    "email": "user450@test.com",
+    "name": "User450 Test450",
+    "mobile": "9377396521",
+    "rollNo": "R1450",
+    "schoolName": "Global Public School",
+    "branch": "Mechanical",
+    "address": "61 Lucknow Street, Lucknow, India",
+    "password": "Test@450"
+  },
+  {
+    "email": "user451@test.com",
+    "name": "User451 Test451",
+    "mobile": "9841587329",
+    "rollNo": "R1451",
+    "schoolName": "Bright Future Academy",
+    "branch": "Biotechnology",
+    "address": "71 Pune Street, Pune, India",
+    "password": "Test@451"
+  },
+  {
+    "email": "user452@test.com",
+    "name": "User452 Test452",
+    "mobile": "9956465235",
+    "rollNo": "R1452",
+    "schoolName": "Central Academy",
+    "branch": "Environmental",
+    "address": "75 Kolkata Street, Kolkata, India",
+    "password": "Test@452"
+  },
+  {
+    "email": "user453@test.com",
+    "name": "User453 Test453",
+    "mobile": "9741890637",
+    "rollNo": "R1453",
+    "schoolName": "Elite International School",
+    "branch": "Electrical",
+    "address": "47 Kolkata Street, Kolkata, India",
+    "password": "Test@453"
+  },
+  {
+    "email": "user454@test.com",
+    "name": "User454 Test454",
+    "mobile": "9452693339",
+    "rollNo": "R1454",
+    "schoolName": "Delhi Public School",
+    "branch": "Environmental",
+    "address": "81 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@454"
+  },
+  {
+    "email": "user455@test.com",
+    "name": "User455 Test455",
+    "mobile": "9624774559",
+    "rollNo": "R1455",
+    "schoolName": "Elite International School",
+    "branch": "Computer Science",
+    "address": "60 Jaipur Street, Jaipur, India",
+    "password": "Test@455"
+  },
+  {
+    "email": "user456@test.com",
+    "name": "User456 Test456",
+    "mobile": "9251105693",
+    "rollNo": "R1456",
+    "schoolName": "Bright Future Academy",
+    "branch": "Computer Science",
+    "address": "43 New Delhi Street, New Delhi, India",
+    "password": "Test@456"
+  },
+  {
+    "email": "user457@test.com",
+    "name": "User457 Test457",
+    "mobile": "9228599242",
+    "rollNo": "R1457",
+    "schoolName": "Sunshine International School",
+    "branch": "Aerospace",
+    "address": "37 Mumbai Street, Mumbai, India",
+    "password": "Test@457"
+  },
+  {
+    "email": "user458@test.com",
+    "name": "User458 Test458",
+    "mobile": "9858691324",
+    "rollNo": "R1458",
+    "schoolName": "Sunshine International School",
+    "branch": "Electrical",
+    "address": "49 New Delhi Street, New Delhi, India",
+    "password": "Test@458"
+  },
+  {
+    "email": "user459@test.com",
+    "name": "User459 Test459",
+    "mobile": "9988483134",
+    "rollNo": "R1459",
+    "schoolName": "Bright Future Academy",
+    "branch": "Civil",
+    "address": "93 Pune Street, Pune, India",
+    "password": "Test@459"
+  },
+  {
+    "email": "user460@test.com",
+    "name": "User460 Test460",
+    "mobile": "9299315567",
+    "rollNo": "R1460",
+    "schoolName": "Central Academy",
+    "branch": "Mechanical",
+    "address": "6 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@460"
+  },
+  {
+    "email": "user461@test.com",
+    "name": "User461 Test461",
+    "mobile": "9534347183",
+    "rollNo": "R1461",
+    "schoolName": "Elite International School",
+    "branch": "Information Technology",
+    "address": "94 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@461"
+  },
+  {
+    "email": "user462@test.com",
+    "name": "User462 Test462",
+    "mobile": "9429749959",
+    "rollNo": "R1462",
+    "schoolName": "Sunshine International School",
+    "branch": "Electrical",
+    "address": "29 Hyderabad Street, Hyderabad, India",
+    "password": "Test@462"
+  },
+  {
+    "email": "user463@test.com",
+    "name": "User463 Test463",
+    "mobile": "9107105059",
+    "rollNo": "R1463",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Electrical",
+    "address": "73 Kolkata Street, Kolkata, India",
+    "password": "Test@463"
+  },
+  {
+    "email": "user464@test.com",
+    "name": "User464 Test464",
+    "mobile": "9814039462",
+    "rollNo": "R1464",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Electronics",
+    "address": "97 Lucknow Street, Lucknow, India",
+    "password": "Test@464"
+  },
+  {
+    "email": "user465@test.com",
+    "name": "User465 Test465",
+    "mobile": "9369850212",
+    "rollNo": "R1465",
+    "schoolName": "Delhi Public School",
+    "branch": "Biotechnology",
+    "address": "48 Kolkata Street, Kolkata, India",
+    "password": "Test@465"
+  },
+  {
+    "email": "user466@test.com",
+    "name": "User466 Test466",
+    "mobile": "9456803513",
+    "rollNo": "R1466",
+    "schoolName": "Sunshine International School",
+    "branch": "Electronics",
+    "address": "52 Pune Street, Pune, India",
+    "password": "Test@466"
+  },
+  {
+    "email": "user467@test.com",
+    "name": "User467 Test467",
+    "mobile": "9550265322",
+    "rollNo": "R1467",
+    "schoolName": "Global Public School",
+    "branch": "Civil",
+    "address": "7 Mumbai Street, Mumbai, India",
+    "password": "Test@467"
+  },
+  {
+    "email": "user468@test.com",
+    "name": "User468 Test468",
+    "mobile": "9237771108",
+    "rollNo": "R1468",
+    "schoolName": "Elite International School",
+    "branch": "Environmental",
+    "address": "89 New Delhi Street, New Delhi, India",
+    "password": "Test@468"
+  },
+  {
+    "email": "user469@test.com",
+    "name": "User469 Test469",
+    "mobile": "9394733760",
+    "rollNo": "R1469",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Mechanical",
+    "address": "53 Pune Street, Pune, India",
+    "password": "Test@469"
+  },
+  {
+    "email": "user470@test.com",
+    "name": "User470 Test470",
+    "mobile": "9371598210",
+    "rollNo": "R1470",
+    "schoolName": "SHUATS University",
+    "branch": "Chemical",
+    "address": "68 Bangalore Street, Bangalore, India",
+    "password": "Test@470"
+  },
+  {
+    "email": "user471@test.com",
+    "name": "User471 Test471",
+    "mobile": "9774373018",
+    "rollNo": "R1471",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Mechanical",
+    "address": "26 Pune Street, Pune, India",
+    "password": "Test@471"
+  },
+  {
+    "email": "user472@test.com",
+    "name": "User472 Test472",
+    "mobile": "9409451240",
+    "rollNo": "R1472",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Chemical",
+    "address": "14 Chennai Street, Chennai, India",
+    "password": "Test@472"
+  },
+  {
+    "email": "user473@test.com",
+    "name": "User473 Test473",
+    "mobile": "9673588886",
+    "rollNo": "R1473",
+    "schoolName": "Sunshine International School",
+    "branch": "Mechanical",
+    "address": "64 New Delhi Street, New Delhi, India",
+    "password": "Test@473"
+  },
+  {
+    "email": "user474@test.com",
+    "name": "User474 Test474",
+    "mobile": "9590026520",
+    "rollNo": "R1474",
+    "schoolName": "Delhi Public School",
+    "branch": "Computer Science",
+    "address": "18 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@474"
+  },
+  {
+    "email": "user475@test.com",
+    "name": "User475 Test475",
+    "mobile": "9130778812",
+    "rollNo": "R1475",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Information Technology",
+    "address": "65 Jaipur Street, Jaipur, India",
+    "password": "Test@475"
+  },
+  {
+    "email": "user476@test.com",
+    "name": "User476 Test476",
+    "mobile": "9135074361",
+    "rollNo": "R1476",
+    "schoolName": "Modern Public School",
+    "branch": "Electrical",
+    "address": "38 Jaipur Street, Jaipur, India",
+    "password": "Test@476"
+  },
+  {
+    "email": "user477@test.com",
+    "name": "User477 Test477",
+    "mobile": "9439099839",
+    "rollNo": "R1477",
+    "schoolName": "St. Xavier's School",
+    "branch": "Environmental",
+    "address": "56 New Delhi Street, New Delhi, India",
+    "password": "Test@477"
+  },
+  {
+    "email": "user478@test.com",
+    "name": "User478 Test478",
+    "mobile": "9154155133",
+    "rollNo": "R1478",
+    "schoolName": "Sunshine International School",
+    "branch": "Biotechnology",
+    "address": "66 Jaipur Street, Jaipur, India",
+    "password": "Test@478"
+  },
+  {
+    "email": "user479@test.com",
+    "name": "User479 Test479",
+    "mobile": "9837330194",
+    "rollNo": "R1479",
+    "schoolName": "St. Xavier's School",
+    "branch": "Electrical",
+    "address": "62 Mumbai Street, Mumbai, India",
+    "password": "Test@479"
+  },
+  {
+    "email": "user480@test.com",
+    "name": "User480 Test480",
+    "mobile": "9851757528",
+    "rollNo": "R1480",
+    "schoolName": "Elite International School",
+    "branch": "Electronics",
+    "address": "82 Jaipur Street, Jaipur, India",
+    "password": "Test@480"
+  },
+  {
+    "email": "user481@test.com",
+    "name": "User481 Test481",
+    "mobile": "9972535660",
+    "rollNo": "R1481",
+    "schoolName": "Central Academy",
+    "branch": "Computer Science",
+    "address": "26 Mumbai Street, Mumbai, India",
+    "password": "Test@481"
+  },
+  {
+    "email": "user482@test.com",
+    "name": "User482 Test482",
+    "mobile": "9495991392",
+    "rollNo": "R1482",
+    "schoolName": "Global Public School",
+    "branch": "Information Technology",
+    "address": "91 Pune Street, Pune, India",
+    "password": "Test@482"
+  },
+  {
+    "email": "user483@test.com",
+    "name": "User483 Test483",
+    "mobile": "9452217825",
+    "rollNo": "R1483",
+    "schoolName": "Delhi Public School",
+    "branch": "Computer Science",
+    "address": "45 Hyderabad Street, Hyderabad, India",
+    "password": "Test@483"
+  },
+  {
+    "email": "user484@test.com",
+    "name": "User484 Test484",
+    "mobile": "9903699219",
+    "rollNo": "R1484",
+    "schoolName": "Global Public School",
+    "branch": "Chemical",
+    "address": "57 New Delhi Street, New Delhi, India",
+    "password": "Test@484"
+  },
+  {
+    "email": "user485@test.com",
+    "name": "User485 Test485",
+    "mobile": "9834685922",
+    "rollNo": "R1485",
+    "schoolName": "Modern Public School",
+    "branch": "Biotechnology",
+    "address": "15 Hyderabad Street, Hyderabad, India",
+    "password": "Test@485"
+  },
+  {
+    "email": "user486@test.com",
+    "name": "User486 Test486",
+    "mobile": "9444959041",
+    "rollNo": "R1486",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Information Technology",
+    "address": "11 Pune Street, Pune, India",
+    "password": "Test@486"
+  },
+  {
+    "email": "user487@test.com",
+    "name": "User487 Test487",
+    "mobile": "9803977245",
+    "rollNo": "R1487",
+    "schoolName": "Elite International School",
+    "branch": "Chemical",
+    "address": "32 Lucknow Street, Lucknow, India",
+    "password": "Test@487"
+  },
+  {
+    "email": "user488@test.com",
+    "name": "User488 Test488",
+    "mobile": "9389857293",
+    "rollNo": "R1488",
+    "schoolName": "Modern Public School",
+    "branch": "Electronics",
+    "address": "26 Pune Street, Pune, India",
+    "password": "Test@488"
+  },
+  {
+    "email": "user489@test.com",
+    "name": "User489 Test489",
+    "mobile": "9400138648",
+    "rollNo": "R1489",
+    "schoolName": "St. Xavier's School",
+    "branch": "Biotechnology",
+    "address": "96 New Delhi Street, New Delhi, India",
+    "password": "Test@489"
+  },
+  {
+    "email": "user490@test.com",
+    "name": "User490 Test490",
+    "mobile": "9845413278",
+    "rollNo": "R1490",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Information Technology",
+    "address": "65 New Delhi Street, New Delhi, India",
+    "password": "Test@490"
+  },
+  {
+    "email": "user491@test.com",
+    "name": "User491 Test491",
+    "mobile": "9826882069",
+    "rollNo": "R1491",
+    "schoolName": "Sunshine International School",
+    "branch": "Information Technology",
+    "address": "93 Ahmedabad Street, Ahmedabad, India",
+    "password": "Test@491"
+  },
+  {
+    "email": "user492@test.com",
+    "name": "User492 Test492",
+    "mobile": "9317737658",
+    "rollNo": "R1492",
+    "schoolName": "Central Academy",
+    "branch": "Environmental",
+    "address": "66 Jaipur Street, Jaipur, India",
+    "password": "Test@492"
+  },
+  {
+    "email": "user493@test.com",
+    "name": "User493 Test493",
+    "mobile": "9550382546",
+    "rollNo": "R1493",
+    "schoolName": "SHUATS University",
+    "branch": "Chemical",
+    "address": "67 Pune Street, Pune, India",
+    "password": "Test@493"
+  },
+  {
+    "email": "user494@test.com",
+    "name": "User494 Test494",
+    "mobile": "9480580246",
+    "rollNo": "R1494",
+    "schoolName": "Bright Future Academy",
+    "branch": "Environmental",
+    "address": "76 Kolkata Street, Kolkata, India",
+    "password": "Test@494"
+  },
+  {
+    "email": "user495@test.com",
+    "name": "User495 Test495",
+    "mobile": "9751869753",
+    "rollNo": "R1495",
+    "schoolName": "Kendriya Vidyalaya",
+    "branch": "Chemical",
+    "address": "33 New Delhi Street, New Delhi, India",
+    "password": "Test@495"
+  },
+  {
+    "email": "user496@test.com",
+    "name": "User496 Test496",
+    "mobile": "9735240552",
+    "rollNo": "R1496",
+    "schoolName": "Global Public School",
+    "branch": "Environmental",
+    "address": "25 Bangalore Street, Bangalore, India",
+    "password": "Test@496"
+  },
+  {
+    "email": "user497@test.com",
+    "name": "User497 Test497",
+    "mobile": "9355108403",
+    "rollNo": "R1497",
+    "schoolName": "Delhi Public School",
+    "branch": "Computer Science",
+    "address": "96 Pune Street, Pune, India",
+    "password": "Test@497"
+  },
+  {
+    "email": "user498@test.com",
+    "name": "User498 Test498",
+    "mobile": "9632061378",
+    "rollNo": "R1498",
+    "schoolName": "Central Academy",
+    "branch": "Information Technology",
+    "address": "94 Chennai Street, Chennai, India",
+    "password": "Test@498"
+  },
+  {
+    "email": "user499@test.com",
+    "name": "User499 Test499",
+    "mobile": "9882806729",
+    "rollNo": "R1499",
+    "schoolName": "Modern Public School",
+    "branch": "Environmental",
+    "address": "82 Pune Street, Pune, India",
+    "password": "Test@499"
+  },
+  {
+    "email": "user500@test.com",
+    "name": "User500 Test500",
+    "mobile": "9736919397",
+    "rollNo": "R1500",
+    "schoolName": "Sunshine International School",
+    "branch": "Aerospace",
+    "address": "38 Chennai Street, Chennai, India",
+    "password": "Test@500"
+  }
+]
