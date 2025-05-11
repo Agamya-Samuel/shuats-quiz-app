@@ -73,7 +73,7 @@ const TakeQuiz = () => {
 								each
 							</p>
 							<p className="text-sm text-gray-600 mt-2">
-								Don't miss out on this amazing opportunity to
+								Don&apos;t miss out on this amazing opportunity to
 								win!
 							</p>
 						</div>
