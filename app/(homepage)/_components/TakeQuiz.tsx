@@ -10,7 +10,7 @@ const TakeQuiz = () => {
 						SHUATS Online Quiz Competition
 					</h2>
 					<h2 className="text-1xl md:text-2xl font-bold text-gray-900 mb-4">
-						by Department of Computer Science & Information Technology (DCS & IT)
+						Conducted by Department of Computer Science & Information Technology (DCS & IT)
 					</h2>
 					<p className="text-lg text-gray-700 mb-8">
 						Join us for an exciting opportunity to showcase your
