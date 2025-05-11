@@ -63,7 +63,7 @@ const TakeQuiz = () => {
 							href="/register"
 							className="inline-flex items-center justify-center px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-300"
 						>
-							Take a Quiz Now
+							Register for Quiz Now
 							<ArrowRight className="ml-2 h-5 w-5" />
 						</Link>
 					</div>
