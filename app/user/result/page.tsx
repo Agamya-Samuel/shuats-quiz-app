@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getQuizResults } from '@/actions/question';
+import { getQuizResults } from '@/actions/quiz';
 import { useCookies } from '@/contexts/cookie-context';
 import ResultSummary from './_components/result-summary';
 import ResultDetails from './_components/result-details';
@@ -84,7 +84,7 @@ export default function ResultPage() {
 
 			try {
 				const response: ServerResponse = await getQuizResults(
-					currentUser.userId
+					Number(currentUser.userId)
 				);
 
 				if (
