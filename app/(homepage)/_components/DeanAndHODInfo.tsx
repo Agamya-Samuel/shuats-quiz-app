@@ -1,5 +1,6 @@
 import { Mail, Phone, Map } from 'lucide-react';
 import Image from 'next/image';
+import { deanImage, hodImage, DileepImage, nkGuptaImage } from '@/public/images/index.js';
 
 const profiles = [
   {
@@ -9,7 +10,7 @@ const profiles = [
     phone: '+91-532-2684394',
     fax: 'Fax: +91-532-2684394',
     email: 'deanviaet@shuats.edu.in',
-    img: '/images/dean.asp',
+    img: deanImage,
     color: 'green',
   },
   {
@@ -18,7 +19,7 @@ const profiles = [
     address: 'SHUATS, Naini, Prayagraj (Formerly Allahabad) -211007\nU.P. (INDIA)',
     phone: '+919452248375',
     email: 'jeberson_w@shuats.edu.in',
-    img: '/images/hod.asp',
+    img: hodImage,
     color: 'green',
   },
   {
@@ -27,7 +28,7 @@ const profiles = [
     address: 'SHUATS, Naini, Prayagraj (Formerly Allahabad) -211007\nU.P. (INDIA)',
     phone: '+919935620054',
     email: 'dileep.kumar@shuats.edu.in',
-    img: '/images/csdept1.jpg',
+    img: DileepImage,
     color: 'blue',
   },
   {
@@ -36,7 +37,7 @@ const profiles = [
     address: 'SHUATS, Naini, Prayagraj (Formerly Allahabad) -211007\nU.P. (INDIA)',
     phone: '+919335101824',
     email: 'narendra.gupta@shuats.edu.in',
-    img: '/images/nk_gupta.png',
+    img: nkGuptaImage,
     color: 'purple',
   },
 ];
