@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
 	Card,
 	CardContent,
@@ -34,33 +34,44 @@ interface ActivityItemProps {
 }
 
 export default function SuperAdminPage() {
-	const [activeTab, setActiveTab] = useState('dashboard');
+	const defaultTab = 'dashboard';
+	const searchParams = useSearchParams();
+	const router = useRouter();
+
+	// Get active tab directly from URL params or use default
+	const activeTab = searchParams.get('tab') || defaultTab;
+
+	// Update URL when tab changes
+	const handleTabChange = (tab: string) => {
+		// Update URL without refreshing the page
+		router.push(`/super-admin?tab=${tab}`, { scroll: false });
+	};
 
 	return (
 		<div className="min-h-screen bg-gray-50 dark:bg-gray-900">
 			{/* Header */}
 			<header className="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
-				<div className="container mx-auto px-4 py-4 flex items-center justify-between">
+				<div className="container mx-auto px-4 py-4 flex items-center justify-between max-w-5xl">
 					<h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
 						<LayoutDashboard className="h-6 w-6 text-primary" />
-						Admin Portal
+						Super Admin Portal
 					</h1>
 					<div className="flex items-center gap-4">
 						<span className="hidden md:inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
-							Admin Access
+							Super Admin Access
 						</span>
 					</div>
 				</div>
 			</header>
 
-			<div className="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-6">
+			<div className="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-6 max-w-5xl">
 				{/* Sidebar Navigation */}
 				<aside className="w-full md:w-64 shrink-0">
 					<Card className="sticky top-24">
 						<CardContent className="p-0">
 							<nav className="flex flex-col md:flex-col gap-1 p-2">
 								<button
-									onClick={() => setActiveTab('dashboard')}
+									onClick={() => handleTabChange('dashboard')}
 									className={`flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors ${
 										activeTab === 'dashboard'
 											? 'bg-primary text-primary-foreground'
@@ -71,7 +82,7 @@ export default function SuperAdminPage() {
 									Dashboard
 								</button>
 								<button
-									onClick={() => setActiveTab('create')}
+									onClick={() => handleTabChange('create')}
 									className={`flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors ${
 										activeTab === 'create'
 											? 'bg-primary text-primary-foreground'
@@ -82,7 +93,7 @@ export default function SuperAdminPage() {
 									Create Admin
 								</button>
 								<button
-									onClick={() => setActiveTab('list')}
+									onClick={() => handleTabChange('list')}
 									className={`flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors ${
 										activeTab === 'list'
 											? 'bg-primary text-primary-foreground'
@@ -93,7 +104,9 @@ export default function SuperAdminPage() {
 									Admin List
 								</button>
 								<button
-									onClick={() => setActiveTab('submissions')}
+									onClick={() =>
+										handleTabChange('submissions')
+									}
 									className={`flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors ${
 										activeTab === 'submissions'
 											? 'bg-primary text-primary-foreground'
@@ -248,14 +261,16 @@ function DashboardCard({
 function ActivityItem({ title, description, time }: ActivityItemProps) {
 	return (
 		<div className="flex items-start gap-4 pb-4 border-b border-border last:border-0 last:pb-0">
-			<div className="h-2 w-2 mt-2 rounded-full bg-primary shrink-0" />
+			<div className="bg-primary/10 p-2 rounded-full">
+				<ClipboardList className="h-4 w-4 text-primary" />
+			</div>
 			<div className="flex-1">
 				<h4 className="text-sm font-medium">{title}</h4>
-				<p className="text-sm text-muted-foreground">{description}</p>
+				<p className="text-xs text-muted-foreground mt-1">
+					{description}
+				</p>
 			</div>
-			<div className="text-xs text-muted-foreground whitespace-nowrap">
-				{time}
-			</div>
+			<div className="text-xs text-muted-foreground">{time}</div>
 		</div>
 	);
 }
