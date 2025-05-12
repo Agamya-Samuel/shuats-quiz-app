@@ -11,10 +11,18 @@ export const registrationSchema = z
 		mobile: z.string().regex(/^[0-9]{10}$/, {
 			message: 'Please enter a valid 10-digit mobile number.',
 		}),
-		rollNo: z.string().nonempty('Roll number field cannot be empty.'),
-		schoolName: z.string().nonempty('School name field cannot be empty.'),
+		rollno: z.string().nonempty('Roll number field cannot be empty.'),
+		school: z.string().nonempty('School name field cannot be empty.'),
 		branch: z.string().nonempty('Branch field cannot be empty.'),
-		address: z.string().nonempty('Address field cannot be empty.'),
+		// Address fields
+		country: z.string().nonempty('Country field cannot be empty.'),
+		address1: z.string().nonempty('Address line 1 cannot be empty.'),
+		address2: z.string().optional(),
+		area: z.string().nonempty('Area field cannot be empty.'),
+		city: z.string().nonempty('City field cannot be empty.'),
+		pincode: z.string().nonempty('Pincode field cannot be empty.'),
+		state: z.string().nonempty('State field cannot be empty.'),
+		// Password fields
 		password: z
 			.string()
 			.min(8, 'Password must be at least 8 characters long'),
