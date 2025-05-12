@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { campusTourVideo } from '@/public/images/index.js';
 
 const VideoFrame = () => {
@@ -7,6 +7,18 @@ const VideoFrame = () => {
   const [muted, setMuted] = useState(false); // Not muted by default
   const [playing, setPlaying] = useState(true);
   const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    // Try to play the video on mount if not muted
+    if (videoRef.current && !muted) {
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay with sound may be blocked by browser
+        });
+      }
+    }
+  }, [muted]);
 
   const handleMicClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent play/pause toggle
