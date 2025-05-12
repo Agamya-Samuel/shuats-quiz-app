@@ -22,7 +22,6 @@ export default function Academics() {
 		'M.Tech. Renewable Energy Engineering',
 		'M.Tech. Water Resource Engineering',
 		'M.Tech. Computer Science and Engineering (Data Science)',
-		'M.Tech. Remote Sensing and Geographical Information System',
 		'M.Tech. Computer Science and Engineering',
 		'M.Tech Food Process Engineering',
 		'M.Tech. Food Processing Technology',
