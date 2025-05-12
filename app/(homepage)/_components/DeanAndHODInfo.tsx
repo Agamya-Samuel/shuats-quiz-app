@@ -34,7 +34,7 @@ export default function DeanAndHODInfo() {
               SHUATS, Naini, Prayagraj (Formerly Allahabad) -211007<br />U.P. (INDIA)
             </div>
             <div className="flex items-center gap-4 mb-2 text-green-700 text-base">
-              <Phone className="w-5 h-5 inline-block mr-1" /> 9452248375
+              <Phone className="w-5 h-5 inline-block mr-1" /> +919452248375
             </div>
             <div className="flex items-center gap-2 text-green-700 text-base">
               <Mail className="w-5 h-5 inline-block mr-1" /> jeberson_w@shuats.edu.in
