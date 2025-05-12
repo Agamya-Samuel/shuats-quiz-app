@@ -32,7 +32,7 @@ export interface UpdateUserData {
 }
 
 export interface ForgotPasswordData {
-	id: number;
+	userId: number;
 	email: string;
 	purpose: 'password-reset';
 	role: 'user';
