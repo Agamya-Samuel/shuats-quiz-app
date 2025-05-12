@@ -16,5 +16,5 @@ export const maintainerLoginSchema = z.object({
 });
 
 export const superAdminLoginSchema = z.object({
-	password: z.string().nonempty('Password field cannot be empty.'),
+	username: z.string().nonempty('Username field cannot be empty.'),
 });
