@@ -20,6 +20,13 @@ export async function middleware(request: NextRequest) {
 	if (!token && !isPublicPath) {
 		const path = request.nextUrl.pathname;
 
+		// if path is user, redirect to user login
+		if (request.nextUrl.pathname.startsWith('/user')) {
+			return NextResponse.redirect(
+				new URL(`/login?redirect=${path}`, request.url)
+			);
+		}
+
 		// if path is admin, redirect to admin login
 		if (request.nextUrl.pathname.startsWith('/admin')) {
 			return NextResponse.redirect(
@@ -33,27 +40,41 @@ export async function middleware(request: NextRequest) {
 				new URL(`/super-admin/login?redirect=${path}`, request.url)
 			);
 		}
-
-		// if path is user, redirect to user login
-		if (request.nextUrl.pathname.startsWith('/user')) {
-			return NextResponse.redirect(
-				new URL(`/login?redirect=${path}`, request.url)
-			);
-		}
 	}
 
 	if (token) {
 		const payload = await verifyToken(token);
 
-		// Protect admin/maintainer routes
+		// Protect user routes
+		if (
+			request.nextUrl.pathname.startsWith('/user') &&
+			payload?.role !== 'user' &&
+			request.nextUrl.pathname !== '/user/login'
+		) {
+			return NextResponse.redirect(new URL('/login', request.url));
+		}
+
+		// Protect admin routes
 		if (
 			request.nextUrl.pathname.startsWith('/admin') &&
-			payload?.role !== 'maintainer' &&
+			payload?.role !== 'admin' &&
 			request.nextUrl.pathname !== '/admin/login'
 		) {
 			return NextResponse.redirect(new URL('/admin/login', request.url));
 		}
 
+		// Protect super admin routes
+		if (
+			request.nextUrl.pathname.startsWith('/super-admin') &&
+			payload?.role !== 'superadmin' &&
+			request.nextUrl.pathname !== '/super-admin/login'
+		) {
+			return NextResponse.redirect(
+				new URL('/super-admin/login', request.url)
+			);
+		}
+
+		// if token is not present and path is not public, => redirect to login
 		if (!payload && !isPublicPath) {
 			const response = NextResponse.redirect(
 				new URL('/login', request.url)
