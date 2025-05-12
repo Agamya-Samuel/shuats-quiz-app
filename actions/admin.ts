@@ -13,10 +13,10 @@ const THIRTY_DAYS = 60 * 60 * 24 * 30;
 
 // Create a new admin account
 export const createAdmin = async ({
-	email,
+	username,
 	password,
 }: {
-	email: string;
+	username: string;
 	password: string;
 }) => {
 	try {
@@ -25,7 +25,7 @@ export const createAdmin = async ({
 
 		// Check if admin already exists
 		const existingAdmin = await db.query.admins.findFirst({
-			where: eq(admins.email, email),
+			where: eq(admins.username, username),
 		});
 
 		if (existingAdmin) {
@@ -42,7 +42,7 @@ export const createAdmin = async ({
 
 		// Insert new admin
 		await db.insert(admins).values({
-			email,
+			username,
 			password: hashedPassword,
 		});
 
@@ -66,7 +66,7 @@ export const getAdmins = async () => {
 		const adminsList = await db.query.admins.findMany({
 			columns: {
 				id: true,
-				email: true,
+				username: true,
 				createdAt: true,
 				updatedAt: true,
 			},
@@ -84,10 +84,10 @@ export const getAdmins = async () => {
 
 // Admin login
 export async function loginAdmin({
-	email,
+	username,
 	password,
 }: {
-	email: string;
+	username: string;
 	password: string;
 }) {
 	try {
@@ -96,7 +96,7 @@ export async function loginAdmin({
 
 		// Find admin by email
 		const admin = await db.query.admins.findFirst({
-			where: eq(admins.email, email),
+			where: eq(admins.username, username),
 		});
 
 		if (!admin) {
@@ -118,7 +118,7 @@ export async function loginAdmin({
 		// Create JWT payload
 		const payload: AdminJwtPayload = {
 			userId: admin.id,
-			email: admin.email,
+			username: admin.username,
 			role: 'admin',
 		};
 

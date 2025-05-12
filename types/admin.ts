@@ -1,10 +1,10 @@
 export interface Admin {
-	email: string;
+	username: string;
 	password: string;
 }
 
 export interface AdminJwtPayload {
 	userId: number;
-	email: string;
+	username: string;
 	role: 'admin';
 }
