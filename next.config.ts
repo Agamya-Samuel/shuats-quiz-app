@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
 				port: '',
 				pathname: '/catalogue-pics/**',
 			},
+			{
+				protocol: 'https',
+				hostname: 'cdn-shuatsquiz.agamya.dev',
+				port: '',
+				pathname: '/faculty-pics/**',
+			},
 		],
 	},
 	// Add webpack configuration to handle markdown files
