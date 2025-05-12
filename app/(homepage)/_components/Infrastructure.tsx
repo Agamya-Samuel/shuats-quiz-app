@@ -5,7 +5,7 @@ export default function Infrastructure() {
 	const stats = [
 		{
 			title: 'Campus Area',
-			value: '50',
+			value: '1020',
 			unit: 'Acres',
 			color: 'text-blue-600',
 			width: '100%',

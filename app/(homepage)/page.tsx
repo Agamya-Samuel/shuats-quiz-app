@@ -7,10 +7,11 @@ import Academics from '@/app/(homepage)/_components/Academics';
 import CampusLife from '@/app/(homepage)/_components/CampusLife';
 import Infrastructure from '@/app/(homepage)/_components/Infrastructure';
 import Gallery from '@/app/(homepage)/_components/Gallery';
-import Testimonials from '@/app/(homepage)/_components/Testimonials';
+import DeanAndHODInfo from '@/app/(homepage)/_components/DeanAndHODInfo';
 import Contact from '@/app/(homepage)/_components/Contact';
 import Footer from '@/app/(homepage)/_components/Footer';
 import TakeQuiz from '@/app/(homepage)/_components/TakeQuiz';
+import VideoFrame from '@/app/(homepage)/_components/VideoFrame';
 
 export default function Home() {
 	return (
@@ -19,12 +20,13 @@ export default function Home() {
 			<main className="flex-1">
 				<Hero />
 				<TakeQuiz />
+				<VideoFrame />
 				<Facilities />
 				<Academics />
 				<CampusLife />
 				<Infrastructure />
 				<Gallery />
-				<Testimonials />
+				<DeanAndHODInfo />
 				<Contact />
 			</main>
 			<Footer />
