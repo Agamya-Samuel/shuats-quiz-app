@@ -37,3 +37,10 @@ export interface ForgotPasswordData {
 	purpose: 'password-reset';
 	role: 'user';
 }
+
+export interface ISubmission {
+	userId: number;
+	questionId: number;
+	selectedOption: string;
+	correctOption: string;	
+}
