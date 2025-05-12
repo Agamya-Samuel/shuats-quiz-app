@@ -1,4 +1,4 @@
-// app/(auth)/login/page.tsx
+// app/admin/login/page.tsx
 'use client';
 
 import { useSearchParams } from 'next/navigation';
