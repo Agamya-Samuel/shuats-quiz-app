@@ -6,7 +6,12 @@
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate --config=./drizzle.config.ts",
+    "db:migrate": "drizzle-kit migrate --config=./drizzle.config.ts",
+    "db:push": "drizzle-kit push --config=./drizzle.config.ts",
+    "db:studio": "drizzle-kit studio --config=./drizzle.config.ts",
+    "db:setup": "ts-node -r tsconfig-paths/register scripts/setup-db.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
