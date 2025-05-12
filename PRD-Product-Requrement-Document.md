@@ -202,12 +202,13 @@ and recommending them appropriate courses,
 
 <!-- For Agamya -->
 
-- Add DAO to all actions, specially to quiz submit action and all admin actions.
-- Add DB Index to
+- [ ] Make the First Prize Bigger pop out more than other prizes.
+- [ ] Add DAL (Data Access Layer) to all actions, specially to quiz submit action and all admin actions.
+- [ ] Add DB Index to
 	- [ ] questions.text
 	- [ ] questions.subject
-- Add logging (saves to db) to all actions
-- Kubernetes for Auto Scaling ? minimum 2 instance, maximum 5 instances
-	- Load Balancer
-- Add Analytics to the app using Google Analytics, Mixpanel or Amplitude
-- in shuatsquiz add: a dashboard to start-end quiz, and emergency section in case of load too much and other such cases.
+- [ ] Add logging (saves to db) to all actions
+- [ ] Kubernetes for Auto Scaling ? minimum 2 instance, maximum 5 instances
+	- [ ] Load Balancer
+- [ ] Add Analytics to the app using Google Analytics, Mixpanel or Amplitude
+- [ ] in shuatsquiz add: a dashboard to start-end quiz, and emergency section in case of load too much and other such cases.
