@@ -1,6 +1,4 @@
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { FacebookIcon, Twitter, Linkedin, Instagram } from 'lucide-react';
 
 export default function Footer() {
 	return (
@@ -14,10 +12,10 @@ export default function Footer() {
 							Empowering minds through quality education and world-class facilities.
 						</p>
 						<div className="flex space-x-4 mt-2">
-							<a href="#" className="text-gray-400 hover:text-white transition-colors"><Facebook className="w-6 h-6" /></a>
-							<a href="#" className="text-gray-400 hover:text-white transition-colors"><Twitter className="w-6 h-6" /></a>
-							<a href="#" className="text-gray-400 hover:text-white transition-colors"><Linkedin className="w-6 h-6" /></a>
-							<a href="#" className="text-gray-400 hover:text-white transition-colors"><Instagram className="w-6 h-6" /></a>
+							<a href="https://www.facebook.com/shuats.allahabad" className="text-gray-400 hover:text-white transition-colors"><FacebookIcon className="w-6 h-6" /></a>
+							<a href="https://x.com/shuats_edu" className="text-gray-400 hover:text-white transition-colors"><Twitter className="w-6 h-6" /></a>
+							<a href="https://www.linkedin.com/school/shuats-edu/posts/?feedView=all" className="text-gray-400 hover:text-white transition-colors"><Linkedin className="w-6 h-6" /></a>
+							<a href="https://www.instagram.com/shuats_edu/" className="text-gray-400 hover:text-white transition-colors"><Instagram className="w-6 h-6" /></a>
 						</div>
 					</div>
 
