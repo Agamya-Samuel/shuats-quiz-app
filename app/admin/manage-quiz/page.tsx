@@ -1,26 +1,39 @@
 'use client';
-import { QuestionForm } from '@/app/admin/manage-quiz/_components/question-form';
-import { QuestionList } from '@/app/admin/manage-quiz/_components/question-list';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { Suspense } from 'react';
-import LoadingState from '@/components/loading-component';
-import { Button } from '@/components/ui/button';
-import { LogOut } from 'lucide-react';
-import { logout } from '@/actions/logout';
-import { useToast } from '@/hooks/use-toast';
 
-// Separate the main content into a client component
-function QuizContent() {
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import { logout } from '@/actions/logout';
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+	CardDescription,
+} from '@/components/ui/card';
+import { QuestionForm } from './_components/question-form';
+import { EnhancedQuestionList } from './_components/enhanced-question-list';
+import { QuizDashboard } from './_components/quiz-dashboard';
+import {
+	LayoutDashboard,
+	PlusCircle,
+	ListChecks,
+	LogOut,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+export default function ManageQuizPage() {
+	const defaultTab = 'dashboard';
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const { toast } = useToast();
-	const defaultTab = searchParams.get('tab') || 'add';
 
-	const handleTabChange = (value: string) => {
-		const params = new URLSearchParams(searchParams);
-		params.set('tab', value);
-		router.push(`?${params.toString()}`);
+	// Get active tab directly from URL params or use default
+	const activeTab = searchParams.get('tab') || defaultTab;
+
+	// Update URL when tab changes
+	const handleTabChange = (tab: string) => {
+		// Update URL without refreshing the page
+		router.push(`/admin/manage-quiz?tab=${tab}`, { scroll: false });
 	};
 
 	const handleLogout = async () => {
@@ -32,7 +45,7 @@ function QuizContent() {
 				variant: 'success',
 			});
 			router.push('/admin/login');
-			router.refresh(); // Refresh to update cookie context
+			router.refresh();
 		} catch (err) {
 			console.error('Logout error:', err);
 			toast({
@@ -44,53 +57,108 @@ function QuizContent() {
 	};
 
 	return (
-		<div className="container mx-auto py-8">
-			<div className="mb-8 flex justify-between items-center">
-				<div>
-					<h1 className="text-3xl font-bold tracking-tight">
-						Quiz Management
-					</h1>
-					<p className="text-muted-foreground">
-						Create and manage quiz questions.
-					</p>
-				</div>
-				<Button
-					variant="destructive"
-					size="lg"
-					onClick={handleLogout}
-					className="text-md"
-				>
-					<LogOut className="h-5 w-5" />
-					<span className="ml-2 hidden sm:block">Logout</span>
-				</Button>
-			</div>
-			<Tabs
-				defaultValue={defaultTab}
-				onValueChange={handleTabChange}
-				className="space-y-4"
-			>
-				<TabsList>
-					<TabsTrigger value="add">Add Question</TabsTrigger>
-					<TabsTrigger value="list">Question List</TabsTrigger>
-				</TabsList>
-				<TabsContent value="add" className="space-y-4">
-					<div className="grid gap-6">
-						<QuestionForm />
+		<div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+			{/* Header */}
+			<header className="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+				<div className="container mx-auto px-4 py-4 flex items-center justify-between max-w-5xl">
+					<div className="flex items-center gap-3">
+						<h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+							<LayoutDashboard className="h-6 w-6 text-primary" />
+							Manage Quiz
+						</h1>
 					</div>
-				</TabsContent>
-				<TabsContent value="list" className="space-y-4">
-					<QuestionList />
-				</TabsContent>
-			</Tabs>
-		</div>
-	);
-}
+					<div className="flex items-center gap-4">
+						<Button
+							variant="destructive"
+							size="sm"
+							onClick={handleLogout}
+							className="flex items-center gap-2"
+						>
+							<LogOut className="h-4 w-4" />
+							<span className="hidden md:inline">Logout</span>
+						</Button>
+					</div>
+				</div>
+			</header>
 
-// Main page component with Suspense boundary
-export default function QuizAdminPage() {
-	return (
-		<Suspense fallback={<LoadingState />}>
-			<QuizContent />
-		</Suspense>
+			<div className="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-6 max-w-5xl">
+				{/* Sidebar Navigation */}
+				<aside className="w-full md:w-64 shrink-0">
+					<Card className="sticky top-24">
+						<CardContent className="p-0">
+							<nav className="flex flex-col md:flex-col gap-1 p-2">
+								<button
+									onClick={() => handleTabChange('dashboard')}
+									className={`flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors ${
+										activeTab === 'dashboard'
+											? 'bg-primary text-primary-foreground'
+											: 'hover:bg-muted'
+									}`}
+								>
+									<LayoutDashboard className="h-5 w-5" />
+									Dashboard
+								</button>
+								<button
+									onClick={() => handleTabChange('create')}
+									className={`flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors ${
+										activeTab === 'create'
+											? 'bg-primary text-primary-foreground'
+											: 'hover:bg-muted'
+									}`}
+								>
+									<PlusCircle className="h-5 w-5" />
+									Add Question
+								</button>
+								<button
+									onClick={() => handleTabChange('list')}
+									className={`flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors ${
+										activeTab === 'list'
+											? 'bg-primary text-primary-foreground'
+											: 'hover:bg-muted'
+									}`}
+								>
+									<ListChecks className="h-5 w-5" />
+									Question List
+								</button>
+							</nav>
+						</CardContent>
+					</Card>
+				</aside>
+
+				{/* Main Content */}
+				<main className="flex-1">
+					{activeTab === 'dashboard' && <QuizDashboard />}
+
+					{activeTab === 'create' && (
+						<Card>
+							<CardHeader>
+								<CardTitle>Add New Question</CardTitle>
+								<CardDescription>
+									Create a new question for the quiz database
+								</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<QuestionForm />
+							</CardContent>
+						</Card>
+					)}
+
+					{activeTab === 'list' && (
+						<Card>
+							<CardHeader>
+								<CardTitle>Question Database</CardTitle>
+								<CardDescription>
+									View and manage all questions in the
+									database
+								</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<EnhancedQuestionList />
+							</CardContent>
+						</Card>
+					)}
+				</main>
+			</div>
+		</div>
 	);
 }
