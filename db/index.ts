@@ -1,32 +1,47 @@
-// import { Db, MongoClient } from 'mongodb';
-import mongoose from 'mongoose';
+import { Pool } from 'pg';
+import { db } from './query';
+import { runMigrations } from './migrate';
 
-type ConnectionObject = {
-	isConnected?: number;
-};
+// Connection singleton
+let connectionPool: Pool | null = null;
 
-const connection: ConnectionObject = {};
-
-export async function connectToDB(): Promise<void> {
-	// Check if we have a connection to the database or if it's currently connecting
-	if (connection.isConnected) {
-		if (process.env.NODE_ENV === 'development') {
-			console.log('Using cached database connection...');
+export function getConnectionPool(): Pool {
+	if (!connectionPool) {
+		if (!process.env.DATABASE_URL) {
+			throw new Error('DATABASE_URL environment variable is not defined');
 		}
-		return;
+
+		connectionPool = new Pool({
+			connectionString: process.env.DATABASE_URL,
+		});
+
+		if (process.env.NODE_ENV === 'development') {
+			console.log('Database connection pool created');
+		}
 	}
 
-	if (!process.env.MONGODB_URI) {
-		throw new Error('MONGODB_URI environment variable is not defined');
-	}
+	return connectionPool;
+}
 
+// Re-export db and schema from query.ts
+export * from './query';
+
+export async function connectToDB(): Promise<typeof db> {
 	try {
-		// Attempt to connect to the database
-		const db = await mongoose.connect(process.env.MONGODB_URI || '', {});
+		// Test the connection
+		const pool = getConnectionPool();
+		await pool.query('SELECT NOW()');
 
-		// Store the connection state
-		connection.isConnected = db.connections[0].readyState;
-		console.log('Database connected successfully');
+		if (process.env.NODE_ENV === 'development') {
+			console.log('Database connected successfully');
+		}
+
+		// Run migrations to ensure the database schema is up to date
+		await runMigrations();
+
+		// Import db from query to ensure it's initialized
+		const { db } = await import('./query');
+		return db;
 	} catch (error) {
 		console.error('Database connection failed:', error);
 
