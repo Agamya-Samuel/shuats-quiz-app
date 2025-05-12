@@ -18,14 +18,50 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+// Define type for the API response
+interface ApiQuestion {
+	id: number;
+	text?: string;
+	question?: string;
+	subject: string;
+	topic?: string;
+	difficulty?: 'easy' | 'medium' | 'hard';
+	options: {
+		id: string;
+		text: string;
+	}[];
+	correctOptionId?: string | null;
+	explanation?: string;
+}
+
+// Interface for our internal use that matches all component requirements
 interface IQuestion {
 	id: string;
 	question: string;
+	text: string;
 	subject: string;
 	topic: string;
 	difficulty: 'easy' | 'medium' | 'hard';
 	options: { id: string; text: string; isCorrect: boolean }[];
+	correctOptionId: string | null;
 	explanation?: string;
+}
+
+// Type for the ViewDialog component props
+interface ViewQuestion {
+	text: string;
+	options: { id: string; text: string }[];
+	correctOptionId: string | null;
+	subject?: string;
+}
+
+// Type for the EditDialog component props
+interface EditQuestion {
+	id: number;
+	text: string;
+	options: { id: string; text: string }[];
+	correctOptionId: string | null;
+	subject: string;
 }
 
 export function EnhancedQuestionList() {
@@ -47,20 +83,22 @@ export function EnhancedQuestionList() {
 			const response = await getAllQuestionsWithAnswers();
 			if (response.success && Array.isArray(response.questions)) {
 				// Transform the questions to match our interface
-				const formattedQuestions = response.questions.map((q: any) => ({
+				const formattedQuestions = response.questions.map((q: ApiQuestion) => ({
 					id: q.id.toString(),
-					question: q.text || q.question,
+					question: q.text || q.question || '',
+					text: q.text || q.question || '',
 					subject: q.subject || 'General',
 					topic: q.topic || 'General',
 					difficulty: q.difficulty || 'medium',
 					options: Array.isArray(q.options)
-						? q.options.map((opt: any) => ({
+						? q.options.map((opt) => ({
 								id: opt.id?.toString() || '',
 								text: opt.text || '',
 								isCorrect:
 									opt.id?.toString() === q.correctOptionId,
 						  }))
 						: [],
+					correctOptionId: q.correctOptionId || null,
 					explanation: q.explanation || '',
 				}));
 
@@ -103,15 +141,15 @@ export function EnhancedQuestionList() {
 		setDeleteDialogOpen(true);
 	};
 
-	const handleQuestionUpdated = () => {
-		fetchQuestions();
-		setEditDialogOpen(false);
-	};
+	// const handleQuestionUpdated = () => {
+	// 	fetchQuestions();
+	// 	setEditDialogOpen(false);
+	// };
 
-	const handleQuestionDeleted = () => {
-		fetchQuestions();
-		setDeleteDialogOpen(false);
-	};
+	// const handleQuestionDeleted = () => {
+	// 	fetchQuestions();
+	// 	setDeleteDialogOpen(false);
+	// };
 
 	// Get unique subjects for filter
 	const subjects = Array.from(
@@ -315,21 +353,60 @@ export function EnhancedQuestionList() {
 			{selectedQuestion && (
 				<>
 					<ViewDialog
-						open={viewDialogOpen}
+						isOpen={viewDialogOpen}
 						onOpenChange={setViewDialogOpen}
-						question={selectedQuestion}
+						question={selectedQuestion as unknown as ViewQuestion}
 					/>
 					<EditDialog
-						open={editDialogOpen}
+						isOpen={editDialogOpen}
 						onOpenChange={setEditDialogOpen}
-						question={selectedQuestion}
-						onQuestionUpdated={handleQuestionUpdated}
+						question={{
+							...selectedQuestion,
+							id: parseInt(selectedQuestion.id)
+						} as EditQuestion}
+						setQuestions={(updatedQuestions) => {
+							// Transform the API questions to match our IQuestion interface
+							const formattedQuestions = updatedQuestions.map((q) => ({
+								id: q.id.toString(),
+								question: q.text,
+								text: q.text,
+								subject: q.subject,
+								topic: 'General', // Assuming this is not in the API response
+								difficulty: 'medium' as const, // Assuming this is not in the API response
+								options: q.options.map((opt) => ({
+									id: opt.id,
+									text: opt.text,
+									isCorrect: opt.id === q.correctOptionId
+								})),
+								correctOptionId: q.correctOptionId,
+								explanation: ''
+							}));
+							setQuestions(formattedQuestions);
+						}}
 					/>
 					<DeleteConfirmationDialog
-						open={deleteDialogOpen}
+						isOpen={deleteDialogOpen}
 						onOpenChange={setDeleteDialogOpen}
 						questionId={selectedQuestion.id}
-						onQuestionDeleted={handleQuestionDeleted}
+						setQuestions={(updatedQuestions) => {
+							// Transform the API questions to match our IQuestion interface
+							const formattedQuestions = updatedQuestions.map((q) => ({
+								id: q.id.toString(),
+								question: q.text,
+								text: q.text,
+								subject: q.subject,
+								topic: 'General', // Assuming this is not in the API response
+								difficulty: 'medium' as const, // Assuming this is not in the API response
+								options: q.options.map((opt) => ({
+									id: opt.id,
+									text: opt.text,
+									isCorrect: opt.id === q.correctOptionId
+								})),
+								correctOptionId: q.correctOptionId,
+								explanation: ''
+							}));
+							setQuestions(formattedQuestions);
+						}}
 					/>
 				</>
 			)}
