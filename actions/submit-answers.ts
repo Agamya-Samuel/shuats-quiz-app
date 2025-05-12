@@ -2,15 +2,15 @@
 
 'use server';
 
-import { connectToDB, db } from '@/db';
+import { connectToDB } from '@/db';
 import { userSubmissions } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
 import { and, eq } from 'drizzle-orm';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import * as dbSchema from '@/db/schema';
 
 // Record quiz start time for a user
 export async function recordQuizStartTime(userId: string, startTime?: Date) {
-	await connectToDB();
-
 	try {
 		// Use provided startTime or create a new one
 		const quizStartTime = startTime || new Date();
@@ -38,9 +38,10 @@ export async function submitAnswer(
 	questionId: number,
 	selectedOption: string // Now a string like "A", "B", "C", etc.
 ) {
-	await connectToDB();
-
 	try {
+		// Connect to the database
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+
 		// Check if answer exists
 		const existingAnswer = await db.query.userSubmissions.findFirst({
 			where: and(
@@ -83,9 +84,10 @@ export async function submitQuiz(
 	userId: number,
 	answers: { questionId: number; selectedOption: string }[]
 ) {
-	await connectToDB();
-
 	try {
+		// Connect to the database
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+
 		// Use Promise.all to submit all answers in parallel
 		await Promise.all(
 			answers.map(async ({ questionId, selectedOption }) => {
