@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { loginMaintainer } from '@/actions/login-maintainer';
+import { loginAdmin } from '@/actions/admin';
 
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,6 +22,15 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { LoadingSpinner } from '@/components/loading-spinner';
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
+import { User, Lock } from 'lucide-react';
 
 export function LoginForm({ redirect }: { redirect?: string }) {
 	const { toast } = useToast();
@@ -40,7 +49,10 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 		setIsLoading(true);
 
 		try {
-			const response = await loginMaintainer(values);
+			const response = await loginAdmin({
+				username: values.username,
+				password: values.password,
+			});
 
 			if (response.success) {
 				toast({
@@ -53,7 +65,7 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 				toast({
 					title: 'Login Failed',
 					description:
-						response.error || 'Invalid username or password.',
+						response.message || 'Invalid username or password.',
 					variant: 'destructive',
 				});
 			}
@@ -69,67 +81,101 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 		}
 	}
 
+	// Helper function to render form field with icon
+	const renderField = (
+		name: keyof z.infer<typeof maintainerLoginSchema>,
+		label: string,
+		placeholder: string,
+		icon: React.ReactNode,
+		type = 'text',
+		autoComplete = ''
+	) => (
+		<FormField
+			control={form.control}
+			name={name}
+			render={({ field }) => (
+				<FormItem>
+					<FormLabel>{label}</FormLabel>
+					<FormControl>
+						<div className="relative">
+							<div className="absolute left-3 top-3 text-muted-foreground">
+								{icon}
+							</div>
+							<Input
+								placeholder={placeholder}
+								className="pl-10"
+								type={type}
+								autoComplete={autoComplete}
+								{...field}
+							/>
+						</div>
+					</FormControl>
+					<FormMessage />
+				</FormItem>
+			)}
+		/>
+	);
+
 	return (
 		<div className="container mx-auto px-4 py-8">
-			<div className="max-w-md mx-auto">
-				<h1 className="text-2xl font-bold mb-6">Admin Login</h1>
-				<Form {...form}>
-					<form
-						onSubmit={form.handleSubmit(onSubmit)}
-						className="space-y-1"
-					>
-						<FormField
-							control={form.control}
-							name="username"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Username</FormLabel>
-									<FormControl>
-										<Input
-											placeholder="Enter your username"
-											autoComplete="username"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="password"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Password</FormLabel>
-									<FormControl>
-										<Input
-											type="password"
-											placeholder="Enter your password"
-											autoComplete="current-password"
-											{...field}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<Button
-							type="submit"
-							className="w-full"
-							disabled={isLoading}
+			<Card className="max-w-md mx-auto shadow-lg">
+				<CardHeader className="text-center">
+					<CardTitle className="text-2xl font-bold">
+						Admin Login
+					</CardTitle>
+					<CardDescription>
+						Sign in to manage quizzes and students
+					</CardDescription>
+				</CardHeader>
+
+				<CardContent>
+					<Form {...form}>
+						<form
+							onSubmit={form.handleSubmit(onSubmit)}
+							className="space-y-4"
 						>
-							{isLoading ? (
-								<>
-									<span>Logging in</span>
-									<LoadingSpinner />
-								</>
-							) : (
-								'Login'
+							{renderField(
+								'username',
+								'Username',
+								'Enter your username',
+								<User className="h-4 w-4" />,
+								'text',
+								'username'
 							)}
-						</Button>
-					</form>
-				</Form>
-			</div>
+
+							{renderField(
+								'password',
+								'Password',
+								'Enter your password',
+								<Lock className="h-4 w-4" />,
+								'password',
+								'current-password'
+							)}
+
+							<Button
+								type="submit"
+								className="w-full mt-6"
+								disabled={isLoading}
+							>
+								{isLoading ? (
+									<>
+										<span>Logging in</span>
+										<LoadingSpinner />
+									</>
+								) : (
+									'Login'
+								)}
+							</Button>
+						</form>
+					</Form>
+				</CardContent>
+
+				<CardFooter className="flex flex-col items-center justify-center pt-2 pb-6">
+					<p className="text-xs text-muted-foreground mt-2">
+						This login is restricted to quiz administrators only
+					</p>
+				</CardFooter>
+			</Card>
 		</div>
 	);
 }
