@@ -1,6 +1,8 @@
 // import jwt from 'jsonwebtoken';
 import * as jose from 'jose';
-import { UserJwtPayload } from '@/types/auth';
+import { UserJwtPayload, ForgotPasswordData } from '@/types/user';
+import { AdminJwtPayload } from '@/types/admin';
+import { SuperAdminJwtPayload } from '@/types/superadmin';
 
 // Use a strong secret key
 const JWT_SECRET = new TextEncoder().encode(
@@ -16,7 +18,13 @@ const THIRTY_DAYS = 60 * 60 * 24 * 30;
 // 	});
 // }
 
-export async function generateToken(payload: UserJwtPayload): Promise<string> {
+export async function generateToken(
+	payload:
+		| UserJwtPayload
+		| AdminJwtPayload
+		| SuperAdminJwtPayload
+		| ForgotPasswordData
+): Promise<string> {
 	try {
 		// Convert UserJwtPayload to a regular object to satisfy JWTPayload type
 		const jwtPayload = { ...payload } as jose.JWTPayload;
@@ -36,10 +44,20 @@ export async function generateToken(payload: UserJwtPayload): Promise<string> {
 
 export async function verifyToken(
 	token: string
-): Promise<UserJwtPayload | null> {
+): Promise<
+	| UserJwtPayload
+	| AdminJwtPayload
+	| SuperAdminJwtPayload
+	| ForgotPasswordData
+	| null
+> {
 	try {
 		const { payload } = await jose.jwtVerify(token, JWT_SECRET);
-		return payload as unknown as UserJwtPayload;
+		return payload as unknown as
+			| UserJwtPayload
+			| AdminJwtPayload
+			| SuperAdminJwtPayload
+			| ForgotPasswordData;
 	} catch (error) {
 		// Only log the error type and message, not the full error object
 		console.error(
