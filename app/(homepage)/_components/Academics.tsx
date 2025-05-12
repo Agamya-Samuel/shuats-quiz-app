@@ -5,27 +5,13 @@ export default function Academics() {
 	const undergraduatePrograms = [
 		'Bachelor of Computer Application',
 		'B.Sc. Computer Science',
-		'B.Tech. (Agricultural Engineering)',
 		'B.Tech. Computer Science and Engineering',
-		'B.Tech. (Food Technology)',
 	];
 
 	const postgraduatePrograms = [
 		'Master of Computer Application',
-		'M.Tech. Processing and Food Engineering',
-		'M.Tech. Farm Machinery and Power Engineering',
-		'M.Tech. Irrigation and Drainage Engineering',
-		'M.Tech. Soil and Water Conservation Engineering',
-		'M.Tech. Agricultural Water Management',
-		'M.Tech. Energy Management',
-		'M.Tech. Renewable Energy Engineering',
-		'M.Tech. Water Resource Engineering',
 		'M.Tech. Computer Science and Engineering (Data Science)',
 		'M.Tech. Computer Science and Engineering',
-		'M.Tech Food Process Engineering',
-		'M.Tech. Food Processing Technology',
-		'M.Tech. (Food Technology) Food Plant Operation Management',
-		'M.Tech. Food Safety and Quality',
 	];
 
 	const academicFeatures = [
