@@ -13,8 +13,9 @@ interface ViewDialogProps {
 	onOpenChange: (isOpen: boolean) => void;
 	question: {
 		text: string;
-		options: { id: number; text: string }[];
-		correctOptionId: number | null;
+		options: { id: string; text: string }[];
+		correctOptionId: string | null;
+		subject?: string;
 	} | null;
 }
 
@@ -47,7 +48,7 @@ export function ViewDialog({
 							<h4 className="font-medium">Correct Answer:</h4>
 							<Badge>
 								{question.correctOptionId !== null
-									? question.correctOptionId.toString()
+									? question.correctOptionId
 									: 'Not set'}
 							</Badge>
 						</div>
