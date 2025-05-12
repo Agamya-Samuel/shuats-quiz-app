@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { resetPassword } from '@/actions/reset-password';
+import { resetPassword } from '@/actions/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
 import * as z from 'zod';
@@ -177,7 +177,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
 				toast({
 					title: 'Error',
 					description:
-						response.error ||
+						response.message ||
 						'Something went wrong. Please try again.',
 					variant: 'destructive',
 				});
