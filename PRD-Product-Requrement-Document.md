@@ -202,9 +202,15 @@ and recommending them appropriate courses,
 
 <!-- For Agamya -->
 
-- [ ] Make the First Prize Bigger pop out more than other prizes.
-- [ ] Add guidlines for Exam Rules, Question Format, Syllabus, Scoring Criteria (preferece order of subjects, time taken to complete the quiz, etc.)
+#### Important
 - [ ] Add DAL (Data Access Layer) to all actions, specially to quiz submit action and all admin actions.
+- [ ] After Registering, login user, redirect to dashboard and ask for document upload.
+- [ ] Add guidlines for Exam Rules, Question Format, Syllabus, Scoring Criteria (preferece order of subjects, time taken to complete the quiz, etc.)
+- [ ] Profile photo upload during registration.
+- [ ] Add S3 bucket support to upload documents and profile photo.
+
+#### Medium Priority
+- [ ] Make the First Prize Bigger pop out more than other prizes.
 - [ ] Fix `contexts\cookie-context.tsx` types/interface for `user` cookie.
 - [ ] Add DB Index to
 	- [ ] questions.text
