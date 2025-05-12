@@ -12,7 +12,6 @@ export default function Academics() {
 
 	const postgraduatePrograms = [
 		'Master of Computer Application',
-		'M.Sc. Remote Sensing and Geographical Information System',
 		'M.Tech. Processing and Food Engineering',
 		'M.Tech. Farm Machinery and Power Engineering',
 		'M.Tech. Irrigation and Drainage Engineering',
