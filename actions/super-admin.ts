@@ -3,10 +3,12 @@
 import { generateToken } from '@/lib/auth';
 import { setCookie } from '@/lib/cookies';
 import { SuperAdminJwtPayload } from '@/types/superadmin';
-import { db } from '@/db';
+import { connectToDB } from '@/db';
 import { users, userSubmissions } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import * as dbSchema from '@/db/schema';
 
 const THIRTY_DAYS = 60 * 60 * 24 * 30;
 
@@ -56,6 +58,9 @@ export async function resetUserSubmissions(userEmail: string) {
 				message: 'Email is required to reset user submissions',
 			};
 		}
+
+		// Connect to the database
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		// Find the user by email
 		const user = await db.query.users.findFirst({
