@@ -4,13 +4,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { getAllQuestions } from '@/actions/question';
+import { getAllQuestions } from '@/actions/quiz';
 import {
 	submitAnswer,
 	submitQuiz,
 	recordQuizStartTime,
 } from '@/actions/submit-answers';
-import { getQuizResults } from '@/actions/question';
+import { getQuizResults } from '@/actions/quiz';
 import Legend from './legend';
 import QuizQuestionView from './quiz-question-view';
 import { cn } from '@/lib/utils';
@@ -33,13 +33,15 @@ import { useAntiCheat, safeExitFullscreen } from '@/hooks/use-anti-cheat';
 
 // Types
 export interface Option {
-	id: number;
+	id: string; // Using string to match database schema
 	text: string;
 }
 
 export interface Question {
-	_id: string;
+	id: number; // Use ID from database schema
+	_id?: string; // Keep for backward compatibility with components
 	text: string;
+	question?: string; // Add this for compatibility with API responses
 	options: Option[];
 	subject: string;
 	status:
@@ -51,18 +53,19 @@ export interface Question {
 	userAnswer?: string;
 }
 
-// Interface for stored answers
+// Interface for stored answers - keep string keys for compatibility with child components
 export interface StoredAnswer {
 	questionId: string;
-	selectedOptionId: number;
+	selectedOptionId: string;
 	answerText: string; // Keep text for UI display
 }
 
-export const OptionsMapping: Record<number, string> = {
-	1: 'A',
-	2: 'B',
-	3: 'C',
-	4: 'D',
+// Define mapping from option IDs to display letters
+export const OptionsMapping: Record<string, string> = {
+	'1': 'A',
+	'2': 'B',
+	'3': 'C',
+	'4': 'D',
 };
 
 // Error Component
@@ -104,7 +107,7 @@ export default function QuizInterface() {
 	const [selectedAnswer, setSelectedAnswer] = useState<string>('');
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [answers, setAnswers] = useState<Record<string, StoredAnswer>>({});
+	const [answers, setAnswers] = useState<Record<string, StoredAnswer>>({}); // Keep string keys for compatibility
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [hasAlreadyAttempted, setHasAlreadyAttempted] = useState(false);
 	const [isCheckingAttemptStatus, setIsCheckingAttemptStatus] =
@@ -123,7 +126,7 @@ export default function QuizInterface() {
 	const [isTimeUp, setIsTimeUp] = useState(false);
 
 	// Quiz start time state
-	const [quizStartTime, setQuizStartTime] = useState<Date | null>(null);
+	const [, setQuizStartTime] = useState<Date | null>(null);
 
 	// Anti-cheat state
 	const [quizStarted, setQuizStarted] = useState(false);
@@ -139,11 +142,13 @@ export default function QuizInterface() {
 			setIsCheckingAttemptStatus(true);
 
 			try {
-				const response = await getQuizResults(currentUser.userId);
+				const response = await getQuizResults(
+					Number(currentUser.userId)
+				);
 				if (
 					response.success &&
-					response.data &&
-					response.data.results.length > 0
+					response.results &&
+					response.results.questions.length > 0
 				) {
 					setHasAlreadyAttempted(true);
 					setShowSubjectSelector(false);
@@ -204,19 +209,18 @@ export default function QuizInterface() {
 			// Format answers for submission using stored optionIds
 			const formattedAnswers = Object.values(answers)
 				.map(({ questionId, selectedOptionId }) => ({
-					questionId,
-					selectedOptionId,
+					questionId: Number(questionId), // Convert to number for API
+					selectedOption: selectedOptionId,
 				}))
-				.filter((a) => a.selectedOptionId > 0);
+				.filter((a) => a.selectedOption);
 
 			if (!currentUser?.userId) {
 				throw new Error('You must be logged in to submit the quiz');
 			}
 
 			const result = await submitQuiz(
-				currentUser.userId,
-				formattedAnswers,
-				quizStartTime
+				Number(currentUser.userId),
+				formattedAnswers
 			);
 
 			if (result.success) {
@@ -287,7 +291,8 @@ export default function QuizInterface() {
 	useEffect(() => {
 		if (questions.length > 0 && Object.keys(answers).length > 0) {
 			const updatedQuestions = questions.map((q) => {
-				const savedAnswer = answers[q._id];
+				// Use _id for compatibility with how answers are stored
+				const savedAnswer = answers[String(q.id)];
 				if (savedAnswer) {
 					return {
 						...q,
@@ -374,13 +379,52 @@ export default function QuizInterface() {
 					return;
 				}
 
-				// Initialize question status
+				// Initialize question status and properly format data for our UI
 				const initializedQuestions = filteredQuestions.map(
-					(q, index) => ({
-						...q,
-						status: index === 0 ? 'not-answered' : 'not-visited',
-					})
-				) as Question[];
+					(q, index) => {
+						// Type assertion to handle the possibility that q might have either text or question property
+						const questionData = q as {
+							id: number;
+							text?: string;
+							question?: string;
+							options: Array<{
+								id?: string | number;
+								text?: string;
+								value?: string;
+							}>;
+							subject: string;
+						};
+
+						// Extract question from API response and format as needed
+						const formattedQuestion: Question = {
+							id: questionData.id,
+							_id: String(questionData.id), // Add _id for compatibility with components
+							text:
+								questionData.text ||
+								questionData.question ||
+								'',
+							question: questionData.question,
+							options: Array.isArray(questionData.options)
+								? questionData.options.map(
+										(opt: {
+											id?: string | number;
+											text?: string;
+											value?: string;
+										}) => ({
+											id: String(
+												opt.id || opt.value || ''
+											),
+											text: opt.text || opt.value || '',
+										})
+								  )
+								: [],
+							subject: questionData.subject || '',
+							status:
+								index === 0 ? 'not-answered' : 'not-visited',
+						};
+						return formattedQuestion;
+					}
+				);
 
 				setQuestions(initializedQuestions);
 			} else {
@@ -397,17 +441,17 @@ export default function QuizInterface() {
 	}, []);
 
 	// Handle answer selection
-	const handleAnswerSelect = async (optionId: number, optionText: string) => {
+	const handleAnswerSelect = async (optionId: string, optionText: string) => {
 		if (isSubmitting) return;
 
 		const currentQuestion = questions[currentQuestionIndex];
 		if (!currentQuestion) return;
 
-		// Store the answer
+		// Store the answer using ID as string
 		const updatedAnswers = {
 			...answers,
-			[currentQuestion._id]: {
-				questionId: currentQuestion._id,
+			[String(currentQuestion.id)]: {
+				questionId: String(currentQuestion.id), // Keep as string for UI
 				selectedOptionId: optionId,
 				answerText: optionText,
 			},
@@ -427,10 +471,9 @@ export default function QuizInterface() {
 		if (currentUser?.userId) {
 			try {
 				await submitAnswer(
-					currentUser.userId,
-					currentQuestion._id,
-					optionId,
-					quizStartTime
+					Number(currentUser.userId),
+					currentQuestion.id,
+					optionId
 				);
 			} catch (err) {
 				console.error('Error auto-saving answer:', err);
@@ -438,10 +481,10 @@ export default function QuizInterface() {
 		}
 	};
 
-	// Adapter function to match the expected onAutoSave signature
+	// Adapter function to match the expected onAutoSave signature in QuizQuestionView
 	const handleAutoSave = async (questionId: string, answerText: string) => {
-		// Find the question
-		const question = questions.find((q) => q._id === questionId);
+		// Find the question using string ID (backward compatibility)
+		const question = questions.find((q) => String(q.id) === questionId);
 		if (!question) return;
 
 		// Find the option that matches the answer text
@@ -480,15 +523,14 @@ export default function QuizInterface() {
 			// Format answers for submission using stored optionIds
 			const formattedAnswers = Object.values(answers)
 				.map(({ questionId, selectedOptionId }) => ({
-					questionId,
-					selectedOptionId,
+					questionId: Number(questionId), // Convert to number for API
+					selectedOption: selectedOptionId,
 				}))
-				.filter((a) => a.selectedOptionId > 0);
+				.filter((a) => a.selectedOption);
 
 			const result = await submitQuiz(
-				currentUser.userId,
-				formattedAnswers,
-				quizStartTime
+				Number(currentUser.userId),
+				formattedAnswers
 			);
 
 			if (result.success) {
@@ -685,7 +727,7 @@ export default function QuizInterface() {
 									<div className="grid grid-cols-5 gap-2 mb-4">
 										{questions.map((question, index) => (
 											<Button
-												key={question._id}
+												key={question.id}
 												variant="outline"
 												className={cn('h-8 w-8 p-0', {
 													'bg-green-100':

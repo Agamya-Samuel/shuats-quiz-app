@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Question, OptionsMapping } from './quiz-interface';
+import { Question, StoredAnswer, OptionsMapping } from './quiz-interface';
 import { toast } from '@/hooks/use-toast';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { MarkdownPreview } from '@/components/markdown-preview';
@@ -17,12 +17,6 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog';
-
-interface StoredAnswer {
-	questionId: string;
-	selectedOptionId: number;
-	answerText: string;
-}
 
 type SetAnswersType = Dispatch<SetStateAction<Record<string, StoredAnswer>>>;
 
@@ -60,7 +54,9 @@ export default function QuizQuestionView({
 	// Load saved answer when switching questions
 	useEffect(() => {
 		if (currentQuestion) {
-			const savedAnswer = answers[currentQuestion._id];
+			// Get the question ID as string
+			const questionId = String(currentQuestion.id);
+			const savedAnswer = answers[questionId];
 			setSelectedAnswer(savedAnswer?.answerText || '');
 		}
 	}, [currentQuestion, answers, setSelectedAnswer]);
@@ -74,23 +70,25 @@ export default function QuizQuestionView({
 		};
 		setQuestions(updatedQuestions);
 
-		if (selectedAnswer) {
+		if (selectedAnswer && currentQuestion) {
 			const option = currentQuestion.options.find(
 				(opt) => opt.text === selectedAnswer
 			);
 
 			if (option) {
+				// Use string ID
+				const questionId = String(currentQuestion.id);
 				setAnswers((prev) => ({
 					...prev,
-					[currentQuestion._id]: {
-						questionId: currentQuestion._id,
+					[questionId]: {
+						questionId: questionId,
 						selectedOptionId: option.id,
 						answerText: selectedAnswer,
 					},
 				}));
 
 				// Auto-save to server
-				await onAutoSave(currentQuestion._id, selectedAnswer);
+				await onAutoSave(questionId, selectedAnswer);
 			}
 		}
 	};
@@ -138,11 +136,14 @@ export default function QuizQuestionView({
 		};
 		setQuestions(updatedQuestions);
 
-		setAnswers((prev) => {
-			const newAnswers = { ...prev };
-			delete newAnswers[currentQuestion._id];
-			return newAnswers;
-		});
+		if (currentQuestion) {
+			const questionId = String(currentQuestion.id);
+			setAnswers((prev) => {
+				const newAnswers = { ...prev };
+				delete newAnswers[questionId];
+				return newAnswers;
+			});
+		}
 	};
 
 	return (
@@ -201,7 +202,7 @@ export default function QuizQuestionView({
 										</span>
 										<MarkdownPreview
 											content={option.text}
-											className="flex pt-3.5"
+											className="inline"
 										/>
 									</Label>
 								</div>
@@ -209,73 +210,78 @@ export default function QuizQuestionView({
 						</RadioGroup>
 					</div>
 
-					<div className="mt-auto">
-						<div className="flex gap-4 flex-wrap">
+					<div className="flex justify-between items-center mt-auto">
+						<div className="flex space-x-2">
 							<Button
 								variant="outline"
 								onClick={() => handleNavigation('prev')}
 								disabled={currentQuestionIndex === 0}
 							>
-								<ChevronLeft className="h-4 w-4 mr-2" />
-								Previous
+								<ChevronLeft className="h-4 w-4 mr-1" /> Prev
 							</Button>
 							<Button
-								variant="success"
-								onClick={handleSaveAndNext}
-							>
-								{isLastQuestion
-									? 'Save & Submit'
-									: 'Save & Next'}
-								{!isLastQuestion && (
-									<ChevronRight className="h-4 w-4 ml-2" />
-								)}
-							</Button>
-							<Button
-								variant="destructive"
+								variant="outline"
 								onClick={() => handleNavigation('next')}
-								disabled={
-									currentQuestionIndex ===
-									questions.length - 1
-								}
+								disabled={isLastQuestion || isSubmitting}
 							>
-								Skip
-								<ChevronRight className="h-4 w-4 ml-2" />
+								Next <ChevronRight className="h-4 w-4 ml-1" />
 							</Button>
-							<Button variant="outline" onClick={handleClear}>
-								Clear Response
+						</div>
+						<div className="flex space-x-2">
+							<Button
+								variant="secondary"
+								onClick={handleClear}
+								disabled={!selectedAnswer || isSubmitting}
+							>
+								Clear
 							</Button>
+							{isLastQuestion ? (
+								<Button
+									onClick={() => setShowSubmitDialog(true)}
+									variant="default"
+									disabled={isSubmitting}
+								>
+									{isSubmitting
+										? 'Submitting...'
+										: 'Submit Quiz'}
+								</Button>
+							) : (
+								<Button
+									onClick={handleSaveAndNext}
+									variant="default"
+									disabled={isSubmitting}
+								>
+									Save & Next
+								</Button>
+							)}
 						</div>
 					</div>
 				</CardContent>
 			</Card>
 
-			{/* Confirmation Dialog */}
 			<Dialog open={showSubmitDialog} onOpenChange={setShowSubmitDialog}>
 				<DialogContent>
 					<DialogHeader>
 						<DialogTitle>Submit Quiz</DialogTitle>
 						<DialogDescription>
-							Are you sure you want to submit your quiz? This
+							Are you sure you want to submit the quiz? This
 							action cannot be undone.
 						</DialogDescription>
 					</DialogHeader>
-					<DialogFooter className="mt-4">
+					<DialogFooter>
 						<Button
 							variant="outline"
 							onClick={() => setShowSubmitDialog(false)}
+							disabled={isSubmitting}
 						>
 							Cancel
 						</Button>
 						<Button
-							onClick={() => {
-								setShowSubmitDialog(false);
-								onSubmit();
-							}}
+							variant="default"
+							onClick={onSubmit}
 							disabled={isSubmitting}
 						>
-							{isSubmitting
-								? 'Submitting...'
-								: 'Yes, Submit Quiz'}
+							{isSubmitting ? 'Submitting...' : 'Submit Quiz'}
 						</Button>
 					</DialogFooter>
 				</DialogContent>
