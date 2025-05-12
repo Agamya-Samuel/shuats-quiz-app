@@ -203,7 +203,8 @@ and recommending them appropriate courses,
 <!-- For Agamya -->
 
 #### Important
-- [ ] Add DAL (Data Access Layer) to all actions, specially to quiz submit action and all admin actions.
+- [x] Add DAL (Data Access Layer) to all actions, specially to quiz submit action and all admin actions.
+	- [ ] Give Final Review to DAL once again.
 - [ ] After Registering, login user, redirect to dashboard and ask for document upload.
 - [ ] Add guidlines for Exam Rules, Question Format, Syllabus, Scoring Criteria (preferece order of subjects, time taken to complete the quiz, etc.)
 - [ ] Profile photo upload during registration.
