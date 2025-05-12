@@ -10,15 +10,23 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { deleteQuestion, getAllQuestionsWithAnswers } from '@/actions/question';
+import { deleteQuestion, getAllQuestionsWithAnswers } from '@/actions/quiz';
 import { toast } from '@/hooks/use-toast';
-import { Question } from './question-list';
+
+// Updated Question interface to match the schema
+interface Question {
+	id: number;
+	text: string;
+	options: { id: string; text: string }[];
+	correctOptionId: string | null;
+	subject: string;
+}
 
 interface DeleteConfirmationDialogProps {
 	isOpen: boolean;
 	onOpenChange: (isOpen: boolean) => void;
 	questionId: string | null;
-	setQuestions: (questions: Question[]) => void; // Use the Question type
+	setQuestions: (questions: Question[]) => void;
 }
 
 export function DeleteConfirmationDialog({
@@ -30,35 +38,25 @@ export function DeleteConfirmationDialog({
 	const handleDelete = async () => {
 		if (questionId) {
 			try {
-				const response = await deleteQuestion(questionId);
+				const response = await deleteQuestion(Number(questionId));
 				if (response.success) {
 					toast({
 						title: 'Success',
-						description: 'Question deleted successfully',
+						description:
+							response.message || 'Question deleted successfully',
 					});
 					const updatedQuestions = await getAllQuestionsWithAnswers();
 					if (
 						updatedQuestions.success &&
 						updatedQuestions.questions
 					) {
-						// Ensure options are correctly formatted
-						const formattedQuestions =
-							updatedQuestions.questions.map((question: Question) => ({
-								...question,
-								options: question.options.map(
-									(option: { id: number; text: string }) => ({
-										id: option.id,
-										text:
-											typeof option.text === 'string'
-												? option.text
-												: option.text,
-									})
-								),
-							}));
-						setQuestions(formattedQuestions);
+						// Questions are already in the correct format, no need for complex conversions
+						setQuestions(updatedQuestions.questions);
 					}
 				} else {
-					throw new Error(response.error);
+					throw new Error(
+						response.message || 'Failed to delete question'
+					);
 				}
 			} catch (error) {
 				toast({

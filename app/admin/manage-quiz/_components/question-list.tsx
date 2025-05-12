@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { getAllQuestionsWithAnswers, deleteQuestion } from '@/actions/question';
+import { getAllQuestionsWithAnswers, deleteQuestion } from '@/actions/quiz';
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
@@ -21,12 +21,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Edit, Trash2, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { subjects } from '@/lib/constants';
 import LoadingComponent from '@/components/loading-component';
 import { EditQuestionForm } from './edit-question-form';
@@ -34,15 +29,16 @@ import { toast } from '@/hooks/use-toast';
 import { MarkdownPreview } from '@/components/markdown-preview';
 
 interface Option {
-	id: number;
+	id: string;
 	text: string;
 }
 
-export interface Question {
-	_id: string;
+// Updated Question interface to match API response
+interface Question {
+	id: number;
 	text: string;
 	options: Option[];
-	correctOptionId: number;
+	correctOptionId: string | null;
 	subject: string;
 }
 
@@ -74,11 +70,10 @@ export function QuestionList() {
 			const response = await getAllQuestionsWithAnswers();
 
 			if (response.success && Array.isArray(response.questions)) {
-				const fetchedQuestions = response.questions as Question[];
-				setQuestions(fetchedQuestions);
+				setQuestions(response.questions);
 
 				// Calculate subject counts
-				const counts = fetchedQuestions.reduce(
+				const counts = response.questions.reduce(
 					(acc: Record<string, number>, q: Question) => {
 						acc[q.subject] = (acc[q.subject] || 0) + 1;
 						return acc;
@@ -88,7 +83,7 @@ export function QuestionList() {
 				setSubjectCounts(counts);
 				setError(null);
 			} else {
-				setError(response.error || 'Failed to fetch questions');
+				setError(response.message || 'Failed to fetch questions');
 			}
 		} catch (err) {
 			console.error('Fetch error:', err);
@@ -103,15 +98,15 @@ export function QuestionList() {
 	}, [fetchQuestions]);
 
 	const handleDelete = useCallback(async () => {
-		if (!selectedQuestion?._id) return;
+		if (!selectedQuestion?.id) return;
 
 		try {
-			const response = await deleteQuestion(selectedQuestion._id);
+			const response = await deleteQuestion(selectedQuestion.id);
 
 			if (response.success) {
 				toast({
 					title: 'Success',
-					description: response.success,
+					description: response.message,
 					variant: 'success',
 				});
 				setIsDeleteOpen(false);
@@ -120,7 +115,8 @@ export function QuestionList() {
 			} else {
 				toast({
 					title: 'Error',
-					description: response.error || 'Failed to delete question',
+					description:
+						response.message || 'Failed to delete question',
 					variant: 'destructive',
 				});
 			}
@@ -180,7 +176,10 @@ export function QuestionList() {
 					{displayQuestions.length > 0 ? (
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 							{displayQuestions.map((question) => (
-								<Card key={question._id} className="bg-white flex flex-col justify-between">
+								<Card
+									key={question.id}
+									className="bg-white flex flex-col justify-between"
+								>
 									<CardHeader className="p-4">
 										<div className="flex justify-between items-start mb-2">
 											<div className="font-medium flex-grow">
@@ -212,7 +211,7 @@ export function QuestionList() {
 													<span className="font-medium">
 														{
 															OptionsMapping[
-																option.id as keyof typeof OptionsMapping
+																option.id as unknown as keyof typeof OptionsMapping
 															]
 														}
 														:
@@ -339,7 +338,7 @@ export function QuestionList() {
 															<span className="font-medium">
 																{
 																	OptionsMapping[
-																		option.id as keyof typeof OptionsMapping
+																		option.id as unknown as keyof typeof OptionsMapping
 																	]
 																}
 																:
@@ -370,28 +369,28 @@ export function QuestionList() {
 						</DialogHeader>
 						{selectedQuestion && (
 							<EditQuestionForm
-								questionId={selectedQuestion._id}
+								questionId={String(selectedQuestion.id)}
 								defaultValues={{
 									question: selectedQuestion.text,
 									subject: selectedQuestion.subject,
 									optionA:
 										selectedQuestion.options.find(
-											(o) => o.id === 1
+											(o) => o.id === '1'
 										)?.text || '',
 									optionB:
 										selectedQuestion.options.find(
-											(o) => o.id === 2
+											(o) => o.id === '2'
 										)?.text || '',
 									optionC:
 										selectedQuestion.options.find(
-											(o) => o.id === 3
+											(o) => o.id === '3'
 										)?.text || '',
 									optionD:
 										selectedQuestion.options.find(
-											(o) => o.id === 4
+											(o) => o.id === '4'
 										)?.text || '',
 									correctAnswer: OptionsMapping[
-										selectedQuestion.correctOptionId as keyof typeof OptionsMapping
+										selectedQuestion.correctOptionId as unknown as keyof typeof OptionsMapping
 									] as 'A' | 'B' | 'C' | 'D',
 								}}
 								onSuccess={() => {

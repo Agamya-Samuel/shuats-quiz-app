@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { toast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
-import { updateQuestion } from '@/actions/question';
+import { updateQuestion } from '@/actions/quiz';
 import {
 	Select,
 	SelectContent,
@@ -57,21 +57,21 @@ export function EditQuestionForm({
 
 	const handleSubmit = async (values: z.infer<typeof formSchema>) => {
 		const options = [
-			{ id: 1, text: values.optionA },
-			{ id: 2, text: values.optionB },
-			{ id: 3, text: values.optionC },
-			{ id: 4, text: values.optionD },
+			{ id: '1', value: values.optionA },
+			{ id: '2', value: values.optionB },
+			{ id: '3', value: values.optionC },
+			{ id: '4', value: values.optionD },
 		];
 
 		const correctOptionId = {
-			A: 1,
-			B: 2,
-			C: 3,
-			D: 4,
+			A: '1',
+			B: '2',
+			C: '3',
+			D: '4',
 		}[values.correctAnswer];
 
 		const response = await updateQuestion({
-			questionId,
+			questionId: Number(questionId),
 			newText: values.question,
 			newOptions: options,
 			newCorrectOptionId: correctOptionId,
@@ -81,14 +81,14 @@ export function EditQuestionForm({
 		if (response.success) {
 			toast({
 				title: 'Success',
-				description: response.success,
+				description: response.message,
 				variant: 'success',
 			});
 			onSuccess?.();
 		} else {
 			toast({
 				title: 'Error',
-				description: response.error,
+				description: response.message || 'Failed to update question',
 				variant: 'destructive',
 			});
 		}
