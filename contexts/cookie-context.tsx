@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, PropsWithChildren, useContext, useMemo, useEffect, useState } from 'react';
+import { createContext, PropsWithChildren, useContext, useMemo } from 'react';
 
 interface CookieContextType {
 	token: string | null;
@@ -36,12 +36,6 @@ export const CookieProvider = ({
 	token: string | undefined;
 	user: CookieContextType['user'];
 }>) => {
-	const [mounted, setMounted] = useState(false);
-
-	useEffect(() => {
-		setMounted(true);
-	}, []);
-
 	// Memoize the context value to prevent unnecessary re-renders
 	const providerValue = useMemo(
 		() => ({
@@ -50,11 +44,6 @@ export const CookieProvider = ({
 		}),
 		[token, user]
 	);
-
-	// Prevent hydration mismatch by not rendering until mounted
-	if (!mounted) {
-		return null;
-	}
 
 	return (
 		<CookieContext.Provider value={providerValue}>

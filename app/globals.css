@@ -84,22 +84,6 @@ body {
 	}
 }
 
-@keyframes electric-shock {
-	0% { box-shadow: 0 0 0 0 #38bdf8, 0 0 0 0 #f472b6; }
-	10% { box-shadow: 0 0 24px 8px #38bdf8, 0 0 48px 16px #f472b6; }
-	20% { box-shadow: 0 0 48px 16px #f472b6, 0 0 96px 32px #38bdf8; }
-	30% { box-shadow: 0 0 32px 8px #38bdf8, 0 0 64px 16px #f472b6; }
-	40% { box-shadow: 0 0 64px 24px #f472b6, 0 0 128px 48px #38bdf8; }
-	50% { box-shadow: 0 0 32px 8px #38bdf8, 0 0 64px 16px #f472b6; }
-	60% { box-shadow: 0 0 24px 8px #f472b6, 0 0 48px 16px #38bdf8; }
-	70% { box-shadow: 0 0 16px 4px #38bdf8, 0 0 32px 8px #f472b6; }
-	80% { box-shadow: 0 0 8px 2px #f472b6, 0 0 16px 4px #38bdf8; }
-	100% { box-shadow: none; }
-}
-
-.animate-electric-shock {
-	animation: electric-shock 1s cubic-bezier(0.4, 0, 0.2, 1) 1;
-}
 
 @layer base {
   * {
