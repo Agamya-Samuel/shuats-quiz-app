@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLeaderboard } from '@/actions/question';
+import { getLeaderboard } from '@/actions/quiz';
 import LeaderboardTable from './_components/leaderboard-table';
 import LeaderboardStats from './_components/leaderboard-stats';
 import { Card, CardContent } from '@/components/ui/card';
