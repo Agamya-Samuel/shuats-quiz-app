@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import Navbar from '@/components/navbar';
 import { useCookies } from '@/contexts/cookie-context';
-import { getQuizResults } from '@/actions/question';
+import { getQuizResults } from '@/actions/quiz';
 
 /**
  * Client component wrapper for Navbar
@@ -18,16 +18,22 @@ export default function ClientNavbar() {
 			if (!currentUser?.userId) return;
 
 			try {
-				const response = await getQuizResults(currentUser.userId);
-				// We're not using this state anymore, but keeping the check for future reference
+				// Convert userId from string to number
+				const response = await getQuizResults(
+					Number(currentUser.userId)
+				);
+
+				// Check if the user has attempted the quiz based on the actual response structure
 				if (
 					response.success &&
-					response.data &&
-					response.data.results.length > 0
+					response.results &&
+					response.results.questions.length > 0
 				) {
 					// User has attempted the quiz
+					console.log('User has attempted the quiz');
 				} else {
 					// User has not attempted the quiz
+					console.log('User has not attempted the quiz yet');
 				}
 			} catch (err) {
 				console.error('Error checking attempt status:', err);
@@ -39,5 +45,9 @@ export default function ClientNavbar() {
 
 	// Always pass false for showTime to never show the timer in the navbar
 	// The timer is now displayed directly in the quiz interface
-	return <Navbar showTime={false} />;
+	return (
+		<div className="container mx-auto px-4 max-w-5xl">
+			<Navbar showTime={false} />
+		</div>
+	);
 }
