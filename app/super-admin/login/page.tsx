@@ -1,4 +1,4 @@
-// app/(auth)/login/page.tsx
+// app/super-admin/login/page.tsx
 
 import { LoginForm } from './forms/LoginForm';
 
