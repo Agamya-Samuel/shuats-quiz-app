@@ -210,7 +210,7 @@ and recommending them appropriate courses,
 - [ ] Add S3 bucket support to upload documents and profile photo.
 
 #### Medium Priority
-- [ ] Make the First Prize Bigger pop out more than other prizes.
+- [x] Make the First Prize Bigger pop out more than other prizes.
 - [ ] Fix `contexts\cookie-context.tsx` types/interface for `user` cookie.
 - [ ] Add DB Index to
 	- [ ] questions.text
