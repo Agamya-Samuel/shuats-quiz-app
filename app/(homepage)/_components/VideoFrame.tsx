@@ -4,17 +4,41 @@ import { campusTourVideo } from '@/public/images/index.js';
 
 const VideoFrame = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(false); // Not muted by default
+  const [muted, setMuted] = useState(true); // Muted by default for reliable autoplay
   const [playing, setPlaying] = useState(true);
   const [hovered, setHovered] = useState(false);
+  const [showUnmute, setShowUnmute] = useState(true);
+
+  // Hybrid approach: unmute on first user interaction
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      if (videoRef.current) {
+        videoRef.current.muted = false;
+        setMuted(false);
+        setShowUnmute(false);
+        videoRef.current.play();
+      }
+      window.removeEventListener('click', handleUserInteraction);
+      window.removeEventListener('keydown', handleUserInteraction);
+      window.removeEventListener('touchstart', handleUserInteraction);
+    };
+    window.addEventListener('click', handleUserInteraction);
+    window.addEventListener('keydown', handleUserInteraction);
+    window.addEventListener('touchstart', handleUserInteraction);
+    return () => {
+      window.removeEventListener('click', handleUserInteraction);
+      window.removeEventListener('keydown', handleUserInteraction);
+      window.removeEventListener('touchstart', handleUserInteraction);
+    };
+  }, []);
 
   useEffect(() => {
-    // Try to play the video on mount if not muted
-    if (videoRef.current && !muted) {
+    // Try to play the video on mount if muted
+    if (videoRef.current && muted) {
       const playPromise = videoRef.current.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // Autoplay with sound may be blocked by browser
+          // Autoplay may be blocked by browser
         });
       }
     }
@@ -25,6 +49,17 @@ const VideoFrame = () => {
     if (!videoRef.current) return;
     videoRef.current.muted = !videoRef.current.muted;
     setMuted(videoRef.current.muted);
+    if (!videoRef.current.muted) setShowUnmute(false);
+    else setShowUnmute(true);
+  };
+
+  const handleUnmuteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!videoRef.current) return;
+    videoRef.current.muted = false;
+    setMuted(false);
+    setShowUnmute(false);
+    videoRef.current.play();
   };
 
   const handlePlayPause = () => {
@@ -65,6 +100,19 @@ const VideoFrame = () => {
             onPause={handleVideoPause}
             className="w-full h-full min-h-[320px] md:min-h-[480px] bg-background object-cover select-none pointer-events-none rounded-xl"
           />
+          {/* Unmute notify button top left */}
+          {showUnmute && muted && (
+            <button
+              onClick={handleUnmuteClick}
+              className="absolute top-4 left-4 z-50 flex items-center gap-2 bg-white/95 dark:bg-black/80 px-4 py-2 rounded-xl shadow border border-blue-200 dark:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900 transition"
+              style={{backdropFilter: 'blur(2px)'}}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#2563eb" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 9v6h4l5 5V4l-5 5H9z" />
+              </svg>
+              <span className="text-blue-700 dark:text-blue-200 font-medium text-base">Unmute</span>
+            </button>
+          )}
           {/* Centered play/pause icon overlay */}
           <div
             className={`absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300
