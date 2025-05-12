@@ -24,38 +24,42 @@ const TakeQuiz = () => {
 					</div>
 
 					{/* Prize Section */}
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+					<div className="flex flex-col gap-6 mb-8">
 						{/* 1st Prize */}
-						<div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-xl shadow-lg border-2 border-yellow-200 transform hover:scale-105 transition-transform">
-							<Trophy className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-							<h3 className="text-2xl font-bold text-yellow-700 mb-2">
+						<div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-8 rounded-xl shadow-lg border-2 border-yellow-200 transform hover:scale-105 transition-transform">
+							<Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-6" />
+							<h3 className="text-3xl font-bold text-yellow-700 mb-3">
 								1st Prize
 							</h3>
-							<p className="text-3xl font-bold text-yellow-800">
+							<p className="text-4xl font-bold text-yellow-800 mb-2">
 								₹10,000
 							</p>
+							<p className="text-lg text-yellow-700">Grand Winner</p>
 						</div>
 
-						{/* 2nd Prize */}
-						<div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-xl shadow-lg border-2 border-gray-200 transform hover:scale-105 transition-transform">
-							<Trophy className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-							<h3 className="text-2xl font-bold text-gray-700 mb-2">
-								2nd Prize
-							</h3>
-							<p className="text-3xl font-bold text-gray-800">
-								₹5,000
-							</p>
-						</div>
+						{/* 2nd and 3rd Prizes */}
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+							{/* 2nd Prize */}
+							<div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-xl shadow-lg border-2 border-gray-200 transform hover:scale-105 transition-transform">
+								<Trophy className="h-12 w-12 text-gray-500 mx-auto mb-4" />
+								<h3 className="text-2xl font-bold text-gray-700 mb-2">
+									2nd Prize
+								</h3>
+								<p className="text-3xl font-bold text-gray-800">
+									₹5,000
+								</p>
+							</div>
 
-						{/* 3rd Prize */}
-						<div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl shadow-lg border-2 border-orange-200 transform hover:scale-105 transition-transform">
-							<Trophy className="h-12 w-12 text-orange-500 mx-auto mb-4" />
-							<h3 className="text-2xl font-bold text-amber-700 mb-2">
-								3rd Prize
-							</h3>
-							<p className="text-3xl font-bold text-amber-800">
-								₹3,000
-							</p>
+							{/* 3rd Prize */}
+							<div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl shadow-lg border-2 border-orange-200 transform hover:scale-105 transition-transform">
+								<Trophy className="h-12 w-12 text-orange-500 mx-auto mb-4" />
+								<h3 className="text-2xl font-bold text-amber-700 mb-2">
+									3rd Prize
+								</h3>
+								<p className="text-3xl font-bold text-amber-800">
+									₹3,000
+								</p>
+							</div>
 						</div>
 					</div>
 
