@@ -10,7 +10,7 @@ import {
 	bigint,
 	index,
 } from 'drizzle-orm/pg-core';
-
+import { IOption } from '@/types/question';
 // Addresses table
 export const addresses = pgTable('addresses', {
 	id: serial('id').primaryKey(),
@@ -68,7 +68,7 @@ export const questions = pgTable('questions', {
 	id: serial('id').primaryKey(),
 	question: text('question').notNull(),
 	options: jsonb('options')
-		.$type<{ id: string; value: string }[]>()
+		.$type<IOption[]>()
 		.notNull(),
 	subject: varchar('subject', { length: 100 }).notNull(),
 	// Subject should be one of: 'Arithmatic', 'Reasoning', 'Computer Aptitude', 'General Knowledge'
