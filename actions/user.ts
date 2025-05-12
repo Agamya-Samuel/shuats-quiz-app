@@ -1,11 +1,12 @@
 'use server';
 
 import argon2 from 'argon2';
-import { connectToDB, db } from '@/db';
+import { connectToDB } from '@/db';
 import { users, addresses } from '@/db/schema';
 import { generateToken, verifyToken } from '@/lib/auth';
 import { setCookie } from '@/lib/cookies';
 import { eq } from 'drizzle-orm';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import {
 	AddressData,
 	UserJwtPayload,
@@ -14,6 +15,9 @@ import {
 } from '@/types/user';
 import { z } from 'zod';
 import { sendPasswordResetEmail } from '@/lib/email';
+
+// Import schema type for transaction
+import * as dbSchema from '@/db/schema';
 
 // Register a new user
 export async function registerUser({
@@ -37,7 +41,7 @@ export async function registerUser({
 }) {
 	try {
 		// Connect to the database
-		await connectToDB();
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		// Check if the user already exists
 		const existingUser = await db.query.users.findFirst({
@@ -53,7 +57,7 @@ export async function registerUser({
 		const hashedPassword = await argon2.hash(password);
 
 		// Use a transaction to ensure both address and user are saved
-		const result = await db.transaction(async (tx) => {
+		const result = await db.transaction(async (tx: NodePgDatabase<typeof dbSchema>) => {
 			// Create address first
 			const [newAddress] = await tx
 				.insert(addresses)
@@ -112,7 +116,7 @@ export async function loginUser({
 }) {
 	try {
 		// Connect to the database
-		await connectToDB();
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		// Find user by email and include address information
 		const user = await db.query.users.findFirst({
@@ -187,7 +191,7 @@ export async function loginUser({
 export async function getUser(userId: number) {
 	try {
 		// Connect to the database
-		await connectToDB();
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		const user = await db.query.users.findFirst({
 			where: eq(users.id, userId),
@@ -218,7 +222,7 @@ export async function getUser(userId: number) {
 // Update a user
 export async function updateUser(userId: number, userData: UpdateUserData) {
 	try {
-		await connectToDB();
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		// Check if user exists
 		const existingUser = await db.query.users.findFirst({
@@ -233,7 +237,7 @@ export async function updateUser(userId: number, userData: UpdateUserData) {
 		}
 
 		// Use a transaction to update both user and address
-		await db.transaction(async (tx) => {
+		await db.transaction(async (tx: NodePgDatabase<typeof dbSchema>) => {
 			// Update user
 			await tx
 				.update(users)
@@ -345,7 +349,7 @@ export async function forgotPassword(formData: FormData) {
 		}
 
 		// Connect to database
-		await connectToDB();
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		// Find user by email
 		const user = await db.query.users.findFirst({
@@ -443,7 +447,7 @@ export async function resetPassword(token: string, formData: FormData) {
 		}
 
 		// Connect to database
-		await connectToDB();
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		// Find user by ID
 		const existingUser = await db.query.users.findFirst({
