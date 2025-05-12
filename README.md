@@ -106,11 +106,56 @@ npm run dev
 
 ![Admin Dashboard List User](./screenshots/admin-list-question.png)
 
+## Database Setup
 
+This application uses PostgreSQL with Drizzle ORM. Follow these steps to set up your database:
 
+### 1. Install PostgreSQL
 
+Install PostgreSQL on your local machine or set up a PostgreSQL instance on a cloud provider.
 
+### 2. Create Environment Variables
 
+Create a `.env` file in the root directory with the following variables:
+
+```
+# PostgreSQL Database
+DATABASE_URL=postgresql://postgres:postgres@localhost:5433/quiz_app
+```
+
+Replace the `DATABASE_URL` with your actual PostgreSQL connection string.
+
+### 3. Push the Schema to Your Database
+
+Run the following command to create the database tables:
+
+```bash
+# Generate the schema
+npm run db:generate
+
+# Migrate the schema to the database
+npm run db:migrate
+```
+
+### 4. Explore Your Database (Optional)
+
+You can use Drizzle Studio to explore your database:
+
+```bash
+npm run db:studio
+```
+
+This will start a local web interface at http://localhost:3333 where you can view and edit your database.
+
+## Migrating from MongoDB to PostgreSQL
+
+If you're migrating from the previous MongoDB setup, you'll need to manually transfer your data. Here's a basic process:
+
+1. Export your data from MongoDB
+2. Transform the data to match the new schema
+3. Import the data into PostgreSQL
+
+Note that IDs have changed from MongoDB's ObjectID to UUID format, so you'll need to update any hardcoded IDs in your application.
 
 ## 🤝 Contributing
 
