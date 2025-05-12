@@ -1,53 +1,176 @@
 'use server';
 
-import { connectToDB } from '@/db';
-import SubmittedAnswer from '@/db/models/submitted-answer';
-import User from '@/db/models/user';
-import { revalidatePath } from 'next/cache';
+import { connectToDB, db } from '@/db';
+import { admins } from '@/db/schema';
+import { AdminJwtPayload } from '@/types/admin';
+import argon2 from 'argon2';
+import { eq } from 'drizzle-orm';
+import { generateToken } from '@/lib/auth';
+import { setCookie } from '@/lib/cookies';
 
-/**
- * Reset all submitted answers for a specific user
- * @param userEmail - The email of the user whose submissions should be reset
- */
-export async function resetUserSubmissions(userEmail: string) {
-	// Validate that an email was provided
-	if (!userEmail || userEmail.trim() === '') {
+// 30 days in seconds
+const THIRTY_DAYS = 60 * 60 * 24 * 30;
+
+// Create a new admin account
+export const createAdmin = async ({
+	email,
+	password,
+}: {
+	email: string;
+	password: string;
+}) => {
+	try {
+		// Connect to db
+		await connectToDB();
+
+		// Check if admin already exists
+		const existingAdmin = await db.query.admins.findFirst({
+			where: eq(admins.email, email),
+		});
+
+		if (existingAdmin) {
+			return { success: false, message: 'Admin already exists' };
+		}
+
+		// Hash the password
+		const hashedPassword = await argon2.hash(password, {
+			type: argon2.argon2id,
+			memoryCost: 19456,
+			timeCost: 2,
+			parallelism: 1,
+		});
+
+		// Insert new admin
+		await db.insert(admins).values({
+			email,
+			password: hashedPassword,
+		});
+
+		return { success: true, message: 'Admin created successfully' };
+	} catch (error) {
+		console.error('Error creating admin:', error);
 		return {
 			success: false,
-			message: 'Email is required to reset user submissions',
+			message: `Error creating admin: ${error}`,
 		};
 	}
+};
 
-	await connectToDB();
-
+// Get all admins from the database (without passwords)
+export const getAdmins = async () => {
 	try {
-		// Find the user by email
-		const user = await User.findOne({ email: userEmail });
+		// Connect to db
+		await connectToDB();
 
-		if (!user) {
+		// Get admins
+		const adminsList = await db.query.admins.findMany({
+			columns: {
+				id: true,
+				email: true,
+				createdAt: true,
+				updatedAt: true,
+			},
+		});
+
+		return { success: true, admins: adminsList };
+	} catch (error) {
+		console.error('Error getting admins:', error);
+		return {
+			success: false,
+			message: `Error getting admins: ${error}`,
+		};
+	}
+};
+
+// Admin login
+export async function loginAdmin({
+	email,
+	password,
+}: {
+	email: string;
+	password: string;
+}) {
+	try {
+		// Connect to db
+		await connectToDB();
+
+		// Find admin by email
+		const admin = await db.query.admins.findFirst({
+			where: eq(admins.email, email),
+		});
+
+		if (!admin) {
 			return {
 				success: false,
-				message: 'User not found',
+				message: 'Admin not found',
 			};
 		}
 
-		// Delete all submitted answers for this user
-		const result = await SubmittedAnswer.deleteMany({ userId: user._id });
+		// Verify password
+		const isPasswordValid = await argon2.verify(admin.password, password);
+		if (!isPasswordValid) {
+			return {
+				success: false,
+				message: 'Invalid password',
+			};
+		}
 
-		// Revalidate relevant pages
-		revalidatePath('/user/quiz');
-		revalidatePath('/super-admin');
-		revalidatePath('/user/leaderboard');
-
-		return {
-			success: true,
-			message: `Successfully reset ${result.deletedCount} submissions for ${userEmail}`,
+		// Create JWT payload
+		const payload: AdminJwtPayload = {
+			userId: admin.id,
+			email: admin.email,
+			role: 'admin',
 		};
+
+		// Generate JWT token
+		const token = await generateToken(payload);
+
+		// Set the token in the cookie with proper maxAge
+		await setCookie('token', token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			maxAge: THIRTY_DAYS, // 30 days in seconds
+			path: '/', // Make sure cookie is available on all paths
+		});
+
+		// Return only serializable data
+		return { success: true };
 	} catch (error) {
-		console.error('Error resetting user submissions:', error);
+		console.error('Login error:', error);
 		return {
 			success: false,
-			message: 'Failed to reset user submissions',
+			message: `Failed to login: ${error}`,
+		};
+	}
+}
+
+// Delete an admin account
+export async function deleteAdmin(adminId: number) {
+	try {
+		// Connect to db
+		await connectToDB();
+
+		// Check if admin exists
+		const admin = await db.query.admins.findFirst({
+			where: eq(admins.id, adminId),
+		});
+
+		if (!admin) {
+			return {
+				success: false,
+				message: 'Admin not found',
+			};
+		}
+
+		// Delete admin
+		await db.delete(admins).where(eq(admins.id, adminId));
+
+		return { success: true, message: 'Admin deleted successfully' };
+	} catch (error) {
+		console.error('Error deleting admin:', error);
+		return {
+			success: false,
+			message: `Failed to delete admin: ${error}`,
 		};
 	}
 }
