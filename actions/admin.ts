@@ -1,12 +1,14 @@
 'use server';
 
-import { connectToDB, db } from '@/db';
+import { connectToDB } from '@/db';
 import { admins } from '@/db/schema';
 import { AdminJwtPayload } from '@/types/admin';
 import argon2 from 'argon2';
 import { eq } from 'drizzle-orm';
 import { generateToken } from '@/lib/auth';
 import { setCookie } from '@/lib/cookies';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import * as dbSchema from '@/db/schema';
 
 // 30 days in seconds
 const THIRTY_DAYS = 60 * 60 * 24 * 30;
@@ -21,7 +23,7 @@ export const createAdmin = async ({
 }) => {
 	try {
 		// Connect to db
-		await connectToDB();
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		// Check if admin already exists
 		const existingAdmin = await db.query.admins.findFirst({
@@ -60,7 +62,7 @@ export const createAdmin = async ({
 export const getAdmins = async () => {
 	try {
 		// Connect to db
-		await connectToDB();
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		// Get admins
 		const adminsList = await db.query.admins.findMany({
@@ -92,7 +94,7 @@ export async function loginAdmin({
 }) {
 	try {
 		// Connect to db
-		await connectToDB();
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		// Find admin by email
 		const admin = await db.query.admins.findFirst({
@@ -148,7 +150,7 @@ export async function loginAdmin({
 export async function deleteAdmin(adminId: number) {
 	try {
 		// Connect to db
-		await connectToDB();
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		// Check if admin exists
 		const admin = await db.query.admins.findFirst({
