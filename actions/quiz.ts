@@ -1,9 +1,11 @@
 // actions/question.ts
 'use server';
 
-import { connectToDB, db } from '@/db';
-import { questions, correctAnswers, userSubmissions } from '@/db/schema';
+import { connectToDB } from '@/db';
+import { questions, correctAnswers, userSubmissions, users } from '@/db/schema';
 import { and, eq, sql } from 'drizzle-orm';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import * as dbSchema from '@/db/schema';
 
 // Add a question and its correct answer to the database
 export async function addQuestion({
@@ -19,7 +21,7 @@ export async function addQuestion({
 }) {
 	try {
 		// Connect to the database
-		await connectToDB();
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		// Check if the question text already exists
 		const existingQuestion = await db.query.questions.findFirst({
@@ -94,7 +96,7 @@ export async function addQuestion({
 export async function getAllQuestions() {
 	try {
 		// First establish database connection
-		await connectToDB();
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		// Get all questions with their options
 		const allQuestions = await db.query.questions.findMany({
@@ -107,10 +109,10 @@ export async function getAllQuestions() {
 		});
 
 		// Transform the questions into the desired format with proper serialization
-		const formattedQuestions = allQuestions.map((question) => {
+		const formattedQuestions = allQuestions.map((question: any) => {
 			// Ensure options are properly formatted with sequential IDs
 			const formattedOptions = (question.options || []).map(
-				(option, index) => {
+				(option: any, index: number) => {
 					// If option is already in {id, text} format, return as is
 					// Otherwise, create the proper structure
 					return typeof option === 'object' &&
@@ -166,10 +168,10 @@ export async function getAllQuestions() {
 
 // Get a question by its ID
 export async function getQuestionById(questionId: number) {
-	// Connect to the database
-	await connectToDB();
-
 	try {
+		// Connect to the database
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+
 		// Find the question by its ID
 		const question = await db.query.questions.findFirst({
 			where: eq(questions.id, questionId),
@@ -193,7 +195,7 @@ export async function getQuestionById(questionId: number) {
 export async function getAllQuestionsWithAnswers() {
 	try {
 		// Connect to the database
-		await connectToDB();
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 
 		// Get all questions
 		const questionsList = await db.query.questions.findMany();
@@ -203,14 +205,14 @@ export async function getAllQuestionsWithAnswers() {
 
 		// Create a map of question IDs to correct answers
 		const correctAnswersMap = new Map();
-		correctAnswersList.forEach((answer) => {
+		correctAnswersList.forEach((answer: any) => {
 			correctAnswersMap.set(answer.questionId, answer.correctOption);
 		});
 
 		// Format questions with their correct answers
-		const formattedQuestions = questionsList.map((question) => {
+		const formattedQuestions = questionsList.map((question: any) => {
 			// Format options for client display
-			const formattedOptions = (question.options || []).map((option) => {
+			const formattedOptions = (question.options || []).map((option: any) => {
 				if (
 					typeof option === 'object' &&
 					option !== null &&
@@ -261,10 +263,10 @@ export async function updateQuestion({
 	newCorrectOptionId: string;
 	newSubject?: string;
 }) {
-	// Connect to the database
-	await connectToDB();
-
 	try {
+		// Connect to the database
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+
 		// Check if the question exists
 		const existingQuestion = await db.query.questions.findFirst({
 			where: eq(questions.id, questionId),
@@ -337,10 +339,10 @@ export async function updateQuestion({
 
 // Delete a question
 export async function deleteQuestion(questionId: number) {
-	// Connect to the database
-	await connectToDB();
-
 	try {
+		// Connect to the database
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+
 		// Delete the question (cascading will take care of correct answers and submitted answers)
 		await db.delete(questions).where(eq(questions.id, questionId));
 
@@ -352,10 +354,10 @@ export async function deleteQuestion(questionId: number) {
 }
 
 export async function getQuizResults(userId: number) {
-	// Connect to the database
-	await connectToDB();
-
 	try {
+		// Connect to the database
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+
 		// Get all submitted answers for the user
 		const submissions = await db.query.userSubmissions.findMany({
 			where: eq(userSubmissions.userId, userId),
@@ -369,7 +371,7 @@ export async function getQuizResults(userId: number) {
 
 		// Map to store correct answers by question ID
 		const correctAnswersMap = new Map();
-		allCorrectAnswers.forEach((answer) => {
+		allCorrectAnswers.forEach((answer: any) => {
 			correctAnswersMap.set(answer.questionId, answer.correctOption);
 		});
 
@@ -379,7 +381,7 @@ export async function getQuizResults(userId: number) {
 		let attemptedQuestions = 0;
 
 		// Format the individual question results
-		const questionResults = submissions.map((submission) => {
+		const questionResults = submissions.map((submission: any) => {
 			totalQuestions++;
 
 			const questionId = submission.questionId;
@@ -432,10 +434,10 @@ export async function getQuizResults(userId: number) {
 
 // Get leaderboard data with user scores and performance metrics
 export async function getLeaderboard() {
-	// Connect to the database
-	await connectToDB();
-
 	try {
+		// Connect to the database
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+
 		// Get all users
 		const allUsers = await db.query.users.findMany({
 			columns: {
@@ -454,23 +456,23 @@ export async function getLeaderboard() {
 
 		// Map to store correct answers by question ID
 		const correctAnswersMap = new Map();
-		allCorrectAnswers.forEach((answer) => {
+		allCorrectAnswers.forEach((answer: any) => {
 			correctAnswersMap.set(answer.questionId, answer.correctOption);
 		});
 
 		// Process user data for leaderboard
 		const leaderboardData = await Promise.all(
-			allUsers.map(async (user) => {
+			allUsers.map(async (user: any) => {
 				// Filter submissions for this user
 				const userSubmissions = allSubmissions.filter(
-					(submission) => submission.userId === user.id
+					(submission: any) => submission.userId === user.id
 				);
 
 				// Calculate results for this user
 				const totalAnswered = userSubmissions.length;
 				let correctCount = 0;
 
-				userSubmissions.forEach((submission) => {
+				userSubmissions.forEach((submission: any) => {
 					const isCorrect =
 						submission.option ===
 						correctAnswersMap.get(submission.questionId);
@@ -497,10 +499,10 @@ export async function getLeaderboard() {
 		);
 
 		// Sort by score in descending order
-		leaderboardData.sort((a, b) => b.score - a.score);
+		leaderboardData.sort((a: any, b: any) => b.score - a.score);
 
 		// Add rankings
-		const rankedData = leaderboardData.map((user, index) => ({
+		const rankedData = leaderboardData.map((user: any, index: number) => ({
 			...user,
 			rank: index + 1,
 		}));
