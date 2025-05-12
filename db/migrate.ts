@@ -2,17 +2,14 @@ import { resolve } from 'node:path';
 import { readdir } from 'node:fs/promises';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
-import { getConnectionPool } from './index';
+import { Pool } from 'pg';
 
 /**
  * Runs all migrations from the drizzle folder when the application starts
  * This ensures the database schema is up to date
  */
-export async function runMigrations() {
+export async function runMigrations(pool: Pool) {
 	try {
-		// Get the connection pool
-		const pool = getConnectionPool();
-
 		// Create a Drizzle instance
 		const db = drizzle(pool);
 

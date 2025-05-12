@@ -1,6 +1,7 @@
 import { Pool } from 'pg';
-import { db } from './query';
 import { runMigrations } from './migrate';
+import { initDb } from './query';
+import * as schema from './schema';
 
 // Connection singleton
 let connectionPool: Pool | null = null;
@@ -23,13 +24,18 @@ export function getConnectionPool(): Pool {
 	return connectionPool;
 }
 
-// Re-export db and schema from query.ts
+// Re-export schema
+export { schema };
+
+// Export db for convenience
 export * from './query';
 
-export async function connectToDB(): Promise<typeof db> {
+export async function connectToDB() {
 	try {
-		// Test the connection
+		// Get the connection pool
 		const pool = getConnectionPool();
+		
+		// Test the connection
 		await pool.query('SELECT NOW()');
 
 		if (process.env.NODE_ENV === 'development') {
@@ -37,10 +43,11 @@ export async function connectToDB(): Promise<typeof db> {
 		}
 
 		// Run migrations to ensure the database schema is up to date
-		await runMigrations();
-
-		// Import db from query to ensure it's initialized
-		const { db } = await import('./query');
+		await runMigrations(pool);
+		
+		// Initialize the db with the pool
+		const db = initDb(pool);
+		
 		return db;
 	} catch (error) {
 		console.error('Database connection failed:', error);
