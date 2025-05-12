@@ -2,10 +2,56 @@
 'use server';
 
 import { connectToDB } from '@/db';
-import { questions, correctAnswers, userSubmissions, users } from '@/db/schema';
+import { questions, correctAnswers, userSubmissions } from '@/db/schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as dbSchema from '@/db/schema';
+import { IOption, IQuestion, IQuestionWithAnswers } from '@/types/question';
+import { verifyAuth } from '@/lib/dal';
+
+// Structure for user submission with question
+interface SubmissionWithQuestion {
+	id: number;
+	option: string;
+	userId: number | null;
+	questionId: number | null;
+	question: {
+		id: number;
+		createdAt: Date | null;
+		updatedAt: Date | null;
+		options: IOption[];
+		question: string;
+		subject: string;
+	} | null;
+}
+
+// Structure for correct answer
+interface CorrectAnswer {
+	id: number;
+	questionId: number | null;
+	correctOption: string;
+}
+
+// Structure for user data
+interface User {
+	id: number;
+	name: string;
+	email: string;
+	school: string;
+}
+
+// Structure for leaderboard entry
+interface LeaderboardEntry {
+	userId: number;
+	name: string;
+	email: string;
+	school: string;
+	totalAnswered: number;
+	correctAnswers: number;
+	accuracy: number;
+	score: number;
+	rank?: number;
+}
 
 // Add a question and its correct answer to the database
 export async function addQuestion({
@@ -13,15 +59,23 @@ export async function addQuestion({
 	options,
 	correctOption,
 	subject,
-}: {
-	question: string;
-	options: { id: string; value: string }[];
-	correctOption: string; // Now expects "A", "B", "C", etc.
-	subject: string;
-}) {
+}: IQuestionWithAnswers) {
+	// First verify that the requester is an admin or superadmin
+	const user = await verifyAuth();
+
+	if (!user || (user.role !== 'admin' && user.role !== 'superadmin')) {
+		return {
+			success: false,
+			message:
+				'Unauthorized: You do not have permission to add questions',
+		};
+	}
+
 	try {
 		// Connect to the database
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Check if the question text already exists
 		const existingQuestion = await db.query.questions.findFirst({
@@ -43,7 +97,7 @@ export async function addQuestion({
 		if (uniqueOptionValues.size !== optionValues.length) {
 			return {
 				success: false,
-				message: 'All options must be unique for each question.',
+				message: 'All options must be unique.',
 			};
 		}
 
@@ -96,7 +150,9 @@ export async function addQuestion({
 export async function getAllQuestions() {
 	try {
 		// First establish database connection
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Get all questions with their options
 		const allQuestions = await db.query.questions.findMany({
@@ -109,10 +165,10 @@ export async function getAllQuestions() {
 		});
 
 		// Transform the questions into the desired format with proper serialization
-		const formattedQuestions = allQuestions.map((question: any) => {
+		const formattedQuestions = allQuestions.map((question: IQuestion) => {
 			// Ensure options are properly formatted with sequential IDs
 			const formattedOptions = (question.options || []).map(
-				(option: any, index: number) => {
+				(option: { id: string; value: string }, index: number) => {
 					// If option is already in {id, text} format, return as is
 					// Otherwise, create the proper structure
 					return typeof option === 'object' &&
@@ -129,7 +185,7 @@ export async function getAllQuestions() {
 			// Return a clean question object with proper types
 			return {
 				id: question.id,
-				text: question.question || '', // Ensure text exists
+				text: question.question,
 				options: formattedOptions,
 				subject: question.subject,
 				// Status will be initialized in the client component
@@ -158,10 +214,9 @@ export async function getAllQuestions() {
 
 		return {
 			success: false,
-			error:
-				error instanceof Error
-					? error.message
-					: 'An unknown error occurred while retrieving questions',
+			message: `Failed to fetch questions: ${
+				error instanceof Error ? error.message : String(error)
+			}`,
 		};
 	}
 }
@@ -170,7 +225,9 @@ export async function getAllQuestions() {
 export async function getQuestionById(questionId: number) {
 	try {
 		// Connect to the database
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Find the question by its ID
 		const question = await db.query.questions.findFirst({
@@ -179,7 +236,10 @@ export async function getQuestionById(questionId: number) {
 
 		// Check if the question exists
 		if (!question) {
-			return { error: 'Question not found' };
+			return {
+				success: false,
+				message: 'Question not found',
+			};
 		}
 
 		// Return the question data
@@ -187,7 +247,8 @@ export async function getQuestionById(questionId: number) {
 	} catch (error) {
 		// Handle any errors that occur during the query
 		return {
-			error: `An error occurred while retrieving the question: ${error}`,
+			success: false,
+			message: `An error occurred while retrieving the question: ${error}`,
 		};
 	}
 }
@@ -195,7 +256,9 @@ export async function getQuestionById(questionId: number) {
 export async function getAllQuestionsWithAnswers() {
 	try {
 		// Connect to the database
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Get all questions
 		const questionsList = await db.query.questions.findMany();
@@ -204,28 +267,37 @@ export async function getAllQuestionsWithAnswers() {
 		const correctAnswersList = await db.query.correctAnswers.findMany();
 
 		// Create a map of question IDs to correct answers
-		const correctAnswersMap = new Map();
-		correctAnswersList.forEach((answer: any) => {
-			correctAnswersMap.set(answer.questionId, answer.correctOption);
-		});
+		const correctAnswersMap = new Map<number, string>();
+		correctAnswersList.forEach(
+			(answer: { questionId: number | null; correctOption: string }) => {
+				if (answer.questionId !== null) {
+					correctAnswersMap.set(
+						answer.questionId,
+						answer.correctOption
+					);
+				}
+			}
+		);
 
 		// Format questions with their correct answers
-		const formattedQuestions = questionsList.map((question: any) => {
+		const formattedQuestions = questionsList.map((question: IQuestion) => {
 			// Format options for client display
-			const formattedOptions = (question.options || []).map((option: any) => {
-				if (
-					typeof option === 'object' &&
-					option !== null &&
-					'id' in option &&
-					'value' in option
-				) {
-					return {
-						id: option.id,
-						text: option.value,
-					};
+			const formattedOptions = (question.options || []).map(
+				(option: IOption) => {
+					if (
+						typeof option === 'object' &&
+						option !== null &&
+						'id' in option &&
+						'value' in option
+					) {
+						return {
+							id: option.id,
+							text: option.value,
+						};
+					}
+					return option;
 				}
-				return option;
-			});
+			);
 
 			return {
 				id: question.id,
@@ -259,13 +331,26 @@ export async function updateQuestion({
 }: {
 	questionId: number;
 	newText: string;
-	newOptions: { id: string; value: string }[];
+	newOptions: IOption[];
 	newCorrectOptionId: string;
 	newSubject?: string;
 }) {
+	// First verify that the requester is an admin or superadmin
+	const user = await verifyAuth();
+
+	if (!user || (user.role !== 'admin' && user.role !== 'superadmin')) {
+		return {
+			success: false,
+			message:
+				'Unauthorized: You do not have permission to update questions',
+		};
+	}
+
 	try {
 		// Connect to the database
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Check if the question exists
 		const existingQuestion = await db.query.questions.findFirst({
@@ -273,7 +358,7 @@ export async function updateQuestion({
 		});
 
 		if (!existingQuestion) {
-			return { error: 'Question not found' };
+			return { success: false, message: 'Question not found' };
 		}
 
 		// Check if the new text already exists in another question
@@ -285,24 +370,33 @@ export async function updateQuestion({
 		});
 
 		if (duplicateQuestion) {
-			return { error: 'A question with this text already exists' };
+			return {
+				success: false,
+				message: 'A question with this text already exists',
+			};
 		}
 
 		// Validate unique option values
-		const optionValues = newOptions.map((option) =>
+		const optionValues = newOptions.map((option: IOption) =>
 			option.value.trim().toLowerCase()
 		);
 		const uniqueOptionValues = new Set(optionValues);
 		if (uniqueOptionValues.size !== optionValues.length) {
-			return { error: 'All options must be unique for each question.' };
+			return {
+				success: false,
+				message: 'All options must be unique.',
+			};
 		}
 
 		// Check if the correct option is valid
 		const isValidOption = newOptions.some(
-			(option) => option.id === newCorrectOptionId
+			(option: IOption) => option.id === newCorrectOptionId
 		);
 		if (!isValidOption) {
-			return { error: 'Correct option ID is not valid.' };
+			return {
+				success: false,
+				message: 'Correct option ID is not valid.',
+			};
 		}
 
 		// Use a transaction to update both the question and correct answer
@@ -326,11 +420,12 @@ export async function updateQuestion({
 				.where(eq(correctAnswers.questionId, questionId));
 		});
 
-		return { success: 'Question updated successfully' };
+		return { success: true, message: 'Question updated successfully' };
 	} catch (error) {
 		console.error('Error updating question:', error);
 		return {
-			error: `Failed to update question: ${
+			success: false,
+			message: `Failed to update question: ${
 				error instanceof Error ? error.message : String(error)
 			}`,
 		};
@@ -339,95 +434,159 @@ export async function updateQuestion({
 
 // Delete a question
 export async function deleteQuestion(questionId: number) {
+	// First verify that the requester is an admin or superadmin
+	const user = await verifyAuth();
+
+	if (!user || (user.role !== 'admin' && user.role !== 'superadmin')) {
+		return {
+			success: false,
+			message:
+				'Unauthorized: You do not have permission to delete questions',
+		};
+	}
+
 	try {
 		// Connect to the database
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
-		// Delete the question (cascading will take care of correct answers and submitted answers)
-		await db.delete(questions).where(eq(questions.id, questionId));
+		// Check if the question exists
+		const question = await db.query.questions.findFirst({
+			where: eq(questions.id, questionId),
+		});
 
-		return { success: 'Question deleted successfully' };
+		if (!question) {
+			return { success: false, message: 'Question not found' };
+		}
+
+		// Use a transaction to ensure atomicity (all operations succeed or fail together)
+		await db.transaction(async (tx) => {
+			// First delete associated correct answers
+			await tx
+				.delete(correctAnswers)
+				.where(eq(correctAnswers.questionId, questionId));
+
+			// Then delete the question
+			await tx.delete(questions).where(eq(questions.id, questionId));
+		});
+
+		return { success: true, message: 'Question deleted successfully' };
 	} catch (error) {
 		console.error('Error deleting question:', error);
-		return { error: `Failed to delete question: ${error}` };
+		return {
+			success: false,
+			message: `Failed to delete question: ${error}`,
+		};
 	}
 }
 
 export async function getQuizResults(userId: number) {
+	// Verify authorization - users can only see their own results unless they're an admin/superadmin
+	const authUser = await verifyAuth();
+
+	if (!authUser) {
+		return {
+			success: false,
+			message: 'Unauthorized: You must be logged in to view quiz results',
+		};
+	}
+
+	// Users can only access their own results unless they are admins or superadmins
+	if (authUser.role === 'user' && authUser.userId !== userId) {
+		return {
+			success: false,
+			message: 'Unauthorized: You can only view your own quiz results',
+		};
+	}
+
 	try {
 		// Connect to the database
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Get all submitted answers for the user
-		const submissions = await db.query.userSubmissions.findMany({
+		const submissions = (await db.query.userSubmissions.findMany({
 			where: eq(userSubmissions.userId, userId),
 			with: {
 				question: true,
 			},
-		});
+		})) as SubmissionWithQuestion[];
 
 		// Get all correct answers
-		const allCorrectAnswers = await db.query.correctAnswers.findMany();
+		const allCorrectAnswers =
+			(await db.query.correctAnswers.findMany()) as CorrectAnswer[];
 
 		// Map to store correct answers by question ID
-		const correctAnswersMap = new Map();
-		allCorrectAnswers.forEach((answer: any) => {
-			correctAnswersMap.set(answer.questionId, answer.correctOption);
+		const correctAnswersMap = new Map<number, string>();
+		allCorrectAnswers.forEach((answer) => {
+			if (answer.questionId !== null) {
+				correctAnswersMap.set(answer.questionId, answer.correctOption);
+			}
 		});
 
 		// Process results
-		let totalQuestions = 0;
 		let correctAnswersCount = 0;
 		let attemptedQuestions = 0;
 
 		// Format the individual question results
-		const questionResults = submissions.map((submission: any) => {
-			totalQuestions++;
+		const questionResults = submissions
+			.map((submission) => {
+				const questionId = submission.questionId;
+				// Skip questions with null IDs
+				if (questionId === null) {
+					return null;
+				}
 
-			const questionId = submission.questionId;
-			const correctOption = correctAnswersMap.get(questionId);
+				const correctOption = correctAnswersMap.get(questionId);
 
-			// Check if the answer is correct
-			const isCorrect = submission.option === correctOption;
-			if (isCorrect) {
-				correctAnswersCount++;
-			}
+				// Check if the answer is correct
+				const isCorrect = submission.option === correctOption;
+				if (isCorrect) {
+					correctAnswersCount++;
+				}
 
-			// Track attempted questions
-			attemptedQuestions++;
+				if (submission.option) {
+					attemptedQuestions++;
+				}
 
-			return {
-				questionId: submission.questionId,
-				questionText: submission.question?.question || '', // Safe access with optional chaining
-				userAnswer: submission.option,
-				correctAnswer: correctOption,
-				isCorrect,
-			};
-		});
+				// Return formatted result for this question
+				return {
+					questionId,
+					question:
+						submission.question?.question ?? 'Question not found',
+					options: submission.question?.options ?? [],
+					selectedOption: submission.option,
+					correctOption,
+					isCorrect,
+				};
+			})
+			.filter(Boolean); // Remove null results
 
-		// Calculate overall results
-		const percentage =
-			totalQuestions > 0
-				? (correctAnswersCount / totalQuestions) * 100
-				: 0;
+		// Prepare summary statistics
+		const summary = {
+			totalQuestions: questionResults.length,
+			attemptedQuestions,
+			correctAnswers: correctAnswersCount,
+			score:
+				questionResults.length > 0
+					? (correctAnswersCount / questionResults.length) * 100
+					: 0,
+		};
 
 		return {
 			success: true,
 			results: {
-				userId,
-				totalQuestions,
-				attemptedQuestions,
-				correctAnswers: correctAnswersCount,
-				incorrectAnswers: attemptedQuestions - correctAnswersCount,
-				percentage: parseFloat(percentage.toFixed(2)),
-				questionResults,
+				summary,
+				questions: questionResults,
 			},
 		};
 	} catch (error) {
-		console.error('Error getting quiz results:', error);
+		console.error('Error retrieving quiz results:', error);
 		return {
 			success: false,
-			error: `An error occurred while retrieving quiz results: ${error}`,
+			message: `Failed to retrieve quiz results: ${error}`,
 		};
 	}
 }
@@ -436,43 +595,55 @@ export async function getQuizResults(userId: number) {
 export async function getLeaderboard() {
 	try {
 		// Connect to the database
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Get all users
-		const allUsers = await db.query.users.findMany({
+		const allUsers = (await db.query.users.findMany({
 			columns: {
 				id: true,
 				name: true,
 				email: true,
-				school: true, // Updated from schoolName to school
+				school: true,
 			},
-		});
+		})) as User[];
 
 		// Get all submitted answers
-		const allSubmissions = await db.query.userSubmissions.findMany();
+		const allSubmissions = (await db.query.userSubmissions.findMany()) as {
+			id: number;
+			userId: number | null;
+			questionId: number | null;
+			option: string;
+		}[];
 
 		// Get all correct answers
-		const allCorrectAnswers = await db.query.correctAnswers.findMany();
+		const allCorrectAnswers =
+			(await db.query.correctAnswers.findMany()) as CorrectAnswer[];
 
 		// Map to store correct answers by question ID
-		const correctAnswersMap = new Map();
-		allCorrectAnswers.forEach((answer: any) => {
-			correctAnswersMap.set(answer.questionId, answer.correctOption);
+		const correctAnswersMap = new Map<number, string>();
+		allCorrectAnswers.forEach((answer) => {
+			if (answer.questionId !== null) {
+				correctAnswersMap.set(answer.questionId, answer.correctOption);
+			}
 		});
 
 		// Process user data for leaderboard
 		const leaderboardData = await Promise.all(
-			allUsers.map(async (user: any) => {
+			allUsers.map(async (user) => {
 				// Filter submissions for this user
 				const userSubmissions = allSubmissions.filter(
-					(submission: any) => submission.userId === user.id
+					(submission) => submission.userId === user.id
 				);
 
 				// Calculate results for this user
 				const totalAnswered = userSubmissions.length;
 				let correctCount = 0;
 
-				userSubmissions.forEach((submission: any) => {
+				userSubmissions.forEach((submission) => {
+					if (submission.questionId === null) return;
+
 					const isCorrect =
 						submission.option ===
 						correctAnswersMap.get(submission.questionId);
@@ -494,15 +665,15 @@ export async function getLeaderboard() {
 					accuracy: parseFloat(accuracy.toFixed(2)),
 					// Simple scoring formula based on correct answers
 					score: correctCount * 10,
-				};
+				} as LeaderboardEntry;
 			})
 		);
 
 		// Sort by score in descending order
-		leaderboardData.sort((a: any, b: any) => b.score - a.score);
+		leaderboardData.sort((a, b) => b.score - a.score);
 
 		// Add rankings
-		const rankedData = leaderboardData.map((user: any, index: number) => ({
+		const rankedData = leaderboardData.map((user, index: number) => ({
 			...user,
 			rank: index + 1,
 		}));
@@ -515,7 +686,7 @@ export async function getLeaderboard() {
 		console.error('Error getting leaderboard:', error);
 		return {
 			success: false,
-			error: `An error occurred while retrieving leaderboard: ${error}`,
+			message: `An error occurred while retrieving leaderboard: ${error}`,
 		};
 	}
 }

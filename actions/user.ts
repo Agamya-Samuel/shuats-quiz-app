@@ -15,6 +15,7 @@ import {
 } from '@/types/user';
 import { z } from 'zod';
 import { sendPasswordResetEmail } from '@/lib/email';
+import { verifyAuth } from '@/lib/dal';
 
 // Import schema type for transaction
 import * as dbSchema from '@/db/schema';
@@ -41,7 +42,9 @@ export async function registerUser({
 }) {
 	try {
 		// Connect to the database
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Check if the user already exists
 		const existingUser = await db.query.users.findFirst({
@@ -57,38 +60,40 @@ export async function registerUser({
 		const hashedPassword = await argon2.hash(password);
 
 		// Use a transaction to ensure both address and user are saved
-		const result = await db.transaction(async (tx: NodePgDatabase<typeof dbSchema>) => {
-			// Create address first
-			const [newAddress] = await tx
-				.insert(addresses)
-				.values({
-					country: address.country,
-					address1: address.address1,
-					address2: address.address2 || null,
-					area: address.area,
-					city: address.city,
-					pincode: address.pincode,
-					state: address.state,
-				})
-				.returning({ id: addresses.id });
+		const result = await db.transaction(
+			async (tx: NodePgDatabase<typeof dbSchema>) => {
+				// Create address first
+				const [newAddress] = await tx
+					.insert(addresses)
+					.values({
+						country: address.country,
+						address1: address.address1,
+						address2: address.address2 || null,
+						area: address.area,
+						city: address.city,
+						pincode: address.pincode,
+						state: address.state,
+					})
+					.returning({ id: addresses.id });
 
-			// Create user with reference to address
-			const [newUser] = await tx
-				.insert(users)
-				.values({
-					email,
-					password: hashedPassword,
-					mobile,
-					school,
-					rollno,
-					name,
-					branch,
-					addressId: newAddress.id,
-				})
-				.returning({ id: users.id });
+				// Create user with reference to address
+				const [newUser] = await tx
+					.insert(users)
+					.values({
+						email,
+						password: hashedPassword,
+						mobile,
+						school,
+						rollno,
+						name,
+						branch,
+						addressId: newAddress.id,
+					})
+					.returning({ id: users.id });
 
-			return { addressId: newAddress.id, userId: newUser.id };
-		});
+				return { addressId: newAddress.id, userId: newUser.id };
+			}
+		);
 
 		return {
 			success: true,
@@ -116,7 +121,9 @@ export async function loginUser({
 }) {
 	try {
 		// Connect to the database
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Find user by email and include address information
 		const user = await db.query.users.findFirst({
@@ -189,9 +196,29 @@ export async function loginUser({
 
 // Get a user by ID
 export async function getUser(userId: number) {
+	// Verify authorization - users can only access their own data unless they're an admin/superadmin
+	const authUser = await verifyAuth();
+
+	if (!authUser) {
+		return {
+			success: false,
+			message: 'Unauthorized: You must be logged in to view user data',
+		};
+	}
+
+	// Regular users can only access their own data
+	if (authUser.role === 'user' && authUser.userId !== userId) {
+		return {
+			success: false,
+			message: 'Unauthorized: You can only view your own data',
+		};
+	}
+
 	try {
 		// Connect to the database
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		const user = await db.query.users.findFirst({
 			where: eq(users.id, userId),
@@ -209,20 +236,50 @@ export async function getUser(userId: number) {
 			},
 		});
 
-		return { success: true, user };
+		if (!user) {
+			return { success: false, message: 'User not found' };
+		}
+
+		return {
+			success: true,
+			user: {
+				...user,
+				address: user.address,
+			},
+		};
 	} catch (error) {
-		console.error('Error getting user:', error);
+		console.error('Error fetching user:', error);
 		return {
 			success: false,
-			message: 'Failed to get user',
+			message: `Failed to fetch user: ${error}`,
 		};
 	}
 }
 
 // Update a user
 export async function updateUser(userId: number, userData: UpdateUserData) {
+	// Verify authorization - users can only modify their own data unless they're an admin/superadmin
+	const authUser = await verifyAuth();
+
+	if (!authUser) {
+		return {
+			success: false,
+			message: 'Unauthorized: You must be logged in to update user data',
+		};
+	}
+
+	// Regular users can only modify their own data
+	if (authUser.role === 'user' && authUser.userId !== userId) {
+		return {
+			success: false,
+			message: 'Unauthorized: You can only update your own data',
+		};
+	}
+
 	try {
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Check if user exists
 		const existingUser = await db.query.users.findFirst({
@@ -277,7 +334,7 @@ export async function updateUser(userId: number, userData: UpdateUserData) {
 		});
 
 		if (!updatedUser) {
-			return { success: false, error: 'User not found after update' };
+			return { success: false, message: 'User not found after update' };
 		}
 
 		// Create new token payload with updated user data
@@ -322,7 +379,7 @@ export async function updateUser(userId: number, userData: UpdateUserData) {
 		console.error('Error updating user:', error);
 		return {
 			success: false,
-			message: 'Failed to update user',
+			message: `Failed to update user: ${error}`,
 		};
 	}
 }
@@ -349,7 +406,9 @@ export async function forgotPassword(formData: FormData) {
 		}
 
 		// Connect to database
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Find user by email
 		const user = await db.query.users.findFirst({
@@ -363,7 +422,7 @@ export async function forgotPassword(formData: FormData) {
 
 		// Create reset token payload
 		const forgotPasswordPayload: ForgotPasswordData = {
-			id: user.id,
+			userId: user.id,
 			email: user.email,
 			purpose: 'password-reset',
 			role: 'user',
@@ -417,7 +476,9 @@ export async function resetPassword(token: string, formData: FormData) {
 		// Check if token is valid and has the correct purpose
 		if (
 			!payload ||
-			!('id' in payload) ||
+			!('userId' in payload) ||
+			payload.role !== 'user' ||
+			!('purpose' in payload) ||
 			payload.purpose !== 'password-reset'
 		) {
 			return {
@@ -447,11 +508,13 @@ export async function resetPassword(token: string, formData: FormData) {
 		}
 
 		// Connect to database
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Find user by ID
 		const existingUser = await db.query.users.findFirst({
-			where: eq(users.id, payload.id),
+			where: eq(users.id, payload.userId),
 		});
 
 		if (!existingUser) {
@@ -468,7 +531,7 @@ export async function resetPassword(token: string, formData: FormData) {
 		await db
 			.update(users)
 			.set({ password: hashedPassword })
-			.where(eq(users.id, payload.id));
+			.where(eq(users.id, payload.userId));
 
 		return { success: true };
 	} catch (error) {

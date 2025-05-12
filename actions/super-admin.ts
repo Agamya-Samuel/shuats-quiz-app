@@ -22,6 +22,7 @@ export async function loginSuperAdmin({ username }: { username: string }) {
 		}
 		// Generate JWT token
 		const payload: SuperAdminJwtPayload = {
+			userId: 1,
 			username: process.env.SUPER_ADMIN_USERNAME || 'superadmin',
 			role: 'superadmin',
 		};

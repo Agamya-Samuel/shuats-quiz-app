@@ -9,6 +9,7 @@ import { generateToken } from '@/lib/auth';
 import { setCookie } from '@/lib/cookies';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as dbSchema from '@/db/schema';
+import { verifyAuth } from '@/lib/dal';
 
 // 30 days in seconds
 const THIRTY_DAYS = 60 * 60 * 24 * 30;
@@ -23,7 +24,9 @@ export const createAdmin = async ({
 }) => {
 	try {
 		// Connect to db
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Check if admin already exists
 		const existingAdmin = await db.query.admins.findFirst({
@@ -60,9 +63,21 @@ export const createAdmin = async ({
 
 // Get all admins from the database (without passwords)
 export const getAdmins = async () => {
+	// First verify that the requester is an admin or superadmin
+	const user = await verifyAuth();
+
+	if (!user || (user.role !== 'admin' && user.role !== 'superadmin')) {
+		return {
+			success: false,
+			message: 'Unauthorized: You do not have permission to view admins',
+		};
+	}
+
 	try {
 		// Connect to db
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Get admins
 		const adminsList = await db.query.admins.findMany({
@@ -94,7 +109,9 @@ export async function loginAdmin({
 }) {
 	try {
 		// Connect to db
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Find admin by email
 		const admin = await db.query.admins.findFirst({
@@ -148,9 +165,22 @@ export async function loginAdmin({
 
 // Delete an admin account
 export async function deleteAdmin(adminId: number) {
+	// First verify that the requester is an admin or superadmin
+	const user = await verifyAuth();
+
+	if (!user || (user.role !== 'admin' && user.role !== 'superadmin')) {
+		return {
+			success: false,
+			message:
+				'Unauthorized: You do not have permission to delete admins',
+		};
+	}
+
 	try {
 		// Connect to db
-		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
 
 		// Check if admin exists
 		const admin = await db.query.admins.findFirst({
