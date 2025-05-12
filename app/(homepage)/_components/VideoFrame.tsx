@@ -96,9 +96,10 @@ const VideoFrame = () => {
             muted={muted}
             loop
             playsInline
+            preload="auto"
             onPlay={handleVideoPlay}
             onPause={handleVideoPause}
-            className="w-full h-full min-h-[320px] md:min-h-[480px] bg-background object-cover select-none pointer-events-auto rounded-xl"
+            className="w-full h-full min-h-[180px] md:min-h-[320px] md:min-h-[480px] bg-background object-cover select-none pointer-events-auto rounded-xl"
           />
           {/* Unmute notify button top left */}
           {showUnmute && muted && (
