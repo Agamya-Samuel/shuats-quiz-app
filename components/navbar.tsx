@@ -171,11 +171,11 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 							<DropdownMenuSeparator />
 							<DropdownMenuItem asChild>
 								<Link
-									href="/user/dashboard"
+									href="/user/profile"
 									className="w-full cursor-pointer"
 								>
 									<User className="h-5 w-5 text-amber-500" />
-									Edit Profile
+									My Profile
 								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem asChild>

@@ -112,7 +112,7 @@ interface IUser {
 	} | null;
 }
 
-export function UserDashboard() {
+export function UserProfile() {
 	const [isEditing, setIsEditing] = useState(false);
 	const [user, setUser] = useState<IUser | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
@@ -128,7 +128,7 @@ export function UserDashboard() {
 	// Update URL when tab changes
 	const handleTabChange = (tab: string) => {
 		// Update URL without refreshing the page
-		router.push(`/user/dashboard?tab=${tab}`, { scroll: false });
+		router.push(`/user/profile?tab=${tab}`, { scroll: false });
 	};
 
 	const form = useForm<z.infer<typeof formSchema>>({
