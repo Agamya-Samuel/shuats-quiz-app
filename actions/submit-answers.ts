@@ -2,9 +2,10 @@
 
 'use server';
 
-import { connectToDB } from '@/db';
-import SubmittedAnswer from '@/db/models/submitted-answer';
+import { connectToDB, db } from '@/db';
+import { userSubmissions } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
+import { and, eq } from 'drizzle-orm';
 
 // Record quiz start time for a user
 export async function recordQuizStartTime(userId: string, startTime?: Date) {
@@ -14,9 +15,8 @@ export async function recordQuizStartTime(userId: string, startTime?: Date) {
 		// Use provided startTime or create a new one
 		const quizStartTime = startTime || new Date();
 
-		// Store the start time in session storage or database
-		// We'll store it in the database for each answer the user will submit
-		// Note: userId is passed but currently only used for future database integration
+		// In the new schema, we don't store start time with submissions
+		// This is just a utility function to track time client-side
 
 		return {
 			success: true,
@@ -32,25 +32,44 @@ export async function recordQuizStartTime(userId: string, startTime?: Date) {
 	}
 }
 
-// Submit a single answer (used for auto-saving)
+// Submit a single answer
 export async function submitAnswer(
-	userId: string,
-	questionId: string,
-	selectedOptionId: number,
-	startTime: Date | null = null
+	userId: number,
+	questionId: number,
+	selectedOption: string // Now a string like "A", "B", "C", etc.
 ) {
 	await connectToDB();
 
 	try {
-		// Upsert the answer (update if exists, insert if not)
-		await SubmittedAnswer.findOneAndUpdate(
-			{ userId, questionId },
-			{
-				selectedOptionId,
-				...(startTime && { startTime }),
-			},
-			{ upsert: true, new: true }
-		);
+		// Check if answer exists
+		const existingAnswer = await db.query.userSubmissions.findFirst({
+			where: and(
+				eq(userSubmissions.userId, userId),
+				eq(userSubmissions.questionId, questionId)
+			),
+		});
+
+		if (existingAnswer) {
+			// Update existing answer
+			await db
+				.update(userSubmissions)
+				.set({
+					option: selectedOption,
+				})
+				.where(
+					and(
+						eq(userSubmissions.userId, userId),
+						eq(userSubmissions.questionId, questionId)
+					)
+				);
+		} else {
+			// Insert new answer
+			await db.insert(userSubmissions).values({
+				userId,
+				questionId: questionId,
+				option: selectedOption,
+			});
+		}
 
 		return { success: true, message: 'Answer submitted successfully' };
 	} catch (error) {
@@ -61,37 +80,47 @@ export async function submitAnswer(
 
 // Submit all answers for the quiz
 export async function submitQuiz(
-	userId: string,
-	answers: { questionId: string; selectedOptionId: number }[],
-	startTime: Date | null = null
+	userId: number,
+	answers: { questionId: number; selectedOption: string }[]
 ) {
 	await connectToDB();
 
 	try {
-		const submittedAt = new Date();
-		let timeTakenSeconds = null;
-
-		// Calculate time taken if startTime is provided
-		if (startTime) {
-			timeTakenSeconds = Math.floor(
-				(submittedAt.getTime() - new Date(startTime).getTime()) / 1000
-			);
-		}
-
 		// Use Promise.all to submit all answers in parallel
 		await Promise.all(
-			answers.map(({ questionId, selectedOptionId }) =>
-				SubmittedAnswer.findOneAndUpdate(
-					{ userId, questionId },
+			answers.map(async ({ questionId, selectedOption }) => {
+				// Check if answer exists
+				const existingAnswer = await db.query.userSubmissions.findFirst(
 					{
-						selectedOptionId,
-						...(startTime && { startTime }),
-						submittedAt,
-						...(timeTakenSeconds !== null && { timeTakenSeconds }),
-					},
-					{ upsert: true, new: true }
-				)
-			)
+						where: and(
+							eq(userSubmissions.userId, userId),
+							eq(userSubmissions.questionId, questionId)
+						),
+					}
+				);
+
+				if (existingAnswer) {
+					// Update existing answer
+					await db
+						.update(userSubmissions)
+						.set({
+							option: selectedOption,
+						})
+						.where(
+							and(
+								eq(userSubmissions.userId, userId),
+								eq(userSubmissions.questionId, questionId)
+							)
+						);
+				} else {
+					// Insert new answer
+					await db.insert(userSubmissions).values({
+						userId,
+						questionId: questionId,
+						option: selectedOption,
+					});
+				}
+			})
 		);
 
 		// Revalidate the quiz page to reflect the changes
@@ -100,7 +129,6 @@ export async function submitQuiz(
 		return {
 			success: true,
 			message: 'Quiz submitted successfully',
-			timeTakenSeconds,
 		};
 	} catch (error) {
 		console.error('Error submitting quiz:', error);
