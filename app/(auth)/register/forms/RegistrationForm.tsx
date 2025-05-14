@@ -53,10 +53,32 @@ interface RegisterResponse {
 	message: string;
 	error?: string;
 	userId?: number;
+	user?: {
+		id: number;
+		name: string;
+		email: string;
+		mobile: string;
+		school: string;
+		rollno: string;
+		branch: string;
+		address: {
+			id: number;
+			country: string;
+			address1: string;
+			address2: string | null;
+			area: string;
+			city: string;
+			pincode: string;
+			state: string;
+		};
+	};
+	autoLogin?: boolean;
 }
 
 // Password strength calculation
-const calculatePasswordStrength = (password: string): {
+const calculatePasswordStrength = (
+	password: string
+): {
 	score: number;
 	criteria: {
 		length: boolean;
@@ -67,17 +89,18 @@ const calculatePasswordStrength = (password: string): {
 	};
 	isValid: boolean;
 } => {
-	if (!password) return {
-		score: 0,
-		criteria: {
-			length: false,
-			uppercase: false,
-			lowercase: false,
-			numbers: false,
-			special: false,
-		},
-		isValid: false,
-	};
+	if (!password)
+		return {
+			score: 0,
+			criteria: {
+				length: false,
+				uppercase: false,
+				lowercase: false,
+				numbers: false,
+				special: false,
+			},
+			isValid: false,
+		};
 
 	let strength = 0;
 	const criteria = {
@@ -198,24 +221,30 @@ export function RegistrationForm() {
 	// Fix: Use isoCode for lookup, since country value is isoCode
 	const stateOptions: ComboboxOption[] = useMemo(() => {
 		// Find country by isoCode, not name
-		const countryObj = countryList.find((c) => c.isoCode === selectedCountry);
+		const countryObj = countryList.find(
+			(c) => c.isoCode === selectedCountry
+		);
 		if (!countryObj) return [];
 		// Use state.isoCode for value, and state.name for label
-		return State.getStatesOfCountry(countryObj.isoCode).map((s) => ({ 
-			value: s.isoCode, 
-			label: s.name 
+		return State.getStatesOfCountry(countryObj.isoCode).map((s) => ({
+			value: s.isoCode,
+			label: s.name,
 		}));
 	}, [selectedCountry, countryList]);
 
 	const cityOptions: ComboboxOption[] = useMemo(() => {
 		// Find country by isoCode, not name
-		const countryObj = countryList.find((c) => c.isoCode === selectedCountry);
+		const countryObj = countryList.find(
+			(c) => c.isoCode === selectedCountry
+		);
 		if (!countryObj || !selectedState) return [];
 		// No need to find state object, just use selectedState directly (which is now the isoCode)
-		return City.getCitiesOfState(countryObj.isoCode, selectedState).map((c) => ({ 
-			value: c.name, 
-			label: c.name 
-		}));
+		return City.getCitiesOfState(countryObj.isoCode, selectedState).map(
+			(c) => ({
+				value: c.name,
+				label: c.name,
+			})
+		);
 	}, [selectedCountry, selectedState, countryList]);
 
 	// Track previous country and state to only reset when they actually change
@@ -269,12 +298,12 @@ export function RegistrationForm() {
 				if (response.success) {
 					toast({
 						title: 'Registration Successful',
-						description: 'You have successfully registered.',
+						description: 'You have been automatically logged in.',
 						variant: 'success',
 					});
 					setTimeout(() => {
-						// Redirect to login page after successful registration
-						router.push('/login');
+						// Redirect to document-upload page after successful registration and auto-login
+						router.push('/user/document-upload');
 					}, 1000);
 				} else {
 					toast({
@@ -487,8 +516,13 @@ export function RegistrationForm() {
 														placeholder="Select country..."
 														options={countryOptions}
 														value={field.value}
-														onChange={field.onChange}
-														disabled={countryOptions.length === 0}
+														onChange={
+															field.onChange
+														}
+														disabled={
+															countryOptions.length ===
+															0
+														}
 													/>
 												)}
 											/>
@@ -502,8 +536,13 @@ export function RegistrationForm() {
 														placeholder="Select state..."
 														options={stateOptions}
 														value={field.value}
-														onChange={field.onChange}
-														disabled={stateOptions.length === 0}
+														onChange={
+															field.onChange
+														}
+														disabled={
+															stateOptions.length ===
+															0
+														}
 													/>
 												)}
 											/>
@@ -517,8 +556,13 @@ export function RegistrationForm() {
 														placeholder="Select city..."
 														options={cityOptions}
 														value={field.value}
-														onChange={field.onChange}
-														disabled={cityOptions.length === 0}
+														onChange={
+															field.onChange
+														}
+														disabled={
+															cityOptions.length ===
+															0
+														}
 													/>
 												)}
 											/>
@@ -569,20 +613,64 @@ export function RegistrationForm() {
 											</AlertTitle>
 											<AlertDescription>
 												<ul className="list-disc pl-5 text-sm mt-2">
-													<li className={passwordStrength.criteria.length ? "text-green-600" : "text-red-600"}>
-														At least 8 characters long
+													<li
+														className={
+															passwordStrength
+																.criteria.length
+																? 'text-green-600'
+																: 'text-red-600'
+														}
+													>
+														At least 8 characters
+														long
 													</li>
-													<li className={passwordStrength.criteria.uppercase ? "text-green-600" : "text-red-600"}>
-														Include at least one uppercase letter
+													<li
+														className={
+															passwordStrength
+																.criteria
+																.uppercase
+																? 'text-green-600'
+																: 'text-red-600'
+														}
+													>
+														Include at least one
+														uppercase letter
 													</li>
-													<li className={passwordStrength.criteria.lowercase ? "text-green-600" : "text-red-600"}>
-														Include at least one lowercase letter
+													<li
+														className={
+															passwordStrength
+																.criteria
+																.lowercase
+																? 'text-green-600'
+																: 'text-red-600'
+														}
+													>
+														Include at least one
+														lowercase letter
 													</li>
-													<li className={passwordStrength.criteria.numbers ? "text-green-600" : "text-red-600"}>
-														Include at least one number
+													<li
+														className={
+															passwordStrength
+																.criteria
+																.numbers
+																? 'text-green-600'
+																: 'text-red-600'
+														}
+													>
+														Include at least one
+														number
 													</li>
-													<li className={passwordStrength.criteria.special ? "text-green-600" : "text-red-600"}>
-														Include at least one special character
+													<li
+														className={
+															passwordStrength
+																.criteria
+																.special
+																? 'text-green-600'
+																: 'text-red-600'
+														}
+													>
+														Include at least one
+														special character
 													</li>
 												</ul>
 											</AlertDescription>
@@ -614,7 +702,8 @@ export function RegistrationForm() {
 													<div className="mt-2 text-[0.8rem] text-muted-foreground">
 														<div className="flex items-center justify-between mb-1">
 															<span className="text-sm">
-																Password Strength:
+																Password
+																Strength:
 															</span>
 															<span className="text-sm font-medium">
 																{getStrengthLabel(
@@ -623,9 +712,13 @@ export function RegistrationForm() {
 															</span>
 														</div>
 														<div className="relative h-2 w-full overflow-hidden rounded-full bg-primary/20">
-															<div 
-																className={`h-full absolute left-0 top-0 transition-all ${getStrengthColor(passwordStrength.score)}`}
-																style={{ width: `${passwordStrength.score}%` }}
+															<div
+																className={`h-full absolute left-0 top-0 transition-all ${getStrengthColor(
+																	passwordStrength.score
+																)}`}
+																style={{
+																	width: `${passwordStrength.score}%`,
+																}}
 															/>
 														</div>
 													</div>
@@ -675,7 +768,10 @@ export function RegistrationForm() {
 											</Button>
 											<Button
 												type="submit"
-												disabled={isLoading || !passwordStrength.isValid}
+												disabled={
+													isLoading ||
+													!passwordStrength.isValid
+												}
 												className="min-w-[120px]"
 											>
 												{isLoading ? (

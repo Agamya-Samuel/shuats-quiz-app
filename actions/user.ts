@@ -89,16 +89,66 @@ export async function registerUser({
 						branch,
 						addressId: newAddress.id,
 					})
-					.returning({ id: users.id });
+					.returning({
+						id: users.id,
+						email: users.email,
+						name: users.name,
+						mobile: users.mobile,
+						school: users.school,
+						rollno: users.rollno,
+						branch: users.branch,
+					});
 
-				return { addressId: newAddress.id, userId: newUser.id };
+				return {
+					addressId: newAddress.id,
+					userId: newUser.id,
+					user: {
+						...newUser,
+						address: {
+							id: newAddress.id,
+							country: address.country,
+							address1: address.address1,
+							address2: address.address2 || null,
+							area: address.area,
+							city: address.city,
+							pincode: address.pincode,
+							state: address.state,
+						},
+					},
+				};
 			}
 		);
 
+		// Create JWT payload and automatically log in the user
+		const payload: UserJwtPayload = {
+			userId: result.userId,
+			role: 'user',
+			name,
+			email,
+			mobile,
+			school,
+			rollno,
+			branch,
+			address,
+		};
+
+		// Generate a JWT token
+		const token = await generateToken(payload);
+
+		// Set the token in a cookie
+		await setCookie('token', token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			maxAge: 60 * 60 * 24 * 7, // 7 days
+			path: '/',
+		});
+
 		return {
 			success: true,
-			message: 'User registered successfully',
+			message: 'User registered and logged in successfully',
 			userId: result.userId,
+			user: result.user,
+			autoLogin: true,
 		};
 	} catch (error) {
 		console.error('Error registering user:', error);
