@@ -1,0 +1,1 @@
+ALTER TABLE "upload_files" DROP COLUMN "category";
