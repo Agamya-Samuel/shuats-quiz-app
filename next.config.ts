@@ -21,6 +21,12 @@ const nextConfig: NextConfig = {
 
 		return config;
 	},
+	// need to investigate this, how safe is this?
+	experimental: {
+		serverActions: {
+			bodySizeLimit: '5mb',
+		},
+	},
 };
 
 export default nextConfig;
