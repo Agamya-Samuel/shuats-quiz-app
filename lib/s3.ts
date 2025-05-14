@@ -2,15 +2,18 @@ import {
 	S3Client,
 	PutObjectCommand,
 	DeleteObjectCommand,
+	ObjectCannedACL,
 } from '@aws-sdk/client-s3';
 
 // Initialize S3 client
 const s3Client = new S3Client({
+	endpoint: process.env.S3_ENDPOINT,
 	region: process.env.S3_REGION || 'us-east-1',
 	credentials: {
 		accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
 		secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
 	},
+	forcePathStyle: false, // Required for DigitalOcean Spaces
 });
 
 export const BUCKET_NAME = process.env.S3_BUCKET_NAME || '';
@@ -33,15 +36,19 @@ export async function uploadToS3(
 			Key: key,
 			Body: fileBuffer,
 			ContentType: contentType,
+			ACL: 'public-read' as ObjectCannedACL, // Make file publicly readable
 		};
 
 		const command = new PutObjectCommand(params);
 		await s3Client.send(command);
 
-		// Return the URL of the uploaded file
-		return `https://${BUCKET_NAME}.s3.${
-			process.env.S3_REGION || 'us-east-1'
-		}.amazonaws.com/${key}`;
+		// If CDN URL is configured, use it for the file URL
+		if (process.env.CDN_S3_ORIGIN_URL) {
+			return `${process.env.CDN_S3_ORIGIN_URL}/${key}`;
+		}
+
+		// Fallback to direct S3 URL if no CDN is configured
+		return `${process.env.S3_ENDPOINT}/${BUCKET_NAME}/${key}`;
 	} catch (error) {
 		console.error('Error uploading to S3:', error);
 		throw new Error('Failed to upload file to S3');
@@ -75,7 +82,7 @@ export async function deleteFromS3(key: string): Promise<void> {
  * @returns A unique key for S3 storage
  */
 export function generateS3Key(
-	userId: string,
+	userId: number,
 	documentType: string,
 	fileExtension: string
 ): string {
