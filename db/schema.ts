@@ -7,10 +7,17 @@ import {
 	timestamp,
 	integer,
 	jsonb,
-	bigint,
 	index,
+	boolean,
 } from 'drizzle-orm/pg-core';
 import { IOption } from '@/types/question';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { z } from 'zod';
+
+//! #########################################################
+//! TABLE SCHEMAS
+//! #########################################################
+
 // Addresses table
 export const addresses = pgTable('addresses', {
 	id: serial('id').primaryKey(),
@@ -53,23 +60,27 @@ export const admins = pgTable('admins', {
 // Upload files table
 export const uploadFiles = pgTable('upload_files', {
 	id: serial('id').primaryKey(),
-	url: text('url').notNull(),
 	userId: integer('user_id').references(() => users.id),
-	type: varchar('type', { length: 50 }),
-	// Category should be one of: 'profile_pic', 'aadhar', '12th_marksheet', '10th_marksheet'
+	// document_type should be one of: 'profile_pic', 'aadhar', '12th_marksheet', '10th_marksheet'
 	// This check is enforced at the application level
-	category: varchar('category', { length: 50 }),
-	size: bigint('size', { mode: 'number' }),
+	documentType: varchar('document_type', { length: 100 }).notNull(),
+	mimeType: varchar('mime_type', { length: 100 }),
+	fileUrl: text('file_url').notNull(),
+	fileName: varchar('file_name', { length: 255 }).notNull(),
+	fileKey: varchar('file_key', { length: 255 }).notNull(), // S3 key for deletion
+	fileSize: varchar('file_size', { length: 100 }),
+	verified: boolean('verified').default(false),
+	rejected: boolean('rejected').default(false),
+	rejectionReason: text('rejection_reason'),
 	createdAt: timestamp('created_at').defaultNow(),
+	updatedAt: timestamp('updated_at').defaultNow(),
 });
 
 // Questions table
 export const questions = pgTable('questions', {
 	id: serial('id').primaryKey(),
 	question: text('question').notNull(),
-	options: jsonb('options')
-		.$type<IOption[]>()
-		.notNull(),
+	options: jsonb('options').$type<IOption[]>().notNull(),
 	subject: varchar('subject', { length: 100 }).notNull(),
 	// Subject should be one of: 'Arithmatic', 'Reasoning', 'Computer Aptitude', 'General Knowledge'
 	// This check is enforced at the application level
@@ -126,7 +137,10 @@ export const userSubmissionTimestamps = pgTable('user_submission_timestamps', {
 	createdAt: timestamp('created_at').defaultNow(),
 });
 
-// Define relations
+//! #########################################################
+//! RELATIONS
+//! #########################################################
+
 export const addressesRelations = relations(addresses, ({ many }) => ({
 	users: many(users),
 }));
@@ -190,3 +204,30 @@ export const uploadFilesRelations = relations(uploadFiles, ({ one }) => ({
 		references: [users.id],
 	}),
 }));
+
+//! #########################################################
+//! DOCUMENT SCHEMAS
+//! #########################################################
+
+// Schemas for document validation and type safety
+export const insertUploadFileSchema = createInsertSchema(uploadFiles, {
+	documentType: z.string().min(1).max(100),
+	fileUrl: z.string().url(),
+	fileName: z.string().min(1).max(255),
+	fileKey: z.string().min(1).max(255),
+	fileSize: z.string().optional(),
+	mimeType: z.string().optional(),
+});
+
+export const selectUploadFileSchema = createSelectSchema(uploadFiles);
+
+export type UploadFileType = z.infer<typeof selectUploadFileSchema>;
+export type NewUploadFile = z.infer<typeof insertUploadFileSchema>;
+
+// Convenience types for document operations
+export type UploadFileTypeString =
+	| '10th_marksheet'
+	| '12th_marksheet'
+	| 'aadhar'
+	| 'profile_pic'
+	| 'other';
