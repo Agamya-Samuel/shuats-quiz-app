@@ -203,19 +203,24 @@ and recommending them appropriate courses,
 <!-- For Agamya -->
 
 #### Important
+- [x] Add S3 bucket support to upload documents and profile photo.
 - [x] Add DAL (Data Access Layer) to all actions, specially to quiz submit action and all admin actions.
 	- [ ] Give Final Review to DAL once again.
-- [ ] After Registering, login user, redirect to dashboard and ask for document upload.
+- [x] After Registering, login user, redirect to dashboard and ask for document upload.
+- [x] Profile photo upload during registration.
+- [ ] in navbar, show profile photo
 - [ ] Add guidlines for Exam Rules, Question Format, Syllabus, Scoring Criteria (preferece order of subjects, time taken to complete the quiz, etc.)
-- [ ] Profile photo upload during registration.
-- [ ] Add S3 bucket support to upload documents and profile photo.
 
 #### Medium Priority
 - [x] Make the First Prize Bigger pop out more than other prizes.
+- [ ] in navbar, why fecthing quiz results ? investigate it if not needed.
+- [ ] in `next.config.ts`, setting body size limit to 5mb, investigate this, how safe is this?
+- [ ] Fix overall Type Checking issues, improve type safety, implement proper types and interfaces.
 - [ ] Fix `contexts\cookie-context.tsx` types/interface for `user` cookie.
 - [ ] Add DB Index to
 	- [ ] questions.text
 	- [ ] questions.subject
+	- [ ] upload
 - [ ] Add logging (saves to db) to all actions
 - [ ] Kubernetes for Auto Scaling ? minimum 2 instance, maximum 5 instances
 	- [ ] Load Balancer
