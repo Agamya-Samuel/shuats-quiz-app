@@ -24,7 +24,7 @@ export default function Hero() {
 					<h1 className="text-4xl md:text-6xl font-bold text-white mb-6 animate__animated animate__fadeInDown">
 						Welcome to{' '}
 						<span className="text-blue-500">Excellence</span> in
-						Education
+						Education in SHUATS
 					</h1>
 
 					<p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl animate__animated animate__fadeInUp animate__delay-1s">

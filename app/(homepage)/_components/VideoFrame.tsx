@@ -9,29 +9,6 @@ const VideoFrame = () => {
   const [hovered, setHovered] = useState(false);
   const [showUnmute, setShowUnmute] = useState(true);
 
-  // Hybrid approach: unmute on first user interaction
-  useEffect(() => {
-    const handleUserInteraction = () => {
-      if (videoRef.current) {
-        videoRef.current.muted = false;
-        setMuted(false);
-        setShowUnmute(false);
-        videoRef.current.play();
-      }
-      window.removeEventListener('click', handleUserInteraction);
-      window.removeEventListener('keydown', handleUserInteraction);
-      window.removeEventListener('touchstart', handleUserInteraction);
-    };
-    window.addEventListener('click', handleUserInteraction);
-    window.addEventListener('keydown', handleUserInteraction);
-    window.addEventListener('touchstart', handleUserInteraction);
-    return () => {
-      window.removeEventListener('click', handleUserInteraction);
-      window.removeEventListener('keydown', handleUserInteraction);
-      window.removeEventListener('touchstart', handleUserInteraction);
-    };
-  }, []);
-
   useEffect(() => {
     // Try to play the video on mount if muted
     if (videoRef.current && muted) {
@@ -62,8 +39,15 @@ const VideoFrame = () => {
     videoRef.current.play();
   };
 
-  const handlePlayPause = () => {
+  const handlePlayPauseOrUnmute = () => {
     if (!videoRef.current) return;
+    if (muted) {
+      videoRef.current.muted = false;
+      setMuted(false);
+      setShowUnmute(false);
+      videoRef.current.play();
+      return;
+    }
     if (videoRef.current.paused) {
       videoRef.current.play();
       setPlaying(true);
@@ -87,7 +71,7 @@ const VideoFrame = () => {
           className="relative w-full h-full rounded-2xl overflow-hidden bg-background z-20"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
-          onClick={handlePlayPause}
+          onClick={handlePlayPauseOrUnmute}
         >
           <video
             ref={videoRef}
