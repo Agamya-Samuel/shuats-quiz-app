@@ -112,9 +112,3 @@ export default cataloguePics;
 // export const campusTourVideo2 = "https://cdn-shuatsquiz.agamya.dev/video/shuats_tour.mp4";
 
 export const campusTourVideo = "https://cdn-shuatsquiz.agamya.dev/video/shuats_tour_2.mp4";
-
-const s3BucketFaculty = 'https://cdn-shuatsquiz.agamya.dev/faculty-pics';
-export const deanImage = `${s3BucketFaculty}/DEAN.png`;
-export const hodImage = `${s3BucketFaculty}/HOD.png`;
-export const DileepImage = `${s3BucketFaculty}/Dileep.jpg`;
-export const nkGuptaImage = `${s3BucketFaculty}/nk_gupta.png`;

@@ -7,7 +7,6 @@ import Academics from '@/app/(homepage)/_components/Academics';
 import CampusLife from '@/app/(homepage)/_components/CampusLife';
 import Infrastructure from '@/app/(homepage)/_components/Infrastructure';
 import Gallery from '@/app/(homepage)/_components/Gallery';
-import DeanAndHODInfo from '@/app/(homepage)/_components/DeanAndHODInfo';
 import Contact from '@/app/(homepage)/_components/Contact';
 import Footer from '@/app/(homepage)/_components/Footer';
 import TakeQuiz from '@/app/(homepage)/_components/TakeQuiz';
@@ -26,7 +25,6 @@ export default function Home() {
 				<CampusLife />
 				<Infrastructure />
 				<Gallery />
-				<DeanAndHODInfo />
 				<Contact />
 			</main>
 			<Footer />

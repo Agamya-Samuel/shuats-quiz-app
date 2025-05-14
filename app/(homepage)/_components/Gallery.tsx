@@ -66,7 +66,7 @@ export default function Gallery() {
 									sizes="(max-width: 768px) 100vw, 33vw"
 									className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
 								/>
-								<div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-opacity"></div>
+								{/* <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-opacity"></div> */}
 								<div className="absolute bottom-0 left-0 right-0 p-4">
 									<h3 className="text-lg font-bold text-white drop-shadow mb-1">{cat.category.replace(/_/g, ' ').toUpperCase()}</h3>
 								</div>
