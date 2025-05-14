@@ -1,5 +1,7 @@
 // components/Navbar.tsx
 
+'use client';
+
 import {
 	LogOut,
 	Trophy,
@@ -9,13 +11,14 @@ import {
 	Briefcase,
 	User,
 } from 'lucide-react';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { useState, useEffect } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useState, useEffect, useCallback } from 'react';
 import { useCookies } from '@/contexts/cookie-context';
 import { logout } from '@/actions/logout';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
+import { getUserDocuments } from '@/actions/upload';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -40,9 +43,37 @@ interface NavbarProps {
 export default function Navbar({ showTime = true }: NavbarProps) {
 	const [user, setUser] = useState<IUser | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
+	const [profilePhotoUrl, setProfilePhotoUrl] = useState<string | null>(null);
 	const { user: currentUser } = useCookies();
 	const router = useRouter();
 	const { toast } = useToast();
+
+	// Create a fetchProfilePhoto function that can be reused
+	const fetchProfilePhoto = useCallback(async () => {
+		if (currentUser?.userId && currentUser.role === 'user') {
+			try {
+				const response = await getUserDocuments();
+
+				if (response.success && response.documents) {
+					// Find profile photo document
+					const profileDoc = response.documents.find(
+						(doc) => doc.documentType === 'profile_pic'
+					);
+
+					if (profileDoc?.fileUrl) {
+						// Add a timestamp to prevent browser caching
+						setProfilePhotoUrl(
+							`${profileDoc.fileUrl}?t=${new Date().getTime()}`
+						);
+					} else {
+						setProfilePhotoUrl(null);
+					}
+				}
+			} catch (error) {
+				console.error('Error fetching profile photo:', error);
+			}
+		}
+	}, [currentUser?.userId, currentUser?.role]);
 
 	// Update user data when currentUser changes
 	useEffect(() => {
@@ -65,7 +96,34 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 			setUser(null);
 		}
 		setIsLoading(false);
-	}, [currentUser]); // Add currentUser to dependency array
+	}, [currentUser]);
+
+	// Initial profile photo fetch
+	useEffect(() => {
+		fetchProfilePhoto();
+	}, [fetchProfilePhoto]);
+
+	// Listen for profile photo update events
+	useEffect(() => {
+		// Create event handler to refresh profile photo
+		const handleProfilePhotoUpdate = () => {
+			fetchProfilePhoto();
+		};
+
+		// Add event listener
+		window.addEventListener(
+			'profile-photo-updated',
+			handleProfilePhotoUpdate
+		);
+
+		// Clean up
+		return () => {
+			window.removeEventListener(
+				'profile-photo-updated',
+				handleProfilePhotoUpdate
+			);
+		};
+	}, [fetchProfilePhoto]);
 
 	const handleLogout = async () => {
 		try {
@@ -143,6 +201,10 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 						<DropdownMenuTrigger asChild>
 							<div className="flex items-center space-x-2 cursor-pointer">
 								<Avatar className="h-12 w-12">
+									<AvatarImage
+										src={profilePhotoUrl || undefined}
+										alt={user?.name || 'User'}
+									/>
 									<AvatarFallback className="bg-amber-100 text-amber-800">
 										{user?.name
 											? user.name
