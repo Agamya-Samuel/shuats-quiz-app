@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import * as z from 'zod';
@@ -25,7 +25,8 @@ import {
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getUser, updateUser } from '@/actions/user';
-import QuizLoading from '@/app/user/quiz/_components/quiz-loading';
+import { getUserDocuments } from '@/actions/upload';
+import GlobalLoading from '@/components/global-loading';
 import { useCookies } from '@/contexts/cookie-context';
 import { redirect } from 'next/navigation';
 import { LoadingSpinner } from '@/components/loading-spinner';
@@ -110,6 +111,7 @@ interface IUser {
 		pincode: string | null;
 		state: string | null;
 	} | null;
+	avatarUrl?: string;
 }
 
 export function UserProfile() {
@@ -117,6 +119,7 @@ export function UserProfile() {
 	const [user, setUser] = useState<IUser | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isSaving, setIsSaving] = useState(false);
+	const [profilePhotoUrl, setProfilePhotoUrl] = useState<string | null>(null);
 	const defaultTab = 'personal';
 	const searchParams = useSearchParams();
 	const router = useRouter();
@@ -279,6 +282,60 @@ export function UserProfile() {
 		fetchUserData();
 	}, [currentUser, form]);
 
+	// Create a fetchProfilePhoto function that can be reused
+	const fetchProfilePhoto = useCallback(async () => {
+		if (currentUser?.userId) {
+			try {
+				const response = await getUserDocuments();
+
+				if (response.success && response.documents) {
+					// Find profile photo document
+					const profileDoc = response.documents.find(
+						(doc) => doc.documentType === 'profile_pic'
+					);
+
+					if (profileDoc?.fileUrl) {
+						// Add timestamp to prevent browser caching
+						setProfilePhotoUrl(
+							`${profileDoc.fileUrl}?t=${new Date().getTime()}`
+						);
+					} else {
+						setProfilePhotoUrl(null);
+					}
+				}
+			} catch (error) {
+				console.error('Error fetching profile photo:', error);
+			}
+		}
+	}, [currentUser?.userId]);
+
+	// Initial profile photo fetch
+	useEffect(() => {
+		fetchProfilePhoto();
+	}, [fetchProfilePhoto]);
+
+	// Listen for profile photo update events
+	useEffect(() => {
+		// Create event handler to refresh profile photo
+		const handleProfilePhotoUpdate = () => {
+			fetchProfilePhoto();
+		};
+
+		// Add event listener
+		window.addEventListener(
+			'profile-photo-updated',
+			handleProfilePhotoUpdate
+		);
+
+		// Clean up
+		return () => {
+			window.removeEventListener(
+				'profile-photo-updated',
+				handleProfilePhotoUpdate
+			);
+		};
+	}, [fetchProfilePhoto]);
+
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		setIsSaving(true);
 		try {
@@ -335,11 +392,8 @@ export function UserProfile() {
 
 	if (isLoading) {
 		return (
-			<div
-				className="container mx-auto py-8 px-4 max-w-5xl"
-				style={{ minHeight: 'calc(100vh - 150px)' }}
-			>
-				<QuizLoading message="Loading your profile..." />
+			<div className="flex items-center justify-center min-h-[60vh]">
+				<GlobalLoading message="Loading your profile..." />
 			</div>
 		);
 	}
@@ -350,7 +404,10 @@ export function UserProfile() {
 				<div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-6">
 					<Avatar className="w-24 h-24 border-4 border-background shadow-lg">
 						<AvatarImage
-							src="/placeholder.svg?height=96&width=96"
+							src={
+								profilePhotoUrl ||
+								'/placeholder.svg?height=96&width=96'
+							}
 							alt={user?.name}
 						/>
 						<AvatarFallback className="text-xl bg-gradient-to-br from-teal-400 to-emerald-600 text-white">
