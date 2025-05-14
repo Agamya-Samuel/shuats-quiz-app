@@ -38,6 +38,7 @@
     "country-state-city": "^3.2.1",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
+    "drizzle-zod": "^0.7.1",
     "jose": "^5.9.6",
     "js-cookie": "^3.0.5",
     "katex": "^0.16.21",
