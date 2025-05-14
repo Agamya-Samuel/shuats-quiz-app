@@ -14,7 +14,7 @@ import { getQuizResults } from '@/actions/quiz';
 import Legend from './legend';
 import QuizQuestionView from './quiz-question-view';
 import { cn } from '@/lib/utils';
-import QuizLoading from './quiz-loading';
+import GlobalLoading from '@/components/global-loading';
 import { useToast } from '@/hooks/use-toast';
 import { useCookies as useAuthCookies } from '@/contexts/cookie-context';
 import { useCookies } from '@/hooks/use-cookies';
@@ -587,11 +587,8 @@ export default function QuizInterface() {
 	// Show loading state while checking attempt status
 	if (isCheckingAttemptStatus) {
 		return (
-			<div
-				className="max-w-7xl mx-auto w-full px-4 flex items-center justify-center"
-				style={{ minHeight: 'calc(100vh - 150px)' }}
-			>
-				<QuizLoading message="Checking quiz status..." />
+			<div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
+				<GlobalLoading message="Checking quiz status..." />
 			</div>
 		);
 	}
@@ -628,16 +625,13 @@ export default function QuizInterface() {
 	// Show loading state while fetching questions
 	if (isLoading) {
 		return (
-			<div
-				className="max-w-7xl mx-auto w-full px-4 flex items-center justify-center"
-				style={{ minHeight: 'calc(100vh - 150px)' }}
-			>
-				<QuizLoading
-					message={`Loading ${
-						selectedSubjects.length > 0
-							? selectedSubjects.join(', ')
-							: 'questions'
-					}...`}
+			<div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
+				<GlobalLoading
+					message={
+						isSubmitting
+							? 'Submitting your answers...'
+							: 'Loading quiz questions...'
+					}
 				/>
 			</div>
 		);
