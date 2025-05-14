@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import Navbar from '@/components/navbar';
 import { useCookies } from '@/contexts/cookie-context';
 import { getQuizResults } from '@/actions/quiz';
+import { usePathname } from 'next/navigation';
 
 /**
  * Client component wrapper for Navbar
@@ -11,9 +12,17 @@ import { getQuizResults } from '@/actions/quiz';
  */
 export default function ClientNavbar() {
 	const { user: currentUser } = useCookies();
+	const pathname = usePathname();
+
+	// Only check attempt status on quiz-related pages
+	const isQuizRelatedPage =
+		pathname?.includes('/quiz') || pathname?.includes('/result');
 
 	// Check if user has already attempted the quiz - kept for future reference
 	useEffect(() => {
+		// Skip this check on document-upload and other non-quiz pages
+		if (!isQuizRelatedPage) return;
+
 		const checkAttemptStatus = async () => {
 			if (!currentUser?.userId) return;
 
@@ -41,7 +50,7 @@ export default function ClientNavbar() {
 		};
 
 		checkAttemptStatus();
-	}, [currentUser?.userId]);
+	}, [currentUser?.userId, isQuizRelatedPage, pathname]);
 
 	// Always pass false for showTime to never show the timer in the navbar
 	// The timer is now displayed directly in the quiz interface
