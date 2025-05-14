@@ -66,9 +66,11 @@ export default function Gallery() {
 				return updated;
 			});
 		}, IMAGE_CHANGE_INTERVAL);
+		// Copy fadeTimeouts.current to a local variable for cleanup
+		const fadeTimeoutsSnapshot = [...fadeTimeouts.current];
 		return () => {
-			interval && clearInterval(interval);
-			fadeTimeouts.current.forEach(t => t && clearTimeout(t));
+			if (interval) clearInterval(interval);
+			fadeTimeoutsSnapshot.forEach(t => t && clearTimeout(t));
 		};
 	}, [pageSize, pagedCategories, prevIndexes, fading]);
 
