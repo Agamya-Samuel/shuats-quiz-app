@@ -1,1 +1,0 @@
-ALTER TABLE "upload_files" ADD COLUMN "rejected" boolean DEFAULT false;
