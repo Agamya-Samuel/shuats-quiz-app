@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { getAllQuestions } from '@/actions/quiz';
+import { getAllQuestions, getPublicQuizSettings } from '@/actions/quiz';
 import {
 	submitAnswer,
 	submitQuiz,
@@ -120,8 +120,14 @@ export default function QuizInterface() {
 	const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
 	const [showSubjectSelector, setShowSubjectSelector] = useState(false);
 
-	// Timer state
-	const [timeRemaining, setTimeRemaining] = useState(30 * 60); // 30 minutes in seconds
+	// Quiz settings state
+	const [quizSettings, setQuizSettings] = useState<{
+		isLive: boolean;
+	} | null>(null);
+	const [isLoadingSettings, setIsLoadingSettings] = useState(true);
+
+	// Timer state - use a fixed value since we don't get it from API anymore
+	const [timeRemaining, setTimeRemaining] = useState(30 * 60); // 30 minutes in seconds (fixed)
 	const [showTimeUpDialog, setShowTimeUpDialog] = useState(false);
 	const [isTimeUp, setIsTimeUp] = useState(false);
 
@@ -134,29 +140,109 @@ export default function QuizInterface() {
 	// Enable anti-cheat measures when quiz is active
 	const antiCheat = useAntiCheat(quizStarted);
 
+	// Load quiz settings
+	useEffect(() => {
+		const loadQuizSettings = async () => {
+			try {
+				setIsLoadingSettings(true);
+				const response = await getPublicQuizSettings();
+
+				if (response.success && response.settings) {
+					// Use nullish coalescing to ensure we have valid boolean value
+					const isLive =
+						typeof response.settings.isLive === 'boolean'
+							? response.settings.isLive
+							: true;
+
+					setQuizSettings({ isLive });
+
+					// Immediately update loading state if quiz is not live
+					// This allows the UI to show "Quiz Not Available" message faster
+					if (!isLive) {
+						setIsLoadingSettings(false);
+					}
+
+					// We now use a fixed time limit
+					// No need to update timeRemaining here
+				} else {
+					// Use defaults if we can't load settings
+					setQuizSettings({ isLive: true });
+				}
+			} catch (error) {
+				console.error('Error loading quiz settings:', error);
+				// Set default values if there's an error
+				setQuizSettings({ isLive: true });
+			} finally {
+				// Only set loading to false here if it hasn't been set already
+				// This prevents overriding the early completion for not-live quizzes
+				setIsLoadingSettings((current) => current);
+			}
+		};
+
+		loadQuizSettings();
+	}, []);
+
 	// Check if user has already attempted the quiz
 	useEffect(() => {
 		const checkAttemptStatus = async () => {
-			if (!currentUser?.userId) return;
+			// Skip everything if no user ID, still loading settings, or if we've already determined the quiz isn't live
+			if (!currentUser?.userId || isLoadingSettings) return;
+			if (quizSettings && !quizSettings.isLive) return; // Skip API call if quiz is not live
 
 			setIsCheckingAttemptStatus(true);
 
 			try {
+				// Add a flag to localStorage to reduce redundant API calls
+				const checkedRecently = localStorage.getItem(
+					'quiz_attempt_checked'
+				);
+				const parsedCheck = checkedRecently
+					? JSON.parse(checkedRecently)
+					: null;
+				const now = new Date().getTime();
+
+				// If we've checked in the last 5 minutes and user hasn't attempted, skip the API call
+				if (
+					parsedCheck &&
+					parsedCheck.userId === currentUser.userId &&
+					parsedCheck.hasAttempted === false &&
+					now - parsedCheck.timestamp < 5 * 60 * 1000
+				) {
+					setHasAlreadyAttempted(false);
+					setShowSubjectSelector(quizSettings?.isLive || false);
+					setIsCheckingAttemptStatus(false);
+					return;
+				}
+
 				const response = await getQuizResults(
 					Number(currentUser.userId)
 				);
-				if (
+
+				const hasAttempted =
 					response.success &&
 					response.results &&
-					response.results.questions.length > 0
-				) {
+					response.results.questions.length > 0;
+
+				if (hasAttempted) {
 					setHasAlreadyAttempted(true);
 					setShowSubjectSelector(false);
 				} else {
-					// User hasn't attempted the quiz, show subject selector
+					// User hasn't attempted the quiz, show subject selector if quiz is live
 					setHasAlreadyAttempted(false);
-					setShowSubjectSelector(true);
+					if (quizSettings?.isLive) {
+						setShowSubjectSelector(true);
+					}
 				}
+
+				// Store the check in localStorage to avoid redundant API calls
+				localStorage.setItem(
+					'quiz_attempt_checked',
+					JSON.stringify({
+						userId: currentUser.userId,
+						hasAttempted,
+						timestamp: now,
+					})
+				);
 			} catch (err) {
 				console.error('Error checking attempt status:', err);
 				setError(
@@ -167,8 +253,13 @@ export default function QuizInterface() {
 			}
 		};
 
-		checkAttemptStatus();
-	}, [currentUser?.userId]);
+		if (!isLoadingSettings && quizSettings?.isLive) {
+			checkAttemptStatus();
+		} else {
+			// If quiz is not live, we don't need to check attempt status
+			setIsCheckingAttemptStatus(false);
+		}
+	}, [currentUser?.userId, isLoadingSettings, quizSettings]);
 
 	// Timer effect
 	useEffect(() => {
@@ -330,11 +421,15 @@ export default function QuizInterface() {
 			{ expires: 7 }
 		);
 
-		// Record quiz start time after subject selection
+		// Record quiz start time after subject selection - but only record on the server if we have a user ID
 		const startTime = new Date();
 		setQuizStartTime(startTime);
 		localStorage.setItem('quiz_start_time', JSON.stringify(startTime));
-		await recordQuizStartTime(currentUser?.userId || '', startTime);
+
+		// Only make the API call if we have a user ID
+		if (currentUser?.userId) {
+			await recordQuizStartTime(currentUser.userId, startTime);
+		}
 	};
 
 	// Fetch questions only from selected subjects
@@ -584,30 +679,105 @@ export default function QuizInterface() {
 		router.push('/user/quiz/completion');
 	};
 
-	// Show loading state while checking attempt status
-	if (isCheckingAttemptStatus) {
+	// Custom renderer for quiz not live
+	const renderQuizNotLive = () => (
+		<div className="min-h-[80vh] flex items-center justify-center p-4">
+			<Card className="w-full max-w-md shadow-lg">
+				<CardContent className="p-6">
+					<div className="text-center">
+						<h3 className="text-xl font-semibold mb-4">
+							Quiz Not Available
+						</h3>
+						<p className="text-muted-foreground mb-6">
+							The quiz is currently not available. Please check
+							back later when it has been activated by the
+							administrator.
+						</p>
+						{/* <Button
+							onClick={() => router.push('/user')}
+							variant="outline"
+						>
+							Return to Dashboard
+						</Button> */}
+					</div>
+				</CardContent>
+			</Card>
+		</div>
+	);
+
+	// Loading state - Add timeout to prevent infinite loading
+	useEffect(() => {
+		// Set a timeout to prevent infinite loading
+		const timeoutId = setTimeout(() => {
+			if (isLoading || isCheckingAttemptStatus || isLoadingSettings) {
+				console.warn(
+					'Loading timeout reached, forcing state update to prevent infinite loading'
+				);
+				setIsLoading(false);
+				setIsCheckingAttemptStatus(false);
+				setIsLoadingSettings(false);
+			}
+		}, 5000); // Reduced from 10s to 5s for faster fallback
+
+		return () => clearTimeout(timeoutId);
+	}, [isLoading, isCheckingAttemptStatus, isLoadingSettings]);
+
+	// Add debug logs to track loading states
+	useEffect(() => {
+		console.log('Loading states:', {
+			isLoading,
+			isCheckingAttemptStatus,
+			isLoadingSettings,
+			currentUserId: currentUser?.userId,
+			quizSettings,
+		});
+	}, [
+		isLoading,
+		isCheckingAttemptStatus,
+		isLoadingSettings,
+		currentUser?.userId,
+		quizSettings,
+	]);
+
+	// Modified condition order to prioritize showing "Quiz Not Available" message
+	// Quiz not live - check this first
+	if (quizSettings && !quizSettings.isLive) {
+		return renderQuizNotLive();
+	}
+
+	// Loading state
+	if (isLoading || isCheckingAttemptStatus || isLoadingSettings) {
+		return <GlobalLoading />;
+	}
+
+	// Error state
+	if (error) {
 		return (
-			<div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
-				<GlobalLoading message="Checking quiz status..." />
-			</div>
+			<ErrorState
+				message={error}
+				retry={() => window.location.reload()}
+			/>
 		);
 	}
 
-	// If user has already attempted the quiz, show a message
+	// Already attempted
 	if (hasAlreadyAttempted) {
 		return (
-			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
-				<Card className="max-w-lg w-full">
+			<div className="min-h-[80vh] flex items-center justify-center p-4">
+				<Card className="w-full max-w-md shadow-lg">
 					<CardContent className="p-6">
 						<div className="text-center">
-							<h3 className="text-xl font-semibold mb-2">
+							<h3 className="text-xl font-semibold mb-4">
 								Quiz Already Attempted
 							</h3>
-							<p className="mb-6">
-								You have already attempted this quiz. You can
-								view your results below.
+							<p className="text-muted-foreground mb-6">
+								You have already completed this quiz. You can
+								view your results in the results section.
 							</p>
-							<Button onClick={() => router.push('/user/result')}>
+							<Button
+								onClick={() => router.push('/user/result')}
+								variant="outline"
+							>
 								View Results
 							</Button>
 						</div>
@@ -617,7 +787,7 @@ export default function QuizInterface() {
 		);
 	}
 
-	// Show subject selector before starting the quiz
+	// Subject selection
 	if (showSubjectSelector) {
 		return <SubjectSelector onSubjectSelect={handleSubjectSelect} />;
 	}
@@ -632,20 +802,6 @@ export default function QuizInterface() {
 							? 'Submitting your answers...'
 							: 'Loading quiz questions...'
 					}
-				/>
-			</div>
-		);
-	}
-
-	if (error) {
-		return (
-			<div
-				className="max-w-7xl mx-auto w-full px-4"
-				style={{ minHeight: 'calc(100vh - 150px)' }}
-			>
-				<ErrorState
-					message={error}
-					retry={() => fetchQuestions(selectedSubjects)}
 				/>
 			</div>
 		);
