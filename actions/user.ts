@@ -2,10 +2,10 @@
 
 import argon2 from 'argon2';
 import { connectToDB } from '@/db';
-import { users, addresses } from '@/db/schema';
+import { users, addresses, uploadFiles } from '@/db/schema';
 import { generateToken, verifyToken } from '@/lib/auth';
 import { setCookie } from '@/lib/cookies';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import {
 	AddressData,
@@ -589,6 +589,45 @@ export async function resetPassword(token: string, formData: FormData) {
 		return {
 			success: false,
 			message: 'An error occurred. Please try again later.',
+		};
+	}
+}
+
+// Get User Profile Picture
+export async function getUserProfilePicture(userId: number) {
+	const user = await verifyAuth();
+	if (!user || user.role !== 'user') {
+		return {
+			success: false,
+			message:
+				'Unauthorized: Only users can access their profile picture',
+		};
+	}
+
+	try {
+		// Connect to db
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
+
+		// Get user profile
+		const profilePicture = await db.query.uploadFiles.findFirst({
+			where: and(
+				eq(uploadFiles.userId, userId),
+				eq(uploadFiles.documentType, 'profile_pic')
+			),
+			// columns: {
+			// 	fileUrl: true,
+			// },
+		});
+		console.log('profilePicture', profilePicture);
+
+		return { success: true, profilePicture };
+	} catch (error) {
+		console.error('Error fetching user profile picture:', error);
+		return {
+			success: false,
+			message: `Error fetching user profile picture: ${error}`,
 		};
 	}
 }
