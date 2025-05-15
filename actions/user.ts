@@ -620,7 +620,6 @@ export async function getUserProfilePicture(userId: number) {
 				fileUrl: true,
 			},
 		});
-		console.log('profilePicture', profilePicture);
 
 		return { success: true, profilePicture };
 	} catch (error) {
