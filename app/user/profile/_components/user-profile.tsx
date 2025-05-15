@@ -24,8 +24,7 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getUser, updateUser } from '@/actions/user';
-import { getUserDocuments } from '@/actions/upload';
+import { getUser, getUserProfilePicture, updateUser } from '@/actions/user';
 import GlobalLoading from '@/components/global-loading';
 import { useCookies } from '@/contexts/cookie-context';
 import { redirect } from 'next/navigation';
@@ -286,13 +285,12 @@ export function UserProfile() {
 	const fetchProfilePhoto = useCallback(async () => {
 		if (currentUser?.userId) {
 			try {
-				const response = await getUserDocuments();
-
-				if (response.success && response.documents) {
+				const response = await getUserProfilePicture(
+					Number(currentUser.userId)
+				);
+				if (response.success && response.profilePicture) {
 					// Find profile photo document
-					const profileDoc = response.documents.find(
-						(doc) => doc.documentType === 'profile_pic'
-					);
+					const profileDoc = response.profilePicture;
 
 					if (profileDoc?.fileUrl) {
 						// Add timestamp to prevent browser caching
