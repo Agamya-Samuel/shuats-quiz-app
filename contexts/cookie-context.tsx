@@ -5,8 +5,8 @@ import { createContext, PropsWithChildren, useContext, useMemo } from 'react';
 interface CookieContextType {
 	token: string | null;
 	user: {
-		userId: string;
-		role: 'user' | 'superadmin' | 'maintainer';
+		userId: string | number;
+		role: 'user' | 'superadmin' | 'admin';
 		username?: string;
 		name?: string;
 		email?: string;
