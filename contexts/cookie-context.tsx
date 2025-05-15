@@ -1,20 +1,23 @@
 'use client';
 
 import { createContext, PropsWithChildren, useContext, useMemo } from 'react';
+import { AddressData } from '@/types/user';
 
 interface CookieContextType {
 	token: string | null;
 	user: {
-		userId: string | number;
+		userId: number;
 		role: 'user' | 'superadmin' | 'admin';
-		username?: string;
+		// User specific fields
 		name?: string;
 		email?: string;
 		school?: string;
 		mobile?: string;
-		rollNo?: string;
+		rollno?: string;
 		branch?: string;
-		address?: string;
+		address?: AddressData;
+		// Admin and SuperAdmin specific fields
+		username?: string;
 	} | null;
 }
 

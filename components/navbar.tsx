@@ -82,17 +82,17 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 		if (currentUser) {
 			setUser({
 				name:
-					(currentUser.role === 'admin'
-						? currentUser.username
-						: currentUser.name) || '',
+					(currentUser.role === 'user'
+						? currentUser.name
+						: currentUser.username) || '',
 				school:
-					(currentUser.role === 'admin'
-						? 'ADMIN'
-						: currentUser.school) || '',
+					(currentUser.role === 'user'
+						? currentUser.school
+						: currentUser.role.toUpperCase()) || '',
 				email:
-					(currentUser.role === 'admin'
-						? 'ADMIN'
-						: currentUser.email) || '',
+					(currentUser.role === 'user'
+						? currentUser.email
+						: currentUser.role.toUpperCase()) || '',
 			});
 		} else {
 			setUser(null);
