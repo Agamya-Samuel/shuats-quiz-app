@@ -137,6 +137,34 @@ export const userSubmissionTimestamps = pgTable('user_submission_timestamps', {
 	createdAt: timestamp('created_at').defaultNow(),
 });
 
+// Quiz settings table
+export const quizSettings = pgTable('quiz_settings', {
+	id: serial('id').primaryKey(),
+
+	// Time Limit Settings
+	perQuizTimeLimit: integer('per_quiz_time_limit').default(30), // in minutes
+	perQuestionTimeLimit: integer('per_question_time_limit').default(0), // in seconds
+	enablePerQuestionTimer: boolean('enable_per_question_timer').default(false),
+	showCountdown: boolean('show_countdown').default(true),
+
+	// Availability Settings
+	isLive: boolean('is_live').default(true),
+	isScheduled: boolean('is_scheduled').default(false),
+	scheduledDate: timestamp('scheduled_date'),
+
+	// Behavior Settings
+	randomizeQuestions: boolean('randomize_questions').default(true),
+	showResultsMode: text('show_results_mode').default('manual'), // immediately, after_completion, scheduled_date, manual
+	allowRetake: boolean('allow_retake').default(false),
+	maxAttempts: integer('max_attempts').default(1),
+	showCorrectAnswers: boolean('show_correct_answers').default(false),
+	preventTabSwitching: boolean('prevent_tab_switching').default(true),
+
+	// Metadata
+	createdAt: timestamp('created_at').defaultNow(),
+	updatedAt: timestamp('updated_at').defaultNow(),
+});
+
 //! #########################################################
 //! RELATIONS
 //! #########################################################
