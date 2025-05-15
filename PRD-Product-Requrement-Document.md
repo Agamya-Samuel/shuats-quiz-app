@@ -208,11 +208,19 @@ and recommending them appropriate courses,
 	- [ ] Give Final Review to DAL once again.
 - [x] After Registering, login user, redirect to dashboard and ask for document upload.
 - [x] Profile photo upload during registration.
-- [ ] in navbar, show profile photo
+- [x] in navbar, show profile photo
+- [ ] in Admin Dashboard, add option to generate result of quiz for all users.
 - [ ] Add guidlines for Exam Rules, Question Format, Syllabus, Scoring Criteria (preferece order of subjects, time taken to complete the quiz, etc.)
+- [ ] Add logging (saves to db) to all actions, and log the user id, request type, request time, request status, request ip address, request user agent.
+	- [ ] specially for admin actions, log the admin id, request type, request time, request status, request ip address, request user agent.
+- [ ] Add validation -> if user calls `get_all_question` action, first check if the quiz is active or not, if not, return appropriate message.
+- [ ] Add validation -> if user calls `get_result` action, first check if the quiz result is declared or not, if not, return appropriate message.
+- [ ] Add validation -> if user calls `get_leaderboard` action, first check if the quiz result is declared or not, if not, return appropriate message.
+- [ ] Add db_seeding for quiz configuration settings.
 
 #### Medium Priority
 - [x] Make the First Prize Bigger pop out more than other prizes.
+- [ ] when document upload is verified by an admin, store it in the db approved_by_admin column.
 - [ ] in navbar, why fecthing quiz results ? investigate it if not needed.
 - [ ] in `next.config.ts`, setting body size limit to 5mb, investigate this, how safe is this?
 - [ ] Fix overall Type Checking issues, improve type safety, implement proper types and interfaces.
