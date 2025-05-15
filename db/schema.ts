@@ -36,7 +36,6 @@ export const users = pgTable('users', {
 	name: varchar('name', { length: 100 }).notNull(),
 	email: varchar('email', { length: 100 }).notNull().unique(),
 	password: text('password').notNull(),
-	avatar: text('avatar'),
 	addressId: integer('address_id').references(() => addresses.id, {
 		onDelete: 'set null',
 	}),
