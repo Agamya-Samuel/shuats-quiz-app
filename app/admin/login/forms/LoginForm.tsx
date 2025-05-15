@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { maintainerLoginSchema } from '@/schemas/forms/login-schema';
+import { adminLoginSchema } from '@/schemas/forms/login-schema';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -37,15 +37,15 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	const form = useForm<z.infer<typeof maintainerLoginSchema>>({
-		resolver: zodResolver(maintainerLoginSchema),
+	const form = useForm<z.infer<typeof adminLoginSchema>>({
+		resolver: zodResolver(adminLoginSchema),
 		defaultValues: {
 			username: '',
 			password: '',
 		},
 	});
 
-	async function onSubmit(values: z.infer<typeof maintainerLoginSchema>) {
+	async function onSubmit(values: z.infer<typeof adminLoginSchema>) {
 		setIsLoading(true);
 
 		try {
@@ -83,7 +83,7 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 
 	// Helper function to render form field with icon
 	const renderField = (
-		name: keyof z.infer<typeof maintainerLoginSchema>,
+		name: keyof z.infer<typeof adminLoginSchema>,
 		label: string,
 		placeholder: string,
 		icon: React.ReactNode,

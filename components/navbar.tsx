@@ -82,15 +82,15 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 		if (currentUser) {
 			setUser({
 				name:
-					(currentUser.role === 'maintainer'
+					(currentUser.role === 'admin'
 						? currentUser.username
 						: currentUser.name) || '',
 				school:
-					(currentUser.role === 'maintainer'
+					(currentUser.role === 'admin'
 						? 'ADMIN'
 						: currentUser.school) || '',
 				email:
-					(currentUser.role === 'maintainer'
+					(currentUser.role === 'admin'
 						? 'ADMIN'
 						: currentUser.email) || '',
 			});
