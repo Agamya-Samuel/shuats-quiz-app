@@ -10,7 +10,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as dbSchema from '@/db/schema';
 
 // Record quiz start time for a user
-export async function recordQuizStartTime(userId: string, startTime?: Date) {
+export async function recordQuizStartTime(userId: number, startTime?: Date) {
 	try {
 		// Use provided startTime or create a new one
 		const quizStartTime = startTime || new Date();
