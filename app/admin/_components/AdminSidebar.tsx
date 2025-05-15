@@ -71,7 +71,7 @@ export function AdminSidebar() {
 	];
 
 	return (
-		<Card className="h-[calc(100vh-8rem)] overflow-auto">
+		<Card className="overflow-auto">
 			<CardContent className="p-0">
 				<nav className="flex flex-col gap-1 p-2">
 					{menuItems.map((item) => (
