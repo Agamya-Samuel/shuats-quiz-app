@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { FileText, Download } from "lucide-react"
+import Image from "next/image"
 
 interface DocumentViewDialogProps {
   isOpen: boolean
@@ -56,7 +57,7 @@ export function DocumentViewDialog({ isOpen, onOpenChange, document, getDocument
     if (isImage) {
       return (
         <div className="w-full h-96 bg-muted rounded-md flex items-center justify-center">
-          <img
+          <Image
             src="/placeholder.svg?height=400&width=600"
             alt={`${document.userName}'s ${getDocumentTypeName(document.documentType)}`}
             className="max-h-full max-w-full object-contain"

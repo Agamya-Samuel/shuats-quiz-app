@@ -9,8 +9,6 @@ import {
 	Bell,
 	Settings,
 	LogOut,
-	FileQuestion,
-	CheckSquare,
 } from 'lucide-react';
 import { useState } from 'react';
 import {

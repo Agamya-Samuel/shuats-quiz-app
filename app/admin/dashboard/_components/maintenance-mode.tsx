@@ -22,7 +22,7 @@ export function MaintenanceMode() {
     redirectUrl: "",
   })
 
-  const [systemStatus, setSystemStatus] = useState({
+  const [systemStatus, ] = useState({
     database: "healthy", // "healthy", "warning", "error"
     server: "healthy",
     storage: "warning",
@@ -30,7 +30,11 @@ export function MaintenanceMode() {
     activeUsers: 0,
   })
 
-  const updateMaintenanceSetting = (key: string, value: any) => {
+  // Define a type for the maintenance settings keys
+  const updateMaintenanceSetting = (
+    key: keyof typeof maintenanceSettings, 
+    value: typeof maintenanceSettings[keyof typeof maintenanceSettings]
+  ) => {
     setMaintenanceSettings({
       ...maintenanceSettings,
       [key]: value,
