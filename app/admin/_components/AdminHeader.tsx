@@ -60,26 +60,6 @@ export function AdminHeader() {
 						<LayoutDashboard className="h-6 w-6 text-primary" />
 						<span className="font-bold">SHUATS Admin</span>
 					</Link>
-					<nav className="flex items-center space-x-6 text-sm font-medium">
-						<Link
-							href="/admin?section=dashboard"
-							className="transition-colors hover:text-foreground/80 text-foreground"
-						>
-							Dashboard
-						</Link>
-						<Link
-							href="/admin?section=manage-quiz"
-							className="transition-colors hover:text-foreground/80 text-foreground/60"
-						>
-							Manage Quiz
-						</Link>
-						<Link
-							href="/admin?section=verification"
-							className="transition-colors hover:text-foreground/80 text-foreground/60"
-						>
-							Verification
-						</Link>
-					</nav>
 				</div>
 				<Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
 					<SheetTrigger asChild>
