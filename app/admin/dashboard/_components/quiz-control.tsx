@@ -158,9 +158,6 @@ export function QuizControl() {
                         variant={
                           quiz.status === "active" ? "success" : quiz.status === "scheduled" ? "warning" : "outline"
                         }
-                        className={
-                          quiz.status === "active" ? "bg-green-500" : quiz.status === "scheduled" ? "bg-yellow-500" : ""
-                        }
                       >
                         {quiz.status === "active" ? "Active" : quiz.status === "scheduled" ? "Scheduled" : "Inactive"}
                       </Badge>
