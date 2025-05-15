@@ -216,7 +216,7 @@ and recommending them appropriate courses,
 - [ ] Add validation -> if user calls `get_all_question` action, first check if the quiz is active or not, if not, return appropriate message.
 - [ ] Add validation -> if user calls `get_result` action, first check if the quiz result is declared or not, if not, return appropriate message.
 - [ ] Add validation -> if user calls `get_leaderboard` action, first check if the quiz result is declared or not, if not, return appropriate message.
-- [ ] Add db_seeding for quiz configuration settings.
+- [ ] Add db_seeding for quiz configuration settings, add admin user to the db.
 
 #### Medium Priority
 - [x] Make the First Prize Bigger pop out more than other prizes.
