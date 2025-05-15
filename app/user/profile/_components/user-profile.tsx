@@ -110,7 +110,7 @@ interface IUser {
 		pincode: string | null;
 		state: string | null;
 	} | null;
-	avatarUrl?: string;
+	avatarUrl?: string; // TODO: remove avatarUrl from interface, if it is not used anywhere
 }
 
 export function UserProfile() {
