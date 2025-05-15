@@ -724,13 +724,15 @@ export default function QuizInterface() {
 
 	// Add debug logs to track loading states
 	useEffect(() => {
-		console.log('Loading states:', {
-			isLoading,
-			isCheckingAttemptStatus,
-			isLoadingSettings,
-			currentUserId: currentUser?.userId,
-			quizSettings,
-		});
+		if (process.env.NODE_ENV === 'development') {
+			console.log('Loading states:', {
+				isLoading,
+				isCheckingAttemptStatus,
+				isLoadingSettings,
+				currentUserId: currentUser?.userId,
+				quizSettings,
+			});
+		}
 	}, [
 		isLoading,
 		isCheckingAttemptStatus,
