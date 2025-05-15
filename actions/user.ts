@@ -616,9 +616,9 @@ export async function getUserProfilePicture(userId: number) {
 				eq(uploadFiles.userId, userId),
 				eq(uploadFiles.documentType, 'profile_pic')
 			),
-			// columns: {
-			// 	fileUrl: true,
-			// },
+			columns: {
+				fileUrl: true,
+			},
 		});
 		console.log('profilePicture', profilePicture);
 
