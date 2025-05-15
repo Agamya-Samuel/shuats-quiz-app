@@ -115,7 +115,7 @@ export default function Contact() {
 											Email
 										</h4>
 										<p className="text-gray-300">
-											admission@shuats.edu.in
+											head_csit@shiats.edu.in
 										</p>
 									</div>
 								</div>
@@ -126,7 +126,7 @@ export default function Contact() {
 											Phone
 										</h4>
 										<p className="text-gray-300">
-											+91-8960350259, 8887830378
+											+919935620054, +919335101824
 										</p>
 									</div>
 								</div>

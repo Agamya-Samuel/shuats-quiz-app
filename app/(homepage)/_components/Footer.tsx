@@ -12,10 +12,10 @@ export default function Footer() {
 							Empowering minds through quality education and world-class facilities.
 						</p>
 						<div className="flex space-x-4 mt-2">
-							<a href="https://www.facebook.com/shuats.allahabad" className="text-gray-400 hover:text-white transition-colors"><FacebookIcon className="w-6 h-6" /></a>
+							<a href="https://www.facebook.com/DCSITshuats/" className="text-gray-400 hover:text-white transition-colors"><FacebookIcon className="w-6 h-6" /></a>
 							<a href="https://x.com/shuats_edu" className="text-gray-400 hover:text-white transition-colors"><Twitter className="w-6 h-6" /></a>
 							<a href="https://www.linkedin.com/school/shuats-edu/posts/?feedView=all" className="text-gray-400 hover:text-white transition-colors"><Linkedin className="w-6 h-6" /></a>
-							<a href="https://www.instagram.com/shuats_edu/" className="text-gray-400 hover:text-white transition-colors"><Instagram className="w-6 h-6" /></a>
+							<a href="https://www.instagram.com/dcsit_shuats/" className="text-gray-400 hover:text-white transition-colors"><Instagram className="w-6 h-6" /></a>
 						</div>
 					</div>
 

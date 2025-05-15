@@ -26,7 +26,6 @@ export default function Navbar() {
 								'Campus Life',
 								'Infrastructure',
 								'Gallery',
-								'Testimonials',
 								'Contact',
 							].map((item) => (
 								<Link
@@ -99,7 +98,6 @@ export default function Navbar() {
 							'Campus Life',
 							'Infrastructure',
 							'Gallery',
-							'Testimonials',
 							'Contact',
 						].map((item) => (
 							<Link

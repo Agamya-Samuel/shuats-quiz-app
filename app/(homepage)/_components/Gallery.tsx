@@ -2,10 +2,12 @@
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import cataloguePics from '@/public/images/index.js';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const categories = Object.entries(cataloguePics).map(([category, images]) => ({ category, images }));
 const PAGE_SIZE = 9;
+const FADE_DURATION = 1000; // ms (was 500)
+const IMAGE_CHANGE_INTERVAL = 5000; // ms (was 2000)
 
 export default function Gallery() {
 	const [pageSize, setPageSize] = useState(PAGE_SIZE);
@@ -13,6 +15,14 @@ export default function Gallery() {
 	const [randomIndexes, setRandomIndexes] = useState(() =>
 		categories.map(() => 0)
 	);
+	// Track previous image index for fade transition
+	const [prevIndexes, setPrevIndexes] = useState<(number|null)[]>(
+		categories.map(() => null)
+	);
+	const [fading, setFading] = useState(() =>
+		categories.map(() => false)
+	);
+	const fadeTimeouts = useRef<(ReturnType<typeof setTimeout>|null)[]>([]);
 
 	// On mount (client only), randomize the indexes
 	useEffect(() => {
@@ -22,19 +32,47 @@ export default function Gallery() {
 	// Only show up to pageSize categories
 	const pagedCategories = categories.slice(0, pageSize);
 
-	// Update random image index for visible categories every 2 seconds
+	// Update random image index for visible categories every IMAGE_CHANGE_INTERVAL ms
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setRandomIndexes(prev => {
 				const updated = [...prev];
+				const newPrevIndexes = [...prevIndexes];
+				const newFading = [...fading];
 				pagedCategories.forEach((cat, i) => {
-					updated[i] = Math.floor(Math.random() * cat.images.length);
+					const newIdx = Math.floor(Math.random() * cat.images.length);
+					if (newIdx !== prev[i]) {
+						newPrevIndexes[i] = prev[i];
+						updated[i] = newIdx;
+						newFading[i] = true;
+						// Clear any previous timeout
+						if (fadeTimeouts.current[i]) clearTimeout(fadeTimeouts.current[i]!);
+						fadeTimeouts.current[i] = setTimeout(() => {
+							setPrevIndexes(p => {
+								const arr = [...p];
+								arr[i] = null;
+								return arr;
+							});
+							setFading(f => {
+								const arr = [...f];
+								arr[i] = false;
+								return arr;
+							});
+						}, FADE_DURATION);
+					}
 				});
+				setPrevIndexes(newPrevIndexes);
+				setFading(newFading);
 				return updated;
 			});
-		}, 2000);
-		return () => clearInterval(interval);
-	}, [pageSize, pagedCategories]);
+		}, IMAGE_CHANGE_INTERVAL);
+		// Copy fadeTimeouts.current to a local variable for cleanup
+		const fadeTimeoutsSnapshot = [...fadeTimeouts.current];
+		return () => {
+			if (interval) clearInterval(interval);
+			fadeTimeoutsSnapshot.forEach(t => t && clearTimeout(t));
+		};
+	}, [pageSize, pagedCategories, prevIndexes, fading]);
 
 	const handleViewMore = () => setPageSize(categories.length);
 	const hasMore = pageSize < categories.length;
@@ -54,19 +92,33 @@ export default function Gallery() {
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 					{pagedCategories.map((cat, i) => {
 						const imgIdx = randomIndexes[i] ?? 0;
+						const prevIdx = prevIndexes[i];
 						return (
 							<div
 								key={cat.category}
 								className={`relative group overflow-hidden rounded-xl shadow-lg h-72 animate__animated animate__fadeIn animate__delay-${i}s`}
 							>
+								{/* Previous image for fade out */}
+								{prevIdx !== null && (
+									<Image
+										key={cat.category + '-prev'}
+										src={cat.images[prevIdx]}
+										alt={cat.category}
+										fill
+										sizes="(max-width: 768px) 100vw, 33vw"
+										className="object-cover w-full h-full absolute inset-0 transition-opacity duration-1000 opacity-0 z-10"
+										style={{ opacity: fading[i] ? 0 : 1 }}
+									/>
+								)}
+								{/* Current image for fade in */}
 								<Image
+									key={cat.category + '-current'}
 									src={cat.images[imgIdx]}
 									alt={cat.category}
 									fill
 									sizes="(max-width: 768px) 100vw, 33vw"
-									className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+									className={`object-cover w-full h-full transition-opacity duration-1000 ${fading[i] ? 'opacity-100' : 'opacity-100'} relative`}
 								/>
-								{/* <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-opacity"></div> */}
 								<div className="absolute bottom-0 left-0 right-0 p-4">
 									<h3 className="text-lg font-bold text-white drop-shadow mb-1">{cat.category.replace(/_/g, ' ').toUpperCase()}</h3>
 								</div>
