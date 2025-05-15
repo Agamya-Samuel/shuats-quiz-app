@@ -947,3 +947,40 @@ export async function resetQuizSettings() {
 		};
 	}
 }
+
+// Get quiz settings for regular users (public endpoint)
+export async function getPublicQuizSettings() {
+	try {
+		// Connect to db
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
+
+		// Get the global quiz settings (first record)
+		const settings = await db.query.quizSettings.findFirst();
+
+		if (!settings) {
+			// Return default settings if none exist yet
+			return {
+				success: true,
+				settings: {
+					isLive: false,
+				},
+			};
+		}
+
+		// Return only the settings relevant to regular users
+		return {
+			success: true,
+			settings: {
+				isLive: settings.isLive,
+			},
+		};
+	} catch (error) {
+		console.error('Error fetching public quiz settings:', error);
+		return {
+			success: false,
+			message: `Error fetching quiz settings: ${error}`,
+		};
+	}
+}
