@@ -93,6 +93,15 @@ const TakeQuiz = () => {
 						Register for Quiz 🏆 Now
 						<ArrowRight className="ml-2 h-5 w-5" />
 					</Link>
+					<br />
+					<br />
+					<Link
+						href="/syllabus_list"
+						className="inline-flex items-center justify-center px-8 py-4 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors duration-300 text-lg"
+					>
+						Check Syllabus
+						<ArrowRight className="ml-2 h-5 w-5" />
+					</Link>
 				</div>
 			</div>
 		</section>

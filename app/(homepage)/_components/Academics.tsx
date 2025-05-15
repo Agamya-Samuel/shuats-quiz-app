@@ -3,14 +3,15 @@ import { CheckCircle, BookOpen, FlaskConical, Briefcase } from 'lucide-react';
 
 export default function Academics() {
 	const undergraduatePrograms = [
-		'Computer Science Engineering',
-		'Mechanical Engineering',
-		'Electrical Engineering',
+		'Bachelor of Computer Application',
+		'B.Sc. Computer Science',
+		'B.Tech. Computer Science and Engineering',
 	];
 
 	const postgraduatePrograms = [
-		'M.Tech in Data Science',
-		'M.Tech in AI & ML',
+		'Master of Computer Application',
+		'M.Tech. Computer Science and Engineering (Data Science)',
+		'M.Tech. Computer Science and Engineering',
 	];
 
 	const academicFeatures = [

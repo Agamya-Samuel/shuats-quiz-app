@@ -104,10 +104,7 @@ export default function Contact() {
 											Address
 										</h4>
 										<p className="text-gray-300">
-											123 College Street, Education
-											District
-											<br />
-											City, State 12345
+										Sam Higginbottom University of Agriculture, Technology And Sciences, Rewa Road, Naini, Prayagraj (Formerly Allahabad) -211007, Uttar Pradesh, INDIA
 										</p>
 									</div>
 								</div>
@@ -118,7 +115,7 @@ export default function Contact() {
 											Email
 										</h4>
 										<p className="text-gray-300">
-											info@collegename.edu
+											head_csit@shiats.edu.in
 										</p>
 									</div>
 								</div>
@@ -129,7 +126,7 @@ export default function Contact() {
 											Phone
 										</h4>
 										<p className="text-gray-300">
-											+1 (234) 567-8900
+											+919935620054, +919335101824
 										</p>
 									</div>
 								</div>
@@ -142,15 +139,11 @@ export default function Contact() {
 							<CardContent className="space-y-3">
 								<div className="flex items-center space-x-2">
 									<Clock className="w-5 h-5 text-blue-400" />
-									<p>Monday - Friday: 8:00 AM - 6:00 PM</p>
+									<p>Monday - Friday: 9:00 AM - 5:30 PM</p>
 								</div>
 								<div className="flex items-center space-x-2">
 									<Clock className="w-5 h-5 text-blue-400" />
-									<p>Saturday: 9:00 AM - 1:00 PM</p>
-								</div>
-								<div className="flex items-center space-x-2">
-									<Clock className="w-5 h-5 text-blue-400" />
-									<p>Sunday: Closed</p>
+									<p>Saturday & Sunday : Closed</p>
 								</div>
 							</CardContent>
 						</Card>

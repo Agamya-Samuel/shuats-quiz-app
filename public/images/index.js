@@ -108,3 +108,7 @@ const cataloguePics = {
 export const logo = `${s3BucketBaseUrl}/SHIATS_LOGO_hq.png`;
 
 export default cataloguePics;
+
+// export const campusTourVideo2 = "https://cdn-shuatsquiz.agamya.dev/video/shuats_tour.mp4";
+
+export const campusTourVideo = "https://cdn-shuatsquiz.agamya.dev/video/shuats_tour_2.mp4";
