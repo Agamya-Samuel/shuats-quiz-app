@@ -2,12 +2,18 @@
 'use server';
 
 import { connectToDB } from '@/db';
-import { questions, correctAnswers, userSubmissions } from '@/db/schema';
+import {
+	questions,
+	correctAnswers,
+	userSubmissions,
+	quizSettings,
+} from '@/db/schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as dbSchema from '@/db/schema';
 import { IOption, IQuestion, IQuestionWithAnswers } from '@/types/question';
 import { verifyAuth } from '@/lib/dal';
+import { revalidatePath } from 'next/cache';
 
 // Structure for user submission with question
 interface SubmissionWithQuestion {
@@ -687,6 +693,257 @@ export async function getLeaderboard() {
 		return {
 			success: false,
 			message: `An error occurred while retrieving leaderboard: ${error}`,
+		};
+	}
+}
+// Get quiz settings
+type QuizSettingsInput = {
+	timeLimit: {
+		perQuiz: number;
+		perQuestion: number;
+		enablePerQuestionTimer: boolean;
+		showCountdown: boolean;
+	};
+	availability: {
+		live: boolean;
+		scheduled: boolean;
+		scheduledDate: string | null;
+	};
+	behavior: {
+		randomizeQuestions: boolean;
+		showResults: string;
+		allowRetake: boolean;
+		maxAttempts: number;
+		showCorrectAnswers: boolean;
+		preventTabSwitching: boolean;
+	};
+};
+
+// Get global quiz settings
+export async function getQuizSettings() {
+	// Verify that the user is authenticated as admin
+	const user = await verifyAuth();
+	if (!user || user.role !== 'admin') {
+		return {
+			success: false,
+			message: 'Unauthorized: Only admins can access quiz settings',
+		};
+	}
+
+	try {
+		// Connect to db
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
+
+		// Get the global quiz settings (first record)
+		const settings = await db.query.quizSettings.findFirst();
+
+		if (!settings) {
+			// Return default settings if none exist yet
+			return getDefaultQuizSettings();
+		}
+
+		// Transform DB format to application format
+		const formattedSettings = {
+			timeLimit: {
+				perQuiz: settings.perQuizTimeLimit,
+				perQuestion: settings.perQuestionTimeLimit,
+				enablePerQuestionTimer: settings.enablePerQuestionTimer,
+				showCountdown: settings.showCountdown,
+			},
+			availability: {
+				live: settings.isLive,
+				scheduled: settings.isScheduled,
+				scheduledDate: settings.scheduledDate
+					? settings.scheduledDate.toISOString()
+					: null,
+			},
+			behavior: {
+				randomizeQuestions: settings.randomizeQuestions,
+				showResults: settings.showResultsMode,
+				allowRetake: settings.allowRetake,
+				maxAttempts: settings.maxAttempts,
+				showCorrectAnswers: settings.showCorrectAnswers,
+				preventTabSwitching: settings.preventTabSwitching,
+			},
+		};
+
+		return { success: true, settings: formattedSettings };
+	} catch (error) {
+		console.error('Error fetching quiz settings:', error);
+		return {
+			success: false,
+			message: `Error fetching quiz settings: ${error}`,
+		};
+	}
+}
+
+// Save global quiz settings
+export async function saveQuizSettings(settingsInput: QuizSettingsInput) {
+	// Verify that the user is authenticated as admin
+	const user = await verifyAuth();
+	if (!user || user.role !== 'admin') {
+		return {
+			success: false,
+			message: 'Unauthorized: Only admins can update quiz settings',
+		};
+	}
+
+	try {
+		// Connect to db
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
+
+		// Check if any settings already exist
+		const existingSettings = await db.query.quizSettings.findFirst();
+
+		// Map input to database format
+		const dbSettings = {
+			perQuizTimeLimit: settingsInput.timeLimit.perQuiz,
+			perQuestionTimeLimit: settingsInput.timeLimit.perQuestion,
+			enablePerQuestionTimer:
+				settingsInput.timeLimit.enablePerQuestionTimer,
+			showCountdown: settingsInput.timeLimit.showCountdown,
+			isLive: settingsInput.availability.live,
+			isScheduled: settingsInput.availability.scheduled,
+			scheduledDate: settingsInput.availability.scheduledDate
+				? new Date(settingsInput.availability.scheduledDate)
+				: null,
+			randomizeQuestions: settingsInput.behavior.randomizeQuestions,
+			showResultsMode: settingsInput.behavior.showResults,
+			allowRetake: settingsInput.behavior.allowRetake,
+			maxAttempts: settingsInput.behavior.maxAttempts,
+			showCorrectAnswers: settingsInput.behavior.showCorrectAnswers,
+			preventTabSwitching: settingsInput.behavior.preventTabSwitching,
+			updatedAt: new Date(),
+		};
+
+		if (existingSettings) {
+			// Update existing settings - using ID to target the single record
+			await db
+				.update(quizSettings)
+				.set(dbSettings)
+				.where(eq(quizSettings.id, existingSettings.id));
+		} else {
+			// Create new settings if none exist
+			await db.insert(quizSettings).values(dbSettings);
+		}
+
+		// Revalidate the settings page to reflect changes
+		revalidatePath(`/admin?section=settings`);
+
+		return { success: true, message: 'Quiz settings saved successfully' };
+	} catch (error) {
+		console.error('Error saving quiz settings:', error);
+		return {
+			success: false,
+			message: `Error saving quiz settings: ${error}`,
+		};
+	}
+}
+
+// Get default quiz settings
+export async function getDefaultQuizSettings() {
+	// Verify that the user is authenticated as admin
+	const user = await verifyAuth();
+	if (!user || user.role !== 'admin') {
+		return {
+			success: false,
+			message: 'Unauthorized: Only admins can access quiz settings',
+		};
+	}
+
+	// Return default settings
+	return {
+		success: true,
+		settings: {
+			timeLimit: {
+				perQuiz: 30,
+				perQuestion: 0,
+				enablePerQuestionTimer: false,
+				showCountdown: true,
+			},
+			availability: {
+				live: true,
+				scheduled: false,
+				scheduledDate: null,
+			},
+			behavior: {
+				randomizeQuestions: true,
+				showResults: 'manual',
+				allowRetake: false,
+				maxAttempts: 1,
+				showCorrectAnswers: false,
+				preventTabSwitching: true,
+			},
+		},
+	};
+}
+
+// Reset quiz settings to defaults
+export async function resetQuizSettings() {
+	// Verify that the user is authenticated as admin
+	const user = await verifyAuth();
+	if (!user || user.role !== 'admin') {
+		return {
+			success: false,
+			message: 'Unauthorized: Only admins can reset quiz settings',
+		};
+	}
+
+	try {
+		// Connect to db
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
+
+		// Get the default settings
+		const defaultResponse = await getDefaultQuizSettings();
+
+		if (!defaultResponse.success) {
+			return defaultResponse;
+		}
+
+		// Clear existing settings
+		await db.delete(quizSettings);
+
+		// Insert default settings
+		const defaultSettings = defaultResponse.settings;
+		await db.insert(quizSettings).values({
+			perQuizTimeLimit: defaultSettings?.timeLimit?.perQuiz ?? 30,
+			perQuestionTimeLimit: defaultSettings?.timeLimit?.perQuestion ?? 0,
+			enablePerQuestionTimer:
+				defaultSettings?.timeLimit?.enablePerQuestionTimer ?? false,
+			showCountdown: defaultSettings?.timeLimit?.showCountdown ?? true,
+			isLive: defaultSettings?.availability?.live ?? true,
+			isScheduled: defaultSettings?.availability?.scheduled ?? false,
+			scheduledDate: defaultSettings?.availability?.scheduledDate
+				? new Date(defaultSettings?.availability?.scheduledDate)
+				: null,
+			randomizeQuestions:
+				defaultSettings?.behavior?.randomizeQuestions ?? true,
+			showResultsMode: defaultSettings?.behavior?.showResults ?? 'manual',
+			allowRetake: defaultSettings?.behavior?.allowRetake ?? false,
+			maxAttempts: defaultSettings?.behavior?.maxAttempts ?? 1,
+			showCorrectAnswers:
+				defaultSettings?.behavior?.showCorrectAnswers ?? false,
+			preventTabSwitching:
+				defaultSettings?.behavior?.preventTabSwitching ?? true,
+		});
+
+		revalidatePath(`/admin?section=settings`);
+
+		return {
+			success: true,
+			message: 'Quiz settings have been reset to defaults',
+		};
+	} catch (error) {
+		console.error('Error resetting quiz settings:', error);
+		return {
+			success: false,
+			message: `Error resetting quiz settings: ${error}`,
 		};
 	}
 }
