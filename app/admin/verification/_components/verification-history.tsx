@@ -118,7 +118,7 @@ export function VerificationHistory() {
   const [documentFilter, setDocumentFilter] = useState("all")
   const [statusFilter, setStatusFilter] = useState("all")
   const [dateFilter, setDateFilter] = useState("all")
-  const [history, setHistory] = useState(mockHistory)
+  const [history, ] = useState(mockHistory)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [selectedDocument, setSelectedDocument] = useState<{
     userId: string

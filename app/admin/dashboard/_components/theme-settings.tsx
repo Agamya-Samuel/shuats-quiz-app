@@ -11,6 +11,7 @@ import { toast } from "@/hooks/use-toast"
 import { Palette, Upload, Moon, Sun, Monitor, ImageIcon, Save, RefreshCw } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Image from "next/image"
 
 export function ThemeSettings() {
   const [themeSettings, setThemeSettings] = useState({
@@ -26,7 +27,7 @@ export function ThemeSettings() {
     fontSecondary: "Inter",
   })
 
-  const updateThemeSetting = (key: string, value: any) => {
+  const updateThemeSetting = (key: string, value: string | boolean | null) => {
     setThemeSettings({
       ...themeSettings,
       [key]: value,
@@ -316,10 +317,12 @@ export function ThemeSettings() {
                   <div className="border rounded-md p-4 flex flex-col items-center justify-center gap-2">
                     <div className="w-32 h-32 bg-muted rounded-md flex items-center justify-center">
                       {themeSettings.customLogo ? (
-                        <img
+                        <Image
                           src={themeSettings.customLogo || "/placeholder.svg"}
                           alt="Custom logo"
                           className="max-w-full max-h-full object-contain"
+                          width={128}
+                          height={128}
                         />
                       ) : (
                         <ImageIcon className="h-10 w-10 text-muted-foreground" />
@@ -347,10 +350,12 @@ export function ThemeSettings() {
                   <div className="border rounded-md p-4 flex flex-col items-center justify-center gap-2">
                     <div className="w-full h-32 bg-muted rounded-md flex items-center justify-center">
                       {themeSettings.customBackground ? (
-                        <img
+                        <Image
                           src={themeSettings.customBackground || "/placeholder.svg"}
                           alt="Custom background"
                           className="w-full h-full object-cover rounded-md"
+                          width={128}
+                          height={128}
                         />
                       ) : (
                         <ImageIcon className="h-10 w-10 text-muted-foreground" />
@@ -429,10 +434,12 @@ export function ThemeSettings() {
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center">
                       {themeSettings.customLogo ? (
-                        <img
+                        <Image
                           src={themeSettings.customLogo || "/placeholder.svg"}
                           alt="Logo"
                           className="max-w-full max-h-full object-contain"
+                          width={128}
+                          height={128}
                         />
                       ) : (
                         <Palette className="h-5 w-5 text-primary" />
