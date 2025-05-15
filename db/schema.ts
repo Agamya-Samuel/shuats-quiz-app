@@ -20,7 +20,7 @@ import { z } from 'zod';
 
 // Addresses table
 export const addresses = pgTable('addresses', {
-	id: serial('id').primaryKey(),
+	id: integer('id').primaryKey().generatedAlwaysAsIdentity({ startWith: 10001 }),
 	country: varchar('country', { length: 100 }),
 	address1: text('address1'),
 	address2: text('address2'),
@@ -32,7 +32,7 @@ export const addresses = pgTable('addresses', {
 
 // Users table
 export const users = pgTable('users', {
-	id: serial('id').primaryKey(),
+	id: integer('id').primaryKey().generatedAlwaysAsIdentity({ startWith: 10001 }),
 	name: varchar('name', { length: 100 }).notNull(),
 	email: varchar('email', { length: 100 }).notNull().unique(),
 	password: text('password').notNull(),
@@ -49,7 +49,7 @@ export const users = pgTable('users', {
 
 // Admins table
 export const admins = pgTable('admins', {
-	id: serial('id').primaryKey(),
+	id: integer('id').primaryKey().generatedAlwaysAsIdentity({ startWith: 10001 }),
 	username: varchar('username', { length: 100 }).notNull().unique(),
 	password: text('password').notNull(),
 	createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -58,7 +58,7 @@ export const admins = pgTable('admins', {
 
 // Upload files table
 export const uploadFiles = pgTable('upload_files', {
-	id: serial('id').primaryKey(),
+	id: integer('id').primaryKey().generatedAlwaysAsIdentity({ startWith: 10001 }),
 	userId: integer('user_id').references(() => users.id),
 	// document_type should be one of: 'profile_pic', 'aadhar', '12th_marksheet', '10th_marksheet'
 	// This check is enforced at the application level
@@ -77,7 +77,7 @@ export const uploadFiles = pgTable('upload_files', {
 
 // Questions table
 export const questions = pgTable('questions', {
-	id: serial('id').primaryKey(),
+	id: integer('id').primaryKey().generatedAlwaysAsIdentity({ startWith: 10001 }),
 	question: text('question').notNull(),
 	options: jsonb('options').$type<IOption[]>().notNull(),
 	subject: varchar('subject', { length: 100 }).notNull(),
@@ -89,7 +89,7 @@ export const questions = pgTable('questions', {
 
 // Correct answers table
 export const correctAnswers = pgTable('correct_answers', {
-	id: serial('id').primaryKey(),
+	id: integer('id').primaryKey().generatedAlwaysAsIdentity({ startWith: 10001 }),
 	questionId: integer('question_id').references(() => questions.id, {
 		onDelete: 'cascade',
 	}),
@@ -102,7 +102,7 @@ export const correctAnswers = pgTable('correct_answers', {
 export const userSubmissions = pgTable(
 	'user_submissions',
 	{
-		id: serial('id').primaryKey(),
+		id: integer('id').primaryKey().generatedAlwaysAsIdentity({ startWith: 10001 }),
 		userId: integer('user_id').references(() => users.id, {
 			onDelete: 'cascade',
 		}),
@@ -121,7 +121,7 @@ export const userSubmissions = pgTable(
 
 // User submission timestamps table - to track when a user starts and completes a submission
 export const userSubmissionTimestamps = pgTable('user_submission_timestamps', {
-	id: serial('id').primaryKey(),
+	id: integer('id').primaryKey().generatedAlwaysAsIdentity({ startWith: 10001 }),
 	userId: integer('user_id').references(() => users.id, {
 		onDelete: 'cascade',
 	}),
