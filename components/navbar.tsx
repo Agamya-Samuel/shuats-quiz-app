@@ -1,4 +1,4 @@
-// components/Navbar.tsx
+// components/navbar.tsx
 
 'use client';
 
@@ -18,7 +18,6 @@ import { logout } from '@/actions/logout';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
-import { getUserDocuments } from '@/actions/upload';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -28,6 +27,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { logo } from '@/public/images';
 import Image from 'next/image';
+import { getUserProfilePicture } from '@/actions/user';
 
 interface IUser {
 	name: string;
@@ -44,36 +44,38 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 	const [user, setUser] = useState<IUser | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [profilePhotoUrl, setProfilePhotoUrl] = useState<string | null>(null);
+	const [hasLoadedProfilePhoto, setHasLoadedProfilePhoto] = useState(false);
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const { user: currentUser } = useCookies();
 	const router = useRouter();
 	const { toast } = useToast();
 
-	// Create a fetchProfilePhoto function that can be reused
+	// Fetch profile picture from documents
 	const fetchProfilePhoto = useCallback(async () => {
-		if (currentUser?.userId && currentUser.role === 'user') {
-			try {
-				const response = await getUserDocuments();
+		if (!currentUser?.userId || hasLoadedProfilePhoto) return;
 
-				if (response.success && response.documents) {
-					// Find profile photo document
-					const profileDoc = response.documents.find(
-						(doc) => doc.documentType === 'profile_pic'
+		try {
+			setHasLoadedProfilePhoto(true);
+
+			const response = await getUserProfilePicture(
+				Number(currentUser.userId)
+			);
+
+			if (response.success && response.profilePicture) {
+				// Find profile photo document
+				const profileDoc = response.profilePicture;
+
+				if (profileDoc?.fileUrl) {
+					// Add a timestamp to prevent browser caching
+					setProfilePhotoUrl(
+						`${profileDoc.fileUrl}?t=${new Date().getTime()}`
 					);
-
-					if (profileDoc?.fileUrl) {
-						// Add a timestamp to prevent browser caching
-						setProfilePhotoUrl(
-							`${profileDoc.fileUrl}?t=${new Date().getTime()}`
-						);
-					} else {
-						setProfilePhotoUrl(null);
-					}
 				}
-			} catch (error) {
-				console.error('Error fetching profile photo:', error);
 			}
+		} catch (error) {
+			console.error('Error fetching profile photo:', error);
 		}
-	}, [currentUser?.userId, currentUser?.role]);
+	}, [currentUser?.userId, hasLoadedProfilePhoto]);
 
 	// Update user data when currentUser changes
 	useEffect(() => {
@@ -94,20 +96,23 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 			});
 		} else {
 			setUser(null);
+			setProfilePhotoUrl(null);
 		}
 		setIsLoading(false);
 	}, [currentUser]);
 
-	// Initial profile photo fetch
+	// Load profile photo on initial render - avoid circular dependencies
 	useEffect(() => {
-		fetchProfilePhoto();
-	}, [fetchProfilePhoto]);
+		if (currentUser?.userId && !hasLoadedProfilePhoto) {
+			fetchProfilePhoto();
+		}
+	}, [currentUser?.userId, hasLoadedProfilePhoto, fetchProfilePhoto]);
 
 	// Listen for profile photo update events
 	useEffect(() => {
 		// Create event handler to refresh profile photo
 		const handleProfilePhotoUpdate = () => {
-			fetchProfilePhoto();
+			setHasLoadedProfilePhoto(false); // Reset so we can fetch again
 		};
 
 		// Add event listener
@@ -123,7 +128,15 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 				handleProfilePhotoUpdate
 			);
 		};
-	}, [fetchProfilePhoto]);
+	}, []);
+
+	// Handle dropdown opening
+	const handleDropdownOpenChange = (open: boolean) => {
+		setIsDropdownOpen(open);
+		if (open && !hasLoadedProfilePhoto) {
+			fetchProfilePhoto();
+		}
+	};
 
 	const handleLogout = async () => {
 		try {
@@ -197,7 +210,10 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 							{user?.email || 'No Email'}
 						</p>
 					</div>
-					<DropdownMenu>
+					<DropdownMenu
+						open={isDropdownOpen}
+						onOpenChange={handleDropdownOpenChange}
+					>
 						<DropdownMenuTrigger asChild>
 							<div className="flex items-center space-x-2 cursor-pointer">
 								<Avatar className="h-12 w-12">
@@ -251,6 +267,15 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 							</DropdownMenuItem>
 							<DropdownMenuItem asChild>
 								<Link
+									href="/user/document-upload"
+									className="w-full cursor-pointer"
+								>
+									<Briefcase className="h-5 w-5 text-amber-500" />
+									Documents
+								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuItem asChild>
+								<Link
 									href="/user/leaderboard"
 									className="w-full cursor-pointer"
 								>
@@ -258,27 +283,11 @@ export default function Navbar({ showTime = true }: NavbarProps) {
 									Leaderboard
 								</Link>
 							</DropdownMenuItem>
-							<DropdownMenuItem asChild>
-								<Link
-									href="/user/career-guidance"
-									className="w-full cursor-pointer"
-								>
-									<Briefcase className="h-5 w-5 text-amber-500" />
-									Career Guidance
-								</Link>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem onClick={handleLogout}>
+								<LogOut className="h-5 w-5 text-red-500" />
+								Logout
 							</DropdownMenuItem>
-							{user && (
-								<>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem
-										className="text-red-600 cursor-pointer"
-										onClick={handleLogout}
-									>
-										<LogOut className="h-4 w-4 mr-2" />
-										Logout
-									</DropdownMenuItem>
-								</>
-							)}
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
