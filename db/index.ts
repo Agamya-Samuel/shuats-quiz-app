@@ -39,11 +39,6 @@ export function getConnectionPool(): Pool {
 				rejectUnauthorized: true,
 				ca: caCert,
 			};
-			// Log for debugging (remove in production if sensitive)
-			console.log(
-				'Using CA certificate:',
-				caCert.substring(0, 50) + '...'
-			);
 		}
 
 		global.__db_connection_pool = new Pool({
