@@ -30,19 +30,27 @@ export function getConnectionPool(): Pool {
 					'DATABASE_CA_CERT environment variable is not defined'
 				);
 			}
-			// Ensure the CA certificate has proper newlines
-			const caCert = process.env.DATABASE_CA_CERT.replace(/\\n/g, '\n');
+			// Replace escaped newlines and ensure proper PEM format
+			const caCert = process.env.DATABASE_CA_CERT.replace(
+				/\\n/g,
+				'\n'
+			).trim();
 			sslConfig = {
 				rejectUnauthorized: true,
 				ca: caCert,
 			};
+			// Log for debugging (remove in production if sensitive)
+			console.log(
+				'Using CA certificate:',
+				caCert.substring(0, 50) + '...'
+			);
 		}
 
 		global.__db_connection_pool = new Pool({
 			connectionString: process.env.DATABASE_URL,
 			ssl: sslConfig,
-			max: 10, // Limit connections in serverless environment
-			idleTimeoutMillis: 600000, // Close idle connections after 10 minutes
+			max: 10, // Optimize for serverless
+			idleTimeoutMillis: 30000,
 		});
 
 		if (process.env.NODE_ENV === 'development') {
