@@ -681,24 +681,170 @@ export default function QuizInterface() {
 
 	// Custom renderer for quiz not live
 	const renderQuizNotLive = () => (
-		<div className="min-h-[80vh] flex items-center justify-center p-4">
-			<Card className="w-full max-w-md shadow-lg">
-				<CardContent className="p-6">
-					<div className="text-center">
-						<h3 className="text-xl font-semibold mb-4">
-							Quiz Not Available
-						</h3>
-						<p className="text-muted-foreground mb-6">
-							The quiz is currently not available. Please check
-							back later when it has been activated by the
-							administrator.
-						</p>
-						{/* <Button
-							onClick={() => router.push('/user')}
-							variant="outline"
-						>
-							Return to Dashboard
-						</Button> */}
+		<div className="min-h-[80vh] flex items-center justify-center p-4 bg-gradient-to-b from-gray-50 to-gray-100">
+			<Card className="w-full max-w-lg shadow-xl overflow-hidden">
+				<CardContent className="p-0">
+					{/* Header with pattern background */}
+					<div className="bg-primary/10 p-6 border-b relative overflow-hidden">
+						<div className="absolute inset-0 opacity-10">
+							{/* Pattern overlay */}
+							<svg
+								className="w-full h-full"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<defs>
+									<pattern
+										id="pattern"
+										patternUnits="userSpaceOnUse"
+										width="20"
+										height="20"
+										patternTransform="rotate(45)"
+									>
+										<rect
+											width="2"
+											height="2"
+											fill="currentColor"
+										/>
+									</pattern>
+								</defs>
+								<rect
+									width="100%"
+									height="100%"
+									fill="url(#pattern)"
+								/>
+							</svg>
+						</div>
+						<h2 className="text-2xl font-bold text-center text-primary relative z-10">
+							Quiz Status
+						</h2>
+					</div>
+
+					{/* Main content */}
+					<div className="p-6">
+						<div className="flex flex-col items-center text-center">
+							{/* Status icon */}
+							<div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mb-4">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-8 w-8 text-amber-500"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+									/>
+								</svg>
+							</div>
+
+							<h3 className="text-xl font-semibold mb-3">
+								Quiz Not Yet Available
+							</h3>
+
+							<p className="text-muted-foreground mb-6">
+								The quiz is currently not available. Please
+								check back during the scheduled time when it
+								will be activated by the administrator.
+							</p>
+						</div>
+
+						{/* Exam information - highlight box */}
+						<div className="bg-primary/5 p-6 rounded-xl border border-primary/20 shadow-sm mx-auto mb-4 transform transition-all hover:shadow-md hover:-translate-y-1">
+							<div className="flex items-center justify-center gap-2 mb-4">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-5 w-5 text-primary"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+									/>
+								</svg>
+								<h3 className="text-xl font-bold text-primary">
+									Mark Your Calendar
+								</h3>
+							</div>
+
+							<div className="flex flex-col sm:flex-row items-center gap-4 justify-center mb-4">
+								{/* Date */}
+								<div className="bg-white rounded-lg p-4 shadow-sm border border-primary/10 flex-1 w-full sm:w-auto">
+									<div className="flex items-center gap-2 mb-1">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											className="h-5 w-5 text-primary"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+											/>
+										</svg>
+										<span className="text-sm font-medium text-gray-500">
+											Exam Date
+										</span>
+									</div>
+									<p className="text-xl font-bold text-gray-800">
+										8th July, 2025
+									</p>
+								</div>
+
+								{/* Time */}
+								<div className="bg-white rounded-lg p-4 shadow-sm border border-primary/10 flex-1 w-full sm:w-auto">
+									<div className="flex items-center gap-2 mb-1">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											className="h-5 w-5 text-primary"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+											/>
+										</svg>
+										<span className="text-sm font-medium text-gray-500">
+											Exam Time
+										</span>
+									</div>
+									<p className="text-xl font-bold text-gray-800">
+										10:30 AM
+									</p>
+								</div>
+							</div>
+
+							<div className="text-center py-2 px-4 bg-primary/10 rounded-lg">
+								<p className="text-sm font-medium text-primary">
+									Please be ready 15 minutes before the
+									scheduled time
+								</p>
+							</div>
+						</div>
+
+						{/* Return button */}
+						<div className="flex justify-center mt-6">
+							<Button
+								variant="outline"
+								onClick={() => (window.location.href = '/user')}
+								className="px-6"
+							>
+								Return to Dashboard
+							</Button>
+						</div>
 					</div>
 				</CardContent>
 			</Card>
