@@ -100,7 +100,7 @@ export default function ImageCarousel({
 								className="object-cover cursor-pointer hover:opacity-95"
 								sizes="(max-width: 768px) 100vw, 50vw"
 								priority={index === 0}
-								quality={70}
+								quality={50}
 							/>
 						</div>
 					))}
@@ -166,7 +166,7 @@ export default function ImageCarousel({
 								fill
 								className="object-contain"
 								sizes="100vw"
-								quality={30}
+								quality={10}
 							/>
 						</div>
 

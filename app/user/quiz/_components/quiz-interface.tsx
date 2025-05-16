@@ -716,7 +716,7 @@ export default function QuizInterface() {
 							</svg>
 						</div>
 						<h2 className="text-2xl font-bold text-center text-primary relative z-10">
-							Exam Not Yet Available
+							Exam Status
 						</h2>
 					</div>
 
@@ -753,7 +753,7 @@ export default function QuizInterface() {
 						</div>
 
 						{/* Exam information - highlight box */}
-						<div className="bg-primary/5 p-6 rounded-xl border border-primary/20 shadow-sm mx-auto mb-4 transform transition-all hover:shadow-md hover:-translate-y-1">
+						<div className="bg-primary/5 p-6 rounded-xl border border-primary/20 shadow-md mx-auto mb-4">
 							<div className="flex items-center justify-center gap-2 mb-4">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
