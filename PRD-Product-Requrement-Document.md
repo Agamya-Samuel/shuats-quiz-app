@@ -213,6 +213,7 @@ and recommending them appropriate courses,
 - [ ] add dummy question to db, to test the quiz.
 - [ ] record user quiz submit time_stamp in db.
 - [ ] fix error in fetching questions, when quiz is going on.
+- [ ] fix: update user profile is not working.
 - [ ] remove logout, navbar when quiz is being attempted by the user.
 - [ ] fix Broken backlink `/dashboard`
 - [ ] fix mobile view when user is attempting the quiz.
