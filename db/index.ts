@@ -13,7 +13,6 @@ declare global {
 }
 
 export function getConnectionPool(): Pool {
-	// Use the global connection pool if it exists
 	if (!global.__db_connection_pool) {
 		if (!process.env.DATABASE_URL) {
 			throw new Error('DATABASE_URL environment variable is not defined');
@@ -23,21 +22,33 @@ export function getConnectionPool(): Pool {
 		if (process.env.NODE_ENV === 'development') {
 			process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 			sslConfig = {
-				rejectUnauthorized: false, // Always allow self-signed certificates
+				rejectUnauthorized: false,
 			};
 		} else {
+			if (!process.env.DATABASE_CA_CERT) {
+				throw new Error(
+					'DATABASE_CA_CERT environment variable is not defined'
+				);
+			}
+			// Ensure the CA certificate has proper newlines
+			const caCert = process.env.DATABASE_CA_CERT.replace(/\\n/g, '\n');
 			sslConfig = {
-				rejectUnauthorized: true // Strict in production (if no CA provided)
+				rejectUnauthorized: true,
+				ca: caCert,
 			};
 		}
 
 		global.__db_connection_pool = new Pool({
 			connectionString: process.env.DATABASE_URL,
-			ssl: sslConfig
+			ssl: sslConfig,
+			max: 10, // Limit connections in serverless environment
+			idleTimeoutMillis: 600000, // Close idle connections after 10 minutes
 		});
 
 		if (process.env.NODE_ENV === 'development') {
-			console.log('Database connection pool created (persisted in global)');
+			console.log(
+				'Database connection pool created (persisted in global)'
+			);
 		}
 	}
 
@@ -58,7 +69,7 @@ export async function initializeDB() {
 	try {
 		// Get the connection pool
 		const pool = getConnectionPool();
-		
+
 		// Test the connection
 		await pool.query('SELECT NOW()');
 
@@ -70,9 +81,11 @@ export async function initializeDB() {
 		if (!global.__db_migrations_applied) {
 			await runMigrations(pool);
 			global.__db_migrations_applied = true;
-			console.log('Database migrations applied (tracked in global state)');
+			console.log(
+				'Database migrations applied (tracked in global state)'
+			);
 		}
-		
+
 		// Initialize and return the db
 		return initDb(pool);
 	} catch (error) {
@@ -92,7 +105,7 @@ export async function connectToDB() {
 	if (!global.__db_connection_pool || !global.__db_migrations_applied) {
 		return initializeDB();
 	}
-	
+
 	// Otherwise, just return the existing db connection
 	return initDb(global.__db_connection_pool);
 }

@@ -11,6 +11,10 @@ declare global {
  * This ensures initialization happens only once across all serverless function invocations.
  */
 export async function initializeDatabase() {
+  if (process.env.VERCEL) {
+    console.log('Skipping DB initialization during Vercel build');
+    return null; // Or handle appropriately
+  }
   // If initialization is already in progress, return that promise
   if (global.__db_initialization_in_progress) {
     return global.__db_initialization_in_progress;

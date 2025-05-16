@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
-    "build": "next build",
+    "build": "if [ \"$VERCEL\" = \"1\" ]; then next build; else yarn db:migrate && next build; fi",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate --config=./drizzle.config.ts",
