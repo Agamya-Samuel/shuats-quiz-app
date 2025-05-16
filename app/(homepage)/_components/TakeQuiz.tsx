@@ -7,9 +7,9 @@ const TakeQuiz = () => {
 			<div className="container mx-auto px-4">
 				<div className="max-w-4xl mx-auto text-center">
 					<h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-						SHUATS Online Quiz Competition
+						SHUATS National Talent Search Exam (SNTSE)
 					</h2>
-					<h2 className="text-1xl md:text-2xl font-bold text-gray-900 mb-4">
+					<h2 className="text-1xl md:text-xl font-bold text-gray-900 mb-4">
 						by Department of Computer Science & Information Technology (DCS & IT)
 					</h2>
 					<p className="text-lg text-gray-700 mb-8">
