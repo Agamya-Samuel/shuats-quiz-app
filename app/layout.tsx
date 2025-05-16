@@ -21,8 +21,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: 'SHUATS Quiz App',
-	description: 'Quiz App for SHUATS',
+	title: 'SHUATS National Talent Search Exam (SNTSE)',
+	description: 'SHUATS National Talent Search Exam (SNTSE). An Online Quiz Competition to find the best talent in the field of Computer Science & Information Technology (DCS & IT). Developed by Department of Computer Science & Information Technology (DCS & IT), SHUATS.',
 };
 
 export default async function RootLayout({
