@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Trophy, Calendar, Users } from 'lucide-react';
+import { ArrowRight, Trophy, Calendar } from 'lucide-react';
 
 const TakeQuiz = () => {
 	return (
@@ -18,9 +18,12 @@ const TakeQuiz = () => {
 					</p>
 
 					{/* Event Date */}
-					<div className="mb-8 flex items-center justify-center gap-2 text-xl font-semibold text-indigo-700">
-						<Calendar className="h-6 w-6" />
-						<span>Date: 5 June, 2025</span>
+					<div className="mb-8 flex items-center justify-center gap-2 text-xl font-semibold text-indigo-700 flex-col">
+						<div className="flex items-center justify-center gap-2">
+							<Calendar className="h-6 w-6" />
+							<span>Date: 8 July, 2025</span>
+						</div>
+						<span>Time: 10:30 AM</span>
 					</div>
 
 					{/* Prize Section */}
@@ -64,7 +67,7 @@ const TakeQuiz = () => {
 					</div>
 
 					{/* Additional Prizes */}
-					<div className="bg-gradient-to-r from-purple-50 via-pink-50 to-indigo-50 p-8 rounded-xl shadow-lg border-2 border-purple-200 mb-8">
+					{/* <div className="bg-gradient-to-r from-purple-50 via-pink-50 to-indigo-50 p-8 rounded-xl shadow-lg border-2 border-purple-200 mb-8">
 						<div className="flex items-center justify-center gap-3 mb-6">
 							<Users className="h-8 w-8 text-purple-600" />
 							<h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
@@ -84,7 +87,7 @@ const TakeQuiz = () => {
 								win!
 							</p>
 						</div>
-					</div>
+					</div> */}
 
 					<Link
 						href="/register"
