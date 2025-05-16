@@ -70,7 +70,7 @@ export default function QuizPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50">
+		<div className="bg-gray-50 min-h-[calc(100vh-111px)]">
 			<QuizInterface />
 		</div>
 	);

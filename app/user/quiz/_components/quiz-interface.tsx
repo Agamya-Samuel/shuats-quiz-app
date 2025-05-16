@@ -682,7 +682,7 @@ export default function QuizInterface() {
 
 	// Custom renderer for quiz not live
 	const renderQuizNotLive = () => (
-		<div className="min-h-[80vh] flex items-center justify-center p-4 bg-gradient-to-b from-gray-50 to-gray-100">
+		<div className="flex items-center justify-center p-4 bg-gradient-to-b from-gray-50 to-gray-100 min-h-[calc(100vh-111px)]">
 			<Card className="w-full max-w-lg shadow-xl overflow-hidden">
 				<CardContent className="p-0">
 					{/* Header with pattern background */}
@@ -942,7 +942,7 @@ export default function QuizInterface() {
 	// Already attempted
 	if (hasAlreadyAttempted) {
 		return (
-			<div className="min-h-[80vh] flex items-center justify-center p-4">
+			<div className="flex items-center justify-center p-4">
 				<Card className="w-full max-w-md shadow-lg">
 					<CardContent className="p-6">
 						<div className="text-center">
@@ -974,7 +974,7 @@ export default function QuizInterface() {
 	// Show loading state while fetching questions
 	if (isLoading) {
 		return (
-			<div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
+			<div className="container mx-auto px-4 py-16 flex flex-col items-center justify-center">
 				<GlobalLoading
 					message={
 						isSubmitting
@@ -988,10 +988,7 @@ export default function QuizInterface() {
 
 	if (!questions.length) {
 		return (
-			<div
-				className="max-w-7xl mx-auto w-full px-4 flex items-center justify-center"
-				style={{ minHeight: 'calc(100vh - 150px)' }}
-			>
+			<div className="max-w-7xl mx-auto w-full px-4 py-16 flex items-center justify-center">
 				<Card className="max-w-lg w-full">
 					<CardContent className="p-6">
 						<div className="text-center">
@@ -1004,7 +1001,7 @@ export default function QuizInterface() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-8">
+		<div className="bg-gray-50 py-6">
 			<div className="max-w-7xl mx-auto px-4">
 				{/* SHUATS Image Carousel */}
 				<div>
