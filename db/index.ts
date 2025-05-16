@@ -12,8 +12,21 @@ export function getConnectionPool(): Pool {
 			throw new Error('DATABASE_URL environment variable is not defined');
 		}
 
+		let sslConfig;
+		if (process.env.NODE_ENV === 'development') {
+			process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+			sslConfig = {
+				rejectUnauthorized: false, // Always allow self-signed certificates
+			};
+		} else {
+			sslConfig = {
+				rejectUnauthorized: true // Strict in production (if no CA provided)
+			};
+		}
+
 		connectionPool = new Pool({
 			connectionString: process.env.DATABASE_URL,
+			ssl: sslConfig
 		});
 
 		if (process.env.NODE_ENV === 'development') {
