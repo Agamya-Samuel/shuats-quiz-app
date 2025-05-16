@@ -716,7 +716,7 @@ export default function QuizInterface() {
 							</svg>
 						</div>
 						<h2 className="text-2xl font-bold text-center text-primary relative z-10">
-							Quiz Status
+							Exam Not Yet Available
 						</h2>
 					</div>
 
@@ -742,11 +742,11 @@ export default function QuizInterface() {
 							</div>
 
 							<h3 className="text-xl font-semibold mb-3">
-								Quiz Not Yet Available
+								Exam Not Yet Available
 							</h3>
 
 							<p className="text-muted-foreground mb-6">
-								The quiz is currently not available. Please
+								The exam is currently not available. Please
 								check back during the scheduled time when it
 								will be activated by the administrator.
 							</p>
