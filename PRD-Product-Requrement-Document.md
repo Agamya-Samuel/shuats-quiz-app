@@ -210,6 +210,11 @@ and recommending them appropriate courses,
 - [x] Profile photo upload during registration.
 - [x] in navbar, show profile photo
 - [ ] record user quiz submit time_stamp in db.
+- [ ] fix error in fetching questions, when quiz is going on.
+- [ ] remove logout, navbar when quiz is being attempted by the user.
+- [ ] fix Broken backlink `/dashboard`
+- [ ] fix mobile view when user is attempting the quiz.
+- [ ] reduce image quality of shuats catalog pics, to improve page load time. (remove image that maybe invisible image_url)
 - [ ] in Admin Dashboard, add option for Manual Result Generation for all users.
 - [ ] Add guidlines for Exam Rules, Question Format, Syllabus, Scoring Criteria (preferece order of subjects, time taken to complete the quiz, etc.)
 	- [ ] Subjects: 'Arithmatic - 10 Qs', 'Reasoning - 20 Qs', 'Computer Aptitude - 30 Qs', 'General Knowledge - 30 Qs'
