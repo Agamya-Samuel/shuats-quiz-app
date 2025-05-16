@@ -209,6 +209,8 @@ and recommending them appropriate courses,
 - [x] After Registering, login user, redirect to dashboard and ask for document upload.
 - [x] Profile photo upload during registration.
 - [x] in navbar, show profile photo
+- [ ] add dummy user to db, to test the quiz.
+- [ ] add dummy question to db, to test the quiz.
 - [ ] record user quiz submit time_stamp in db.
 - [ ] fix error in fetching questions, when quiz is going on.
 - [ ] remove logout, navbar when quiz is being attempted by the user.
