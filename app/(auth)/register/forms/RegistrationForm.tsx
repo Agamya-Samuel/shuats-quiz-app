@@ -40,6 +40,8 @@ import {
 	Home,
 	Lock,
 	AlertCircle,
+	Eye,
+	EyeOff,
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -143,6 +145,9 @@ export function RegistrationForm() {
 	const { toast } = useToast();
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [showPassword, setShowPassword] = useState<boolean>(false);
+	const [showConfirmPassword, setShowConfirmPassword] =
+		useState<boolean>(false);
 	const [passwordStrength, setPasswordStrength] = useState<{
 		score: number;
 		criteria: {
@@ -690,12 +695,32 @@ export function RegistrationForm() {
 																<Lock className="h-4 w-4" />
 															</div>
 															<Input
-																type="password"
+																type={
+																	showPassword
+																		? 'text'
+																		: 'password'
+																}
 																placeholder="Create a secure password"
-																className="pl-10"
+																className="pl-10 pr-10"
 																autoComplete="new-password"
 																{...field}
 															/>
+															<button
+																type="button"
+																onClick={() =>
+																	setShowPassword(
+																		!showPassword
+																	)
+																}
+																className="absolute right-3 top-3 text-muted-foreground hover:text-primary transition-colors"
+																tabIndex={-1}
+															>
+																{showPassword ? (
+																	<EyeOff className="h-4 w-4" />
+																) : (
+																	<Eye className="h-4 w-4" />
+																)}
+															</button>
 														</div>
 													</FormControl>
 													{/* Password strength meter */}
@@ -741,12 +766,32 @@ export function RegistrationForm() {
 																<Lock className="h-4 w-4" />
 															</div>
 															<Input
-																type="password"
+																type={
+																	showConfirmPassword
+																		? 'text'
+																		: 'password'
+																}
 																placeholder="Confirm your password"
-																className="pl-10"
+																className="pl-10 pr-10"
 																autoComplete="new-password"
 																{...field}
 															/>
+															<button
+																type="button"
+																onClick={() =>
+																	setShowConfirmPassword(
+																		!showConfirmPassword
+																	)
+																}
+																className="absolute right-3 top-3 text-muted-foreground hover:text-primary transition-colors"
+																tabIndex={-1}
+															>
+																{showConfirmPassword ? (
+																	<EyeOff className="h-4 w-4" />
+																) : (
+																	<Eye className="h-4 w-4" />
+																)}
+															</button>
 														</div>
 													</FormControl>
 													<FormMessage />

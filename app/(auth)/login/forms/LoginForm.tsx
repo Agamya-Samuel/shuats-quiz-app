@@ -32,7 +32,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
-import { Mail, Lock } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
 // Define response type for better type safety
 interface LoginResponse {
@@ -54,6 +54,7 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 	const { toast } = useToast();
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [showPassword, setShowPassword] = useState<boolean>(false);
 
 	const form = useForm<z.infer<typeof loginSchema>>({
 		resolver: zodResolver(loginSchema),
@@ -83,7 +84,8 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 				} else {
 					toast({
 						title: 'Login Failed',
-						description: response.message || 'Invalid email or password.',
+						description:
+							response.message || 'Invalid email or password.',
 						variant: 'destructive',
 					});
 				}
@@ -120,11 +122,35 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 							</div>
 							<Input
 								placeholder={placeholder}
-								className="pl-10"
-								type={type}
+								className={`pl-10 ${
+									name === 'password' ? 'pr-10' : ''
+								}`}
+								type={
+									name === 'password'
+										? showPassword
+											? 'text'
+											: 'password'
+										: type
+								}
 								autoComplete={autoComplete}
 								{...field}
 							/>
+							{name === 'password' && (
+								<button
+									type="button"
+									onClick={() =>
+										setShowPassword(!showPassword)
+									}
+									className="absolute right-3 top-3 text-muted-foreground hover:text-primary transition-colors"
+									tabIndex={-1}
+								>
+									{showPassword ? (
+										<EyeOff className="h-4 w-4" />
+									) : (
+										<Eye className="h-4 w-4" />
+									)}
+								</button>
+							)}
 						</div>
 					</FormControl>
 					<FormMessage />
@@ -169,7 +195,7 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 								'email',
 								'email'
 							)}
-							
+
 							{renderField(
 								'password',
 								'Password',
@@ -178,7 +204,7 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 								'password',
 								'current-password'
 							)}
-							
+
 							<Button
 								type="submit"
 								className="w-full mt-6"

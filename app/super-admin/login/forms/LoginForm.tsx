@@ -29,12 +29,13 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
-import { Lock, ShieldAlert } from 'lucide-react';
+import { Lock, ShieldAlert, Eye, EyeOff } from 'lucide-react';
 
 export function LoginForm() {
 	const { toast } = useToast();
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [showPassword, setShowPassword] = useState<boolean>(false);
 
 	const form = useForm<z.infer<typeof superAdminLoginSchema>>({
 		resolver: zodResolver(superAdminLoginSchema),
@@ -98,11 +99,37 @@ export function LoginForm() {
 							</div>
 							<Input
 								placeholder={placeholder}
-								className="pl-10"
-								type={type}
+								className={`pl-10 ${
+									name === 'username' && type === 'password'
+										? 'pr-10'
+										: ''
+								}`}
+								type={
+									name === 'username' && type === 'password'
+										? showPassword
+											? 'text'
+											: 'password'
+										: type
+								}
 								autoComplete={autoComplete}
 								{...field}
 							/>
+							{name === 'username' && type === 'password' && (
+								<button
+									type="button"
+									onClick={() =>
+										setShowPassword(!showPassword)
+									}
+									className="absolute right-3 top-3 text-muted-foreground hover:text-primary transition-colors"
+									tabIndex={-1}
+								>
+									{showPassword ? (
+										<EyeOff className="h-4 w-4" />
+									) : (
+										<Eye className="h-4 w-4" />
+									)}
+								</button>
+							)}
 						</div>
 					</FormControl>
 					<FormMessage />
