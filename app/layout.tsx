@@ -7,6 +7,8 @@ import { Toaster } from '@/components/ui/toaster';
 import { CookieProvider } from '@/contexts/cookie-context';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth';
+// Import the database initialization promise
+import '@/lib/db-init';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',

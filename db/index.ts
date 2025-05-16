@@ -3,11 +3,18 @@ import { runMigrations } from './migrate';
 import { initDb } from './query';
 import * as schema from './schema';
 
-// Connection singleton
-let connectionPool: Pool | null = null;
+// Define globals for persistent connections across serverless function invocations
+// Using var is required for global declarations in TypeScript
+declare global {
+	// eslint-disable-next-line no-var
+	var __db_connection_pool: Pool | undefined;
+	// eslint-disable-next-line no-var
+	var __db_migrations_applied: boolean | undefined;
+}
 
 export function getConnectionPool(): Pool {
-	if (!connectionPool) {
+	// Use the global connection pool if it exists
+	if (!global.__db_connection_pool) {
 		if (!process.env.DATABASE_URL) {
 			throw new Error('DATABASE_URL environment variable is not defined');
 		}
@@ -24,17 +31,17 @@ export function getConnectionPool(): Pool {
 			};
 		}
 
-		connectionPool = new Pool({
+		global.__db_connection_pool = new Pool({
 			connectionString: process.env.DATABASE_URL,
 			ssl: sslConfig
 		});
 
 		if (process.env.NODE_ENV === 'development') {
-			console.log('Database connection pool created');
+			console.log('Database connection pool created (persisted in global)');
 		}
 	}
 
-	return connectionPool;
+	return global.__db_connection_pool;
 }
 
 // Re-export schema
@@ -43,7 +50,11 @@ export { schema };
 // Export db for convenience
 export * from './query';
 
-export async function connectToDB() {
+/**
+ * Initialize the database connection and run migrations.
+ * This should be called only once during application startup.
+ */
+export async function initializeDB() {
 	try {
 		// Get the connection pool
 		const pool = getConnectionPool();
@@ -52,20 +63,36 @@ export async function connectToDB() {
 		await pool.query('SELECT NOW()');
 
 		if (process.env.NODE_ENV === 'development') {
-			console.log('Database connected successfully');
+			console.log('Database connected successfully (global connection)');
 		}
 
-		// Run migrations to ensure the database schema is up to date
-		await runMigrations(pool);
+		// Run migrations only once
+		if (!global.__db_migrations_applied) {
+			await runMigrations(pool);
+			global.__db_migrations_applied = true;
+			console.log('Database migrations applied (tracked in global state)');
+		}
 		
-		// Initialize the db with the pool
-		const db = initDb(pool);
-		
-		return db;
+		// Initialize and return the db
+		return initDb(pool);
 	} catch (error) {
 		console.error('Database connection failed:', error);
 
 		// Graceful exit in case of a connection error
 		process.exit(1);
 	}
+}
+
+/**
+ * Get the database connection for regular requests.
+ * Uses the existing connection pool without re-running migrations.
+ */
+export async function connectToDB() {
+	// If we haven't initialized yet, do the full initialization
+	if (!global.__db_connection_pool || !global.__db_migrations_applied) {
+		return initializeDB();
+	}
+	
+	// Otherwise, just return the existing db connection
+	return initDb(global.__db_connection_pool);
 }
