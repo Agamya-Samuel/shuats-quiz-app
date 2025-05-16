@@ -209,8 +209,10 @@ and recommending them appropriate courses,
 - [x] After Registering, login user, redirect to dashboard and ask for document upload.
 - [x] Profile photo upload during registration.
 - [x] in navbar, show profile photo
-- [ ] in Admin Dashboard, add option to generate result of quiz for all users.
+- [ ] record user quiz submit time_stamp in db.
+- [ ] in Admin Dashboard, add option for Manual Result Generation for all users.
 - [ ] Add guidlines for Exam Rules, Question Format, Syllabus, Scoring Criteria (preferece order of subjects, time taken to complete the quiz, etc.)
+	- [ ] Subjects: 'Arithmatic - 10 Qs', 'Reasoning - 20 Qs', 'Computer Aptitude - 30 Qs', 'General Knowledge - 30 Qs'
 - [ ] Add logging (saves to db) to all actions, and log the user id, request type, request time, request status, request ip address, request user agent.
 	- [ ] specially for admin actions, log the admin id, request type, request time, request status, request ip address, request user agent.
 - [ ] Add validation -> if user calls `get_all_question` action, first check if the quiz is active or not, if not, return appropriate message.
