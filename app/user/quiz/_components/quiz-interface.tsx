@@ -30,6 +30,7 @@ import ImageCarousel from '@/components/image-carousel';
 import SubjectSelector from './subject-selector';
 import { subjects } from '@/lib/constants';
 import { useAntiCheat, safeExitFullscreen } from '@/hooks/use-anti-cheat';
+import { Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 
 // Types
 export interface Option {
@@ -835,15 +836,45 @@ export default function QuizInterface() {
 							</div>
 						</div>
 
-						{/* Return button */}
-						<div className="flex justify-center mt-6">
-							<Button
-								variant="outline"
-								onClick={() => (window.location.href = '/user')}
-								className="px-6"
-							>
-								Return to Dashboard
-							</Button>
+						{/* Social Media Links */}
+						<div className="mt-6 border-t pt-6">
+							<h4 className="text-center text-sm font-medium text-gray-500 mb-3">
+								Connect with us
+							</h4>
+							<div className="flex justify-center space-x-6">
+								<a
+									href="https://www.facebook.com/DCSITshuats/"
+									className="text-gray-500 hover:text-primary transition-colors"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									<Facebook className="w-5 h-5" />
+								</a>
+								<a
+									href="https://x.com/shuats_edu"
+									className="text-gray-500 hover:text-primary transition-colors"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									<Twitter className="w-5 h-5" />
+								</a>
+								<a
+									href="https://www.linkedin.com/school/shuats-edu/posts/?feedView=all"
+									className="text-gray-500 hover:text-primary transition-colors"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									<Linkedin className="w-5 h-5" />
+								</a>
+								<a
+									href="https://www.instagram.com/dcsit_shuats/"
+									className="text-gray-500 hover:text-primary transition-colors"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									<Instagram className="w-5 h-5" />
+								</a>
+							</div>
 						</div>
 					</div>
 				</CardContent>
