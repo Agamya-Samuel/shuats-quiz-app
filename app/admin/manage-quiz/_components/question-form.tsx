@@ -122,6 +122,7 @@ export function QuestionForm({
 					<form
 						onSubmit={form.handleSubmit(handleSubmit)}
 						className="space-y-8"
+						method="post"
 					>
 						<FormField
 							control={form.control}

@@ -186,6 +186,7 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 						<form
 							onSubmit={form.handleSubmit(onSubmit)}
 							className="space-y-4"
+							method="post"
 						>
 							{renderField(
 								'email',

@@ -169,6 +169,7 @@ export function LoginForm() {
 						<form
 							onSubmit={form.handleSubmit(onSubmit)}
 							className="space-y-4"
+							method="post"
 						>
 							{renderField(
 								'username',

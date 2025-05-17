@@ -292,6 +292,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
 								<form
 									onSubmit={form.handleSubmit(onSubmit)}
 									className="space-y-4"
+									method="post"
 								>
 									<FormField
 										control={form.control}

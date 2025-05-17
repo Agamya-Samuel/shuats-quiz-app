@@ -31,7 +31,7 @@ export default function Contact() {
 							<CardTitle>Send us a message</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<form className="space-y-6">
+							<form className="space-y-6" method="post">
 								<div>
 									<Input
 										type="text"
