@@ -211,7 +211,9 @@ and recommending them appropriate courses,
 - [x] in navbar, show profile photo
 - [ ] add dummy user to db, to test the quiz.
 - [ ] add dummy question to db, to test the quiz.
-- [ ] record user quiz submit time_stamp in db.
+- [ ] record user quiz submit time_stamp in db, on client side handle the logic for calculating the time taken to complete each question, then directly finlla quiz answer submition, submit the time taken to complete the quiz. Update the DB schema accordingly.
+- [ ] on mobile device, fix admin tab content to be hidden visible (because alredy in hamburger menu).
+- [ ] improve super_admin page take reference from `admin/dashboard` page.
 - [ ] add logo to every login component.
 - [ ] fix error in fetching questions, when quiz is going on.
 - [ ] fix: update user profile is not working.
