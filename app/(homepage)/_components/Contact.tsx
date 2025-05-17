@@ -104,7 +104,11 @@ export default function Contact() {
 											Address
 										</h4>
 										<p className="text-gray-300">
-										Sam Higginbottom University of Agriculture, Technology And Sciences, Rewa Road, Naini, Prayagraj (Formerly Allahabad) -211007, Uttar Pradesh, INDIA
+											Sam Higginbottom University of
+											Agriculture, Technology And
+											Sciences, Rewa Road, Naini,
+											Prayagraj (Formerly Allahabad)
+											-211007, Uttar Pradesh, INDIA
 										</p>
 									</div>
 								</div>
