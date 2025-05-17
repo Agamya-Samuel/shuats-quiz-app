@@ -61,7 +61,7 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 					description: 'You have successfully logged in.',
 					variant: 'success',
 				});
-				router.push(redirect || '/admin/manage-quiz');
+				router.push(redirect || '/admin/dashboard');
 			} else {
 				toast({
 					title: 'Login Failed',
