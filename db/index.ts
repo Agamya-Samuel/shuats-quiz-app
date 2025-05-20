@@ -19,34 +19,35 @@ export function getConnectionPool(): Pool {
       throw new Error('DATABASE_URL environment variable is not defined');
     }
 
-    let sslConfig;
+    let poolConfig: any = {
+      connectionString: process.env.DATABASE_URL,
+      max: 10, // Optimize for serverless
+      idleTimeoutMillis: 30000,
+    };
+
     if (process.env.NODE_ENV === 'development') {
+      // In development, do NOT set the ssl property at all.
+      // Many local Postgres servers do not support SSL.
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-      sslConfig = {
-        rejectUnauthorized: false,
-      };
+      if (process.env.NODE_ENV === 'development') {
+        console.log(
+          'Database connection pool created (persisted in global, no SSL for development)',
+        );
+      }
     } else {
+      // In production, require SSL with CA cert
       if (!process.env.DATABASE_CA_CERT) {
         throw new Error('DATABASE_CA_CERT environment variable is not defined');
       }
       // Replace escaped newlines and ensure proper PEM format
       const caCert = process.env.DATABASE_CA_CERT.replace(/\\n/g, '\n').trim();
-      sslConfig = {
+      poolConfig.ssl = {
         rejectUnauthorized: true,
         ca: caCert,
       };
     }
 
-    global.__db_connection_pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: sslConfig,
-      max: 10, // Optimize for serverless
-      idleTimeoutMillis: 30000,
-    });
-
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Database connection pool created (persisted in global)');
-    }
+    global.__db_connection_pool = new Pool(poolConfig);
   }
 
   return global.__db_connection_pool;
