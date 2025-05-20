@@ -64,15 +64,10 @@ const VideoFrame = () => {
   const handleVideoPause = () => setPlaying(false);
 
   return (
-    <div className="flex flex-col items-center my-12">
-      <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-6 text-black-700 drop-shadow-lg tracking-tight">
-        Let&apos;s have a tour of our campus
-      </h2>
-      <div className="relative w-full max-w-4xl aspect-[16/9] group cursor-pointer p-2 md:p-4">
-        {/* Subtle professional border and shadow */}
-        <div className="absolute inset-0 rounded-2xl pointer-events-none z-10 border-2 border-blue-200 dark:border-blue-700 shadow-md" />
+    <div className="w-full">
+      <div className="relative w-full aspect-[16/9] rounded-3xl overflow-hidden bg-white shadow-lg">
         <div
-          className="relative w-full h-full rounded-2xl overflow-hidden bg-background z-20"
+          className="relative w-full h-full cursor-pointer"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
           onClick={handlePlayPauseOrUnmute}>
@@ -86,116 +81,54 @@ const VideoFrame = () => {
             preload="auto"
             onPlay={handleVideoPlay}
             onPause={handleVideoPause}
-            className="w-full h-full min-h-[180px] md:min-h-[320px] md:min-h-[480px] bg-background object-cover select-none pointer-events-auto rounded-xl"
+            className="w-full h-full object-cover"
           />
-          {/* Unmute notify button top left */}
+          {/* Unmute button */}
           {showUnmute && muted && (
             <button
               onClick={handleUnmuteClick}
-              className="absolute top-4 left-4 z-50 flex items-center gap-2 bg-white/95 dark:bg-black/80 px-4 py-2 rounded-xl shadow border border-blue-200 dark:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900 transition"
-              style={{ backdropFilter: 'blur(2px)' }}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#2563eb"
-                className="w-5 h-5">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 9v6h4l5 5V4l-5 5H9z"
-                />
+              className="absolute top-4 left-4 z-50 flex items-center gap-2 bg-white/95 px-4 py-2 rounded-xl shadow-lg"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#2563eb" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 9v6h4l5 5V4l-5 5H9z" />
               </svg>
-              <span className="text-blue-700 dark:text-blue-200 font-medium text-base">
-                Unmute
-              </span>
+              <span className="text-blue-700 font-medium text-base">Unmute</span>
             </button>
           )}
-          {/* Centered play/pause icon overlay */}
+          {/* Play/Pause overlay */}
           <div
             className={`absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300
-              ${!playing || hovered ? 'opacity-100 pointer-events-none' : 'opacity-0 pointer-events-none'}`}>
+              ${!playing || hovered ? 'opacity-100' : 'opacity-0'}`}
+          >
             {playing && hovered ? (
-              // Pause icon (Heroicon, professional)
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 32 32"
-                fill="none"
-                className="w-14 h-14 bg-white/90 rounded-full shadow border border-blue-200 flex items-center justify-center">
-                <rect
-                  x="9"
-                  y="8"
-                  width="4"
-                  height="16"
-                  rx="1.5"
-                  fill="#2563eb"
-                />
-                <rect
-                  x="19"
-                  y="8"
-                  width="4"
-                  height="16"
-                  rx="1.5"
-                  fill="#2563eb"
-                />
-              </svg>
+              <div className="bg-white/90 rounded-full p-4 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2563eb" className="w-8 h-8">
+                  <rect x="6" y="4" width="4" height="16" rx="1" />
+                  <rect x="14" y="4" width="4" height="16" rx="1" />
+                </svg>
+              </div>
             ) : (
-              // Play icon (Heroicon, professional)
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 32 32"
-                fill="none"
-                className="w-16 h-16 bg-white/90 rounded-full shadow border border-blue-200 flex items-center justify-center">
-                <polygon
-                  points="12,8 24,16 12,24"
-                  fill="#2563eb"
-                />
-              </svg>
+              <div className="bg-white/90 rounded-full p-4 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2563eb" className="w-8 h-8">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
             )}
           </div>
-          {/* Speaker button bottom right */}
+          {/* Mute/Unmute button */}
           <button
             onClick={handleMicClick}
-            className="absolute bottom-4 right-4 z-40 bg-white/90 dark:bg-black/60 rounded-full p-2 shadow border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900 transition"
-            aria-label={muted ? 'Unmute video' : 'Mute video'}>
+            className="absolute bottom-4 right-4 z-40 bg-white/90 rounded-full p-2 shadow-lg"
+            aria-label={muted ? "Unmute video" : "Mute video"}
+          >
             {muted ? (
-              // Speaker off icon (Heroicon, professional)
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#2563eb"
-                className="w-6 h-6">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 9v6h4l5 5V4l-5 5H9z"
-                />
-                <line
-                  x1="19"
-                  y1="5"
-                  x2="5"
-                  y2="19"
-                  stroke="#2563eb"
-                  strokeWidth="2"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#2563eb" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 9v6h4l5 5V4l-5 5H9z" />
+                <line x1="19" y1="5" x2="5" y2="19" stroke="#2563eb" strokeWidth="2" />
               </svg>
             ) : (
-              // Speaker on icon (Heroicon, professional)
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#2563eb"
-                className="w-6 h-6">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 9v6h4l5 5V4l-5 5H9z"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#2563eb" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 9v6h4l5 5V4l-5 5H9z" />
               </svg>
             )}
           </button>

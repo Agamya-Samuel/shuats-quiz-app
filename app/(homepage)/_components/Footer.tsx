@@ -46,7 +46,7 @@ export default function Footer() {
             <ul className="space-y-1 text-base">
               <li>
                 <a
-                  href="#hero"
+                  href="#quiz"
                   className="hover:text-white transition-colors">
                   Home
                 </a>
