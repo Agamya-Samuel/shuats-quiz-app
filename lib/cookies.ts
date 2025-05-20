@@ -5,15 +5,15 @@ import { cookies } from 'next/headers';
  * This avoids the Promise<ReadonlyRequestCookies> issue
  */
 export async function setCookie(
-	name: string,
-	value: string,
-	options: {
-		httpOnly?: boolean;
-		secure?: boolean;
-		maxAge?: number;
-		path?: string;
-	}
+  name: string,
+  value: string,
+  options: {
+    httpOnly?: boolean;
+    secure?: boolean;
+    maxAge?: number;
+    path?: string;
+  },
 ) {
-	const cookieStore = await cookies();
-	cookieStore.set(name, value, options);
+  const cookieStore = await cookies();
+  cookieStore.set(name, value, options);
 }

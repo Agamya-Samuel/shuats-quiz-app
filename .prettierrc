@@ -9,7 +9,7 @@
   "bracketSpacing": true,
   "endOfLine": "lf",
   "singleAttributePerLine": true,
-  "jsxBracketSameLine": true,
+  "bracketSameLine": true,
   "importOrder": [
     "^@/(.*)$",
     "^[./]"

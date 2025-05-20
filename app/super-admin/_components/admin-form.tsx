@@ -1,71 +1,85 @@
-"use client"
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { toast } from "@/hooks/use-toast"
-import { createAdmin } from "@/actions/admin"
-import { LoadingSpinner } from "@/components/loading-spinner"
-import { useState } from "react"
-import { Card } from "@/components/ui/card"
-import { User, Lock, CheckCircle } from "lucide-react"
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CheckCircle, Lock, User } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+
+import { createAdmin } from '@/actions/admin';
+import { LoadingSpinner } from '@/components/loading-spinner';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { toast } from '@/hooks/use-toast';
 
 const formSchema = z
   .object({
-    userName: z.string().min(2, "Username must be at least 2 characters"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
+    userName: z.string().min(2, 'Username must be at least 2 characters'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+    confirmPassword: z
+      .string()
+      .min(6, 'Password must be at least 6 characters'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ["confirmPassword"],
-  })
+    path: ['confirmPassword'],
+  });
 
 export function AdminForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      userName: "",
-      password: "",
-      confirmPassword: "",
+      userName: '',
+      password: '',
+      confirmPassword: '',
     },
-  })
+  });
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
-    setIsSuccess(false)
+    setIsLoading(true);
+    setIsSuccess(false);
 
     try {
       const response = await createAdmin({
         username: values.userName,
         password: values.password,
-      })
+      });
 
       if (response.success) {
         toast({
-          title: "Success",
-          description: "Administrator account created successfully",
-          variant: "success",
-        })
-        form.reset()
-        setIsSuccess(true)
+          title: 'Success',
+          description: 'Administrator account created successfully',
+          variant: 'success',
+        });
+        form.reset();
+        setIsSuccess(true);
       } else {
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to create administrator account",
-        variant: "destructive",
-      })
+        title: 'Error',
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Failed to create administrator account',
+        variant: 'destructive',
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -78,7 +92,9 @@ export function AdminForm() {
               <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400" />
             </div>
             <div>
-              <h3 className="text-lg font-medium text-green-800 dark:text-green-300">Administrator Created</h3>
+              <h3 className="text-lg font-medium text-green-800 dark:text-green-300">
+                Administrator Created
+              </h3>
               <p className="text-sm text-green-600 dark:text-green-400 mt-1">
                 The administrator account was created successfully
               </p>
@@ -86,18 +102,19 @@ export function AdminForm() {
             <Button
               variant="outline"
               onClick={() => {
-                setIsSuccess(false)
-                form.reset()
+                setIsSuccess(false);
+                form.reset();
               }}
-              className="mt-2"
-            >
+              className="mt-2">
               Create Another
             </Button>
           </div>
         </Card>
       ) : (
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6">
             <FormField
               control={form.control}
               name="userName"
@@ -107,10 +124,17 @@ export function AdminForm() {
                   <FormControl>
                     <div className="relative">
                       <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                      <Input type="text" className="pl-10" placeholder="Enter username" {...field} />
+                      <Input
+                        type="text"
+                        className="pl-10"
+                        placeholder="Enter username"
+                        {...field}
+                      />
                     </div>
                   </FormControl>
-                  <FormDescription>Choose a unique username for the administrator</FormDescription>
+                  <FormDescription>
+                    Choose a unique username for the administrator
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -125,10 +149,17 @@ export function AdminForm() {
                   <FormControl>
                     <div className="relative">
                       <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                      <Input type="password" className="pl-10" placeholder="Enter password" {...field} />
+                      <Input
+                        type="password"
+                        className="pl-10"
+                        placeholder="Enter password"
+                        {...field}
+                      />
                     </div>
                   </FormControl>
-                  <FormDescription>Password must be at least 6 characters</FormDescription>
+                  <FormDescription>
+                    Password must be at least 6 characters
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -143,21 +174,31 @@ export function AdminForm() {
                   <FormControl>
                     <div className="relative">
                       <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                      <Input type="password" className="pl-10" placeholder="Confirm password" {...field} />
+                      <Input
+                        type="password"
+                        className="pl-10"
+                        placeholder="Confirm password"
+                        {...field}
+                      />
                     </div>
                   </FormControl>
-                  <FormDescription>Re-enter the password to confirm</FormDescription>
+                  <FormDescription>
+                    Re-enter the password to confirm
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button type="submit" disabled={isLoading} className="w-full">
-              {isLoading ? <LoadingSpinner /> : "Create Administrator"}
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full">
+              {isLoading ? <LoadingSpinner /> : 'Create Administrator'}
             </Button>
           </form>
         </Form>
       )}
     </div>
-  )
+  );
 }

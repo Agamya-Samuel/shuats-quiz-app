@@ -33,6 +33,7 @@ Salaries vary based on role, experience, and location:
 SHUATS offers undergraduate and postgraduate programs relevant to these subjects:
 
 - **Undergraduate Programs**:
+
   - B.Sc. in Computer Science
   - B.Tech in Computer Science and Engineering
   - B.Tech in Biotechnology

@@ -1,4 +1,3 @@
-
 # Physics, Mathematics, and Computer Science (PMCS)
 
 ## 1. Job Roles and Position Opportunities
@@ -35,6 +34,7 @@ Salaries vary based on role, experience, and location:
 SHUATS offers undergraduate and postgraduate programs relevant to PMCS:
 
 - **Undergraduate Programs**:
+
   - B.Tech in Computer Science and Engineering
   - B.Tech in Electronics and Communication Engineering
   - B.Sc. in Computer Science

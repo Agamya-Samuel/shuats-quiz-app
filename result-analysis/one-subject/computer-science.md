@@ -1,6 +1,5 @@
 # Computer Science
 
-
 ## 1. Job Roles and Position Opportunities
 
 Graduates with a background in computer science can pursue various career paths, including:

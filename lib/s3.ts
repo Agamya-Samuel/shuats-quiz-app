@@ -1,19 +1,19 @@
 import {
-	S3Client,
-	PutObjectCommand,
-	DeleteObjectCommand,
-	ObjectCannedACL,
+  DeleteObjectCommand,
+  ObjectCannedACL,
+  PutObjectCommand,
+  S3Client,
 } from '@aws-sdk/client-s3';
 
 // Initialize S3 client
 const s3Client = new S3Client({
-	endpoint: process.env.S3_ENDPOINT,
-	region: process.env.S3_REGION || 'us-east-1',
-	credentials: {
-		accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-		secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
-	},
-	forcePathStyle: false, // Required for DigitalOcean Spaces
+  endpoint: process.env.S3_ENDPOINT,
+  region: process.env.S3_REGION || 'us-east-1',
+  credentials: {
+    accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+  },
+  forcePathStyle: false, // Required for DigitalOcean Spaces
 });
 
 export const BUCKET_NAME = process.env.S3_BUCKET_NAME || '';
@@ -26,33 +26,33 @@ export const BUCKET_NAME = process.env.S3_BUCKET_NAME || '';
  * @returns The URL of the uploaded file
  */
 export async function uploadToS3(
-	fileBuffer: Buffer,
-	key: string,
-	contentType: string
+  fileBuffer: Buffer,
+  key: string,
+  contentType: string,
 ): Promise<string> {
-	try {
-		const params = {
-			Bucket: BUCKET_NAME,
-			Key: key,
-			Body: fileBuffer,
-			ContentType: contentType,
-			ACL: 'public-read' as ObjectCannedACL, // Make file publicly readable
-		};
+  try {
+    const params = {
+      Bucket: BUCKET_NAME,
+      Key: key,
+      Body: fileBuffer,
+      ContentType: contentType,
+      ACL: 'public-read' as ObjectCannedACL, // Make file publicly readable
+    };
 
-		const command = new PutObjectCommand(params);
-		await s3Client.send(command);
+    const command = new PutObjectCommand(params);
+    await s3Client.send(command);
 
-		// If CDN URL is configured, use it for the file URL
-		if (process.env.CDN_S3_ORIGIN_URL) {
-			return `${process.env.CDN_S3_ORIGIN_URL}/${key}`;
-		}
+    // If CDN URL is configured, use it for the file URL
+    if (process.env.CDN_S3_ORIGIN_URL) {
+      return `${process.env.CDN_S3_ORIGIN_URL}/${key}`;
+    }
 
-		// Fallback to direct S3 URL if no CDN is configured
-		return `${process.env.S3_ENDPOINT}/${BUCKET_NAME}/${key}`;
-	} catch (error) {
-		console.error('Error uploading to S3:', error);
-		throw new Error('Failed to upload file to S3');
-	}
+    // Fallback to direct S3 URL if no CDN is configured
+    return `${process.env.S3_ENDPOINT}/${BUCKET_NAME}/${key}`;
+  } catch (error) {
+    console.error('Error uploading to S3:', error);
+    throw new Error('Failed to upload file to S3');
+  }
 }
 
 /**
@@ -60,18 +60,18 @@ export async function uploadToS3(
  * @param key - The key (path) of the file to delete
  */
 export async function deleteFromS3(key: string): Promise<void> {
-	try {
-		const params = {
-			Bucket: BUCKET_NAME,
-			Key: key,
-		};
+  try {
+    const params = {
+      Bucket: BUCKET_NAME,
+      Key: key,
+    };
 
-		const command = new DeleteObjectCommand(params);
-		await s3Client.send(command);
-	} catch (error) {
-		console.error('Error deleting from S3:', error);
-		throw new Error('Failed to delete file from S3');
-	}
+    const command = new DeleteObjectCommand(params);
+    await s3Client.send(command);
+  } catch (error) {
+    console.error('Error deleting from S3:', error);
+    throw new Error('Failed to delete file from S3');
+  }
 }
 
 /**
@@ -82,12 +82,10 @@ export async function deleteFromS3(key: string): Promise<void> {
  * @returns A unique key for S3 storage
  */
 export function generateS3Key(
-	userId: number,
-	documentType: string,
-	fileExtension: string
+  userId: number,
+  documentType: string,
+  fileExtension: string,
 ): string {
-	const timestamp = Date.now();
-	return `documents/${userId}/${documentType
-		.toLowerCase()
-		.replace(/\s+/g, '-')}-${timestamp}.${fileExtension}`;
+  const timestamp = Date.now();
+  return `documents/${userId}/${documentType.toLowerCase().replace(/\s+/g, '-')}-${timestamp}.${fileExtension}`;
 }

@@ -34,6 +34,7 @@ Salaries vary based on role, experience, and location:
 SHUATS offers undergraduate and postgraduate programs relevant to PCM:
 
 - **Undergraduate Programs**:
+
   - B.Tech in Civil Engineering
   - B.Tech in Mechanical Engineering
   - B.Tech in Electrical Engineering

@@ -1,25 +1,25 @@
 // hooks/use-cookies.ts
-import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 
 export function useCookies() {
-	const [isClient, setIsClient] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
-	useEffect(() => {
-		setIsClient(true);
-	}, []);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
-	if (!isClient) {
-		return {
-			setCookie: () => {},
-			getCookie: () => null,
-			removeCookie: () => {},
-		};
-	}
+  if (!isClient) {
+    return {
+      setCookie: () => {},
+      getCookie: () => null,
+      removeCookie: () => {},
+    };
+  }
 
-	return {
-		setCookie: Cookies.set,
-		getCookie: Cookies.get,
-		removeCookie: Cookies.remove,
-	};
+  return {
+    setCookie: Cookies.set,
+    getCookie: Cookies.get,
+    removeCookie: Cookies.remove,
+  };
 }
