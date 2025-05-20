@@ -1,7 +1,6 @@
 {
 	"printWidth": 120,
-	"useTabs": true,
-	"tabWidth": 4,
+	"tabWidth": 2,
 	"singleQuote": true,
 	"trailingComma": "all",
 	"arrowParens": "always",
@@ -9,7 +8,7 @@
 	"bracketSpacing": true,
 	"endOfLine": "lf",
 	"singleAttributePerLine": true,
-	"jsxBracketSameLine": true,
+	"bracketSameLine": true,
 	"importOrder": [
 		"^@/(.*)$",
 		"^[./]"
