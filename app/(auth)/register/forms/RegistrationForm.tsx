@@ -575,8 +575,8 @@ export function RegistrationForm() {
 											{/* Pincode field - moved to come after City */}
 											{renderField(
 												'pincode',
-												'Pincode',
-												'Enter your pincode',
+												'Postal Code',
+												'Enter your postal code',
 												<MapPin className="h-4 w-4" />,
 												'text',
 												'postal-code'
