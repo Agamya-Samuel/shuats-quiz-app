@@ -1,5 +1,7 @@
-"use client";
-import React, { useRef, useState, useEffect } from 'react';
+'use client';
+
+import React, { useEffect, useRef, useState } from 'react';
+
 import { campusTourVideo } from '@/public/images/index.js';
 
 const VideoFrame = () => {
@@ -68,8 +70,7 @@ const VideoFrame = () => {
           className="relative w-full h-full cursor-pointer"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
-          onClick={handlePlayPauseOrUnmute}
-        >
+          onClick={handlePlayPauseOrUnmute}>
           <video
             ref={videoRef}
             src={campusTourVideo}
@@ -137,4 +138,4 @@ const VideoFrame = () => {
   );
 };
 
-export default VideoFrame; 
+export default VideoFrame;

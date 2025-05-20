@@ -63,6 +63,7 @@ Salaries for commerce graduates can vary based on role, experience, and location
 The **Joseph School of Business Studies and Commerce** at SHUATS offers comprehensive programs in commerce and business administration:
 
 - **Undergraduate Programs**:
+
   - **Bachelor of Commerce (B.Com.)**: A 3-year program focusing on accounting, finance, and business management.
   - **Bachelor of Business Administration (BBA)**: A 3-year program emphasizing management principles and business strategies.
 

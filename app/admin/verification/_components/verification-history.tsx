@@ -1,145 +1,160 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { toast } from "@/hooks/use-toast"
-import { Search, Download, Eye, Calendar, RefreshCw } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { DocumentViewDialog } from "./document-view-dialog"
+import { Calendar, Download, Eye, RefreshCw, Search } from 'lucide-react';
+import { useState } from 'react';
+
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { toast } from '@/hooks/use-toast';
+
+import { DocumentViewDialog } from './document-view-dialog';
 
 // Mock data for verification history
 const mockHistory = [
   {
-    id: "1",
-    userId: "1",
-    userName: "John Doe",
-    documentType: "aadhar",
-    filename: "aadhar_card.pdf",
-    status: "approved",
-    verifiedBy: "Admin User",
-    verifiedAt: "2023-05-14 11:30 AM",
+    id: '1',
+    userId: '1',
+    userName: 'John Doe',
+    documentType: 'aadhar',
+    filename: 'aadhar_card.pdf',
+    status: 'approved',
+    verifiedBy: 'Admin User',
+    verifiedAt: '2023-05-14 11:30 AM',
     reason: null,
   },
   {
-    id: "2",
-    userId: "2",
-    userName: "Jane Smith",
-    documentType: "10th_marksheet",
-    filename: "10th_marksheet.pdf",
-    status: "rejected",
-    verifiedBy: "Admin User",
-    verifiedAt: "2023-05-14 10:15 AM",
-    reason: "Document unclear",
+    id: '2',
+    userId: '2',
+    userName: 'Jane Smith',
+    documentType: '10th_marksheet',
+    filename: '10th_marksheet.pdf',
+    status: 'rejected',
+    verifiedBy: 'Admin User',
+    verifiedAt: '2023-05-14 10:15 AM',
+    reason: 'Document unclear',
   },
   {
-    id: "3",
-    userId: "2",
-    userName: "Jane Smith",
-    documentType: "aadhar",
-    filename: "aadhar_card.pdf",
-    status: "approved",
-    verifiedBy: "Admin User",
-    verifiedAt: "2023-05-14 10:10 AM",
+    id: '3',
+    userId: '2',
+    userName: 'Jane Smith',
+    documentType: 'aadhar',
+    filename: 'aadhar_card.pdf',
+    status: 'approved',
+    verifiedBy: 'Admin User',
+    verifiedAt: '2023-05-14 10:10 AM',
     reason: null,
   },
   {
-    id: "4",
-    userId: "3",
-    userName: "Bob Johnson",
-    documentType: "photo",
-    filename: "photo.jpg",
-    status: "rejected",
-    verifiedBy: "Admin User",
-    verifiedAt: "2023-05-13 04:45 PM",
-    reason: "Photo does not meet requirements",
+    id: '4',
+    userId: '3',
+    userName: 'Bob Johnson',
+    documentType: 'photo',
+    filename: 'photo.jpg',
+    status: 'rejected',
+    verifiedBy: 'Admin User',
+    verifiedAt: '2023-05-13 04:45 PM',
+    reason: 'Photo does not meet requirements',
   },
   {
-    id: "5",
-    userId: "3",
-    userName: "Bob Johnson",
-    documentType: "12th_marksheet",
-    filename: "12th_marksheet.pdf",
-    status: "approved",
-    verifiedBy: "Admin User",
-    verifiedAt: "2023-05-13 04:40 PM",
+    id: '5',
+    userId: '3',
+    userName: 'Bob Johnson',
+    documentType: '12th_marksheet',
+    filename: '12th_marksheet.pdf',
+    status: 'approved',
+    verifiedBy: 'Admin User',
+    verifiedAt: '2023-05-13 04:40 PM',
     reason: null,
   },
   {
-    id: "6",
-    userId: "4",
-    userName: "Alice Williams",
-    documentType: "aadhar",
-    filename: "aadhar_card.pdf",
-    status: "approved",
-    verifiedBy: "Admin User",
-    verifiedAt: "2023-05-12 12:20 PM",
+    id: '6',
+    userId: '4',
+    userName: 'Alice Williams',
+    documentType: 'aadhar',
+    filename: 'aadhar_card.pdf',
+    status: 'approved',
+    verifiedBy: 'Admin User',
+    verifiedAt: '2023-05-12 12:20 PM',
     reason: null,
   },
   {
-    id: "7",
-    userId: "4",
-    userName: "Alice Williams",
-    documentType: "photo",
-    filename: "photo.jpg",
-    status: "approved",
-    verifiedBy: "Admin User",
-    verifiedAt: "2023-05-12 12:15 PM",
+    id: '7',
+    userId: '4',
+    userName: 'Alice Williams',
+    documentType: 'photo',
+    filename: 'photo.jpg',
+    status: 'approved',
+    verifiedBy: 'Admin User',
+    verifiedAt: '2023-05-12 12:15 PM',
     reason: null,
   },
   {
-    id: "8",
-    userId: "4",
-    userName: "Alice Williams",
-    documentType: "10th_marksheet",
-    filename: "10th_marksheet.pdf",
-    status: "approved",
-    verifiedBy: "Admin User",
-    verifiedAt: "2023-05-12 12:10 PM",
+    id: '8',
+    userId: '4',
+    userName: 'Alice Williams',
+    documentType: '10th_marksheet',
+    filename: '10th_marksheet.pdf',
+    status: 'approved',
+    verifiedBy: 'Admin User',
+    verifiedAt: '2023-05-12 12:10 PM',
     reason: null,
   },
   {
-    id: "9",
-    userId: "4",
-    userName: "Alice Williams",
-    documentType: "12th_marksheet",
-    filename: "12th_marksheet.pdf",
-    status: "approved",
-    verifiedBy: "Admin User",
-    verifiedAt: "2023-05-12 12:05 PM",
+    id: '9',
+    userId: '4',
+    userName: 'Alice Williams',
+    documentType: '12th_marksheet',
+    filename: '12th_marksheet.pdf',
+    status: 'approved',
+    verifiedBy: 'Admin User',
+    verifiedAt: '2023-05-12 12:05 PM',
     reason: null,
   },
-]
+];
 
 export function VerificationHistory() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [documentFilter, setDocumentFilter] = useState("all")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [dateFilter, setDateFilter] = useState("all")
-  const [history, ] = useState(mockHistory)
-  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('');
+  const [documentFilter, setDocumentFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [dateFilter, setDateFilter] = useState('all');
+  const [history] = useState(mockHistory);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<{
-    userId: string
-    userName: string
-    documentType: string
-    filename: string
-    status: string
-  } | null>(null)
-  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
+    userId: string;
+    userName: string;
+    documentType: string;
+    filename: string;
+    status: string;
+  } | null>(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
 
   const refreshData = () => {
-    setIsRefreshing(true)
+    setIsRefreshing(true);
     setTimeout(() => {
-      setIsRefreshing(false)
+      setIsRefreshing(false);
       toast({
-        title: "Data Refreshed",
-        description: "Verification history has been updated.",
-        variant: "success",
-      })
-    }, 1000)
-  }
+        title: 'Data Refreshed',
+        description: 'Verification history has been updated.',
+        variant: 'success',
+      });
+    }, 1000);
+  };
 
   const handleViewDocument = (
     userId: string,
@@ -148,86 +163,90 @@ export function VerificationHistory() {
     filename: string,
     status: string,
   ) => {
-    setSelectedDocument({ userId, userName, documentType, filename, status })
-    setIsViewDialogOpen(true)
-  }
+    setSelectedDocument({ userId, userName, documentType, filename, status });
+    setIsViewDialogOpen(true);
+  };
 
   const exportHistory = () => {
     toast({
-      title: "Export Started",
-      description: "Verification history is being exported to CSV.",
-      variant: "success",
-    })
-  }
+      title: 'Export Started',
+      description: 'Verification history is being exported to CSV.',
+      variant: 'success',
+    });
+  };
 
   const getDocumentTypeName = (type: string) => {
     switch (type) {
-      case "aadhar":
-        return "Aadhar Card"
-      case "photo":
-        return "Photo"
-      case "10th_marksheet":
-        return "10th Marksheet"
-      case "12th_marksheet":
-        return "12th Marksheet"
+      case 'aadhar':
+        return 'Aadhar Card';
+      case 'photo':
+        return 'Photo';
+      case '10th_marksheet':
+        return '10th Marksheet';
+      case '12th_marksheet':
+        return '12th Marksheet';
       default:
-        return type
+        return type;
     }
-  }
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "approved":
-        return <Badge className="bg-green-500">Approved</Badge>
-      case "rejected":
-        return <Badge className="bg-red-500">Rejected</Badge>
-      case "pending":
+      case 'approved':
+        return <Badge className="bg-green-500">Approved</Badge>;
+      case 'rejected':
+        return <Badge className="bg-red-500">Rejected</Badge>;
+      case 'pending':
         return (
-          <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-200">
+          <Badge
+            variant="outline"
+            className="bg-yellow-100 text-yellow-800 border-yellow-200">
             Pending
           </Badge>
-        )
+        );
       default:
-        return <Badge variant="outline">Unknown</Badge>
+        return <Badge variant="outline">Unknown</Badge>;
     }
-  }
+  };
 
   // Filter history based on search query, document type, status, and date
   const filteredHistory = history.filter((item) => {
     // Filter by search query
     const matchesSearch =
       item.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.verifiedBy.toLowerCase().includes(searchQuery.toLowerCase())
+      item.verifiedBy.toLowerCase().includes(searchQuery.toLowerCase());
 
     // Filter by document type
-    const matchesDocumentType = documentFilter === "all" || item.documentType === documentFilter
+    const matchesDocumentType =
+      documentFilter === 'all' || item.documentType === documentFilter;
 
     // Filter by status
-    const matchesStatus = statusFilter === "all" || item.status === statusFilter
+    const matchesStatus =
+      statusFilter === 'all' || item.status === statusFilter;
 
     // Filter by date (simplified for demo)
-    let matchesDate = true
-    const itemDate = new Date(item.verifiedAt)
-    const today = new Date()
-    const yesterday = new Date(today)
-    yesterday.setDate(yesterday.getDate() - 1)
-    const lastWeek = new Date(today)
-    lastWeek.setDate(lastWeek.getDate() - 7)
-    const lastMonth = new Date(today)
-    lastMonth.setMonth(lastMonth.getMonth() - 1)
+    let matchesDate = true;
+    const itemDate = new Date(item.verifiedAt);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const lastWeek = new Date(today);
+    lastWeek.setDate(lastWeek.getDate() - 7);
+    const lastMonth = new Date(today);
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
 
-    if (dateFilter === "today") {
-      matchesDate = itemDate.toDateString() === today.toDateString()
-    } else if (dateFilter === "yesterday") {
-      matchesDate = itemDate.toDateString() === yesterday.toDateString()
-    } else if (dateFilter === "last_week") {
-      matchesDate = itemDate >= lastWeek
-    } else if (dateFilter === "last_month") {
-      matchesDate = itemDate >= lastMonth
+    if (dateFilter === 'today') {
+      matchesDate = itemDate.toDateString() === today.toDateString();
+    } else if (dateFilter === 'yesterday') {
+      matchesDate = itemDate.toDateString() === yesterday.toDateString();
+    } else if (dateFilter === 'last_week') {
+      matchesDate = itemDate >= lastWeek;
+    } else if (dateFilter === 'last_month') {
+      matchesDate = itemDate >= lastMonth;
     }
 
-    return matchesSearch && matchesDocumentType && matchesStatus && matchesDate
-  })
+    return matchesSearch && matchesDocumentType && matchesStatus && matchesDate;
+  });
 
   return (
     <div className="space-y-4">
@@ -243,7 +262,9 @@ export function VerificationHistory() {
           />
         </div>
         <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-          <Select value={documentFilter} onValueChange={setDocumentFilter}>
+          <Select
+            value={documentFilter}
+            onValueChange={setDocumentFilter}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Document Type" />
             </SelectTrigger>
@@ -256,7 +277,9 @@ export function VerificationHistory() {
             </SelectContent>
           </Select>
 
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <Select
+            value={statusFilter}
+            onValueChange={setStatusFilter}>
             <SelectTrigger className="w-[150px]">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
@@ -267,7 +290,9 @@ export function VerificationHistory() {
             </SelectContent>
           </Select>
 
-          <Select value={dateFilter} onValueChange={setDateFilter}>
+          <Select
+            value={dateFilter}
+            onValueChange={setDateFilter}>
             <SelectTrigger className="w-[150px]">
               <SelectValue placeholder="Date" />
             </SelectTrigger>
@@ -280,8 +305,14 @@ export function VerificationHistory() {
             </SelectContent>
           </Select>
 
-          <Button variant="outline" size="icon" onClick={refreshData} disabled={isRefreshing}>
-            <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={refreshData}
+            disabled={isRefreshing}>
+            <RefreshCw
+              className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`}
+            />
           </Button>
         </div>
       </div>
@@ -324,10 +355,15 @@ export function VerificationHistory() {
                     variant="ghost"
                     size="sm"
                     onClick={() =>
-                      handleViewDocument(item.userId, item.userName, item.documentType, item.filename, item.status)
+                      handleViewDocument(
+                        item.userId,
+                        item.userName,
+                        item.documentType,
+                        item.filename,
+                        item.status,
+                      )
                     }
-                    className="flex items-center gap-1"
-                  >
+                    className="flex items-center gap-1">
                     <Eye className="h-4 w-4" />
                     View
                   </Button>
@@ -340,9 +376,13 @@ export function VerificationHistory() {
 
       <div className="flex justify-between items-center">
         <p className="text-sm text-muted-foreground">
-          Showing {filteredHistory.length} of {history.length} verification records
+          Showing {filteredHistory.length} of {history.length} verification
+          records
         </p>
-        <Button variant="outline" onClick={exportHistory} className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          onClick={exportHistory}
+          className="flex items-center gap-2">
           <Download className="h-4 w-4" />
           Export History
         </Button>
@@ -356,5 +396,5 @@ export function VerificationHistory() {
         getDocumentTypeName={getDocumentTypeName}
       />
     </div>
-  )
+  );
 }

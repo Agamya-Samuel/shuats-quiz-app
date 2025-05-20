@@ -25,7 +25,7 @@ export async function initializeDatabase() {
     try {
       // Perform database initialization
       await initializeDB();
-      
+
       if (process.env.NODE_ENV === 'development') {
         console.log('Database fully initialized (from lib/db-init.ts)');
       }
@@ -42,4 +42,4 @@ export async function initializeDatabase() {
 }
 
 // This ensures the database is initialized when this module is imported
-export const dbInitPromise = initializeDatabase(); 
+export const dbInitPromise = initializeDatabase();

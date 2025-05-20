@@ -34,6 +34,7 @@ Salaries vary based on role, experience, and location:
 SHUATS offers undergraduate and postgraduate programs relevant to PCB:
 
 - **Undergraduate Programs**:
+
   - B.Sc. in Biotechnology
   - B.Sc. in Microbiology
   - B.Sc. in Food Technology

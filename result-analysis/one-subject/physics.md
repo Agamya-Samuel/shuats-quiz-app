@@ -1,6 +1,5 @@
 # Physics
 
-
 ## 1. Job Roles and Position Opportunities
 
 Graduates with a background in physics can pursue various career paths, including:

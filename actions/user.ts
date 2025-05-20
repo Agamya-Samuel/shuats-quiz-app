@@ -1,632 +1,628 @@
 'use server';
 
 import argon2 from 'argon2';
-import { connectToDB } from '@/db';
-import { users, addresses, uploadFiles } from '@/db/schema';
-import { generateToken, verifyToken } from '@/lib/auth';
-import { setCookie } from '@/lib/cookies';
-import { eq, and } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import {
-	AddressData,
-	UserJwtPayload,
-	UpdateUserData,
-	ForgotPasswordData,
-} from '@/types/user';
 import { z } from 'zod';
-import { sendPasswordResetEmail } from '@/lib/email';
-import { verifyAuth } from '@/lib/dal';
 
+import { connectToDB } from '@/db';
+import { addresses, uploadFiles, users } from '@/db/schema';
 // Import schema type for transaction
 import * as dbSchema from '@/db/schema';
+import { generateToken, verifyToken } from '@/lib/auth';
+import { setCookie } from '@/lib/cookies';
+import { verifyAuth } from '@/lib/dal';
+import { sendPasswordResetEmail } from '@/lib/email';
+import {
+  AddressData,
+  ForgotPasswordData,
+  UpdateUserData,
+  UserJwtPayload,
+} from '@/types/user';
 
 // Register a new user
 export async function registerUser({
-	email,
-	name,
-	password,
-	mobile,
-	rollno,
-	school,
-	branch,
-	address,
+  email,
+  name,
+  password,
+  mobile,
+  rollno,
+  school,
+  branch,
+  address,
 }: {
-	email: string;
-	name: string;
-	password: string;
-	mobile: string;
-	rollno: string;
-	school: string;
-	branch: string;
-	address: AddressData;
+  email: string;
+  name: string;
+  password: string;
+  mobile: string;
+  rollno: string;
+  school: string;
+  branch: string;
+  address: AddressData;
 }) {
-	try {
-		// Connect to the database
-		const db = (await connectToDB()) as unknown as NodePgDatabase<
-			typeof dbSchema
-		>;
+  try {
+    // Connect to the database
+    const db = (await connectToDB()) as unknown as NodePgDatabase<
+      typeof dbSchema
+    >;
 
-		// Check if the user already exists
-		const existingUser = await db.query.users.findFirst({
-			where: eq(users.email, email),
-		});
+    // Check if the user already exists
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.email, email),
+    });
 
-		// If the user already exists, return an error
-		if (existingUser) {
-			return { success: false, message: 'User email already exists' };
-		}
+    // If the user already exists, return an error
+    if (existingUser) {
+      return { success: false, message: 'User email already exists' };
+    }
 
-		// Hash the password
-		const hashedPassword = await argon2.hash(password);
+    // Hash the password
+    const hashedPassword = await argon2.hash(password);
 
-		// Use a transaction to ensure both address and user are saved
-		const result = await db.transaction(
-			async (tx: NodePgDatabase<typeof dbSchema>) => {
-				// Create address first
-				const [newAddress] = await tx
-					.insert(addresses)
-					.values({
-						country: address.country,
-						address1: address.address1,
-						address2: address.address2 || null,
-						area: address.area,
-						city: address.city,
-						pincode: address.pincode,
-						state: address.state,
-					})
-					.returning({ id: addresses.id });
+    // Use a transaction to ensure both address and user are saved
+    const result = await db.transaction(
+      async (tx: NodePgDatabase<typeof dbSchema>) => {
+        // Create address first
+        const [newAddress] = await tx
+          .insert(addresses)
+          .values({
+            country: address.country,
+            address1: address.address1,
+            address2: address.address2 || null,
+            area: address.area,
+            city: address.city,
+            pincode: address.pincode,
+            state: address.state,
+          })
+          .returning({ id: addresses.id });
 
-				// Create user with reference to address
-				const [newUser] = await tx
-					.insert(users)
-					.values({
-						email,
-						password: hashedPassword,
-						mobile,
-						school,
-						rollno,
-						name,
-						branch,
-						addressId: newAddress.id,
-					})
-					.returning({
-						id: users.id,
-						email: users.email,
-						name: users.name,
-						mobile: users.mobile,
-						school: users.school,
-						rollno: users.rollno,
-						branch: users.branch,
-					});
+        // Create user with reference to address
+        const [newUser] = await tx
+          .insert(users)
+          .values({
+            email,
+            password: hashedPassword,
+            mobile,
+            school,
+            rollno,
+            name,
+            branch,
+            addressId: newAddress.id,
+          })
+          .returning({
+            id: users.id,
+            email: users.email,
+            name: users.name,
+            mobile: users.mobile,
+            school: users.school,
+            rollno: users.rollno,
+            branch: users.branch,
+          });
 
-				return {
-					addressId: newAddress.id,
-					userId: newUser.id,
-					user: {
-						...newUser,
-						address: {
-							id: newAddress.id,
-							country: address.country,
-							address1: address.address1,
-							address2: address.address2 || null,
-							area: address.area,
-							city: address.city,
-							pincode: address.pincode,
-							state: address.state,
-						},
-					},
-				};
-			}
-		);
+        return {
+          addressId: newAddress.id,
+          userId: newUser.id,
+          user: {
+            ...newUser,
+            address: {
+              id: newAddress.id,
+              country: address.country,
+              address1: address.address1,
+              address2: address.address2 || null,
+              area: address.area,
+              city: address.city,
+              pincode: address.pincode,
+              state: address.state,
+            },
+          },
+        };
+      },
+    );
 
-		// Create JWT payload and automatically log in the user
-		const payload: UserJwtPayload = {
-			userId: result.userId,
-			role: 'user',
-			name,
-			email,
-			mobile,
-			school,
-			rollno,
-			branch,
-			address,
-		};
+    // Create JWT payload and automatically log in the user
+    const payload: UserJwtPayload = {
+      userId: result.userId,
+      role: 'user',
+      name,
+      email,
+      mobile,
+      school,
+      rollno,
+      branch,
+      address,
+    };
 
-		// Generate a JWT token
-		const token = await generateToken(payload);
+    // Generate a JWT token
+    const token = await generateToken(payload);
 
-		// Set the token in a cookie
-		await setCookie('token', token, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === 'production',
-			maxAge: 60 * 60 * 24 * 7, // 7 days
-			path: '/',
-		});
+    // Set the token in a cookie
+    await setCookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: '/',
+    });
 
-		return {
-			success: true,
-			message: 'User registered and logged in successfully',
-			userId: result.userId,
-			user: result.user,
-			autoLogin: true,
-		};
-	} catch (error) {
-		console.error('Error registering user:', error);
-		return {
-			success: false,
-			message: `Failed to register user: ${
-				error instanceof Error ? error.message : String(error)
-			}`,
-		};
-	}
+    return {
+      success: true,
+      message: 'User registered and logged in successfully',
+      userId: result.userId,
+      user: result.user,
+      autoLogin: true,
+    };
+  } catch (error) {
+    console.error('Error registering user:', error);
+    return {
+      success: false,
+      message: `Failed to register user: ${error instanceof Error ? error.message : String(error)}`,
+    };
+  }
 }
 
 // Log in a user
 export async function loginUser({
-	email,
-	password,
+  email,
+  password,
 }: {
-	email: string;
-	password: string;
+  email: string;
+  password: string;
 }) {
-	try {
-		// Connect to the database
-		const db = (await connectToDB()) as unknown as NodePgDatabase<
-			typeof dbSchema
-		>;
+  try {
+    // Connect to the database
+    const db = (await connectToDB()) as unknown as NodePgDatabase<
+      typeof dbSchema
+    >;
 
-		// Find user by email and include address information
-		const user = await db.query.users.findFirst({
-			where: eq(users.email, email),
-			with: {
-				address: true,
-			},
-		});
+    // Find user by email and include address information
+    const user = await db.query.users.findFirst({
+      where: eq(users.email, email),
+      with: {
+        address: true,
+      },
+    });
 
-		// If user doesn't exist, return an error
-		if (!user) {
-			return { success: false, message: 'User not found' };
-		}
+    // If user doesn't exist, return an error
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
 
-		// Verify the password
-		const isValidPassword = await argon2.verify(user.password, password);
+    // Verify the password
+    const isValidPassword = await argon2.verify(user.password, password);
 
-		// If the password is not valid, return an error
-		if (!isValidPassword) {
-			return { success: false, message: 'Invalid credentials' };
-		}
+    // If the password is not valid, return an error
+    if (!isValidPassword) {
+      return { success: false, message: 'Invalid credentials' };
+    }
 
-		// Create a JWT payload
-		const payload: UserJwtPayload = {
-			userId: user.id,
-			role: 'user',
-			name: user.name,
-			email: user.email,
-			mobile: user.mobile,
-			school: user.school,
-			rollno: user.rollno,
-			branch: user.branch,
-			address: user.address as AddressData,
-		};
+    // Create a JWT payload
+    const payload: UserJwtPayload = {
+      userId: user.id,
+      role: 'user',
+      name: user.name,
+      email: user.email,
+      mobile: user.mobile,
+      school: user.school,
+      rollno: user.rollno,
+      branch: user.branch,
+      address: user.address as AddressData,
+    };
 
-		// Generate a JWT token
-		const token = await generateToken(payload);
+    // Generate a JWT token
+    const token = await generateToken(payload);
 
-		// Set the token in a cookie
-		await setCookie('token', token, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === 'production',
-			maxAge: 60 * 60 * 24 * 7, // 7 days
-			path: '/',
-		});
+    // Set the token in a cookie
+    await setCookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: '/',
+    });
 
-		// Return the user data (without the password)
-		return {
-			success: true,
-			message: 'User logged in successfully',
-			user: {
-				id: user.id,
-				name: user.name,
-				email: user.email,
-				mobile: user.mobile,
-				school: user.school,
-				rollno: user.rollno,
-				branch: user.branch,
-				address: user.address as AddressData,
-			},
-		};
-	} catch (error) {
-		console.error('Login error:', error);
-		return {
-			success: false,
-			message: 'Failed to login user. Please try again.',
-		};
-	}
+    // Return the user data (without the password)
+    return {
+      success: true,
+      message: 'User logged in successfully',
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile,
+        school: user.school,
+        rollno: user.rollno,
+        branch: user.branch,
+        address: user.address as AddressData,
+      },
+    };
+  } catch (error) {
+    console.error('Login error:', error);
+    return {
+      success: false,
+      message: 'Failed to login user. Please try again.',
+    };
+  }
 }
 
 // Get a user by ID
 export async function getUser(userId: number) {
-	// Verify authorization - users can only access their own data unless they're an admin/superadmin
-	const authUser = await verifyAuth();
+  // Verify authorization - users can only access their own data unless they're an admin/superadmin
+  const authUser = await verifyAuth();
 
-	if (!authUser) {
-		return {
-			success: false,
-			message: 'Unauthorized: You must be logged in to view user data',
-		};
-	}
+  if (!authUser) {
+    return {
+      success: false,
+      message: 'Unauthorized: You must be logged in to view user data',
+    };
+  }
 
-	// Regular users can only access their own data
-	if (authUser.role === 'user' && authUser.userId !== userId) {
-		return {
-			success: false,
-			message: 'Unauthorized: You can only view your own data',
-		};
-	}
+  // Regular users can only access their own data
+  if (authUser.role === 'user' && authUser.userId !== userId) {
+    return {
+      success: false,
+      message: 'Unauthorized: You can only view your own data',
+    };
+  }
 
-	try {
-		// Connect to the database
-		const db = (await connectToDB()) as unknown as NodePgDatabase<
-			typeof dbSchema
-		>;
+  try {
+    // Connect to the database
+    const db = (await connectToDB()) as unknown as NodePgDatabase<
+      typeof dbSchema
+    >;
 
-		const user = await db.query.users.findFirst({
-			where: eq(users.id, userId),
-			columns: {
-				id: true,
-				name: true,
-				email: true,
-				mobile: true,
-				school: true,
-				rollno: true,
-				branch: true,
-			},
-			with: {
-				address: true,
-			},
-		});
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+      columns: {
+        id: true,
+        name: true,
+        email: true,
+        mobile: true,
+        school: true,
+        rollno: true,
+        branch: true,
+      },
+      with: {
+        address: true,
+      },
+    });
 
-		if (!user) {
-			return { success: false, message: 'User not found' };
-		}
+    if (!user) {
+      return { success: false, message: 'User not found' };
+    }
 
-		return {
-			success: true,
-			user: {
-				...user,
-				address: user.address,
-			},
-		};
-	} catch (error) {
-		console.error('Error fetching user:', error);
-		return {
-			success: false,
-			message: `Failed to fetch user: ${error}`,
-		};
-	}
+    return {
+      success: true,
+      user: {
+        ...user,
+        address: user.address,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    return {
+      success: false,
+      message: `Failed to fetch user: ${error}`,
+    };
+  }
 }
 
 // Update a user
 export async function updateUser(userId: number, userData: UpdateUserData) {
-	// Verify authorization - users can only modify their own data unless they're an admin/superadmin
-	const authUser = await verifyAuth();
+  // Verify authorization - users can only modify their own data unless they're an admin/superadmin
+  const authUser = await verifyAuth();
 
-	if (!authUser) {
-		return {
-			success: false,
-			message: 'Unauthorized: You must be logged in to update user data',
-		};
-	}
+  if (!authUser) {
+    return {
+      success: false,
+      message: 'Unauthorized: You must be logged in to update user data',
+    };
+  }
 
-	// Regular users can only modify their own data
-	if (authUser.role === 'user' && authUser.userId !== userId) {
-		return {
-			success: false,
-			message: 'Unauthorized: You can only update your own data',
-		};
-	}
+  // Regular users can only modify their own data
+  if (authUser.role === 'user' && authUser.userId !== userId) {
+    return {
+      success: false,
+      message: 'Unauthorized: You can only update your own data',
+    };
+  }
 
-	try {
-		const db = (await connectToDB()) as unknown as NodePgDatabase<
-			typeof dbSchema
-		>;
+  try {
+    const db = (await connectToDB()) as unknown as NodePgDatabase<
+      typeof dbSchema
+    >;
 
-		// Check if user exists
-		const existingUser = await db.query.users.findFirst({
-			where: eq(users.id, userId),
-			with: {
-				address: true,
-			},
-		});
+    // Check if user exists
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+      with: {
+        address: true,
+      },
+    });
 
-		if (!existingUser) {
-			return { success: false, message: 'User not found' };
-		}
+    if (!existingUser) {
+      return { success: false, message: 'User not found' };
+    }
 
-		// Use a transaction to update both user and address
-		await db.transaction(async (tx: NodePgDatabase<typeof dbSchema>) => {
-			// Update user
-			await tx
-				.update(users)
-				.set({
-					name: userData.name,
-					email: userData.email,
-					mobile: userData.mobile,
-					school: userData.school,
-					rollno: userData.rollno,
-					branch: userData.branch,
-				})
-				.where(eq(users.id, userId));
+    // Use a transaction to update both user and address
+    await db.transaction(async (tx: NodePgDatabase<typeof dbSchema>) => {
+      // Update user
+      await tx
+        .update(users)
+        .set({
+          name: userData.name,
+          email: userData.email,
+          mobile: userData.mobile,
+          school: userData.school,
+          rollno: userData.rollno,
+          branch: userData.branch,
+        })
+        .where(eq(users.id, userId));
 
-			// Update address if it exists
-			if (existingUser.address && userData.address) {
-				await tx
-					.update(addresses)
-					.set({
-						country: userData.address.country,
-						address1: userData.address.address1,
-						address2: userData.address.address2 || null,
-						area: userData.address.area,
-						city: userData.address.city,
-						pincode: userData.address.pincode,
-						state: userData.address.state,
-					})
-					.where(eq(addresses.id, existingUser.address.id));
-			}
-		});
+      // Update address if it exists
+      if (existingUser.address && userData.address) {
+        await tx
+          .update(addresses)
+          .set({
+            country: userData.address.country,
+            address1: userData.address.address1,
+            address2: userData.address.address2 || null,
+            area: userData.address.area,
+            city: userData.address.city,
+            pincode: userData.address.pincode,
+            state: userData.address.state,
+          })
+          .where(eq(addresses.id, existingUser.address.id));
+      }
+    });
 
-		// Get the updated user
-		const updatedUser = await db.query.users.findFirst({
-			where: eq(users.id, userId),
-			with: {
-				address: true,
-			},
-		});
+    // Get the updated user
+    const updatedUser = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+      with: {
+        address: true,
+      },
+    });
 
-		if (!updatedUser) {
-			return { success: false, message: 'User not found after update' };
-		}
+    if (!updatedUser) {
+      return { success: false, message: 'User not found after update' };
+    }
 
-		// Create new token payload with updated user data
-		const payload: UserJwtPayload = {
-			userId: updatedUser.id,
-			role: 'user',
-			name: updatedUser.name,
-			email: updatedUser.email,
-			mobile: updatedUser.mobile,
-			school: updatedUser.school,
-			rollno: updatedUser.rollno,
-			branch: updatedUser.branch,
-			address: updatedUser.address as AddressData,
-		};
+    // Create new token payload with updated user data
+    const payload: UserJwtPayload = {
+      userId: updatedUser.id,
+      role: 'user',
+      name: updatedUser.name,
+      email: updatedUser.email,
+      mobile: updatedUser.mobile,
+      school: updatedUser.school,
+      rollno: updatedUser.rollno,
+      branch: updatedUser.branch,
+      address: updatedUser.address as AddressData,
+    };
 
-		// Generate new token
-		const token = await generateToken(payload);
+    // Generate new token
+    const token = await generateToken(payload);
 
-		// Update cookie with new token
-		await setCookie('token', token, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === 'production',
-			maxAge: 60 * 60 * 24 * 7, // 7 days
-			path: '/',
-		});
+    // Update cookie with new token
+    await setCookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: '/',
+    });
 
-		return {
-			success: true,
-			message: 'User updated successfully',
-			user: {
-				id: updatedUser.id,
-				name: updatedUser.name,
-				email: updatedUser.email,
-				mobile: updatedUser.mobile,
-				school: updatedUser.school,
-				rollno: updatedUser.rollno,
-				branch: updatedUser.branch,
-				address: updatedUser.address || null,
-			},
-		};
-	} catch (error) {
-		console.error('Error updating user:', error);
-		return {
-			success: false,
-			message: `Failed to update user: ${error}`,
-		};
-	}
+    return {
+      success: true,
+      message: 'User updated successfully',
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        mobile: updatedUser.mobile,
+        school: updatedUser.school,
+        rollno: updatedUser.rollno,
+        branch: updatedUser.branch,
+        address: updatedUser.address || null,
+      },
+    };
+  } catch (error) {
+    console.error('Error updating user:', error);
+    return {
+      success: false,
+      message: `Failed to update user: ${error}`,
+    };
+  }
 }
 
 // Schema for forgot password
 const forgotPasswordSchema = z.object({
-	email: z.string().email('Please enter a valid email address'),
+  email: z.string().email('Please enter a valid email address'),
 });
 
 /**
  * Send password reset email to user
  */
 export async function forgotPassword(formData: FormData) {
-	try {
-		const email = formData.get('email') as string;
+  try {
+    const email = formData.get('email') as string;
 
-		// Validate email
-		const result = forgotPasswordSchema.safeParse({ email });
-		if (!result.success) {
-			return {
-				success: false,
-				message: 'Please enter a valid email address',
-			};
-		}
+    // Validate email
+    const result = forgotPasswordSchema.safeParse({ email });
+    if (!result.success) {
+      return {
+        success: false,
+        message: 'Please enter a valid email address',
+      };
+    }
 
-		// Connect to database
-		const db = (await connectToDB()) as unknown as NodePgDatabase<
-			typeof dbSchema
-		>;
+    // Connect to database
+    const db = (await connectToDB()) as unknown as NodePgDatabase<
+      typeof dbSchema
+    >;
 
-		// Find user by email
-		const user = await db.query.users.findFirst({
-			where: eq(users.email, email),
-		});
+    // Find user by email
+    const user = await db.query.users.findFirst({
+      where: eq(users.email, email),
+    });
 
-		// If user not found, still return success to prevent email enumeration
-		if (!user) {
-			return { success: true, message: 'Email sent successfully' };
-		}
+    // If user not found, still return success to prevent email enumeration
+    if (!user) {
+      return { success: true, message: 'Email sent successfully' };
+    }
 
-		// Create reset token payload
-		const forgotPasswordPayload: ForgotPasswordData = {
-			userId: user.id,
-			email: user.email,
-			purpose: 'password-reset',
-			role: 'user',
-		};
+    // Create reset token payload
+    const forgotPasswordPayload: ForgotPasswordData = {
+      userId: user.id,
+      email: user.email,
+      purpose: 'password-reset',
+      role: 'user',
+    };
 
-		// Generate reset token (valid for 1 hour)
-		const resetToken = await generateToken(forgotPasswordPayload);
+    // Generate reset token (valid for 1 hour)
+    const resetToken = await generateToken(forgotPasswordPayload);
 
-		// Send password reset email
-		const emailSent = await sendPasswordResetEmail(user.email, resetToken);
+    // Send password reset email
+    const emailSent = await sendPasswordResetEmail(user.email, resetToken);
 
-		if (!emailSent) {
-			return {
-				success: false,
-				message: 'Failed to send reset email. Please try again.',
-			};
-		}
+    if (!emailSent) {
+      return {
+        success: false,
+        message: 'Failed to send reset email. Please try again.',
+      };
+    }
 
-		return { success: true, message: 'Email sent successfully' };
-	} catch (error) {
-		console.error('Forgot password error:', error);
-		return {
-			success: false,
-			message: 'An error occurred. Please try again later.',
-		};
-	}
+    return { success: true, message: 'Email sent successfully' };
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    return {
+      success: false,
+      message: 'An error occurred. Please try again later.',
+    };
+  }
 }
 
 // Schema for password reset
 const resetPasswordSchema = z
-	.object({
-		password: z
-			.string()
-			.min(8, 'Password must be at least 8 characters')
-			.max(100, 'Password is too long'),
-		confirmPassword: z.string(),
-	})
-	.refine((data) => data.password === data.confirmPassword, {
-		message: "Passwords don't match",
-		path: ['confirmPassword'],
-	});
+  .object({
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .max(100, 'Password is too long'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
 
 /**
  * Reset user password using token from email
  */
 export async function resetPassword(token: string, formData: FormData) {
-	try {
-		// Verify token
-		const payload = await verifyToken(token);
+  try {
+    // Verify token
+    const payload = await verifyToken(token);
 
-		// Check if token is valid and has the correct purpose
-		if (
-			!payload ||
-			!('userId' in payload) ||
-			payload.role !== 'user' ||
-			!('purpose' in payload) ||
-			payload.purpose !== 'password-reset'
-		) {
-			return {
-				success: false,
-				message:
-					'Invalid or expired reset link. Please request a new one.',
-			};
-		}
+    // Check if token is valid and has the correct purpose
+    if (
+      !payload ||
+      !('userId' in payload) ||
+      payload.role !== 'user' ||
+      !('purpose' in payload) ||
+      payload.purpose !== 'password-reset'
+    ) {
+      return {
+        success: false,
+        message: 'Invalid or expired reset link. Please request a new one.',
+      };
+    }
 
-		const password = formData.get('password') as string;
-		const confirmPassword = formData.get('confirmPassword') as string;
+    const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
 
-		// Validate password
-		const result = resetPasswordSchema.safeParse({
-			password,
-			confirmPassword,
-		});
+    // Validate password
+    const result = resetPasswordSchema.safeParse({
+      password,
+      confirmPassword,
+    });
 
-		if (!result.success) {
-			const fieldErrors = result.error.flatten().fieldErrors;
-			const errorMessage =
-				fieldErrors.password?.[0] ||
-				fieldErrors.confirmPassword?.[0] ||
-				'Invalid password';
+    if (!result.success) {
+      const fieldErrors = result.error.flatten().fieldErrors;
+      const errorMessage =
+        fieldErrors.password?.[0] ||
+        fieldErrors.confirmPassword?.[0] ||
+        'Invalid password';
 
-			return { success: false, message: errorMessage };
-		}
+      return { success: false, message: errorMessage };
+    }
 
-		// Connect to database
-		const db = (await connectToDB()) as unknown as NodePgDatabase<
-			typeof dbSchema
-		>;
+    // Connect to database
+    const db = (await connectToDB()) as unknown as NodePgDatabase<
+      typeof dbSchema
+    >;
 
-		// Find user by ID
-		const existingUser = await db.query.users.findFirst({
-			where: eq(users.id, payload.userId),
-		});
+    // Find user by ID
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.id, payload.userId),
+    });
 
-		if (!existingUser) {
-			return {
-				success: false,
-				message: 'User not found. Please request a new reset link.',
-			};
-		}
+    if (!existingUser) {
+      return {
+        success: false,
+        message: 'User not found. Please request a new reset link.',
+      };
+    }
 
-		// Hash the new password
-		const hashedPassword = await argon2.hash(password);
+    // Hash the new password
+    const hashedPassword = await argon2.hash(password);
 
-		// Update user's password
-		await db
-			.update(users)
-			.set({ password: hashedPassword })
-			.where(eq(users.id, payload.userId));
+    // Update user's password
+    await db
+      .update(users)
+      .set({ password: hashedPassword })
+      .where(eq(users.id, payload.userId));
 
-		return { success: true };
-	} catch (error) {
-		console.error('Password reset error:', error);
-		return {
-			success: false,
-			message: 'An error occurred. Please try again later.',
-		};
-	}
+    return { success: true };
+  } catch (error) {
+    console.error('Password reset error:', error);
+    return {
+      success: false,
+      message: 'An error occurred. Please try again later.',
+    };
+  }
 }
 
 // Get User Profile Picture
 export async function getUserProfilePicture(userId: number) {
-	const user = await verifyAuth();
-	if (!user || user.role !== 'user') {
-		return {
-			success: false,
-			message:
-				'Unauthorized: Only users can access their profile picture',
-		};
-	}
+  const user = await verifyAuth();
+  if (!user || user.role !== 'user') {
+    return {
+      success: false,
+      message: 'Unauthorized: Only users can access their profile picture',
+    };
+  }
 
-	try {
-		// Connect to db
-		const db = (await connectToDB()) as unknown as NodePgDatabase<
-			typeof dbSchema
-		>;
+  try {
+    // Connect to db
+    const db = (await connectToDB()) as unknown as NodePgDatabase<
+      typeof dbSchema
+    >;
 
-		// Get user profile
-		const profilePicture = await db.query.uploadFiles.findFirst({
-			where: and(
-				eq(uploadFiles.userId, userId),
-				eq(uploadFiles.documentType, 'profile_pic')
-			),
-			columns: {
-				fileUrl: true,
-			},
-		});
+    // Get user profile
+    const profilePicture = await db.query.uploadFiles.findFirst({
+      where: and(
+        eq(uploadFiles.userId, userId),
+        eq(uploadFiles.documentType, 'profile_pic'),
+      ),
+      columns: {
+        fileUrl: true,
+      },
+    });
 
-		return { success: true, profilePicture };
-	} catch (error) {
-		console.error('Error fetching user profile picture:', error);
-		return {
-			success: false,
-			message: `Error fetching user profile picture: ${error}`,
-		};
-	}
+    return { success: true, profilePicture };
+  } catch (error) {
+    console.error('Error fetching user profile picture:', error);
+    return {
+      success: false,
+      message: `Error fetching user profile picture: ${error}`,
+    };
+  }
 }

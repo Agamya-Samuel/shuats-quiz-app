@@ -1,7 +1,8 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { pgTableCreator } from 'drizzle-orm/pg-core';
-import * as schema from './schema';
 import { Pool } from 'pg';
+
+import * as schema from './schema';
 
 // Re-export schema
 export { schema };
@@ -26,12 +27,24 @@ export const db = {
     return _db;
   },
   // Forward any property access to the actual db instance
-  get query() { return this.instance.query; },
-  get insert() { return this.instance.insert; },
-  get select() { return this.instance.select; },
-  get update() { return this.instance.update; },
-  get delete() { return this.instance.delete; },
-  get transaction() { return this.instance.transaction; },
+  get query() {
+    return this.instance.query;
+  },
+  get insert() {
+    return this.instance.insert;
+  },
+  get select() {
+    return this.instance.select;
+  },
+  get update() {
+    return this.instance.update;
+  },
+  get delete() {
+    return this.instance.delete;
+  },
+  get transaction() {
+    return this.instance.transaction;
+  },
 };
 
 // Create a prepared query builder

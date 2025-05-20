@@ -10,38 +10,38 @@ This online examination system provides educational institutions with a robust p
 
 ### 👨‍💼 For Administrators
 
--   👥 User management (add, edit, delete users)
--   📝 Exam creation and scheduling
--   🗃️ Question bank management
--   👁️ Real-time monitoring
--   📊 Comprehensive reporting and analytics
--   🔐 Secure authentication
+- 👥 User management (add, edit, delete users)
+- 📝 Exam creation and scheduling
+- 🗃️ Question bank management
+- 👁️ Real-time monitoring
+- 📊 Comprehensive reporting and analytics
+- 🔐 Secure authentication
 
 ### 👨‍🎓 For Students
 
--   🖱️ Simple exam access and navigation
--   ⏱️ Clear instructions and time tracking
--   ❓ Support for various question types (MCQ, written, file upload)
--   ⚡ Instant feedback (for automated assessments)
--   🔒 Secure login and session management
+- 🖱️ Simple exam access and navigation
+- ⏱️ Clear instructions and time tracking
+- ❓ Support for various question types (MCQ, written, file upload)
+- ⚡ Instant feedback (for automated assessments)
+- 🔒 Secure login and session management
 
 ## 🛠️ Technology Stack
 
--   🌐 **Frontend**: React.js, Next.js, Tailwind CSS
--   🖥️ **Backend**: Node.js, Express
--   🗄️ **Database**: MongoDB
--   🔑 **Authentication**: JWT
--   🛡️ **Security**: Data encryption, anti-cheating measures
+- 🌐 **Frontend**: React.js, Next.js, Tailwind CSS
+- 🖥️ **Backend**: Node.js, Express
+- 🗄️ **Database**: MongoDB
+- 🔑 **Authentication**: JWT
+- 🛡️ **Security**: Data encryption, anti-cheating measures
 
 ## 🔒 Security Measures
 
--   🔐 Secure authentication and authorization
--   📡 Session management
--   🔍 Browser lockdown capabilities
--   🕵️ Plagiarism detection
--   🔀 Randomized question order
--   ⏲️ Time restrictions
--   📹 Webcam proctoring options
+- 🔐 Secure authentication and authorization
+- 📡 Session management
+- 🔍 Browser lockdown capabilities
+- 🕵️ Plagiarism detection
+- 🔀 Randomized question order
+- ⏲️ Time restrictions
+- 📹 Webcam proctoring options
 
 ## 📥 Installation
 
@@ -141,29 +141,29 @@ This application supports both AWS S3 and DigitalOcean Spaces for document uploa
 
 2. **Create an S3 Bucket**:
 
-    - Go to the S3 service in the AWS Management Console
-    - Click "Create bucket"
-    - Choose a globally unique bucket name
-    - Select the region closest to your users
-    - Configure bucket settings (public access recommended to be blocked)
-    - Enable CORS if needed for your application
+   - Go to the S3 service in the AWS Management Console
+   - Click "Create bucket"
+   - Choose a globally unique bucket name
+   - Select the region closest to your users
+   - Configure bucket settings (public access recommended to be blocked)
+   - Enable CORS if needed for your application
 
 3. **Create IAM User for Access**:
 
-    - Go to the IAM service
-    - Create a new user with programmatic access
-    - Attach the `AmazonS3FullAccess` policy (or create a custom policy with more restrictive permissions)
-    - Save the access key ID and secret access key
+   - Go to the IAM service
+   - Create a new user with programmatic access
+   - Attach the `AmazonS3FullAccess` policy (or create a custom policy with more restrictive permissions)
+   - Save the access key ID and secret access key
 
 4. **Update Environment Variables**:
-    ```
-    # AWS S3 Configuration
-    S3_ACCESS_KEY_ID=your_s3_access_key_id
-    S3_SECRET_ACCESS_KEY=your_s3_secret_access_key
-    S3_REGION=us-east-1
-    S3_ENDPOINT=https://s3.amazonaws.com
-    S3_BUCKET_NAME=your-bucket-name
-    ```
+   ```
+   # AWS S3 Configuration
+   S3_ACCESS_KEY_ID=your_s3_access_key_id
+   S3_SECRET_ACCESS_KEY=your_s3_secret_access_key
+   S3_REGION=us-east-1
+   S3_ENDPOINT=https://s3.amazonaws.com
+   S3_BUCKET_NAME=your-bucket-name
+   ```
 
 #### Option 2: DigitalOcean Spaces Configuration
 
@@ -171,28 +171,28 @@ This application supports both AWS S3 and DigitalOcean Spaces for document uploa
 
 2. **Create a Space**:
 
-    - Go to the Spaces section in your DigitalOcean dashboard
-    - Click "Create a Space"
-    - Select a region close to your users
-    - Choose a unique name for your Space
-    - Configure CDN if needed for better performance
+   - Go to the Spaces section in your DigitalOcean dashboard
+   - Click "Create a Space"
+   - Select a region close to your users
+   - Choose a unique name for your Space
+   - Configure CDN if needed for better performance
 
 3. **Create API Keys**:
 
-    - In your DigitalOcean account, go to API > Tokens/Keys
-    - Generate new Spaces access keys
-    - Save both the access key and secret
+   - In your DigitalOcean account, go to API > Tokens/Keys
+   - Generate new Spaces access keys
+   - Save both the access key and secret
 
 4. **Update Environment Variables**:
-    ```
-    # DigitalOcean Spaces Configuration
-    S3_ACCESS_KEY_ID=your_spaces_access_key
-    S3_SECRET_ACCESS_KEY=your_spaces_secret_key
-    S3_ENDPOINT=https://your-space-name.region.digitaloceanspaces.com
-    S3_BUCKET_NAME=your-space-name
-    S3_REGION=region-code
-    CDN_S3_ORIGIN_URL=https://your-cdn-url.example.com  # Only if CDN is enabled
-    ```
+   ```
+   # DigitalOcean Spaces Configuration
+   S3_ACCESS_KEY_ID=your_spaces_access_key
+   S3_SECRET_ACCESS_KEY=your_spaces_secret_key
+   S3_ENDPOINT=https://your-space-name.region.digitaloceanspaces.com
+   S3_BUCKET_NAME=your-space-name
+   S3_REGION=region-code
+   CDN_S3_ORIGIN_URL=https://your-cdn-url.example.com  # Only if CDN is enabled
+   ```
 
 ### 4. Push the Schema to Your Database
 
@@ -240,5 +240,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👏 Acknowledgments
 
--   👨‍💻 All contributors and testers
--   📦 Open source libraries used in this project
+- 👨‍💻 All contributors and testers
+- 📦 Open source libraries used in this project
