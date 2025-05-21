@@ -111,7 +111,7 @@ export default cataloguePics;
 // export const campusTourVideo2 = "https://cdn-shuatsquiz.agamya.dev/video/shuats_tour.mp4";
 
 export const campusTourVideo =
-  'https://cdn-shuatsquiz.agamya.dev/video/shuats_tour_2.mp4';
+  'https://cdn-shuatsquiz.agamya.dev/video/webm/campustoor.webm';
 
   export const campusTourVideo1 =
   'https://cdn-shuatsquiz.agamya.dev/video/webm/shuats-reel.webm';  
