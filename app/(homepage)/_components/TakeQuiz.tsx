@@ -3,7 +3,7 @@
 import VideoFrame from './VideoFrame';
 import Image from 'next/image';
 import { Calendar, Trophy } from 'lucide-react';
-import { QuizPoster } from "../../../public/images/index.js";
+import { QuizPoster, campusTourVideo, campusTourVideo1 } from "../../../public/images/index.js";
 import { useEffect, useState } from "react";
 
 const prizes = [
@@ -48,15 +48,13 @@ const TypingHeading = () => {
 		return () => clearInterval(interval);
 	}, []);
 
-	// Render 'Quiz' in red if present in displayed
+	// Render 'SHUATS' in green if present in displayed
 	let headingNode;
-	const quizIndex = displayed.lastIndexOf('Quiz');
-	if (quizIndex !== -1) {
+	if (displayed.startsWith('SHUATS')) {
 		headingNode = (
 			<>
-				{displayed.slice(0, quizIndex)}
-				<span className="text-red-600 font-extrabold">{displayed.slice(quizIndex, quizIndex + 4)}</span>
-				{displayed.slice(quizIndex + 4)}
+				<span className="text-green-900 font-extrabold">{displayed.slice(0, 6)}</span>
+				{displayed.slice(6)}
 			</>
 		);
 	} else {
@@ -72,6 +70,12 @@ const TypingHeading = () => {
 };
 
 const TakeQuiz = () => {
+	const videoList = [campusTourVideo, campusTourVideo1];
+	const [videoSrc] = useState(() => videoList[Math.floor(Math.random() * videoList.length)]);
+
+	const isPortrait = videoSrc === campusTourVideo1;
+	const aspectClass = isPortrait ? "aspect-[2/3]" : "aspect-[16/9]";
+
 	return (
 		<>
 			{/* Animated Gradient Background */}
@@ -88,13 +92,13 @@ const TakeQuiz = () => {
 				className="relative w-full max-w-7xl mx-auto flex flex-col md:flex-row items-stretch justify-center gap-8 px-2 py-10"
 			>
 				{/* Video Card */}
-				<div className="flex-1 min-w-[290px] max-w-sm min-h-[400px] flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-blue-200 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(80,80,255,0.15)] duration-200">
+				<div className="flex-1 min-w-[290px] max-w-sm aspect-[2/3] flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-blue-200 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(80,80,255,0.15)] duration-200 p-1">
 					<div className="w-full p-3 flex-1 flex items-center justify-center h-full">
-						<VideoFrame />
+						<VideoFrame src={videoSrc} aspectClass={aspectClass} />
 					</div>
 				</div>
 				{/* Prizes Card */}
-				<div className="flex-1 min-w-[290px] max-w-sm min-h-[400px] flex flex-col items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-purple-200 px-4 pt-0 pb-8 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(150,80,255,0.15)] duration-200">
+				<div className="flex-1 min-w-[290px] max-w-sm aspect-[2/3] flex flex-col items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-purple-200 px-4 pt-0 pb-8 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(150,80,255,0.15)] duration-200 p-1">
 					<div className="w-full">
 						<div className="flex items-center justify-center gap-2 text-xl font-bold text-purple-700 mb-3 mt-6">
 							<Calendar className="h-5 w-5" />
@@ -143,14 +147,14 @@ const TakeQuiz = () => {
 					</div>
 				</div>
 				{/* Poster Card */}
-				<div className="flex-1 min-w-[290px] max-w-sm min-h-[400px] flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl border border-pink-200 transition-transform hover:scale-105 duration-200">
-					<div className="w-full rounded-2xl overflow-hidden flex-1 flex items-center justify-center p-2 h-full">
+				<div className="flex-1 min-w-[290px] max-w-sm aspect-[2/3] flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl border border-pink-200 transition-transform hover:scale-105 duration-200 p-1">
+					<div className="w-full h-full flex items-center justify-center">
 						<Image
 							src={QuizPoster}
 							alt="Quiz Poster"
 							width={400}
-							height={300}
-							className="object-cover w-full h-56 md:h-72 rounded-xl"
+							height={600}
+							className="object-contain w-full h-full rounded-xl"
 							priority
 						/>
 					</div>
