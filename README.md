@@ -12,65 +12,103 @@ This online examination system provides educational institutions with a robust p
 
 - 👥 User management (add, edit, delete users)
 - 📝 Exam creation and scheduling
-- 🗃️ Question bank management
+- 🗃️ Question bank management with math equation support (KaTeX)
 - 👁️ Real-time monitoring
 - 📊 Comprehensive reporting and analytics
-- 🔐 Secure authentication
+- 🔐 Secure authentication with Argon2 password hashing
 
 ### 👨‍🎓 For Students
 
 - 🖱️ Simple exam access and navigation
 - ⏱️ Clear instructions and time tracking
-- ❓ Support for various question types (MCQ, written, file upload)
-- ⚡ Instant feedback (for automated assessments)
+- ❓ Support for various question types with math equations
+- ⚡ Instant feedback and scoring
 - 🔒 Secure login and session management
+- 📈 Personal performance analytics and leaderboard
+- 🎯 Career guidance based on performance
 
 ## 🛠️ Technology Stack
 
-- 🌐 **Frontend**: React.js, Next.js, Tailwind CSS
-- 🖥️ **Backend**: Node.js, Express
-- 🗄️ **Database**: MongoDB
-- 🔑 **Authentication**: JWT
-- 🛡️ **Security**: Data encryption, anti-cheating measures
+- 🌐 **Frontend**:
+  - React 19
+  - Next.js 15
+  - Tailwind CSS
+  - Radix UI Components
+  - React Hook Form
+  - Recharts for analytics
+  - KaTeX for math equations
+- 🖥️ **Backend**:
+  - Next.js API Routes
+  - Node.js
+  - TypeScript
+- 🗄️ **Database**:
+  - PostgreSQL
+  - Drizzle ORM
+- 🔑 **Authentication**:
+  - JWT (jose)
+  - Argon2 password hashing
+- 📁 **File Storage**:
+  - AWS S3 / DigitalOcean Spaces
+- 📧 **Email**:
+  - Nodemailer for notifications
 
 ## 🔒 Security Measures
 
-- 🔐 Secure authentication and authorization
-- 📡 Session management
-- 🔍 Browser lockdown capabilities
-- 🕵️ Plagiarism detection
-- 🔀 Randomized question order
-- ⏲️ Time restrictions
-- 📹 Webcam proctoring options
+- 🔐 Secure authentication with Argon2 hashing
+- 📡 JWT-based session management
+- 🔍 Server-side validation with Zod
+- ⏲️ Time restrictions on exams
+- 🛡️ Rate limiting and middleware protection
 
 ## 📥 Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/online-examination-system.git
+git clone https://github.com/agamya-samuel/shuats-quiz-app.git
 
 # Navigate to project directory
-cd online-examination-system
+cd shuats-quiz-app
 
 # Install dependencies
-npm install
+yarn install
 
 # Set up environment variables
 cp .env.example .env
 # Edit .env with your configuration
 
+# Set up the database
+yarn db:generate  # Generate the database schema
+yarn db:migrate   # Apply migrations
+yarn db:setup     # Set up initial data (if needed)
+
 # Run development server
-npm run dev
+yarn dev
 ```
 
-## 📚 Usage
+## 🛠️ Environment Variables
 
-1. 👤 Set up administrator account
-2. 🏫 Create courses and enroll students
-3. 📋 Create question banks
-4. 📅 Schedule exams
-5. 📊 Monitor exams in real-time
-6. 📈 Generate and review reports
+Create a `.env` file with the following variables:
+
+```env
+# Database
+DATABASE_URL=postgresql://user:password@localhost:5432/quiz_app
+
+# AWS S3 / DigitalOcean Spaces
+S3_ACCESS_KEY_ID=your_access_key
+S3_SECRET_ACCESS_KEY=your_secret_key
+S3_REGION=your_region
+S3_BUCKET_NAME=your_bucket
+S3_ENDPOINT=your_endpoint  # Optional, for DigitalOcean Spaces
+
+# JWT
+JWT_SECRET=your_jwt_secret
+
+# Email (Optional)
+SMTP_HOST=your_smtp_host
+SMTP_PORT=587
+SMTP_USER=your_email
+SMTP_PASS=your_password
+```
 
 ## 📷 Screenshots
 
@@ -78,15 +116,15 @@ npm run dev
 
 ![HomePage](./screenshots/homepage.png)
 
-### SubjectSelection
+### Subject Selection
 
 ![SubjectSelection](./screenshots/subject-selection.png)
 
-### QuestionPage
+### Question Page
 
 ![QuestionPage](./screenshots/quiz.png)
 
-### ResultPage
+### Result Page
 
 ![ResultPage](./screenshots/result.png)
 
@@ -102,9 +140,9 @@ npm run dev
 
 ![Admin Dashboard Add Question](./screenshots/admin-add-question.png)
 
-### Admin Dashboard List User
+### Admin Dashboard List Questions
 
-![Admin Dashboard List User](./screenshots/admin-list-question.png)
+![Admin Dashboard List Questions](./screenshots/admin-list-question.png)
 
 ## Database Setup
 
