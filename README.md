@@ -1,4 +1,4 @@
-# 🎓 Online Examination System
+# 🎓 Online Quiz Conducting Platform
 
 A secure and seamless platform for conducting online exams.
 
