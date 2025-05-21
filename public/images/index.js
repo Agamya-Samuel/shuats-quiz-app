@@ -112,3 +112,6 @@ export default cataloguePics;
 
 export const campusTourVideo =
   'https://cdn-shuatsquiz.agamya.dev/video/shuats_tour_2.mp4';
+
+export const QuizPoster =
+  'https://cdn-shuatsquiz.agamya.dev/poster/shuats-quiz-poster.jpg';

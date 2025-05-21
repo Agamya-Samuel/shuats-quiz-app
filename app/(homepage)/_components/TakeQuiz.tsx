@@ -3,6 +3,8 @@
 import VideoFrame from './VideoFrame';
 import Image from 'next/image';
 import { Calendar, Trophy } from 'lucide-react';
+import { QuizPoster } from "../../../public/images/index.js";
+import { useEffect, useState } from "react";
 
 const prizes = [
 	{
@@ -26,6 +28,49 @@ const prizes = [
 	},
 ];
 
+const TYPING_TEXT = "SHUATS National Talent Search Quiz";
+const TYPING_SPEED = 60; // ms per character
+
+const TypingHeading = () => {
+	const [displayed, setDisplayed] = useState("");
+	const [showCursor, setShowCursor] = useState(true);
+
+	useEffect(() => {
+		let i = 0;
+		const interval = setInterval(() => {
+			setDisplayed(TYPING_TEXT.slice(0, i + 1));
+			i++;
+			if (i === TYPING_TEXT.length) {
+				clearInterval(interval);
+				setShowCursor(false);
+			}
+		}, TYPING_SPEED);
+		return () => clearInterval(interval);
+	}, []);
+
+	// Render 'Quiz' in red if present in displayed
+	let headingNode;
+	const quizIndex = displayed.lastIndexOf('Quiz');
+	if (quizIndex !== -1) {
+		headingNode = (
+			<>
+				{displayed.slice(0, quizIndex)}
+				<span className="text-red-600 font-extrabold">{displayed.slice(quizIndex, quizIndex + 4)}</span>
+				{displayed.slice(quizIndex + 4)}
+			</>
+		);
+	} else {
+		headingNode = displayed;
+	}
+
+	return (
+		<h1 className="text-3xl md:text-5xl font-extrabold mb-2 text-blue-900 drop-shadow-lg tracking-tight font-bold min-h-[2.5em]">
+			{headingNode}
+			{showCursor && <span className="animate-pulse text-pink-600">|</span>}
+		</h1>
+	);
+};
+
 const TakeQuiz = () => {
 	return (
 		<>
@@ -33,9 +78,7 @@ const TakeQuiz = () => {
 			<div className="absolute inset-0 -z-10 w-full h-[120vh] bg-gradient-to-tr from-blue-400 via-fuchsia-200 to-pink-300 animate-gradient-x" />
 			{/* Main Heading */}
 			<div className="w-full max-w-5xl mx-auto text-center mt-8 mb-2 px-2 pt-20">
-				<h1 className="text-4xl md:text-5xl font-extrabold mb-2 text-blue-900 drop-shadow-lg tracking-tight font-bold">
-					SHUATS National Talent Search <span className="text-pink-600">Quiz</span>
-				</h1>
+				<TypingHeading />
 				<p className="text-lg md:text-xl text-gray-800 mb-4 font-medium">Join us for an exciting opportunity to showcase your knowledge and win amazing prizes!</p>
 			</div>
 
@@ -100,10 +143,10 @@ const TakeQuiz = () => {
 					</div>
 				</div>
 				{/* Poster Card */}
-				<div className="flex-1 min-w-[290px] max-w-sm min-h-[400px] flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-pink-200 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(255,80,180,0.15)] duration-200">
-					<div className="w-full rounded-2xl overflow-hidden shadow-lg flex-1 flex items-center justify-center p-2 h-full">
+				<div className="flex-1 min-w-[290px] max-w-sm min-h-[400px] flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl border border-pink-200 transition-transform hover:scale-105 duration-200">
+					<div className="w-full rounded-2xl overflow-hidden flex-1 flex items-center justify-center p-2 h-full">
 						<Image
-							src="/images/csdept1.jpg"
+							src={QuizPoster}
 							alt="Quiz Poster"
 							width={400}
 							height={300}
@@ -111,7 +154,6 @@ const TakeQuiz = () => {
 							priority
 						/>
 					</div>
-					<div className="text-center text-purple-700 font-bold mt-2">Quiz Poster</div>
 				</div>
 			</section>
 			<style jsx global>{`
