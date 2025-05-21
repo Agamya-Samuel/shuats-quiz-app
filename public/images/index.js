@@ -110,11 +110,19 @@ export default cataloguePics;
 
 // export const campusTourVideo2 = "https://cdn-shuatsquiz.agamya.dev/video/shuats_tour.mp4";
 
-export const campusTourVideo =
-  'https://cdn-shuatsquiz.agamya.dev/video/webm/campustoor.webm';
+const videoBaseUrl = 'https://cdn-shuatsquiz.agamya.dev/video/webm';
 
-  export const campusTourVideo1 =
-  'https://cdn-shuatsquiz.agamya.dev/video/webm/shuats-reel.webm';  
+export const campusTourVideo = `${videoBaseUrl}/campustoor.webm`;
 
-export const QuizPoster =
-  'https://cdn-shuatsquiz.agamya.dev/poster/shuats-quiz-poster.jpg';
+export const campusTourVideo1 = `${videoBaseUrl}/shuats-reel.webm`;
+
+export const QuizPoster = `${s3BucketBaseUrl}/poster/shuats-quiz-poster.jpg`;
+
+// Add new video URLs for infinite scroll
+export const campusTourVideos = [
+  `${videoBaseUrl}/shuats_tour_2.mp4`,
+  `${videoBaseUrl}/shuats-reel.webm`,
+  `${videoBaseUrl}/ct-1.mp4`,
+  `${videoBaseUrl}/ct-2.mp4`,
+  `${videoBaseUrl}/ct-3.mp4`,
+];
