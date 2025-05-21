@@ -4,7 +4,13 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { campusTourVideo } from '@/public/images/index.js';
 
-const VideoFrame = () => {
+// Add type for props
+interface VideoFrameProps {
+  src?: string;
+  aspectClass?: string;
+}
+
+const VideoFrame = ({ src, aspectClass = "aspect-[2/3]" }: VideoFrameProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true); // Muted by default for reliable autoplay
   const [playing, setPlaying] = useState(true);
@@ -65,7 +71,7 @@ const VideoFrame = () => {
 
   return (
     <div className="w-full">
-      <div className="relative w-full aspect-[16/9] rounded-3xl overflow-hidden bg-white shadow-lg">
+      <div className={`relative w-full ${aspectClass} rounded-3xl overflow-hidden bg-white shadow-lg`}>
         <div
           className="relative w-full h-full cursor-pointer"
           onMouseEnter={() => setHovered(true)}
@@ -73,7 +79,7 @@ const VideoFrame = () => {
           onClick={handlePlayPauseOrUnmute}>
           <video
             ref={videoRef}
-            src={campusTourVideo}
+            src={src || campusTourVideo}
             autoPlay
             muted={muted}
             loop

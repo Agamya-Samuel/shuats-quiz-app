@@ -62,7 +62,7 @@ export default function Facilities() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-neutral-900 mb-4 animate__animated animate__fadeInUp">
-            Our World-Class Facilities
+            Facilities that we offer
           </h2>
           <p className="text-lg text-neutral-600 animate__animated animate__fadeInUp animate__delay-1s">
             Discover the state-of-the-art amenities that enhance your learning

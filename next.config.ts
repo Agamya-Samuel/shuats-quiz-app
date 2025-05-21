@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'cdn-shuatsquiz.agamya.dev',
         port: '',
-        pathname: '/catalogue-pics/**',
+          pathname: '/**',
       },
     ],
   },
