@@ -10,13 +10,8 @@ interface VideoFrameProps {
 }
 
 const getAspectClass = (src: string) => {
-  // crude check: if webm or ct-1/2/3, treat as portrait, else landscape
-  if (
-    src.includes('webm') ||
-    src.includes('ct-1') ||
-    src.includes('ct-2') ||
-    src.includes('ct-3')
-  ) {
+  // webm, ct-1, and ct-2 are portrait, others are landscape
+  if (src.includes('webm') || src.includes('ct-1') || src.includes('ct-2')) {
     return 'aspect-[2/3]';
   }
   return 'aspect-[16/9]';
@@ -32,7 +27,14 @@ const VideoFrame = ({ aspectClass }: VideoFrameProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
-  const videos = campusTourVideos;
+  // Updated video order
+  const videos = [
+    'https://cdn-shuatsquiz.agamya.dev/video/webm/shuats-reel.webm',
+    'https://cdn-shuatsquiz.agamya.dev/video/shuats_tour_2.mp4',
+    'https://cdn-shuatsquiz.agamya.dev/video/reel/ct-1.mp4',
+    'https://cdn-shuatsquiz.agamya.dev/video/reel/ct-2.mp4',
+    'https://cdn-shuatsquiz.agamya.dev/video/reel/ct-3.mp4',
+  ];
   const src = videos[currentVideoIndex];
   const dynamicAspectClass = aspectClass || getAspectClass(src);
 
@@ -60,6 +62,20 @@ const VideoFrame = ({ aspectClass }: VideoFrameProps) => {
   };
 
   const handleFrameClick = async () => {
+    if (!isFullscreen && containerRef.current) {
+      await containerRef.current.requestFullscreen();
+    }
+  };
+
+  const handleContainerClick = async (e: React.MouseEvent) => {
+    if (!isFullscreen && containerRef.current) {
+      await containerRef.current.requestFullscreen();
+    } else {
+      handlePlayPauseOrUnmute();
+    }
+  };
+
+  const handleContainerDoubleClick = async (e: React.MouseEvent) => {
     if (!isFullscreen && containerRef.current) {
       await containerRef.current.requestFullscreen();
     }
@@ -108,7 +124,7 @@ const VideoFrame = ({ aspectClass }: VideoFrameProps) => {
       <div
         ref={containerRef}
         className={`relative w-full ${dynamicAspectClass} rounded-3xl overflow-hidden bg-white shadow-lg`}
-        onClick={handleFrameClick}
+        onClick={handleContainerClick}
         style={{ cursor: isFullscreen ? 'default' : 'pointer' }}>
         <div
           className="relative w-full h-full"
