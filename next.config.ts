@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'cdn-shuatsquiz.agamya.dev',
         port: '',
-          pathname: '/**',
+        pathname: '/**',
       },
     ],
   },
@@ -19,14 +19,14 @@ const nextConfig: NextConfig = {
       use: 'raw-loader',
     });
 
-		return config;
-	},
-	// need to investigate this, how safe is this?
-	experimental: {
-		serverActions: {
-			bodySizeLimit: '5mb',
-		},
-	},
+    return config;
+  },
+  // need to investigate this, how safe is this?
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '5mb',
+    },
+  },
 };
 
 export default nextConfig;
