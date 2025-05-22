@@ -1,13 +1,12 @@
 // import jwt from 'jsonwebtoken';
 import * as jose from 'jose';
-
+import { UserJwtPayload, ForgotPasswordData } from '@/types/user';
 import { AdminJwtPayload } from '@/types/admin';
 import { SuperAdminJwtPayload } from '@/types/superadmin';
-import { ForgotPasswordData, UserJwtPayload } from '@/types/user';
 
 // Use a strong secret key
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'your-secret-key',
+	process.env.JWT_SECRET || 'your-secret-key'
 );
 
 // 30 days in seconds
@@ -20,51 +19,51 @@ const THIRTY_DAYS = 60 * 60 * 24 * 30;
 // }
 
 export async function generateToken(
-  payload:
-    | UserJwtPayload
-    | AdminJwtPayload
-    | SuperAdminJwtPayload
-    | ForgotPasswordData,
+	payload:
+		| UserJwtPayload
+		| AdminJwtPayload
+		| SuperAdminJwtPayload
+		| ForgotPasswordData
 ): Promise<string> {
-  try {
-    // Convert UserJwtPayload to a regular object to satisfy JWTPayload type
-    const jwtPayload = { ...payload } as jose.JWTPayload;
+	try {
+		// Convert UserJwtPayload to a regular object to satisfy JWTPayload type
+		const jwtPayload = { ...payload } as jose.JWTPayload;
 
-    const token = await new jose.SignJWT(jwtPayload)
-      .setProtectedHeader({ alg: 'HS256' })
-      .setIssuedAt() // Add issued at time
-      .setExpirationTime(`${THIRTY_DAYS}s`) // Set expiration to 30 days
-      .sign(JWT_SECRET);
+		const token = await new jose.SignJWT(jwtPayload)
+			.setProtectedHeader({ alg: 'HS256' })
+			.setIssuedAt() // Add issued at time
+			.setExpirationTime(`${THIRTY_DAYS}s`) // Set expiration to 30 days
+			.sign(JWT_SECRET);
 
-    return token;
-  } catch (error) {
-    console.error('Error generating token:', error);
-    throw new Error('Failed to generate authentication token');
-  }
+		return token;
+	} catch (error) {
+		console.error('Error generating token:', error);
+		throw new Error('Failed to generate authentication token');
+	}
 }
 
 export async function verifyToken(
-  token: string,
+	token: string
 ): Promise<
-  | UserJwtPayload
-  | AdminJwtPayload
-  | SuperAdminJwtPayload
-  | ForgotPasswordData
-  | null
+	| UserJwtPayload
+	| AdminJwtPayload
+	| SuperAdminJwtPayload
+	| ForgotPasswordData
+	| null
 > {
-  try {
-    const { payload } = await jose.jwtVerify(token, JWT_SECRET);
-    return payload as unknown as
-      | UserJwtPayload
-      | AdminJwtPayload
-      | SuperAdminJwtPayload
-      | ForgotPasswordData;
-  } catch (error) {
-    // Only log the error type and message, not the full error object
-    console.error(
-      'Token verification failed:',
-      error instanceof Error ? error.message : 'Unknown error',
-    );
-    return null;
-  }
+	try {
+		const { payload } = await jose.jwtVerify(token, JWT_SECRET);
+		return payload as unknown as
+			| UserJwtPayload
+			| AdminJwtPayload
+			| SuperAdminJwtPayload
+			| ForgotPasswordData;
+	} catch (error) {
+		// Only log the error type and message, not the full error object
+		console.error(
+			'Token verification failed:',
+			error instanceof Error ? error.message : 'Unknown error'
+		);
+		return null;
+	}
 }

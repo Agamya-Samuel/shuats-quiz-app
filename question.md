@@ -2,18 +2,18 @@
 
 ## **Instructions:**
 
-- This quiz consists of **25 multiple-choice questions**.
-- Each question has **four options**, with only **one correct answer**.
-- Choose the most appropriate answer.
+-   This quiz consists of **25 multiple-choice questions**.
+-   Each question has **four options**, with only **one correct answer**.
+-   Choose the most appropriate answer.
 
 ---
 
 ### **1. A ball is dropped from a height of 80 m. What is its velocity just before hitting the ground? (Take g = 9.8 m/s²)**
 
-- A) 20 m/s
-- B) 25 m/s
-- C) 39.6 m/s
-- D) 50 m/s
+-   A) 20 m/s
+-   B) 25 m/s
+-   C) 39.6 m/s
+-   D) 50 m/s
 
 **Answer:** C) 39.6 m/s
 
@@ -21,10 +21,10 @@
 
 ### **2. The moment of inertia of a solid sphere of mass M and radius R about its diameter is:**
 
-- A) $\frac{2}{5} MR^2$
-- B) $\frac{1}{2} MR^2$
-- C) $\frac{3}{5} MR^2$
-- D) $\frac{2}{3} MR^2$
+-   A) $\frac{2}{5} MR^2$
+-   B) $\frac{1}{2} MR^2$
+-   C) $\frac{3}{5} MR^2$
+-   D) $\frac{2}{3} MR^2$
 
 **Answer:** A) $\frac{2}{5} MR^2$
 
@@ -32,10 +32,10 @@
 
 ### **3. Which of the following statements about conservative forces is incorrect?**
 
-- A) Work done is independent of the path taken
-- B) The force is derivable from a potential energy function
-- C) Work done in a closed path is zero
-- D) They always oppose the motion of the object
+-   A) Work done is independent of the path taken
+-   B) The force is derivable from a potential energy function
+-   C) Work done in a closed path is zero
+-   D) They always oppose the motion of the object
 
 **Answer:** D) They always oppose the motion of the object
 
@@ -43,10 +43,10 @@
 
 ### **4. A car moving at 20 m/s applies brakes and comes to rest in 4 seconds. What is the acceleration of the car?**
 
-- A) -5 m/s²
-- B) -4 m/s²
-- C) -6 m/s²
-- D) -8 m/s²
+-   A) -5 m/s²
+-   B) -4 m/s²
+-   C) -6 m/s²
+-   D) -8 m/s²
 
 **Answer:** A) -5 m/s²
 
@@ -54,10 +54,10 @@
 
 ### **5. A block of mass 2 kg is sliding down an inclined plane at an angle of 30° with an acceleration of 3 m/s². What is the coefficient of kinetic friction? (Take g = 9.8 m/s²)**
 
-- A) 0.2
-- B) 0.3
-- C) 0.4
-- D) 0.5
+-   A) 0.2
+-   B) 0.3
+-   C) 0.4
+-   D) 0.5
 
 **Answer:** B) 0.3
 
@@ -65,10 +65,10 @@
 
 ### **6. The escape velocity from Earth's surface is approximately:**
 
-- A) 7.9 km/s
-- B) 11.2 km/s
-- C) 15 km/s
-- D) 25 km/s
+-   A) 7.9 km/s
+-   B) 11.2 km/s
+-   C) 15 km/s
+-   D) 25 km/s
 
 **Answer:** B) 11.2 km/s
 
@@ -76,10 +76,10 @@
 
 ### **7. The work done in moving a charge between two points in an equipotential surface is:**
 
-- A) Minimum
-- B) Maximum
-- C) Zero
-- D) Infinite
+-   A) Minimum
+-   B) Maximum
+-   C) Zero
+-   D) Infinite
 
 **Answer:** C) Zero
 
@@ -87,10 +87,10 @@
 
 ### **8. A Carnot engine operates between temperatures 500 K and 300 K. What is its efficiency?**
 
-- A) 30%
-- B) 40%
-- C) 50%
-- D) 60%
+-   A) 30%
+-   B) 40%
+-   C) 50%
+-   D) 60%
 
 **Answer:** B) 40%
 
@@ -98,10 +98,10 @@
 
 ### **9. The SI unit of the coefficient of viscosity is:**
 
-- A) N/m²
-- B) Poise
-- C) Pascal-second
-- D) Joule
+-   A) N/m²
+-   B) Poise
+-   C) Pascal-second
+-   D) Joule
 
 **Answer:** C) Pascal-second
 
@@ -109,10 +109,10 @@
 
 ### **10. A capacitor is charged to a potential difference V. If the charge on the capacitor is doubled, what happens to the energy stored?**
 
-- A) Becomes twice
-- B) Becomes four times
-- C) Becomes half
-- D) Remains the same
+-   A) Becomes twice
+-   B) Becomes four times
+-   C) Becomes half
+-   D) Remains the same
 
 **Answer:** B) Becomes four times
 
@@ -120,10 +120,10 @@
 
 ### **11. The dimensional formula of Planck's constant is:**
 
-- A) [ML²T⁻²]
-- B) [ML²T⁻³]
-- C) [MLT⁻¹]
-- D) [M²L⁻²T²]
+-   A) [ML²T⁻²]
+-   B) [ML²T⁻³]
+-   C) [MLT⁻¹]
+-   D) [M²L⁻²T²]
 
 **Answer:** B) [ML²T⁻³]
 
@@ -131,10 +131,10 @@
 
 ### **12. Which of the following is an example of a non-conservative force?**
 
-- A) Gravitational force
-- B) Electrostatic force
-- C) Friction
-- D) Magnetic force
+-   A) Gravitational force
+-   B) Electrostatic force
+-   C) Friction
+-   D) Magnetic force
 
 **Answer:** C) Friction
 
@@ -142,10 +142,10 @@
 
 ### **13. The time period of a simple pendulum on the Moon (where g = 1.63 m/s²) is:**
 
-- A) More than on Earth
-- B) Less than on Earth
-- C) Same as on Earth
-- D) Zero
+-   A) More than on Earth
+-   B) Less than on Earth
+-   C) Same as on Earth
+-   D) Zero
 
 **Answer:** A) More than on Earth
 
@@ -153,10 +153,10 @@
 
 ### **14. The energy of a photon is given by which equation?**
 
-- A) $E = mc^2$
-- B) $E = h \lambda$
-- C) $E = hf$
-- D) $E = \frac{1}{2} mv^2$
+-   A) $E = mc^2$
+-   B) $E = h \lambda$
+-   C) $E = hf$
+-   D) $E = \frac{1}{2} mv^2$
 
 **Answer:** C) $E = hf$
 
@@ -164,10 +164,10 @@
 
 ### **15. If the frequency of a wave is doubled, its wavelength in a given medium will:**
 
-- A) Double
-- B) Remain the same
-- C) Become half
-- D) Increase four times
+-   A) Double
+-   B) Remain the same
+-   C) Become half
+-   D) Increase four times
 
 **Answer:** C) Become half
 
@@ -175,10 +175,10 @@
 
 ### **16. The electric field inside a charged conductor is:**
 
-- A) Zero
-- B) Infinite
-- C) Depends on charge distribution
-- D) Same as outside the conductor
+-   A) Zero
+-   B) Infinite
+-   C) Depends on charge distribution
+-   D) Same as outside the conductor
 
 **Answer:** A) Zero
 
@@ -186,10 +186,10 @@
 
 ### **17. In a series LCR circuit at resonance, the impedance is:**
 
-- A) Minimum
-- B) Maximum
-- C) Infinite
-- D) Zero
+-   A) Minimum
+-   B) Maximum
+-   C) Infinite
+-   D) Zero
 
 **Answer:** A) Minimum
 
@@ -197,10 +197,10 @@
 
 ### **18. Which of the following waves can propagate in a vacuum?**
 
-- A) Sound waves
-- B) Water waves
-- C) Electromagnetic waves
-- D) Seismic waves
+-   A) Sound waves
+-   B) Water waves
+-   C) Electromagnetic waves
+-   D) Seismic waves
 
 **Answer:** C) Electromagnetic waves
 
@@ -208,10 +208,10 @@
 
 ### **19. A body is in equilibrium if:**
 
-- A) Net force is zero
-- B) Net torque is zero
-- C) Both A and B
-- D) Neither A nor B
+-   A) Net force is zero
+-   B) Net torque is zero
+-   C) Both A and B
+-   D) Neither A nor B
 
 **Answer:** C) Both A and B
 
@@ -219,10 +219,10 @@
 
 ### **20. The energy stored in an inductor is given by:**
 
-- A) $\frac{1}{2} LI^2$
-- B) $LI^2$
-- C) $\frac{1}{2} CV^2$
-- D) $CV^2$
+-   A) $\frac{1}{2} LI^2$
+-   B) $LI^2$
+-   C) $\frac{1}{2} CV^2$
+-   D) $CV^2$
 
 **Answer:** A) $\frac{1}{2} LI^2$
 
@@ -230,10 +230,10 @@
 
 ### **21. The unit of magnetic flux is:**
 
-- A) Weber
-- B) Tesla
-- C) Gauss
-- D) Henry
+-   A) Weber
+-   B) Tesla
+-   C) Gauss
+-   D) Henry
 
 **Answer:** A) Weber
 
@@ -241,10 +241,10 @@
 
 ### **22. When a dielectric is inserted between the plates of a capacitor, its capacitance:**
 
-- A) Decreases
-- B) Increases
-- C) Remains the same
-- D) Becomes zero
+-   A) Decreases
+-   B) Increases
+-   C) Remains the same
+-   D) Becomes zero
 
 **Answer:** B) Increases
 
@@ -252,10 +252,10 @@
 
 ### **23. The angular velocity of a particle moving in a circular path is given by:**
 
-- A) $\frac{v}{r}$
-- B) $vr$
-- C) $\frac{r}{v}$
-- D) $\frac{1}{v}$
+-   A) $\frac{v}{r}$
+-   B) $vr$
+-   C) $\frac{r}{v}$
+-   D) $\frac{1}{v}$
 
 **Answer:** A) $\frac{v}{r}$
 
@@ -263,10 +263,10 @@
 
 ### **24. The SI unit of electric current is:**
 
-- A) Volt
-- B) Ampere
-- C) Ohm
-- D) Coulomb
+-   A) Volt
+-   B) Ampere
+-   C) Ohm
+-   D) Coulomb
 
 **Answer:** B) Ampere
 
@@ -274,10 +274,10 @@
 
 ### **25. The coefficient of performance (COP) of a refrigerator is given by:**
 
-- A) $\frac{Q_C}{W}$
-- B) $\frac{W}{Q_C}$
-- C) $\frac{Q_H}{W}$
-- D) $\frac{W}{Q_H}$
+-   A) $\frac{Q_C}{W}$
+-   B) $\frac{W}{Q_C}$
+-   C) $\frac{Q_H}{W}$
+-   D) $\frac{W}{Q_H}$
 
 **Answer:** A) $\frac{Q_C}{W}$
 
@@ -291,18 +291,18 @@ This quiz covers fundamental and advanced topics in **Engineering Physics**, tes
 
 ## **Instructions:**
 
-- This quiz consists of **25 multiple-choice questions**.
-- Each question has **four options**, with only **one correct answer**.
-- Choose the most appropriate answer.
+-   This quiz consists of **25 multiple-choice questions**.
+-   Each question has **four options**, with only **one correct answer**.
+-   Choose the most appropriate answer.
 
 ---
 
 ### **1. Which of the following has the highest lattice energy?**
 
-- A) NaCl
-- B) MgO
-- C) Al₂O₃
-- D) KBr
+-   A) NaCl
+-   B) MgO
+-   C) Al₂O₃
+-   D) KBr
 
 **Answer:** C) Al₂O₃
 
@@ -310,10 +310,10 @@ This quiz covers fundamental and advanced topics in **Engineering Physics**, tes
 
 ### **2. The order of decreasing reactivity of alkali metals with water is:**
 
-- A) Na > K > Rb > Cs
-- B) Cs > Rb > K > Na
-- C) Li > Na > K > Rb
-- D) K > Na > Cs > Rb
+-   A) Na > K > Rb > Cs
+-   B) Cs > Rb > K > Na
+-   C) Li > Na > K > Rb
+-   D) K > Na > Cs > Rb
 
 **Answer:** B) Cs > Rb > K > Na
 
@@ -321,10 +321,10 @@ This quiz covers fundamental and advanced topics in **Engineering Physics**, tes
 
 ### **3. The rate of a chemical reaction increases with temperature due to:**
 
-- A) Increase in activation energy
-- B) Decrease in activation energy
-- C) Increase in collision frequency
-- D) Decrease in collision frequency
+-   A) Increase in activation energy
+-   B) Decrease in activation energy
+-   C) Increase in collision frequency
+-   D) Decrease in collision frequency
 
 **Answer:** C) Increase in collision frequency
 
@@ -332,10 +332,10 @@ This quiz covers fundamental and advanced topics in **Engineering Physics**, tes
 
 ### **4. The correct increasing order of acidic strength of oxoacids of chlorine is:**
 
-- A) HClO < HClO₂ < HClO₃ < HClO₄
-- B) HClO₄ < HClO₃ < HClO₂ < HClO
-- C) HClO₃ < HClO₄ < HClO₂ < HClO
-- D) HClO₂ < HClO₄ < HClO₃ < HClO
+-   A) HClO < HClO₂ < HClO₃ < HClO₄
+-   B) HClO₄ < HClO₃ < HClO₂ < HClO
+-   C) HClO₃ < HClO₄ < HClO₂ < HClO
+-   D) HClO₂ < HClO₄ < HClO₃ < HClO
 
 **Answer:** A) HClO < HClO₂ < HClO₃ < HClO₄
 
@@ -343,10 +343,10 @@ This quiz covers fundamental and advanced topics in **Engineering Physics**, tes
 
 ### **5. In a face-centered cubic (FCC) unit cell, the number of atoms per unit cell is:**
 
-- A) 1
-- B) 2
-- C) 4
-- D) 6
+-   A) 1
+-   B) 2
+-   C) 4
+-   D) 6
 
 **Answer:** C) 4
 
@@ -354,10 +354,10 @@ This quiz covers fundamental and advanced topics in **Engineering Physics**, tes
 
 ### **6. Which of the following statements is correct about the critical temperature of a gas?**
 
-- A) Above this temperature, the gas cannot be liquefied by pressure alone
-- B) It is the temperature at which gas liquefies at atmospheric pressure
-- C) It is the temperature at which all molecular motion stops
-- D) It depends only on the pressure of the gas
+-   A) Above this temperature, the gas cannot be liquefied by pressure alone
+-   B) It is the temperature at which gas liquefies at atmospheric pressure
+-   C) It is the temperature at which all molecular motion stops
+-   D) It depends only on the pressure of the gas
 
 **Answer:** A) Above this temperature, the gas cannot be liquefied by pressure alone
 
@@ -365,10 +365,10 @@ This quiz covers fundamental and advanced topics in **Engineering Physics**, tes
 
 ### **7. The pH of 0.01 M HCl solution is:**
 
-- A) 1
-- B) 2
-- C) 3
-- D) 4
+-   A) 1
+-   B) 2
+-   C) 3
+-   D) 4
 
 **Answer:** B) 2
 
@@ -376,10 +376,10 @@ This quiz covers fundamental and advanced topics in **Engineering Physics**, tes
 
 ### **8. The oxidation state of Cr in potassium dichromate (K₂Cr₂O₇) is:**
 
-- A) +6
-- B) +3
-- C) +4
-- D) +2
+-   A) +6
+-   B) +3
+-   C) +4
+-   D) +2
 
 **Answer:** A) +6
 
@@ -387,10 +387,10 @@ This quiz covers fundamental and advanced topics in **Engineering Physics**, tes
 
 ### **9. Which of the following is a correct representation of Boyle's Law?**
 
-- A) $PV = k$
-- B) $V/T = k$
-- C) $P/T = k$
-- D) $P/V = k$
+-   A) $PV = k$
+-   B) $V/T = k$
+-   C) $P/T = k$
+-   D) $P/V = k$
 
 **Answer:** A) $PV = k$
 
@@ -398,10 +398,10 @@ This quiz covers fundamental and advanced topics in **Engineering Physics**, tes
 
 ### **10. The half-life of a first-order reaction is:**
 
-- A) Proportional to the concentration of reactant
-- B) Independent of the initial concentration
-- C) Inversely proportional to the concentration
-- D) Dependent on the order of the reaction
+-   A) Proportional to the concentration of reactant
+-   B) Independent of the initial concentration
+-   C) Inversely proportional to the concentration
+-   D) Dependent on the order of the reaction
 
 **Answer:** B) Independent of the initial concentration
 
@@ -580,9 +580,9 @@ This **Engineering Chemistry** quiz covers **physical, organic, and inorganic ch
 
 ## **Instructions:**
 
-- This quiz consists of **25 multiple-choice questions**.
-- Each question has **four options**, with only **one correct answer**.
-- Choose the most appropriate answer.
+-   This quiz consists of **25 multiple-choice questions**.
+-   Each question has **four options**, with only **one correct answer**.
+-   Choose the most appropriate answer.
 
 ---
 
@@ -869,9 +869,9 @@ This **Engineering Mathematics** quiz covers **algebra, calculus, geometry, prob
 
 ## **Instructions:**
 
-- This quiz consists of **25 multiple-choice questions**.
-- Each question has **four options**, with only **one correct answer**.
-- Choose the most appropriate answer.
+-   This quiz consists of **25 multiple-choice questions**.
+-   Each question has **four options**, with only **one correct answer**.
+-   Choose the most appropriate answer.
 
 ---
 
@@ -1158,9 +1158,9 @@ This **Biology Quiz** covers key topics from **human physiology, genetics, botan
 
 ## **Instructions:**
 
-- This quiz consists of **25 multiple-choice questions**.
-- Each question has **four options**, with only **one correct answer**.
-- Choose the most appropriate answer.
+-   This quiz consists of **25 multiple-choice questions**.
+-   Each question has **four options**, with only **one correct answer**.
+-   Choose the most appropriate answer.
 
 ---
 
@@ -1447,9 +1447,9 @@ This **General Knowledge Quiz** covers a range of topics including **history, ge
 
 ## **Instructions:**
 
-- This quiz consists of **25 multiple-choice questions**.
-- Each question has **four options**, with only **one correct answer**.
-- Choose the most appropriate answer.
+-   This quiz consists of **25 multiple-choice questions**.
+-   Each question has **four options**, with only **one correct answer**.
+-   Choose the most appropriate answer.
 
 ---
 
@@ -1742,9 +1742,9 @@ This **Social Science Quiz** covers key topics from **History, Civics, and Geogr
 
 ## **Instructions:**
 
-- This quiz consists of **25 multiple-choice questions**.
-- Each question has **four options**, with only **one correct answer**.
-- Choose the most appropriate answer.
+-   This quiz consists of **25 multiple-choice questions**.
+-   Each question has **four options**, with only **one correct answer**.
+-   Choose the most appropriate answer.
 
 ---
 

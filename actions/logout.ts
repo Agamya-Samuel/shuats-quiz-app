@@ -3,13 +3,13 @@
 import { cookies } from 'next/headers';
 
 export async function logout() {
-  const cookieStore = await cookies();
+	const cookieStore = await cookies();
 
-  // Remove the token cookie
-  cookieStore.delete({
-    name: 'token',
-    path: '/',
-  });
+	// Remove the token cookie
+	cookieStore.delete({
+		name: 'token',
+		path: '/'
+	});
 
-  return { success: true };
+	return { success: true };
 }

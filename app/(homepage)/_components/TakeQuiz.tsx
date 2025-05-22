@@ -69,7 +69,7 @@ const TypingHeading = () => {
   }
 
   return (
-    <h1 className="text-3xl md:text-5xl font-extrabold mb-2 text-blue-900 drop-shadow-lg tracking-tight font-bold min-h-[2.5em]">
+    <h1 className="text-3xl md:text-5xl font-extrabold mb-2 text-blue-900 drop-shadow-lg tracking-tight min-h-[2.5em]">
       {headingNode}
       {showCursor && <span className="animate-pulse text-pink-600">|</span>}
     </h1>

@@ -1,5 +1,6 @@
 # Chemistry
 
+
 ## 1. Job Roles and Position Opportunities
 
 Graduates with a background in chemistry can pursue various career paths, including:

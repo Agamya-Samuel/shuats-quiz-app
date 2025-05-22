@@ -2,7 +2,7 @@
 
 ## 1. Importance of General Knowledge
 
-General Knowledge (GK) encompasses a wide range of subjects, including history, geography, politics, science, economics, and current affairs. It plays a crucial role in personal development, critical thinking, and decision-making. 
+General Knowledge (GK) encompasses a wide range of subjects, including history, geography, politics, science, economics, and current affairs. It plays a crucial role in personal development, critical thinking, and decision-making.   
 
 A strong foundation in GK is particularly beneficial for competitive exams, interviews, and various professional fields.
 
@@ -34,19 +34,19 @@ While GK itself is not a career, proficiency in it is essential for various job 
 
 - **Within India**: Highly valued in competitive exams, policymaking, and journalism. Many universities and research institutions require candidates with strong analytical and general awareness skills.
 
-- **Abroad**: Opportunities in international media houses, global think tanks, research organizations, and diplomatic services.
+- **Abroad**: Opportunities in international media houses, global think tanks, research organizations, and diplomatic services. 
 
 Countries like the USA, UK, and Canada offer roles in public policy, international relations, and education that value broad general knowledge.
 
 ---
 
-## 5. Salary Ranges
+## 5. Salary Ranges  
 
 Salaries vary based on the specific career path chosen:
 
-- **Entry-Level**: ₹3–6 LPA
-- **Mid-Level**: ₹7–15 LPA
-- **Senior-Level**: ₹16 LPA and above 
+- **Entry-Level**: ₹3–6 LPA 
+- **Mid-Level**: ₹7–15 LPA  
+- **Senior-Level**: ₹16 LPA and above   
 
 Government salaries follow standardized pay scales, while private sector salaries depend on experience, industry, and job role.
 
@@ -54,28 +54,28 @@ Government salaries follow standardized pay scales, while private sector salarie
 
 ## 6. Courses Offered by SHUATS
 
-SHUATS does not offer a specific **General Knowledge** course but integrates GK components into various disciplines, especially in:
+SHUATS does not offer a specific **General Knowledge** course but integrates GK components into various disciplines, especially in:  
 
-- **B.A. in Social Sciences**: A 3-year program covering history, political science, and general studies. 
-- **M.A. in Social Sciences**: A 2-year program focusing on advanced studies in political science, economics, and public policy. 
+- **B.A. in Social Sciences**: A 3-year program covering history, political science, and general studies.   
+- **M.A. in Social Sciences**: A 2-year program focusing on advanced studies in political science, economics, and public policy.   
 
 ---
 
-## 7. Course Structure at SHUATS
+## 7. Course Structure at SHUATS  
 
 - **B.A. Social Sciences**:
-  - Courses in history, political science, international relations, and economic policies. 
+  - Courses in history, political science, international relations, and economic policies.   
 - **M.A. Social Sciences**:
-  - Advanced studies in governance, policy-making, and global economics. 
+  - Advanced studies in governance, policy-making, and global economics.   
 
 General knowledge is also indirectly developed in journalism, business administration, and law-related studies. 
 
 ---
 
-## 8. Additional Skills to Enhance Employability
+## 8. Additional Skills to Enhance Employability  
 
-- **Current Affairs Awareness**: Regularly reading newspapers, magazines, and research journals. 
-- **Data Analysis**: Understanding statistical tools to interpret global trends. 
-- **Public Speaking**: Enhancing verbal communication for presentations, debates, and discussions. 
-- **Digital Literacy**: Utilizing online platforms and AI tools to gather information effectively. 
+- **Current Affairs Awareness**: Regularly reading newspapers, magazines, and research journals.   
+- **Data Analysis**: Understanding statistical tools to interpret global trends.   
+- **Public Speaking**: Enhancing verbal communication for presentations, debates, and discussions.   
+- **Digital Literacy**: Utilizing online platforms and AI tools to gather information effectively.   
 - **Critical Thinking**: Developing problem-solving and analytical reasoning skills.

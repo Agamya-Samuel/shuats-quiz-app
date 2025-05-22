@@ -254,4 +254,4 @@ const VideoFrame = ({ aspectClass }: VideoFrameProps) => {
   );
 };
 
-export default VideoFrame;
+export default VideoFrame; 

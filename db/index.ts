@@ -1,5 +1,4 @@
 import { Pool } from 'pg';
-
 import { runMigrations } from './migrate';
 import { initDb } from './query';
 import * as schema from './schema';
@@ -7,17 +6,17 @@ import * as schema from './schema';
 // Define globals for persistent connections across serverless function invocations
 // Using var is required for global declarations in TypeScript
 declare global {
-  // eslint-disable-next-line no-var
-  var __db_connection_pool: Pool | undefined;
-  // eslint-disable-next-line no-var
-  var __db_migrations_applied: boolean | undefined;
+	// eslint-disable-next-line no-var
+	var __db_connection_pool: Pool | undefined;
+	// eslint-disable-next-line no-var
+	var __db_migrations_applied: boolean | undefined;
 }
 
 export function getConnectionPool(): Pool {
-  if (!global.__db_connection_pool) {
-    if (!process.env.DATABASE_URL) {
-      throw new Error('DATABASE_URL environment variable is not defined');
-    }
+	if (!global.__db_connection_pool) {
+		if (!process.env.DATABASE_URL) {
+			throw new Error('DATABASE_URL environment variable is not defined');
+		}
 
     let poolConfig: any = {
       connectionString: process.env.DATABASE_URL,
@@ -50,7 +49,7 @@ export function getConnectionPool(): Pool {
     global.__db_connection_pool = new Pool(poolConfig);
   }
 
-  return global.__db_connection_pool;
+	return global.__db_connection_pool;
 }
 
 // Re-export schema
@@ -64,32 +63,34 @@ export * from './query';
  * This should be called only once during application startup.
  */
 export async function initializeDB() {
-  try {
-    // Get the connection pool
-    const pool = getConnectionPool();
+	try {
+		// Get the connection pool
+		const pool = getConnectionPool();
 
-    // Test the connection
-    await pool.query('SELECT NOW()');
+		// Test the connection
+		await pool.query('SELECT NOW()');
 
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Database connected successfully (global connection)');
-    }
+		if (process.env.NODE_ENV === 'development') {
+			console.log('Database connected successfully (global connection)');
+		}
 
-    // Run migrations only once
-    if (!global.__db_migrations_applied) {
-      await runMigrations(pool);
-      global.__db_migrations_applied = true;
-      console.log('Database migrations applied (tracked in global state)');
-    }
+		// Run migrations only once
+		if (!global.__db_migrations_applied) {
+			await runMigrations(pool);
+			global.__db_migrations_applied = true;
+			console.log(
+				'Database migrations applied (tracked in global state)'
+			);
+		}
 
-    // Initialize and return the db
-    return initDb(pool);
-  } catch (error) {
-    console.error('Database connection failed:', error);
+		// Initialize and return the db
+		return initDb(pool);
+	} catch (error) {
+		console.error('Database connection failed:', error);
 
-    // Graceful exit in case of a connection error
-    process.exit(1);
-  }
+		// Graceful exit in case of a connection error
+		process.exit(1);
+	}
 }
 
 /**
@@ -97,11 +98,11 @@ export async function initializeDB() {
  * Uses the existing connection pool without re-running migrations.
  */
 export async function connectToDB() {
-  // If we haven't initialized yet, do the full initialization
-  if (!global.__db_connection_pool || !global.__db_migrations_applied) {
-    return initializeDB();
-  }
+	// If we haven't initialized yet, do the full initialization
+	if (!global.__db_connection_pool || !global.__db_migrations_applied) {
+		return initializeDB();
+	}
 
-  // Otherwise, just return the existing db connection
-  return initDb(global.__db_connection_pool);
+	// Otherwise, just return the existing db connection
+	return initDb(global.__db_connection_pool);
 }

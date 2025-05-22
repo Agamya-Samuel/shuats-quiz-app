@@ -1,10 +1,9 @@
-import { AlertTriangle, FileCheck, Upload } from 'lucide-react';
-
-import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
+import { Card, CardContent } from "@/components/ui/card"
+import { Progress } from "@/components/ui/progress"
+import { FileCheck, Upload, AlertTriangle } from "lucide-react"
 
 interface DocumentUploadHeaderProps {
-  progress: number;
+  progress: number
 }
 
 export function DocumentUploadHeader({ progress }: DocumentUploadHeaderProps) {
@@ -16,12 +15,9 @@ export function DocumentUploadHeader({ progress }: DocumentUploadHeaderProps) {
         </div>
 
         <div className="text-center md:text-left flex-1">
-          <h1 className="text-2xl md:text-3xl font-bold">
-            Document Verification
-          </h1>
+          <h1 className="text-2xl md:text-3xl font-bold">Document Verification</h1>
           <p className="text-muted-foreground mt-2">
-            Upload your documents for verification. All documents must be
-            verified before you can proceed.
+            Upload your documents for verification. All documents must be verified before you can proceed.
           </p>
 
           <div className="mt-4">
@@ -29,10 +25,7 @@ export function DocumentUploadHeader({ progress }: DocumentUploadHeaderProps) {
               <span className="text-sm font-medium">Verification Progress</span>
               <span className="text-sm font-medium">{progress}%</span>
             </div>
-            <Progress
-              value={progress}
-              className="h-2"
-            />
+            <Progress value={progress} className="h-2" />
           </div>
         </div>
       </div>
@@ -75,5 +68,5 @@ export function DocumentUploadHeader({ progress }: DocumentUploadHeaderProps) {
         </Card>
       </div>
     </div>
-  );
+  )
 }

@@ -179,29 +179,29 @@ This application supports both AWS S3 and DigitalOcean Spaces for document uploa
 
 2. **Create an S3 Bucket**:
 
-   - Go to the S3 service in the AWS Management Console
-   - Click "Create bucket"
-   - Choose a globally unique bucket name
-   - Select the region closest to your users
-   - Configure bucket settings (public access recommended to be blocked)
-   - Enable CORS if needed for your application
+    - Go to the S3 service in the AWS Management Console
+    - Click "Create bucket"
+    - Choose a globally unique bucket name
+    - Select the region closest to your users
+    - Configure bucket settings (public access recommended to be blocked)
+    - Enable CORS if needed for your application
 
 3. **Create IAM User for Access**:
 
-   - Go to the IAM service
-   - Create a new user with programmatic access
-   - Attach the `AmazonS3FullAccess` policy (or create a custom policy with more restrictive permissions)
-   - Save the access key ID and secret access key
+    - Go to the IAM service
+    - Create a new user with programmatic access
+    - Attach the `AmazonS3FullAccess` policy (or create a custom policy with more restrictive permissions)
+    - Save the access key ID and secret access key
 
 4. **Update Environment Variables**:
-   ```
-   # AWS S3 Configuration
-   S3_ACCESS_KEY_ID=your_s3_access_key_id
-   S3_SECRET_ACCESS_KEY=your_s3_secret_access_key
-   S3_REGION=us-east-1
-   S3_ENDPOINT=https://s3.amazonaws.com
-   S3_BUCKET_NAME=your-bucket-name
-   ```
+    ```
+    # AWS S3 Configuration
+    S3_ACCESS_KEY_ID=your_s3_access_key_id
+    S3_SECRET_ACCESS_KEY=your_s3_secret_access_key
+    S3_REGION=us-east-1
+    S3_ENDPOINT=https://s3.amazonaws.com
+    S3_BUCKET_NAME=your-bucket-name
+    ```
 
 #### Option 2: DigitalOcean Spaces Configuration
 
@@ -209,28 +209,28 @@ This application supports both AWS S3 and DigitalOcean Spaces for document uploa
 
 2. **Create a Space**:
 
-   - Go to the Spaces section in your DigitalOcean dashboard
-   - Click "Create a Space"
-   - Select a region close to your users
-   - Choose a unique name for your Space
-   - Configure CDN if needed for better performance
+    - Go to the Spaces section in your DigitalOcean dashboard
+    - Click "Create a Space"
+    - Select a region close to your users
+    - Choose a unique name for your Space
+    - Configure CDN if needed for better performance
 
 3. **Create API Keys**:
 
-   - In your DigitalOcean account, go to API > Tokens/Keys
-   - Generate new Spaces access keys
-   - Save both the access key and secret
+    - In your DigitalOcean account, go to API > Tokens/Keys
+    - Generate new Spaces access keys
+    - Save both the access key and secret
 
 4. **Update Environment Variables**:
-   ```
-   # DigitalOcean Spaces Configuration
-   S3_ACCESS_KEY_ID=your_spaces_access_key
-   S3_SECRET_ACCESS_KEY=your_spaces_secret_key
-   S3_ENDPOINT=https://your-space-name.region.digitaloceanspaces.com
-   S3_BUCKET_NAME=your-space-name
-   S3_REGION=region-code
-   CDN_S3_ORIGIN_URL=https://your-cdn-url.example.com  # Only if CDN is enabled
-   ```
+    ```
+    # DigitalOcean Spaces Configuration
+    S3_ACCESS_KEY_ID=your_spaces_access_key
+    S3_SECRET_ACCESS_KEY=your_spaces_secret_key
+    S3_ENDPOINT=https://your-space-name.region.digitaloceanspaces.com
+    S3_BUCKET_NAME=your-space-name
+    S3_REGION=region-code
+    CDN_S3_ORIGIN_URL=https://your-cdn-url.example.com  # Only if CDN is enabled
+    ```
 
 ### 4. Push the Schema to Your Database
 
@@ -278,5 +278,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👏 Acknowledgments
 
-- 👨‍💻 All contributors and testers
-- 📦 Open source libraries used in this project
+-   👨‍💻 All contributors and testers
+-   📦 Open source libraries used in this project

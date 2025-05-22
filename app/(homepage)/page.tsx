@@ -1,8 +1,13 @@
 // app/(homepage)/page.tsx
+
+import Navbar from '@/app/(homepage)/_components/Navbar';
+import Hero from '@/app/(homepage)/_components/Hero';
+import Facilities from '@/app/(homepage)/_components/Facilities';
 import Academics from '@/app/(homepage)/_components/Academics';
 import CampusLife from '@/app/(homepage)/_components/CampusLife';
+import Infrastructure from '@/app/(homepage)/_components/Infrastructure';
+import Gallery from '@/app/(homepage)/_components/Gallery';
 import Contact from '@/app/(homepage)/_components/Contact';
-import Facilities from '@/app/(homepage)/_components/Facilities';
 import Footer from '@/app/(homepage)/_components/Footer';
 import Gallery from '@/app/(homepage)/_components/Gallery';
 import Infrastructure from '@/app/(homepage)/_components/Infrastructure';

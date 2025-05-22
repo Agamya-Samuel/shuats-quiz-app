@@ -131,7 +131,9 @@
         "admins_username_unique": {
           "name": "admins_username_unique",
           "nullsNotDistinct": false,
-          "columns": ["username"]
+          "columns": [
+            "username"
+          ]
         }
       },
       "policies": {},
@@ -192,8 +194,12 @@
           "name": "correct_answers_question_id_questions_id_fk",
           "tableFrom": "correct_answers",
           "tableTo": "questions",
-          "columnsFrom": ["question_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "question_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -493,8 +499,12 @@
           "name": "upload_files_user_id_users_id_fk",
           "tableFrom": "upload_files",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -565,8 +575,12 @@
           "name": "user_submission_timestamps_user_id_users_id_fk",
           "tableFrom": "user_submission_timestamps",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -574,8 +588,12 @@
           "name": "user_submission_timestamps_user_submission_id_user_submissions_id_fk",
           "tableFrom": "user_submission_timestamps",
           "tableTo": "user_submissions",
-          "columnsFrom": ["user_submission_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_submission_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -654,8 +672,12 @@
           "name": "user_submissions_user_id_users_id_fk",
           "tableFrom": "user_submissions",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -663,8 +685,12 @@
           "name": "user_submissions_question_id_questions_id_fk",
           "tableFrom": "user_submissions",
           "tableTo": "questions",
-          "columnsFrom": ["question_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "question_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -765,8 +791,12 @@
           "name": "users_address_id_addresses_id_fk",
           "tableFrom": "users",
           "tableTo": "addresses",
-          "columnsFrom": ["address_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "address_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -776,12 +806,16 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
         },
         "users_mobile_unique": {
           "name": "users_mobile_unique",
           "nullsNotDistinct": false,
-          "columns": ["mobile"]
+          "columns": [
+            "mobile"
+          ]
         }
       },
       "policies": {},
