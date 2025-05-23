@@ -67,8 +67,8 @@ interface User {
   school: string;
   branch: string;
   rollno: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | null;
+  updatedAt: Date | null;
   address?: {
     city: string | null;
     state: string | null;
