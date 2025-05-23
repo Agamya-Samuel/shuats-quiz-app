@@ -27,15 +27,7 @@ const VideoFrame = ({ aspectClass }: VideoFrameProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
-  // Updated video order
-  const videos = [
-    'https://cdn-shuatsquiz.agamya.dev/video/webm/shuats-reel.webm',
-    'https://cdn-shuatsquiz.agamya.dev/video/shuats_tour_2.mp4',
-    'https://cdn-shuatsquiz.agamya.dev/video/reel/ct-1.mp4',
-    'https://cdn-shuatsquiz.agamya.dev/video/reel/ct-2.mp4',
-    'https://cdn-shuatsquiz.agamya.dev/video/reel/ct-3.mp4',
-  ];
-  const src = videos[currentVideoIndex];
+  const src = campusTourVideos[currentVideoIndex];
   const dynamicAspectClass = aspectClass || getAspectClass(src);
 
   useEffect(() => {
@@ -57,7 +49,7 @@ const VideoFrame = ({ aspectClass }: VideoFrameProps) => {
   }, []);
 
   const handleVideoEnded = () => {
-    const nextIndex = (currentVideoIndex + 1) % videos.length;
+    const nextIndex = (currentVideoIndex + 1) % campusTourVideos.length;
     setCurrentVideoIndex(nextIndex);
   };
 

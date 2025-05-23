@@ -9,6 +9,28 @@ const PAGE_SIZE = 9;
 const FADE_DURATION = 1000; // ms (was 500)
 const IMAGE_CHANGE_INTERVAL = 5000; // ms (was 2000)
 
+const categoryDisplayNames: Record<string, string> = {
+	admin: "Administration",
+	agri: "Agriculture",
+	animal: "Animal Science",
+	art: "Art",
+	biotech: "Biotechnology",
+	btech: "B.Tech",
+	cultural: "Cultural",
+	dept: "Department",
+	env: "Environmental Science",
+	fac_sci: "Faculty of Science",
+	field: "Field",
+	hostel: "Hostel",
+	lab: "Laboratory",
+	librarys: "Library",
+	masscom: "Mass Communication",
+	mesh: "Mesh",
+	nav: "Navigation",
+	ncc: "NCC",
+	sports: "Sports",
+};
+
 export default function Gallery() {
 	const [pageSize, setPageSize] = useState(PAGE_SIZE);
 	// Start with first image for SSR consistency
@@ -120,7 +142,7 @@ export default function Gallery() {
 									className={`object-cover w-full h-full transition-opacity duration-1000 ${fading[i] ? 'opacity-100' : 'opacity-100'} relative`}
 								/>
 								<div className="absolute bottom-0 left-0 right-0 p-4">
-									<h3 className="text-lg font-bold text-white drop-shadow mb-1">{cat.category.replace(/_/g, ' ').toUpperCase()}</h3>
+									<h3 className="text-lg font-bold text-white drop-shadow mb-1">{categoryDisplayNames[cat.category] || cat.category.replace(/_/g, ' ').toUpperCase()}</h3>
 								</div>
 							</div>
 						);
