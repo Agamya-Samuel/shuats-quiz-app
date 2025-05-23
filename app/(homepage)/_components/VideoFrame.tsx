@@ -7,7 +7,6 @@ import { campusTourVideos } from '@/public/images/index.js';
 // Add type for props
 interface VideoFrameProps {
   aspectClass?: string;
-  videoIndex?: number;
   filter?: 'landscape' | 'portrait';
 }
 
