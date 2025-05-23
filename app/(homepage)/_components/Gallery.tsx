@@ -25,7 +25,7 @@ const categoryDisplayNames: Record<string, string> = {
 	lab: "Laboratory",
 	librarys: "Library",
 	masscom: "Mass Communication",
-	mesh: "Mesh",
+	mesh: "Mess",
 	nav: "Navigation",
 	ncc: "NCC",
 	sports: "Sports",
