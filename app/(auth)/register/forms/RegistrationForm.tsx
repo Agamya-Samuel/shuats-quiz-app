@@ -443,8 +443,8 @@ export function RegistrationForm() {
 
 											{renderField(
 												'rollno',
-												'Roll Number',
-												'Enter your roll number',
+												'Class 12th Boards Roll Number',
+												'Enter your Class 12th Boards roll number',
 												<Info className="h-4 w-4" />
 											)}
 										</div>
