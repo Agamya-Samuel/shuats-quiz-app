@@ -117,7 +117,7 @@ export const campusTourVideo1 =
   'https://cdn-shuatsquiz.agamya.dev/video/webm/shuats-reel.webm';
 
 export const QuizPoster =
-  'https://cdn-shuatsquiz.agamya.dev/poster/shuats-quiz-poster.jpg';
+  'https://cdn-shuatsquiz.agamya.dev/poster/shuats-quiz-poster-2.jpg';
 
 // Add new video URLs for infinite scroll
 export const campusTourVideos = [
