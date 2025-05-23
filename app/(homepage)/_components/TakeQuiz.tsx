@@ -106,7 +106,7 @@ const TakeQuiz = () => {
           </div>
         </div>
         {/* Prizes Card */}
-        <div className="flex-1 min-w-[290px] max-w-sm aspect-[2/3] flex flex-col items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-purple-200 px-4 pt-0 pb-8 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(150,80,255,0.15)] duration-200 p-1 max-h-[90vh] md:max-h-none overflow-y-auto">
+        <div className="w-full max-w-sm flex flex-col items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-purple-200 px-2 sm:px-4 pt-0 pb-8 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(150,80,255,0.15)] duration-200 p-1 overflow-x-auto">
           <div className="w-full">
             <div className="flex items-center justify-center gap-2 text-xl font-bold text-purple-700 mb-3 mt-6">
               <Calendar className="h-5 w-5" />
