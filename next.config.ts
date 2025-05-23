@@ -19,6 +19,12 @@ const nextConfig: NextConfig = {
       use: 'raw-loader',
     });
 
+    // Add HTML loader for email templates
+    config.module.rules.push({
+      test: /\.html$/,
+      type: 'asset/source',
+    });
+
     return config;
   },
   // need to investigate this, how safe is this?

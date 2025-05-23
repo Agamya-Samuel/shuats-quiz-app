@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-import { loadEmailTemplate } from '@/email-templates/utils';
+import { loadEmailTemplate } from '@/lib/email-template-loader';
 
 // Create a transporter using SMTP for Gmail
 const transporter = nodemailer.createTransport({
@@ -17,7 +17,7 @@ export async function sendRegistrationEmail(
   name: string,
 ): Promise<boolean> {
   try {
-    const htmlContent = loadEmailTemplate('registration', {
+    const htmlContent = await loadEmailTemplate('registration', {
       name,
       year: new Date().getFullYear(),
     });
@@ -45,7 +45,7 @@ export async function sendPasswordResetEmail(
   try {
     const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${resetToken}`;
 
-    const htmlContent = loadEmailTemplate('reset-password', {
+    const htmlContent = await loadEmailTemplate('reset-password', {
       resetUrl,
       year: new Date().getFullYear(),
     });
