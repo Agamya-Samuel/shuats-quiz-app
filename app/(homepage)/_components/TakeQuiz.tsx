@@ -69,7 +69,7 @@ const TypingHeading = () => {
   }
 
   return (
-    <h1 className="text-3xl md:text-5xl font-extrabold mb-2 text-blue-900 drop-shadow-lg tracking-tight min-h-[2.5em]">
+    <h1 className="text-3xl md:text-5xl font-extrabold text-blue-900 drop-shadow-lg tracking-tight mb-5">
       {headingNode}
       {showCursor && <span className="animate-pulse text-pink-600">|</span>}
     </h1>
@@ -84,7 +84,7 @@ const TakeQuiz = () => {
       {/* Main Heading */}
       <div className="w-full max-w-5xl mx-auto text-center mt-8 mb-2 px-2 pt-20">
         <TypingHeading />
-        <p className="text-lg md:text-xl text-gray-800 mb-4 font-medium">
+        <p className="text-lg md:text-xl text-gray-800 font-medium">
           Join us for an exciting opportunity to showcase your knowledge and win
           amazing prizes!
         </p>
@@ -93,7 +93,7 @@ const TakeQuiz = () => {
       {/* Card Deck Section */}
       <section
         id="quiz"
-        className="relative w-full max-w-7xl mx-auto flex flex-col md:flex-row items-stretch justify-center gap-8 px-2 py-10">
+        className="relative w-full max-w-7xl mx-auto flex flex-col md:flex-row items-stretch justify-center gap-8 px-2 py-5">
         {/* Video Card */}
         <div className="flex-1 min-w-[290px] max-w-sm min-h-[600px] flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-blue-200 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(80,80,255,0.15)] duration-200 p-1">
           <div className="w-full p-3 flex-1 flex flex-col gap-4 items-center justify-center">
