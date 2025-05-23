@@ -41,11 +41,8 @@ const VideoFrame = ({ aspectClass, filter }: VideoFrameProps) => {
     return filter ? type === filter : true;
   });
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const src =
-    filteredVideos.length > 0
-      ? filteredVideos[currentVideoIndex] || filteredVideos[0]
-      : null;
-  const dynamicAspectClass = aspectClass || (src ? getAspectClass(src) : '');
+  const src = filteredVideos[currentVideoIndex] || filteredVideos[0];
+  const dynamicAspectClass = aspectClass || getAspectClass(src);
 
   useEffect(() => {
     if (videoRef.current && muted) {
