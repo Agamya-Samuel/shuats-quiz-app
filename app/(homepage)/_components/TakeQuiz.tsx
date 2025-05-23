@@ -150,8 +150,13 @@ const TakeQuiz = () => {
               </div>
               {/* Additional Prizes */}
               <div className="w-full mt-6 mb-4">
-                <div className="font-bold text-purple-700 text-base md:text-lg mb-2 text-center">
-                  Fee Concession Prizes
+                <div className="font-bold text-black-700 text-base md:text-lg mb-2 text-center">
+                  <span className="font-bold">Fee Concession Prizes</span>{' '}
+                  <br />
+                  <span className="text-sm md:text-base font-light">
+                    (Fee Concession applicable only for aspirants of
+                    B.Tech(CSE), BCA & B.Sc(Computer Science) Programmes)
+                  </span>
                 </div>
                 <ul className="text-purple-900 text-sm md:text-base font-medium space-y-2 list-disc list-inside">
                   <li>
