@@ -2,26 +2,149 @@ import nodemailer from 'nodemailer';
 
 // Create a transporter using SMTP for Gmail
 const transporter = nodemailer.createTransport({
-	service: 'gmail',
-	auth: {
-		user: process.env.EMAIL_USER,
-		pass: process.env.EMAIL_PASSWORD, // Use app password for Gmail
-	},
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD, // Use app password for Gmail
+  },
 });
+
+// Function to send registration confirmation email
+export async function sendRegistrationEmail(
+  email: string,
+  name: string,
+): Promise<boolean> {
+  try {
+    await transporter.sendMail({
+      from: `"SHUATS (DCS & IT)" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: 'Welcome to SHUATS National Talent Search Quiz - Thank you for registering',
+      html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" lang="en">
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <meta name="x-apple-disable-message-reformatting" />
+  </head>
+  <body style='background-color:rgb(240,248,244);font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";padding-top:40px;padding-bottom:40px;background-image:linear-gradient(0deg, #f0f8f4 0%, #e6f5ee 100%)'>
+    <div style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0">
+      Welcome to SHUATS National Talent Search Quiz - Thank you for registering
+    </div>
+    <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin-left:auto;margin-right:auto;max-width:600px">
+      <tbody>
+        <tr style="width:100%">
+          <td>
+            <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="height:5px;border-top-left-radius:8px;border-top-right-radius:8px;background:linear-gradient(90deg, #10B981, #059669)">
+              <tbody>
+                <tr>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+            <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background-color:rgb(255,255,255);border-bottom-right-radius:8px;border-bottom-left-radius:8px;padding:32px;box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0 1px 2px 0 rgb(0,0,0,0.05)">
+              <tbody>
+                <tr>
+                  <td>
+                    <h1 style="font-size:26px;font-weight:700;color:rgb(4,120,87);margin-top:16px;margin-bottom:16px">
+                      Welcome to SHUATS National Talent Search Quiz!
+                    </h1>
+                    <p style="font-size:16px;line-height:24px;color:rgb(31,41,55);margin-bottom:16px;margin-top:16px">
+                      Dear ${name},
+                    </p>
+                    <p style="font-size:16px;line-height:24px;color:rgb(55,65,81);margin-bottom:24px;margin-top:16px">
+                      Thank you for registering with SHUATS National Talent Search Quiz. We're excited to have you join our platform!
+                    </p>
+                    <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background-color:rgb(236,253,245);padding:24px;border-radius:8px;margin-bottom:24px;border-left-width:4px;border-style:solid;border-color:rgb(16,185,129)">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <p style="font-size:18px;font-weight:700;color:rgb(4,120,87);margin-bottom:8px;line-height:24px;margin-top:16px">
+                              Important Next Step:
+                            </p>
+                            <p style="font-size:16px;line-height:24px;color:rgb(55,65,81);margin-bottom:16px;margin-top:16px">
+                              To complete your registration process, please reply to this email with a brief explanation of why you would like to participate in the quiz. This helps us understand our participants better and ensure a meaningful experience for everyone.
+                            </p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <p style="font-size:16px;line-height:24px;color:rgb(31,41,55);font-weight:500;margin-bottom:8px;margin-top:16px">
+                      In your reply, please include:
+                    </p>
+                    <ul style="padding-left:24px;margin-bottom:24px">
+                      <li style="font-size:16px;line-height:28px;color:rgb(75,85,99);margin-bottom:8px">
+                        <span style="color:rgb(5,150,105)">Your academic background</span>
+                      </li>
+                      <li style="font-size:16px;line-height:28px;color:rgb(75,85,99);margin-bottom:8px">
+                        <span style="color:rgb(5,150,105)">Your motivation for taking the quiz</span>
+                      </li>
+                      <li style="font-size:16px;line-height:28px;color:rgb(75,85,99)">
+                        <span style="color:rgb(5,150,105)">What you hope to achieve through this experience</span>
+                      </li>
+											<li style="font-size:16px;line-height:28px;color:rgb(75,85,99)">
+                        <span style="color:rgb(5,150,105)">It does not have to be detailed, just 1 line explanation will do.</span>
+                      </li>
+                    </ul>
+                    <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background-color:rgb(254,242,242);padding:16px;border-radius:8px;margin-bottom:32px;border-left-width:4px;border-style:solid;border-color:rgb(220,38,38)">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <p style="font-size:15px;line-height:24px;color:rgb(185,28,28);font-weight:500;margin:0px;margin-bottom:0px;margin-top:0px;margin-left:0px;margin-right:0px">
+                              Note: Your participation in the quiz will be pending until we receive your response.
+                            </p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <hr style="border-style:solid;border-color:rgb(229,231,235);margin-top:24px;margin-bottom:24px;width:100%;border:none;border-top:1px solid #eaeaea" />
+                    <p style="font-size:16px;line-height:24px;color:rgb(107,114,128);margin-bottom:16px;margin-top:16px">
+                      Best regards,<br /><span style="font-weight:500;color:rgb(4,120,87)">Department of Computer Science and Engineering (DCS & IT)</span>
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background-color:rgb(6,78,59);border-radius:8px;margin-top:16px;padding:16px;text-align:center">
+              <tbody>
+                <tr>
+                  <td>
+                    <p style="font-size:12px;color:rgb(255,255,255);margin:0px;line-height:24px;margin-bottom:0px;margin-top:0px;margin-left:0px;margin-right:0px">
+                      © ${new Date().getFullYear()} SHUATS National Talent Search Quiz. All rights reserved.
+                    </p>
+                    <p style="font-size:12px;color:rgb(209,250,229);margin:0px;line-height:24px;margin-bottom:0px;margin-top:0px;margin-left:0px;margin-right:0px">
+                      Sam Higginbottom University of Agriculture, Technology and Sciences <br /> Prayagraj, Uttar Pradesh.
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>`,
+    });
+
+    return true;
+  } catch (error) {
+    console.error('Error sending registration email:', error);
+    return false;
+  }
+}
 
 // Function to send password reset email
 export async function sendPasswordResetEmail(
-	email: string,
-	resetToken: string
+  email: string,
+  resetToken: string,
 ): Promise<boolean> {
-	try {
-		const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${resetToken}`;
+  try {
+    const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${resetToken}`;
 
-		await transporter.sendMail({
-			from: `"SHUATS Quiz App" <${process.env.EMAIL_USER}>`,
-			to: email,
-			subject: 'Reset Your Password',
-			html: `
+    await transporter.sendMail({
+      from: `"SHUATS Quiz App" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: 'Reset Your Password',
+      html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2>Reset Your Password</h2>
           <p>You requested a password reset for your SHUATS Quiz App account.</p>
@@ -32,11 +155,11 @@ export async function sendPasswordResetEmail(
           <p>${resetUrl}</p>
         </div>
       `,
-		});
+    });
 
-		return true;
-	} catch (error) {
-		console.error('Error sending password reset email:', error);
-		return false;
-	}
+    return true;
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
+    return false;
+  }
 }
