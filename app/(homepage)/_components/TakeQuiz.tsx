@@ -105,7 +105,7 @@ const TakeQuiz = () => {
           <div className="w-full">
             <div className="flex items-center justify-center gap-2 text-xl font-bold text-purple-700 mb-3 mt-6">
               <Calendar className="h-5 w-5" />
-              <span>Date: 8 July, 2025</span>
+              <span>Date: 12 July, 2025</span>
             </div>
             {/* Prizes Layout: 1st Prize on top, 2nd & 3rd below */}
             <div className="w-full flex flex-col items-center">
