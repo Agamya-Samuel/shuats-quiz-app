@@ -95,13 +95,18 @@ const TakeQuiz = () => {
         id="quiz"
         className="relative w-full max-w-7xl mx-auto flex flex-col md:flex-row items-stretch justify-center gap-8 px-2 py-10">
         {/* Video Card */}
-        <div className="flex-1 min-w-[290px] max-w-sm aspect-[2/3] flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-blue-200 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(80,80,255,0.15)] duration-200 p-1">
-          <div className="w-full p-3 flex-1 flex items-center justify-center h-full">
-            <VideoFrame />
+        <div className="flex-1 min-w-[290px] max-w-sm min-h-[600px] flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-blue-200 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(80,80,255,0.15)] duration-200 p-1">
+          <div className="w-full p-3 flex-1 flex flex-col gap-4 items-center justify-center">
+            <div className="w-full">
+              <VideoFrame filter="landscape" />
+            </div>
+            <div className="w-full">
+              <VideoFrame filter="portrait" />
+            </div>
           </div>
         </div>
         {/* Prizes Card */}
-        <div className="flex-1 min-w-[290px] max-w-sm aspect-[2/3] flex flex-col items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-purple-200 px-4 pt-0 pb-8 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(150,80,255,0.15)] duration-200 p-1">
+        <div className="w-full max-w-sm flex flex-col items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-purple-200 px-2 sm:px-4 pt-0 pb-8 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(150,80,255,0.15)] duration-200 p-1 overflow-x-auto">
           <div className="w-full">
             <div className="flex items-center justify-center gap-2 text-xl font-bold text-purple-700 mb-3 mt-6">
               <Calendar className="h-5 w-5" />
@@ -142,6 +147,26 @@ const TakeQuiz = () => {
                     ₹3,000
                   </div>
                 </div>
+              </div>
+              {/* Additional Prizes */}
+              <div className="w-full mt-6 mb-4">
+                <div className="font-bold text-purple-700 text-base md:text-lg mb-2 text-center">
+                  Fee Concession Prizes
+                </div>
+                <ul className="text-purple-900 text-sm md:text-base font-medium space-y-2 list-disc list-inside">
+                  <li>
+                    1st to 10th rank:{' '}
+                    <span className="font-bold">50% Fee Concession</span>
+                  </li>
+                  <li>
+                    11th to 50th rank:{' '}
+                    <span className="font-bold">30% Fee Concession</span>
+                  </li>
+                  <li>
+                    51st to 300th rank:{' '}
+                    <span className="font-bold">25% Fee Concession</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
