@@ -9,12 +9,20 @@ interface VideoFrameProps {
   aspectClass?: string;
 }
 
+const videoAspectRatios: Record<string, string> = {
+  'campustoor.webm': 'aspect-[16/9]',      // Landscape!
+  'shuats-reel.webm': 'aspect-[2/3]',      // Portrait
+  'ct-1.mp4': 'aspect-[2/3]',              // Portrait
+  'ct-2.mp4': 'aspect-[2/3]',              // Portrait
+  'ct-3.mp4': 'aspect-[16/9]',              // Landscape
+  // Add more if you have other portrait or special aspect videos
+};
+
 const getAspectClass = (src: string) => {
-  // webm, ct-1, and ct-2 are portrait, others are landscape
-  if (src.includes('webm') || src.includes('ct-1') || src.includes('ct-2')) {
-    return 'aspect-[2/3]';
+  for (const [name, aspect] of Object.entries(videoAspectRatios)) {
+    if (src.includes(name)) return aspect;
   }
-  return 'aspect-[16/9]';
+  return 'aspect-[16/9]'; // Default for landscape
 };
 
 const VideoFrame = ({ aspectClass }: VideoFrameProps) => {
