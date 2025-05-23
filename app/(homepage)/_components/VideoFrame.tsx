@@ -7,25 +7,24 @@ import { campusTourVideos } from '@/public/images/index.js';
 // Add type for props
 interface VideoFrameProps {
   aspectClass?: string;
+  filter?: 'landscape' | 'portrait';
 }
 
-const videoAspectRatios: Record<string, string> = {
-  'campustoor.webm': 'aspect-[16/9]',      // Landscape!
-  'shuats-reel.webm': 'aspect-[2/3]',      // Portrait
-  'ct-1.mp4': 'aspect-[2/3]',              // Portrait
-  'ct-2.mp4': 'aspect-[2/3]',              // Portrait
-  'ct-3.mp4': 'aspect-[16/9]',              // Landscape
-  // Add more if you have other portrait or special aspect videos
+const aspectMap: Record<string, 'landscape' | 'portrait'> = {
+  'campustoor.webm': 'landscape',
+  'shuats-reel.webm': 'portrait',
+  'ct-1.mp4': 'portrait',
+  'ct-2.mp4': 'portrait',
+  'ct-3.mp4': 'landscape',
 };
 
 const getAspectClass = (src: string) => {
-  for (const [name, aspect] of Object.entries(videoAspectRatios)) {
-    if (src.includes(name)) return aspect;
-  }
-  return 'aspect-[16/9]'; // Default for landscape
+  if (src.includes('campustoor.webm') || src.includes('ct-3.mp4'))
+    return 'aspect-[16/9]';
+  return 'aspect-[2/3]';
 };
 
-const VideoFrame = ({ aspectClass }: VideoFrameProps) => {
+const VideoFrame = ({ aspectClass, filter }: VideoFrameProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [muted, setMuted] = useState(true);
@@ -33,9 +32,16 @@ const VideoFrame = ({ aspectClass }: VideoFrameProps) => {
   const [hovered, setHovered] = useState(false);
   const [showUnmute, setShowUnmute] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
-  const src = campusTourVideos[currentVideoIndex];
+  // Filter videos by aspect
+  const filteredVideos = campusTourVideos.filter((src) => {
+    const type = Object.entries(aspectMap).find(([name]) =>
+      src.includes(name),
+    )?.[1];
+    return filter ? type === filter : true;
+  });
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const src = filteredVideos[currentVideoIndex] || filteredVideos[0];
   const dynamicAspectClass = aspectClass || getAspectClass(src);
 
   useEffect(() => {
@@ -57,7 +63,7 @@ const VideoFrame = ({ aspectClass }: VideoFrameProps) => {
   }, []);
 
   const handleVideoEnded = () => {
-    const nextIndex = (currentVideoIndex + 1) % campusTourVideos.length;
+    const nextIndex = (currentVideoIndex + 1) % filteredVideos.length;
     setCurrentVideoIndex(nextIndex);
   };
 
@@ -254,4 +260,4 @@ const VideoFrame = ({ aspectClass }: VideoFrameProps) => {
   );
 };
 
-export default VideoFrame; 
+export default VideoFrame;
