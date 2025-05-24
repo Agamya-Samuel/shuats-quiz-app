@@ -10,6 +10,7 @@ import * as dbSchema from '@/db/schema';
 import { generateToken } from '@/lib/auth';
 import { setCookie } from '@/lib/cookies';
 import { verifyAuth } from '@/lib/dal';
+import { sendAccountTerminationEmail } from '@/lib/email';
 import { AdminJwtPayload } from '@/types/admin';
 
 // 30 days in seconds
@@ -254,7 +255,7 @@ export const getUsers = async () => {
     console.error('Error getting users:', error);
     return {
       success: false,
-      message: `Error getting users: ${error}`,
+      message: 'Failed to fetch users',
     };
   }
 };
@@ -297,7 +298,33 @@ export async function deleteUser(userId: number) {
     console.error('Error deleting user:', error);
     return {
       success: false,
-      message: `Failed to delete user: ${error}`,
+      message: 'Failed to delete user',
+    };
+  }
+}
+
+export async function deleteUserWithNotification(
+  userId: number,
+  email: string,
+  name: string,
+  reason: string,
+) {
+  try {
+    // Send termination email
+    await sendAccountTerminationEmail(email, name, reason);
+
+    // Delete user from database
+    await deleteUser(userId);
+
+    return {
+      success: true,
+      message: 'User deleted and notified successfully',
+    };
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    return {
+      success: false,
+      message: 'Failed to delete user',
     };
   }
 }

@@ -1,3 +1,5 @@
+'use server';
+
 import nodemailer from 'nodemailer';
 
 import { loadEmailTemplate } from '@/lib/email-template-loader';
@@ -60,6 +62,33 @@ export async function sendPasswordResetEmail(
     return true;
   } catch (error) {
     console.error('Error sending password reset email:', error);
+    return false;
+  }
+}
+
+// Function to send account termination email
+export async function sendAccountTerminationEmail(
+  email: string,
+  name: string,
+  reason: string,
+): Promise<boolean> {
+  try {
+    const htmlContent = await loadEmailTemplate('rejection', {
+      name,
+      reason,
+      year: new Date().getFullYear(),
+    });
+
+    await transporter.sendMail({
+      from: `"SHUATS (DCS & IT)" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: 'Important: SHUATS Quiz Account Termination Notice',
+      html: htmlContent,
+    });
+
+    return true;
+  } catch (error) {
+    console.error('Error sending account termination email:', error);
     return false;
   }
 }
