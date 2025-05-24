@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'shuats.org',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   // Add webpack configuration to handle markdown files
