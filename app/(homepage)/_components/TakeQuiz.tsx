@@ -93,9 +93,9 @@ const TakeQuiz = () => {
       {/* Card Deck Section */}
       <section
         id="quiz"
-        className="relative w-full max-w-7xl mx-auto flex flex-col md:flex-row items-stretch justify-center gap-8 px-2 py-5">
+        className="relative w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center md:items-stretch justify-center gap-8 px-2 py-5">
         {/* Video Card */}
-        <div className="flex-1 min-w-[290px] max-w-sm min-h-[600px] flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-blue-200 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(80,80,255,0.15)] duration-200 p-1">
+        <div className="flex-1 min-w-[290px] max-w-sm w-full md:w-auto min-h-[600px] flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-blue-200 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(80,80,255,0.15)] duration-200 p-1 mx-auto">
           <div className="w-full p-3 flex-1 flex flex-col gap-4 items-center justify-center">
             <div className="w-full">
               <VideoFrame filter="landscape" />
@@ -106,7 +106,7 @@ const TakeQuiz = () => {
           </div>
         </div>
         {/* Prizes Card */}
-        <div className="w-full max-w-sm flex flex-col items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-purple-200 px-2 sm:px-4 pt-0 pb-8 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(150,80,255,0.15)] duration-200 p-1 overflow-x-auto">
+        <div className="w-full max-w-sm md:max-w-sm flex flex-col items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-purple-200 px-2 sm:px-4 pt-0 pb-8 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(150,80,255,0.15)] duration-200 p-1 overflow-x-auto mx-auto">
           <div className="w-full">
             <div className="flex items-center justify-center gap-2 text-xl font-bold text-purple-700 mb-3 mt-6">
               <Calendar className="h-5 w-5" />
@@ -150,10 +150,10 @@ const TakeQuiz = () => {
               </div>
               {/* Additional Prizes */}
               <div className="w-full mt-6 mb-4">
-                <div className="text-black-700 text-base md:text-lg mb-4 text-center">
+                <div className="font-bold text-black-700 text-base md:text-lg mb-2 text-center">
                   <span className="font-bold">Fee Concession Prizes</span>{' '}
                   <br />
-                  <span className="text-sm md:text-base">
+                  <span className="text-sm md:text-base font-light">
                     (Fee Concession applicable only for aspirants of
                     B.Tech(CSE), BCA & B.Sc(Computer Science) Programmes)
                   </span>
@@ -190,8 +190,8 @@ const TakeQuiz = () => {
           </div>
         </div>
         {/* Poster Card */}
-        <div className="flex-1 min-w-[290px] max-w-sm aspect-[2/3] flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl border border-pink-200 transition-transform hover:scale-105 duration-200 p-1">
-          <div className="w-full h-full flex items-center justify-center">
+        <div className="flex-1 min-w-[290px] max-w-sm w-full md:w-auto aspect-[2/3] flex flex-col justify-start items-center bg-white/60 backdrop-blur-lg rounded-3xl border border-pink-200 transition-transform hover:scale-105 duration-200 p-1 mx-auto mb-8 md:mb-0">
+          <div className="w-full h-full flex flex-col justify-start items-center">
             <Image
               src={QuizPoster}
               alt="Quiz Poster"
@@ -200,6 +200,22 @@ const TakeQuiz = () => {
               className="object-contain w-full h-full rounded-xl"
               priority
             />
+            {/* Important Notice Box */}
+            <div className="w-full bg-white/90 backdrop-blur-sm rounded-xl p-3 md:p-4 mt-3 mb-4 shadow-md flex flex-col items-start px-2">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-yellow-500 text-lg md:text-xl">⚠️</span>
+                <span className="font-bold text-base md:text-lg text-pink-700">
+                  Important Notice
+                </span>
+              </div>
+              <ul className="list-disc list-inside text-sm md:text-base text-purple-900 space-y-1 pl-4">
+                <li>The quiz will be enabled on the scheduled quiz day.</li>
+                <li>
+                  Please bring all required documents when collecting your prize.
+                </li>
+                <li>Participants must register before 5th July.</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>

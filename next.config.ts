@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'shuats.org',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   // Add webpack configuration to handle markdown files
@@ -17,6 +23,12 @@ const nextConfig: NextConfig = {
     config.module.rules.push({
       test: /\.md$/,
       use: 'raw-loader',
+    });
+
+    // Add HTML loader for email templates
+    config.module.rules.push({
+      test: /\.html$/,
+      type: 'asset/source',
     });
 
     return config;

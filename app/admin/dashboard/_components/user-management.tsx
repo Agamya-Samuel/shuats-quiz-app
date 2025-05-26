@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { deleteUser, getUsers } from '@/actions/admin';
+import { deleteUserWithNotification, getUsers } from '@/actions/admin';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -47,6 +47,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import {
   Table,
@@ -76,11 +83,22 @@ interface User {
   } | null;
 }
 
+// Add termination reasons
+const TERMINATION_REASONS = {
+  existing_student: 'Existing SHUATS students are not allowed to register',
+  duplicate_account: 'Duplicate Account',
+  fake_information: 'Provided fake or incorrect information',
+  policy_violation: 'Violation of platform policies',
+  inappropriate_behavior: 'Inappropriate behavior or misconduct',
+  other: 'Other reasons',
+};
+
 export function UserManagement() {
   const [searchQuery, setSearchQuery] = useState('');
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState<number | null>(null);
+  const [selectedReason, setSelectedReason] = useState<string>('');
 
   // Load users on component mount
   useEffect(() => {
@@ -114,15 +132,35 @@ export function UserManagement() {
   };
 
   const handleDeleteUser = async (userId: number) => {
+    if (!selectedReason) {
+      toast({
+        title: 'Error',
+        description: 'Please select a reason for account termination',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     try {
       setIsDeleting(userId);
-      const response = await deleteUser(userId);
+      const user = users.find((u) => u.id === userId);
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const response = await deleteUserWithNotification(
+        userId,
+        user.email,
+        user.name,
+        TERMINATION_REASONS[selectedReason as keyof typeof TERMINATION_REASONS],
+      );
 
       if (response.success) {
-        setUsers(users.filter((user) => user.id !== userId));
+        setUsers(users.filter((u) => u.id !== userId));
         toast({
           title: 'User Deleted',
-          description: 'The user has been deleted successfully',
+          description: 'The user has been deleted and notified via email',
           variant: 'success',
         });
       } else {
@@ -141,6 +179,7 @@ export function UserManagement() {
       });
     } finally {
       setIsDeleting(null);
+      setSelectedReason('');
     }
   };
 
@@ -248,20 +287,55 @@ export function UserManagement() {
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Delete User</AlertDialogTitle>
+                            <AlertDialogTitle>
+                              Delete User Account
+                            </AlertDialogTitle>
                             <AlertDialogDescription>
-                              Are you sure you want to delete {user.name}? This
-                              action cannot be undone and will remove all
-                              associated data including quiz attempts and
-                              uploaded documents.
+                              This action will permanently delete the user
+                              account and send a termination notice. This action
+                              cannot be undone.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
+                          <div className="py-4">
+                            <Label
+                              htmlFor="termination-reason"
+                              className="mb-2 block">
+                              Select Termination Reason
+                            </Label>
+                            <Select
+                              value={selectedReason}
+                              onValueChange={setSelectedReason}>
+                              <SelectTrigger
+                                id="termination-reason"
+                                className="w-full">
+                                <SelectValue placeholder="Select a reason" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Object.entries(TERMINATION_REASONS).map(
+                                  ([key, value]) => (
+                                    <SelectItem
+                                      key={key}
+                                      value={key}>
+                                      {value}
+                                    </SelectItem>
+                                  ),
+                                )}
+                              </SelectContent>
+                            </Select>
+                          </div>
                           <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogCancel
+                              onClick={() => setSelectedReason('')}>
+                              Cancel
+                            </AlertDialogCancel>
                             <AlertDialogAction
                               onClick={() => handleDeleteUser(user.id)}
-                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                              Delete User
+                              disabled={
+                                !selectedReason || isDeleting === user.id
+                              }>
+                              {isDeleting === user.id
+                                ? 'Deleting...'
+                                : 'Delete Account'}
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
