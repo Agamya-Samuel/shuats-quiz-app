@@ -1,7 +1,6 @@
 'use client';
 
 import { Calendar, Trophy } from 'lucide-react';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import {
@@ -75,6 +74,68 @@ const TypingHeading = () => {
     </h1>
   );
 };
+
+// Countdown Calendar Card styled like the event timeline
+const CountdownCalendarCard = () => {
+  const eventDate = new Date('2025-07-12T00:00:00');
+  const [daysLeft, setDaysLeft] = useState<number | null>(null);
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date();
+      const diff = eventDate.getTime() - now.getTime();
+      const days = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+      setDaysLeft(days);
+    };
+    updateCountdown();
+    const timer = setInterval(updateCountdown, 60 * 60 * 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative w-28 md:w-32 bg-white rounded-2xl shadow-lg flex flex-col items-center">
+        {/* Pink gradient top with tabs */}
+        <div className="w-full h-4 rounded-t-2xl bg-gradient-to-r from-pink-400 to-pink-300 flex items-end justify-between px-2 relative">
+          {/* Tabs */}
+          <div className="w-3 h-3 bg-white rounded-b-full absolute left-0 -bottom-1 shadow" />
+          <div className="w-3 h-3 bg-white rounded-b-full absolute right-0 -bottom-1 shadow" />
+        </div>
+        <div className="flex flex-col items-center py-3">
+          <span className="text-xs font-semibold text-gray-500 tracking-widest mb-1">JULY</span>
+          <span className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-1">12</span>
+        </div>
+      </div>
+      <div className="text-center text-sm md:text-base text-gray-600 font-medium mt-2">
+        {daysLeft !== null && (daysLeft > 0 ? `${daysLeft} day${daysLeft !== 1 ? 's' : ''} left` : 'Event is live!')}
+      </div>
+    </div>
+  );
+};
+
+// Timeline Calendar Card for Quiz Timeline
+const TimelineCalendarCard = ({ month, day, label }: { month: string; day: string; label: string }) => (
+  <div className="flex flex-col items-center">
+    <div className="relative w-36 md:w-44 bg-white rounded-2xl shadow-lg flex flex-col items-center">
+      {/* Pink gradient top with scalloped edge */}
+      <div className="w-full h-5 rounded-t-2xl bg-gradient-to-r from-pink-400 to-pink-300 flex items-end justify-between px-0 relative overflow-visible">
+        {/* Scalloped edge: 5 circles */}
+        <div className="absolute left-0 top-full w-full flex justify-between px-4" style={{ transform: 'translateY(-50%)' }}>
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="w-5 h-5 bg-white rounded-full shadow" />
+          ))}
+        </div>
+      </div>
+      <div className="flex flex-col items-center py-5">
+        <span className="text-sm font-semibold text-gray-500 tracking-widest mb-1">{month}</span>
+        <span className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-1">{day}</span>
+      </div>
+    </div>
+    <div className="text-center text-lg md:text-xl text-gray-800 font-medium mt-4">
+      {label}
+    </div>
+  </div>
+);
 
 const TakeQuiz = () => {
   return (
@@ -176,11 +237,11 @@ const TakeQuiz = () => {
             </div>
           </div>
           {/* Buttons inside the card, below the prizes */}
-          <div className="flex flex-col md:flex-row gap-3 w-full justify-center mt-4 mb-0">
+          <div className="flex flex-col gap-3 w-full justify-center mt-4 mb-0">
             <a
               href="/register"
-              className="px-5 py-3 bg-blue-600 text-white font-bold rounded-lg shadow hover:bg-blue-700 hover:shadow-lg hover:scale-[1.02] text-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 ring-offset-2 ring-offset-white glow-btn w-full md:flex-1">
-              Register for Quiz 🏆 Now
+              className="px-5 py-3 bg-[#2563eb] text-white font-bold rounded-lg shadow hover:bg-[#1d4ed8] hover:shadow-lg hover:scale-[1.02] text-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#2563eb] ring-offset-2 ring-offset-white w-full md:flex-1">
+              Register
             </a>
             <a
               href="/syllabus_list"
@@ -190,33 +251,47 @@ const TakeQuiz = () => {
           </div>
         </div>
         {/* Poster Card */}
-        <div className="flex-1 min-w-[290px] max-w-sm w-full md:w-auto aspect-[2/3] flex flex-col justify-start items-center bg-white/60 backdrop-blur-lg rounded-3xl border border-pink-200 transition-transform hover:scale-105 duration-200 p-1 mx-auto mb-8 md:mb-0">
+        <div className="flex-1 min-h-[600px] min-w-[290px] max-w-sm w-full md:w-auto flex flex-col justify-start items-center bg-white/60 backdrop-blur-lg rounded-3xl border border-pink-200 transition-transform hover:scale-105 duration-200 p-1 mx-auto mb-8 md:mb-0">
           <div className="w-full h-full flex flex-col justify-start items-center">
-            <Image
-              src={QuizPoster}
-              alt="Quiz Poster"
-              width={400}
-              height={600}
-              className="object-contain w-full h-full rounded-xl"
-              priority
-            />
-            {/* Important Notice Box */}
-            <div className="w-full bg-white/90 backdrop-blur-sm rounded-xl p-3 md:p-4 mt-3 mb-4 shadow-md flex flex-col items-start px-2">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-yellow-500 text-lg md:text-xl">⚠️</span>
-                <span className="font-bold text-base md:text-lg text-pink-700">
+            {/*Important Notice Box (no poster image) */}
+            <div className="w-full bg-white/90 backdrop-blur-sm rounded-xl p-4 md:p-6 mt-4 mb-4 shadow-md flex flex-col items-start px-2">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-red-600 text-xl md:text-2xl animate-pulse">🚨</span>
+                <span className="font-extrabold text-lg md:text-xl text-pink-700 uppercase tracking-wide drop-shadow-sm">
                   Important Notice
                 </span>
               </div>
-              <ul className="list-disc list-inside text-sm md:text-base text-purple-900 space-y-1 pl-4">
-                <li>The quiz will be enabled on the scheduled quiz day.</li>
-                <li>
-                  Please bring all required documents when collecting your prize.
-                </li>
-                <li>Participants must register before 5th July.</li>
-              </ul>
+              <div className="flex flex-col gap-3 w-full">
+                <div className="bg-gray-100 rounded-2xl shadow px-4 py-3 text-gray-900 font-semibold">
+                  <b>Eligibility:</b> For students who passed Class 12 in 2025.
+                </div>
+                <div className="bg-gray-100 rounded-2xl shadow px-4 py-3 text-gray-900 font-semibold">
+                  <b>Attention:</b> Participants can win Prize Money with Quiz Competition and those who wish to get Admission in B.Tech Computer Science, BCA & BSc Computer Science in SHUATS, Prayagraj also get fee concession as well.
+                </div>
+                <div className="bg-gray-100 rounded-2xl shadow px-4 py-3 text-gray-900 font-semibold">
+                  <b>Free Registration</b>
+                </div>
+                <div className="bg-gray-100 rounded-2xl shadow px-4 py-3 text-gray-900 font-semibold">
+                  <b>Date:</b> 12th July 2025
+                </div>
+                <div className="bg-gray-100 rounded-2xl shadow px-4 py-3 text-gray-900 font-semibold">
+                  <b>Contact:</b> 9935620054, 9335101824
+                </div>
+                <div className="bg-gray-100 rounded-2xl shadow px-4 py-3 text-gray-900 font-semibold">
+                  <b>Organized by:</b> Dept. of Computer Science & IT, SHUATS
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
+      {/* Quiz Timeline Section */}
+      <section className="w-full max-w-3xl mx-auto mt-8 mb-12">
+        <h2 className="text-4xl font-bold text-center mb-10">Quiz Timeline</h2>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
+          <TimelineCalendarCard month="MAY" day="26" label="Enrollment Begins" />
+          <TimelineCalendarCard month="JULY" day="12" label="Quiz is Live" />
+          <TimelineCalendarCard month="JULY" day="15" label="See Result" />
         </div>
       </section>
       <style
