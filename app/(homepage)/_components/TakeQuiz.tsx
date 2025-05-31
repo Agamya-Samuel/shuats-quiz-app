@@ -3,11 +3,6 @@
 import { Calendar, Trophy } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import {
-  QuizPoster,
-  campusTourVideo,
-  campusTourVideo1,
-} from '../../../public/images/index.js';
 import VideoFrame from './VideoFrame';
 
 const prizes = [
@@ -276,6 +271,12 @@ const TakeQuiz = () => {
                 </div>
                 <div className="bg-gray-100 rounded-2xl shadow px-4 py-3 text-gray-900 font-semibold">
                   <b>Contact:</b> 9935620054, 9335101824
+                </div>
+                <div className="bg-gray-100 rounded-2xl shadow px-4 py-3 text-gray-900 font-semibold">
+                  <b>Quiz Time:</b> Quiz will be enable on day of Quiz
+                </div>
+                <div className="bg-gray-100 rounded-2xl shadow px-4 py-3 text-gray-900 font-semibold">
+                  <b>Attention:</b> Original Documents will be required at the time of prize distribution
                 </div>
                 <div className="bg-gray-100 rounded-2xl shadow px-4 py-3 text-gray-900 font-semibold">
                   <b>Organized by:</b> Dept. of Computer Science & IT, SHUATS
