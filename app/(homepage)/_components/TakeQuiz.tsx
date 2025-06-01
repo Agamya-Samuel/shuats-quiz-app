@@ -151,8 +151,8 @@ const TakeQuiz = () => {
         id="quiz"
         className="relative w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center md:items-stretch justify-center gap-8 px-2 py-5">
         {/* Video Card */}
-        <div className="flex-1 min-w-[290px] max-w-sm w-full md:w-auto min-h-[600px] flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-blue-200 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(80,80,255,0.15)] duration-200 p-1 mx-auto">
-          <div className="w-full p-3 flex-1 flex flex-col gap-4 items-center justify-center">
+        <div className="flex-1 min-w-[290px] max-w-sm w-full md:w-auto flex flex-col justify-center items-center bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl border border-blue-200 transition-transform hover:scale-105 hover:shadow-[0_8px_40px_rgba(80,80,255,0.15)] duration-200 p-1 mx-auto">
+          <div className="w-full p-3 flex flex-col gap-4 items-center">
             <div className="w-full">
               <VideoFrame filter="landscape" />
             </div>
@@ -246,7 +246,7 @@ const TakeQuiz = () => {
           </div>
         </div>
         {/* Poster Card */}
-        <div className="flex-1 min-h-[600px] min-w-[290px] max-w-sm w-full md:w-auto flex flex-col justify-start items-center bg-white/60 backdrop-blur-lg rounded-3xl border border-pink-200 transition-transform hover:scale-105 duration-200 p-1 mx-auto mb-8 md:mb-0">
+        <div className="flex-1 min-w-[290px] max-w-sm w-full md:w-auto flex flex-col justify-start items-center bg-white/60 backdrop-blur-lg rounded-3xl border border-pink-200 transition-transform hover:scale-105 duration-200 p-1 mx-auto mb-8 md:mb-0">
           <div className="w-full h-full flex flex-col justify-start items-center">
             {/*Important Notice Box (no poster image) */}
             <div className="w-full bg-white/90 backdrop-blur-sm rounded-xl p-4 md:p-6 mt-4 mb-4 shadow-md flex flex-col items-start px-2">
@@ -265,9 +265,6 @@ const TakeQuiz = () => {
                 </div>
                 <div className="bg-gray-100 rounded-2xl shadow px-4 py-3 text-gray-900 font-semibold">
                   <b>Free Registration</b>
-                </div>
-                <div className="bg-gray-100 rounded-2xl shadow px-4 py-3 text-gray-900 font-semibold">
-                  <b>Date:</b> 12th July 2025
                 </div>
                 <div className="bg-gray-100 rounded-2xl shadow px-4 py-3 text-gray-900 font-semibold">
                   <b>Contact:</b> 9935620054, 9335101824
