@@ -1,4 +1,3 @@
-// import jwt from 'jsonwebtoken';
 import * as jose from 'jose';
 import { UserJwtPayload, ForgotPasswordData } from '@/types/user';
 import { AdminJwtPayload } from '@/types/admin';
