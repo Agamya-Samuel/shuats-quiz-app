@@ -88,6 +88,7 @@ export async function registerUser({
             name,
             branch,
             addressId: newAddress.id,
+            isOAuthAccount: false,
           })
           .returning({
             id: users.id,
@@ -193,6 +194,24 @@ export async function loginUser({
     // If user doesn't exist, return an error
     if (!user) {
       return { success: false, message: 'User not found' };
+    }
+
+    // Check if it's an OAuth account
+    if (user.isOAuthAccount) {
+      return {
+        success: false,
+        message:
+          'This account was created using Google Sign-In. Please log in with Google.',
+      };
+    }
+
+    // If password is null for a non-OAuth account (should not happen with current logic, but good to check)
+    if (user.password === null) {
+      console.error(`User ${user.email} (non-OAuth) has null password.`);
+      return {
+        success: false,
+        message: 'Invalid account state. Please contact support.',
+      };
     }
 
     // Verify the password
@@ -632,6 +651,104 @@ export async function getUserProfilePicture(userId: number) {
     return {
       success: false,
       message: `Error fetching user profile picture: ${error}`,
+    };
+  }
+}
+
+// Complete user profile after Google Sign-Up
+export async function completeUserProfile({
+  mobile,
+  rollno,
+  school,
+  branch,
+  address,
+}: {
+  mobile: string;
+  rollno: string;
+  school: string;
+  branch: string;
+  address: AddressData;
+}) {
+  try {
+    const authPayload = await verifyAuth();
+
+    // Check if the payload exists and is a standard user with a userId
+    if (
+      !authPayload ||
+      !('userId' in authPayload) ||
+      authPayload.role !== 'user'
+    ) {
+      return {
+        success: false,
+        message: 'User not authenticated or invalid role.',
+        error: 'Authentication failed',
+      };
+    }
+
+    const userId = authPayload.userId;
+
+    const db = (await connectToDB()) as unknown as NodePgDatabase<
+      typeof dbSchema
+    >;
+
+    // Use a transaction to ensure both address and user are saved/updated
+    const result = await db.transaction(async (tx) => {
+      // Create address first
+      const [newAddress] = await tx
+        .insert(addresses)
+        .values({
+          country: address.country,
+          address1: address.address1,
+          address2: address.address2 || null,
+          area: address.area,
+          city: address.city,
+          pincode: address.pincode,
+          state: address.state,
+        })
+        .returning({ id: addresses.id });
+
+      if (!newAddress || !newAddress.id) {
+        throw new Error('Failed to create address.');
+      }
+
+      // Update user with the new addressId and other details
+      const [updatedUser] = await tx
+        .update(users)
+        .set({
+          mobile,
+          school,
+          rollno,
+          branch,
+          addressId: newAddress.id,
+          updatedAt: new Date(),
+        })
+        .where(eq(users.id, userId))
+        .returning({
+          id: users.id,
+          email: users.email,
+          name: users.name,
+        });
+
+      if (!updatedUser) {
+        throw new Error('Failed to update user profile.');
+      }
+
+      return { success: true, user: updatedUser };
+    });
+
+    return {
+      success: true,
+      message: 'Profile completed successfully',
+      user: result.user,
+    };
+  } catch (error) {
+    console.error('Error completing user profile:', error);
+    return {
+      success: false,
+      message: `Failed to complete profile: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+      error: error instanceof Error ? error.message : String(error),
     };
   }
 }
