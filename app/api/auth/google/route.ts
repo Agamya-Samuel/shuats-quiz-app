@@ -6,6 +6,7 @@ import { NextResponse } from 'next/server';
 
 import { connectToDB } from '@/db';
 import { addresses, uploadFiles, users } from '@/db/schema';
+import { sendRegistrationEmail } from '@/lib/email';
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -121,6 +122,26 @@ export async function POST(request: Request) {
       }
       const newDbUser = newUserResult[0];
       userIdToUse = newDbUser.id; // Capture userId
+
+      // Send welcome email to new OAuth user
+      try {
+        const emailSent = await sendRegistrationEmail(
+          newDbUser.email,
+          newDbUser.name,
+        );
+        if (!emailSent) {
+          console.error(
+            `Failed to send registration email to new OAuth user: ${newDbUser.email}`,
+          );
+          // Non-fatal, continue flow
+        }
+      } catch (emailError) {
+        console.error(
+          `Error sending registration email to new OAuth user ${newDbUser.email}:`,
+          emailError,
+        );
+        // Non-fatal, continue flow
+      }
 
       // Generate JWT for new user using jose
       sessionToken = await new jose.SignJWT({
