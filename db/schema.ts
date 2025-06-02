@@ -49,6 +49,12 @@ export const users = pgTable('users', {
   rollno: varchar('rollno', { length: 50 }).notNull(),
   branch: varchar('branch', { length: 100 }).notNull(),
   isOAuthAccount: boolean('is_oauth_account').default(false).notNull(),
+  profileStage1Completed: boolean('profile_stage1_completed')
+    .default(false)
+    .notNull(),
+  profileStage2Completed: boolean('profile_stage2_completed')
+    .default(false)
+    .notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
