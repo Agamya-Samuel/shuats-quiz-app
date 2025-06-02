@@ -89,6 +89,7 @@ export async function registerUser({
             branch,
             addressId: newAddress.id,
             isOAuthAccount: false,
+            profileStage1Completed: true,
           })
           .returning({
             id: users.id,
@@ -98,6 +99,9 @@ export async function registerUser({
             school: users.school,
             rollno: users.rollno,
             branch: users.branch,
+            isOAuthAccount: users.isOAuthAccount,
+            profileStage1Completed: users.profileStage1Completed,
+            profileStage2Completed: users.profileStage2Completed,
           });
 
         return {
@@ -259,6 +263,9 @@ export async function loginUser({
         rollno: user.rollno,
         branch: user.branch,
         address: user.address as AddressData,
+        isOAuthAccount: user.isOAuthAccount,
+        profileStage1Completed: user.profileStage1Completed,
+        profileStage2Completed: user.profileStage2Completed,
       },
     };
   } catch (error) {
@@ -740,6 +747,7 @@ export async function completeUserProfile({
           rollno,
           branch,
           addressId: newAddress.id,
+          profileStage1Completed: true,
           updatedAt: new Date(),
         })
         .where(eq(users.id, userId))
@@ -747,6 +755,8 @@ export async function completeUserProfile({
           id: users.id,
           email: users.email,
           name: users.name,
+          profileStage1Completed: users.profileStage1Completed,
+          profileStage2Completed: users.profileStage2Completed,
         });
 
       if (!updatedUser) {
@@ -769,6 +779,107 @@ export async function completeUserProfile({
         error instanceof Error ? error.message : String(error)
       }`,
       error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+// New action to check and mark profile stage 2 completion
+export async function checkAndMarkStage2Completed() {
+  try {
+    const authPayload = await verifyAuth();
+    if (
+      !authPayload ||
+      !('userId' in authPayload) ||
+      authPayload.role !== 'user'
+    ) {
+      return {
+        success: false,
+        message: 'User not authenticated or invalid role.',
+        stage2Completed: false,
+      };
+    }
+    const userId = authPayload.userId;
+
+    const db = (await connectToDB()) as unknown as NodePgDatabase<
+      typeof dbSchema
+    >;
+
+    // Get the user's current stage 2 status first
+    const currentUser = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+      columns: { profileStage2Completed: true },
+    });
+
+    if (!currentUser) {
+      return {
+        success: false,
+        message: 'User not found.',
+        stage2Completed: false,
+      };
+    }
+
+    // If already completed, no need to re-check or update
+    if (currentUser.profileStage2Completed) {
+      return {
+        success: true,
+        message: 'Stage 2 already completed.',
+        stage2Completed: true,
+      };
+    }
+
+    const uploadedDocs = await db.query.uploadFiles.findMany({
+      where: eq(uploadFiles.userId, userId),
+      columns: {
+        documentType: true,
+      },
+    });
+
+    const uploadedDocTypes = new Set(
+      uploadedDocs.map((doc) => doc.documentType),
+    );
+
+    // Updated list of required document types for Stage 2 completion
+    const requiredDocTypes = [
+      'aadhar',
+      '10th_marksheet',
+      '12th_marksheet',
+      'profile_pic',
+    ];
+
+    let allRequiredDocsPresent = true;
+    for (const docType of requiredDocTypes) {
+      if (!uploadedDocTypes.has(docType)) {
+        allRequiredDocsPresent = false;
+        break;
+      }
+    }
+
+    if (allRequiredDocsPresent) {
+      await db
+        .update(users)
+        .set({ profileStage2Completed: true, updatedAt: new Date() })
+        .where(eq(users.id, userId));
+      return {
+        success: true,
+        message: 'Profile Stage 2 completed.',
+        stage2Completed: true,
+      };
+    }
+
+    return {
+      success: false,
+      message:
+        'All required documents for Stage 2 are not yet uploaded or verified.',
+      stage2Completed: false,
+    };
+  } catch (error) {
+    console.error('Error checking/marking Stage 2 completion:', error);
+    return {
+      success: false,
+      message: `Error processing Stage 2 completion: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+      stage2Completed: false,
     };
   }
 }
