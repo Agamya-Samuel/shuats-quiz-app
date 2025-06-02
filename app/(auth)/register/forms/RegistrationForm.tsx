@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { City, Country, State } from 'country-state-city';
 import {
   AlertCircle,
@@ -45,6 +46,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useCookies } from '@/contexts/cookie-context';
 import { useToast } from '@/hooks/use-toast';
 import { registrationSchema } from '@/schemas/forms/registration-schema';
 import type { AddressData } from '@/types/user';
@@ -146,6 +148,7 @@ const getStrengthLabel = (strength: number): string => {
 export function RegistrationForm() {
   const { toast } = useToast();
   const router = useRouter();
+  const { updateUser } = useCookies();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -210,6 +213,81 @@ export function RegistrationForm() {
   // Manual tab change handler
   const handleManualTabChange = (value: string) => {
     setActiveTab(value);
+  };
+
+  const handleGoogleSuccess = async (
+    credentialResponse: CredentialResponse,
+  ) => {
+    setIsLoading(true);
+    // Send the credentialResponse.credential (ID token) to your backend
+    // This will be handled in the next step (creating the API route)
+    console.log('Google Sign-In Success:', credentialResponse);
+    // Example: await googleSignIn(credentialResponse.credential);
+    // For now, just log and show a toast
+    try {
+      const response = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: credentialResponse.credential }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast({
+          title: 'Google Sign-In Successful',
+          description: data.profileComplete
+            ? 'Welcome back!'
+            : 'Please complete your profile.',
+          variant: 'success',
+        });
+        // Update user context before redirecting
+        if (data.user) {
+          updateUser({
+            userId: data.user.id, // Assuming API returns user.id
+            name: data.user.name,
+            email: data.user.email,
+            picture: data.user.picture,
+            role: 'user', // Or derive from API response if available
+            // Add other fields if returned and needed in context immediately
+          });
+        }
+
+        if (data.profileComplete) {
+          router.push('/user/quiz'); // Or wherever your dashboard is
+        } else {
+          router.push('/user/complete-profile');
+        }
+      } else {
+        toast({
+          title: 'Google Sign-In Failed',
+          description: data.message || 'Could not sign in with Google.',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Google Sign-In error:', error);
+      toast({
+        title: 'Google Sign-In Error',
+        description: 'An unexpected error occurred during Google Sign-In.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    console.error('Google Sign-In Error');
+    toast({
+      title: 'Google Sign-In Failed',
+      description:
+        'There was an error signing in with Google. Please try again.',
+      variant: 'destructive',
+    });
+    setIsLoading(false);
   };
 
   // Inside RegistrationForm, get the country list once (memoized)
@@ -369,11 +447,32 @@ export function RegistrationForm() {
             Create Your Account
           </CardTitle>
           <CardDescription>
-            Fill in your details to register for a new account
+            Fill in your details to register for a new account or use Google to
+            sign up.
           </CardDescription>
         </CardHeader>
 
         <CardContent>
+          <div className="flex flex-col items-center mb-6">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+              shape="rectangular"
+              logo_alignment="center"
+              width="300px"
+            />
+          </div>
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">
+                Or continue with email
+              </span>
+            </div>
+          </div>
+
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -793,6 +892,11 @@ export function RegistrationForm() {
               Privacy Policy
             </Link>
           </p>
+          {isLoading && (
+            <div className="absolute inset-0 bg-white/50 flex items-center justify-center">
+              <LoadingSpinner />
+            </div>
+          )}
         </CardFooter>
       </Card>
     </div>
