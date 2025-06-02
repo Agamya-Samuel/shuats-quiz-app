@@ -60,18 +60,19 @@ export async function POST(request: Request) {
     let sessionToken;
     let profileComplete = false;
     let userIdToUse: number | undefined;
+    let userDbRecord: typeof users.$inferSelect | undefined;
 
     if (user && user.length > 0) {
       // User exists
-      const existingUser = user[0].users;
-      userIdToUse = existingUser.id; // Capture userId
+      userDbRecord = user[0].users;
+      userIdToUse = userDbRecord.id;
       const existingAddress = user[0].addresses;
 
       // Generate JWT using jose
       sessionToken = await new jose.SignJWT({
-        userId: existingUser.id,
-        email: existingUser.email,
-        name: existingUser.name,
+        userId: userDbRecord.id,
+        email: userDbRecord.email,
+        name: userDbRecord.name,
         picture,
         role: 'user', // Assuming role for user
       })
@@ -82,19 +83,21 @@ export async function POST(request: Request) {
 
       // Check profile completeness
       profileComplete = !!(
-        existingUser.mobile &&
-        existingUser.school &&
-        existingUser.rollno &&
-        existingUser.branch &&
-        existingUser.addressId &&
+        userDbRecord.mobile &&
+        userDbRecord.school &&
+        userDbRecord.rollno &&
+        userDbRecord.branch &&
+        userDbRecord.addressId &&
         existingAddress
       );
     } else {
       // User does not exist, create new user
       // ! TODO: Fix this, remove the unique suffix
       // Generate a unique placeholder suffix, e.g., based on timestamp or a short random string
-      const uniqueSuffix =
-        Date.now().toString(36) + Math.random().toString(36).substring(2, 5);
+      const timestampSuffix = Date.now().toString(36);
+      // Use a shorter suffix for mobile to fit within varchar(15)
+      // Prefix "om_" (3 chars) + suffix (e.g., 6 chars) = 9 chars. Well within 15.
+      const shortMobileSuffix = timestampSuffix.slice(-6);
 
       const newUserResult = await db
         .insert(users)
@@ -105,11 +108,15 @@ export async function POST(request: Request) {
           // For NOT NULL fields, provide placeholders that user must update.
           // Ensure these placeholders are handled/validated during profile completion.
           // For unique fields like mobile, these placeholders must be unique.
-          mobile: `oauth_mobile_${uniqueSuffix}`,
+          mobile: `om_${shortMobileSuffix}`,
           school: 'OAuth User - School Needed',
-          rollno: `oauth_rollno_${uniqueSuffix}`,
+          // Keep original suffix for rollno if its length is not an issue, or shorten it too.
+          // Assuming rollno varchar(50) is fine with the longer suffix.
+          rollno: `oauth_rollno_${timestampSuffix}${Math.random().toString(36).substring(2, 5)}`,
           branch: 'OAuth User - Branch Needed',
           isOAuthAccount: true, // Mark as OAuth account
+          profileStage1Completed: false, // Explicitly set for clarity
+          profileStage2Completed: false, // Explicitly set for clarity
           // addressId will be null initially and handled during profile completion
         })
         .returning();
@@ -122,6 +129,7 @@ export async function POST(request: Request) {
       }
       const newDbUser = newUserResult[0];
       userIdToUse = newDbUser.id; // Capture userId
+      userDbRecord = newDbUser; // Store the new user record
 
       // Send welcome email to new OAuth user
       try {
@@ -201,11 +209,12 @@ export async function POST(request: Request) {
       profileComplete,
       token: sessionToken, // Sending token in response for client-side handling if needed, though cookie is set
       user: {
-        id: userIdToUse, // Use the consistently named variable
+        id: userIdToUse,
         email,
         name,
         picture,
-        // Potentially add role here too if needed by the client immediately
+        profileStage1Completed: userDbRecord?.profileStage1Completed,
+        profileStage2Completed: userDbRecord?.profileStage2Completed,
       },
     });
   } catch (error) {
