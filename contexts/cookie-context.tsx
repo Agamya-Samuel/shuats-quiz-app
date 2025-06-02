@@ -26,6 +26,9 @@ export interface UserContextData {
   // Admin and SuperAdmin specific fields
   username?: string;
   picture?: string; // Added for Google Sign-In user
+  isOAuthAccount?: boolean;
+  profileStage1Completed?: boolean;
+  profileStage2Completed?: boolean;
 }
 
 interface CookieContextType {
