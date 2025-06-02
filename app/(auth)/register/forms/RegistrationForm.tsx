@@ -77,6 +77,8 @@ interface RegisterResponse {
       pincode: string;
       state: string;
     };
+    profileStage1Completed: boolean;
+    profileStage2Completed: boolean;
   };
   autoLogin?: boolean;
 }
@@ -246,11 +248,14 @@ export function RegistrationForm() {
         // Update user context before redirecting
         if (data.user) {
           updateUser({
-            userId: data.user.id, // Assuming API returns user.id
+            userId: data.user.id,
             name: data.user.name,
             email: data.user.email,
             picture: data.user.picture,
             role: 'user', // Or derive from API response if available
+            isOAuthAccount: true, // Google sign-in is OAuth
+            profileStage1Completed: data.user.profileStage1Completed,
+            profileStage2Completed: data.user.profileStage2Completed,
             // Add other fields if returned and needed in context immediately
           });
         }
