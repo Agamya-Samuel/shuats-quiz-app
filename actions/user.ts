@@ -491,9 +491,20 @@ export async function forgotPassword(formData: FormData) {
       where: eq(users.email, email),
     });
 
-    // If user not found, still return success to prevent email enumeration
-    if (!user) {
-      return { success: true, message: 'Email sent successfully' };
+    // If user not found, or if it's an OAuth account, return success to prevent email enumeration
+    // but don't send a reset email for OAuth accounts.
+    if (!user || user.isOAuthAccount) {
+      if (user && user.isOAuthAccount) {
+        console.log(
+          `Password reset attempt for OAuth user: ${email}. No email sent.`,
+        );
+        // Optionally, send a specific email to the user explaining this.
+      }
+      return {
+        success: true,
+        message:
+          'If an account with that email exists, a password reset link has been sent.',
+      };
     }
 
     // Create reset token payload
@@ -596,6 +607,15 @@ export async function resetPassword(token: string, formData: FormData) {
       return {
         success: false,
         message: 'User not found. Please request a new reset link.',
+      };
+    }
+
+    // Prevent password reset for OAuth accounts
+    if (existingUser.isOAuthAccount) {
+      return {
+        success: false,
+        message:
+          'Password reset is not available for accounts created with Google Sign-In.',
       };
     }
 
