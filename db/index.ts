@@ -1,22 +1,24 @@
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
+
 import { runMigrations } from './migrate';
-import { initDb } from './query';
+import { initDb, createTable as pgCreateTable } from './query';
 import * as schema from './schema';
 
 // Define globals for persistent connections across serverless function invocations
 // Using var is required for global declarations in TypeScript
 declare global {
-	// eslint-disable-next-line no-var
-	var __db_connection_pool: Pool | undefined;
-	// eslint-disable-next-line no-var
-	var __db_migrations_applied: boolean | undefined;
+  // eslint-disable-next-line no-var
+  var __db_connection_pool: Pool | undefined;
+  // eslint-disable-next-line no-var
+  var __db_migrations_applied: boolean | undefined;
 }
 
 export function getConnectionPool(): Pool {
-	if (!global.__db_connection_pool) {
-		if (!process.env.DATABASE_URL) {
-			throw new Error('DATABASE_URL environment variable is not defined');
-		}
+  if (!global.__db_connection_pool) {
+    if (!process.env.DATABASE_URL) {
+      throw new Error('DATABASE_URL environment variable is not defined');
+    }
 
     let poolConfig: any = {
       connectionString: process.env.DATABASE_URL,
@@ -49,60 +51,62 @@ export function getConnectionPool(): Pool {
     global.__db_connection_pool = new Pool(poolConfig);
   }
 
-	return global.__db_connection_pool;
+  return global.__db_connection_pool;
 }
 
-// Re-export schema
-export { schema };
+// Initialize and export the db instance with schema for querying
+const pool = getConnectionPool();
+export const db: NodePgDatabase<typeof schema> = initDb(pool);
 
-// Export db for convenience
-export * from './query';
+// Re-export schema and other specific utilities from ./query if needed
+export { schema };
+export { pgCreateTable };
 
 /**
  * Initialize the database connection and run migrations.
- * This should be called only once during application startup.
+ * This should return the schema-aware db instance.
  */
-export async function initializeDB() {
-	try {
-		// Get the connection pool
-		const pool = getConnectionPool();
+export async function initializeDB(): Promise<NodePgDatabase<typeof schema>> {
+  try {
+    // Get the connection pool
+    const pool = getConnectionPool();
 
-		// Test the connection
-		await pool.query('SELECT NOW()');
+    // Test the connection
+    await pool.query('SELECT NOW()');
 
-		if (process.env.NODE_ENV === 'development') {
-			console.log('Database connected successfully (global connection)');
-		}
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Database connected successfully (global connection)');
+    }
 
-		// Run migrations only once
-		if (!global.__db_migrations_applied) {
-			await runMigrations(pool);
-			global.__db_migrations_applied = true;
-			console.log(
-				'Database migrations applied (tracked in global state)'
-			);
-		}
+    // Run migrations only once
+    if (!global.__db_migrations_applied) {
+      await runMigrations(pool);
+      global.__db_migrations_applied = true;
+      console.log('Database migrations applied (tracked in global state)');
+    }
 
-		// Initialize and return the db
-		return initDb(pool);
-	} catch (error) {
-		console.error('Database connection failed:', error);
+    // Return the already initialized and typed 'db' instance from this module
+    return db;
+  } catch (error) {
+    console.error('Database connection failed:', error);
 
-		// Graceful exit in case of a connection error
-		process.exit(1);
-	}
+    // Graceful exit in case of a connection error
+    process.exit(1);
+  }
 }
 
 /**
  * Get the database connection for regular requests.
- * Uses the existing connection pool without re-running migrations.
+ * Returns the schema-aware db instance.
  */
-export async function connectToDB() {
-	// If we haven't initialized yet, do the full initialization
-	if (!global.__db_connection_pool || !global.__db_migrations_applied) {
-		return initializeDB();
-	}
+export async function connectToDB(): Promise<NodePgDatabase<typeof schema>> {
+  // If we haven't initialized yet, do the full initialization
+  if (!global.__db_connection_pool || !global.__db_migrations_applied) {
+    // Ensure initializeDB also uses/returns the same 'db' instance or a compatible one
+    return initializeDB();
+  }
 
-	// Otherwise, just return the existing db connection
-	return initDb(global.__db_connection_pool);
+  // Otherwise, just return the existing db connection
+  // This should ideally return the same 'db' instance for consistency
+  return db;
 }
