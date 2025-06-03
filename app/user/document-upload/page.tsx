@@ -1,12 +1,15 @@
 'use client';
 
 import { FileText, Upload } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { getUserDocuments } from '@/actions/upload';
 import GlobalLoading from '@/components/global-loading';
+import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCookies } from '@/contexts/cookie-context';
@@ -271,7 +274,7 @@ export default function DocumentUploadPage() {
                     aadhar: {
                       ...documentStatus.aadhar,
                       uploaded: true,
-                      verified: false,
+                      verified: true,
                       rejected: false,
                       rejectionReason: '',
                       fileUrl: status.fileUrl,
@@ -302,7 +305,7 @@ export default function DocumentUploadPage() {
                     marksheet10: {
                       ...documentStatus.marksheet10,
                       uploaded: true,
-                      verified: false,
+                      verified: true,
                       rejected: false,
                       rejectionReason: '',
                       fileUrl: status.fileUrl,
@@ -333,7 +336,7 @@ export default function DocumentUploadPage() {
                     marksheet12: {
                       ...documentStatus.marksheet12,
                       uploaded: true,
-                      verified: false,
+                      verified: true,
                       rejected: false,
                       rejectionReason: '',
                       fileUrl: status.fileUrl,
@@ -365,7 +368,7 @@ export default function DocumentUploadPage() {
                     photo: {
                       ...documentStatus.photo,
                       uploaded: true,
-                      verified: false,
+                      verified: true,
                       rejected: false,
                       rejectionReason: '',
                       // Add timestamp to prevent browser caching
@@ -414,6 +417,26 @@ export default function DocumentUploadPage() {
                 }
               }}
             />
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <Link
+              href="/user/quiz"
+              passHref>
+              <Button
+                variant="default"
+                size="lg"
+                disabled={
+                  !documentStatus.aadhar.verified ||
+                  !documentStatus.marksheet10.verified ||
+                  !documentStatus.marksheet12.verified ||
+                  !documentStatus.photo.verified
+                }
+                className="bg-green-600 hover:bg-green-700">
+                Continue to Quiz
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
           </div>
 
           <div className="mt-6">
