@@ -739,7 +739,9 @@ export async function completeUserProfile({
       }
 
       // Update user with the new addressId and other details
-      const [updatedUser] = await tx
+      // We don't need the returning values from this specific update anymore,
+      // as we will fetch the full user object next.
+      await tx
         .update(users)
         .set({
           mobile,
@@ -750,20 +752,91 @@ export async function completeUserProfile({
           profileStage1Completed: true,
           updatedAt: new Date(),
         })
-        .where(eq(users.id, userId))
-        .returning({
-          id: users.id,
-          email: users.email,
-          name: users.name,
-          profileStage1Completed: users.profileStage1Completed,
-          profileStage2Completed: users.profileStage2Completed,
-        });
+        .where(eq(users.id, userId));
 
-      if (!updatedUser) {
-        throw new Error('Failed to update user profile.');
+      // Fetch the complete updated user record to ensure all data is fresh for the token
+      const fullyUpdatedUser = await tx.query.users.findFirst({
+        where: eq(users.id, userId),
+        with: {
+          address: true, // Ensure address is also fetched if needed for the token/response
+        },
+      });
+
+      if (!fullyUpdatedUser) {
+        throw new Error('Failed to retrieve updated user profile.');
       }
 
-      return { success: true, user: updatedUser };
+      // Ensure the address data is in the expected format for the JWT payload
+      const userAddressForToken: AddressData = fullyUpdatedUser.address
+        ? {
+            // Ensure id is handled correctly: if db returns number | null, map to number | undefined for AddressData.id?
+            id: fullyUpdatedUser.address.id ?? undefined,
+            // For fields expected as string in AddressData, convert null from DB to empty string ''
+            country: fullyUpdatedUser.address.country ?? '',
+            address1: fullyUpdatedUser.address.address1 ?? '',
+            // For fields expected as string? (string | undefined) in AddressData, convert null from DB to undefined
+            address2: fullyUpdatedUser.address.address2 ?? undefined,
+            area: fullyUpdatedUser.address.area ?? '',
+            city: fullyUpdatedUser.address.city ?? '',
+            pincode: fullyUpdatedUser.address.pincode ?? '',
+            state: fullyUpdatedUser.address.state ?? '',
+          }
+        : {
+            // Default structure when no address is linked, ensuring conformity with AddressData
+            id: undefined,
+            country: '',
+            address1: '',
+            address2: undefined,
+            area: '',
+            city: '',
+            pincode: '',
+            state: '',
+          };
+
+      // Create new token payload with all updated user data
+      const newTokenPayload: UserJwtPayload = {
+        userId: fullyUpdatedUser.id,
+        role: 'user', // Assuming 'user' role, adjust if role can change or is dynamic
+        name: fullyUpdatedUser.name,
+        email: fullyUpdatedUser.email, // Email should already be in authPayload but good to have from DB
+        mobile: fullyUpdatedUser.mobile,
+        school: fullyUpdatedUser.school,
+        rollno: fullyUpdatedUser.rollno,
+        branch: fullyUpdatedUser.branch,
+        address: userAddressForToken,
+        isOAuthAccount: fullyUpdatedUser.isOAuthAccount, // Include OAuth status
+        profileStage1Completed: fullyUpdatedUser.profileStage1Completed,
+        profileStage2Completed: fullyUpdatedUser.profileStage2Completed,
+      };
+
+      // Generate new token
+      const token = await generateToken(newTokenPayload);
+
+      // Update cookie with new token
+      await setCookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: '/',
+      });
+
+      // The user object to return in the response
+      // This should match what the client expects
+      const returnedUserObject = {
+        id: fullyUpdatedUser.id,
+        name: fullyUpdatedUser.name,
+        email: fullyUpdatedUser.email,
+        mobile: fullyUpdatedUser.mobile,
+        school: fullyUpdatedUser.school,
+        rollno: fullyUpdatedUser.rollno,
+        branch: fullyUpdatedUser.branch,
+        address: userAddressForToken,
+        isOAuthAccount: fullyUpdatedUser.isOAuthAccount,
+        profileStage1Completed: fullyUpdatedUser.profileStage1Completed,
+        profileStage2Completed: fullyUpdatedUser.profileStage2Completed,
+      };
+
+      return { success: true, user: returnedUserObject };
     });
 
     return {
