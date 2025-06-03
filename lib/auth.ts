@@ -49,7 +49,7 @@ export interface UserSessionPayload {
   userId: number;
   email: string;
   name: string;
-  role: string;
+  role: 'user' | 'admin' | 'superadmin';
   picture?: string; // Optional based on your JWT payload
   // Add other fields you put in the JWT
   [key: string]: any;
