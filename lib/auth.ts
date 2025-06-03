@@ -50,8 +50,8 @@ export interface UserSessionPayload {
   email: string;
   name: string;
   role: 'user' | 'admin' | 'superadmin';
-  picture?: string; // Optional based on your JWT payload
-  // Add other fields you put in the JWT
+  username?: string;
+  picture?: string;
   [key: string]: any;
 }
 
