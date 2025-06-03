@@ -1,77 +1,99 @@
 // app/user/quiz/page.tsx
-'use client';
+import { eq } from 'drizzle-orm';
+import { redirect } from 'next/navigation';
 
 import QuizInterface from '@/app/user/quiz/_components/quiz-interface';
-import { useCookies } from '@/contexts/cookie-context';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import GlobalLoading from '@/components/global-loading';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { db } from '@/db';
+import { uploadFiles, users } from '@/db/schema';
+import { UserSessionPayload, getUserSession } from '@/lib/auth';
 
-export default function QuizPage() {
-	const { user: currentUser } = useCookies();
-	const router = useRouter();
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
+const REQUIRED_DOCUMENT_TYPES = [
+  'profile_pic',
+  'aadhar',
+  '10th_marksheet',
+  '12th_marksheet',
+];
 
-	// Redirect to login if user is not authenticated
-	useEffect(() => {
-		try {
-			if (!currentUser?.userId) {
-				router.push('/login');
-			} else {
-				setLoading(false);
-			}
-		} catch (err) {
-			console.error('Error in authentication check:', err);
-			setError(
-				'There was a problem checking your login status. Please try refreshing the page.'
-			);
-			setLoading(false);
-		}
-	}, [currentUser?.userId, router]);
+export default async function QuizPage() {
+  const session: UserSessionPayload | null = await getUserSession();
 
-	// Error fallback
-	if (error) {
-		return (
-			<div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-				<Card className="w-full max-w-md">
-					<CardContent className="p-6">
-						<div className="text-center">
-							<h2 className="text-xl font-semibold mb-4">
-								Error
-							</h2>
-							<p className="text-muted-foreground mb-6">
-								{error}
-							</p>
-							<Button
-								onClick={() => window.location.reload()}
-								className="mr-2"
-							>
-								Refresh Page
-							</Button>
-							<Button
-								variant="outline"
-								onClick={() => router.push('/user')}
-							>
-								Return to Dashboard
-							</Button>
-						</div>
-					</CardContent>
-				</Card>
-			</div>
-		);
-	}
+  if (!session || !session.userId) {
+    console.log('QuizPage: No session or userId, redirecting to /login');
+    redirect('/login');
+  }
 
-	// If user is not authenticated, show loading while redirecting
-	if (loading) {
-		return <GlobalLoading />;
-	}
+  let userProfile;
+  try {
+    userProfile = await db.query.users.findFirst({
+      where: eq(users.id, session.userId),
+      columns: {
+        profileStage1Completed: true,
+        // profileStage2Completed is no longer directly used here for quiz access
+      },
+    });
+  } catch (dbError) {
+    console.error('QuizPage: Database error fetching user profile:', dbError);
+    redirect('/login?error=db_error');
+  }
 
-	return (
-		<div className="bg-gray-50 min-h-[calc(100vh-111px)]">
-			<QuizInterface />
-		</div>
-	);
+  if (!userProfile) {
+    console.log(
+      `QuizPage: User profile not found for userId: ${session.userId}, redirecting to /login`,
+    );
+    redirect('/login?error=user_not_found');
+  }
+
+  if (!userProfile.profileStage1Completed) {
+    console.log(
+      `QuizPage: Profile stage 1 not complete for userId: ${session.userId}, redirecting to /user/complete-profile`,
+    );
+    redirect('/user/complete-profile');
+  }
+
+  // If profile stage 1 is complete, check for required documents
+  let uploadedUserDocuments;
+  try {
+    uploadedUserDocuments = await db.query.uploadFiles.findMany({
+      where: eq(uploadFiles.userId, session.userId),
+      columns: {
+        documentType: true,
+        verified: true, // We should check if they are verified as per your previous change
+      },
+    });
+  } catch (dbError) {
+    console.error('QuizPage: Database error fetching user documents:', dbError);
+    redirect('/login?error=db_docs_error');
+  }
+
+  // Define an interface for the shape of documents we expect from the query
+  interface QueriedUploadFile {
+    documentType: string;
+    verified: boolean | null;
+  }
+
+  const verifiedUploadedTypes = (
+    uploadedUserDocuments || ([] as QueriedUploadFile[])
+  )
+    .filter((doc: QueriedUploadFile) => doc.verified === true) // Explicitly check for true
+    .map((doc: QueriedUploadFile) => doc.documentType);
+  const hasAllRequiredDocuments = REQUIRED_DOCUMENT_TYPES.every(
+    (requiredType) => verifiedUploadedTypes.includes(requiredType),
+  );
+
+  if (!hasAllRequiredDocuments) {
+    console.log(
+      `QuizPage: Not all required documents uploaded/verified for userId: ${session.userId}. Missing: ${REQUIRED_DOCUMENT_TYPES.filter((rt) => !verifiedUploadedTypes.includes(rt)).join(', ')}. Redirecting to /user/document-upload`,
+    );
+    redirect('/user/document-upload');
+  }
+
+  // All checks passed, user can access the quiz.
+  // The QuizInterface component can remain a client component if needed for interactivity.
+  // Any client-side logic previously in QuizPage (like router, useState, useEffect for UI)
+  // should now be within QuizInterface or another client component.
+  return (
+    <div className="bg-gray-50 min-h-[calc(100vh-111px)]">
+      <QuizInterface />
+    </div>
+  );
 }

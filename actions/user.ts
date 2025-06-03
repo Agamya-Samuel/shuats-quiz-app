@@ -88,6 +88,8 @@ export async function registerUser({
             name,
             branch,
             addressId: newAddress.id,
+            isOAuthAccount: false,
+            profileStage1Completed: true,
           })
           .returning({
             id: users.id,
@@ -97,6 +99,9 @@ export async function registerUser({
             school: users.school,
             rollno: users.rollno,
             branch: users.branch,
+            isOAuthAccount: users.isOAuthAccount,
+            profileStage1Completed: users.profileStage1Completed,
+            profileStage2Completed: users.profileStage2Completed,
           });
 
         return {
@@ -195,6 +200,24 @@ export async function loginUser({
       return { success: false, message: 'User not found' };
     }
 
+    // Check if it's an OAuth account
+    if (user.isOAuthAccount) {
+      return {
+        success: false,
+        message:
+          'This account was created using Google Sign-In. Please log in with Google.',
+      };
+    }
+
+    // If password is null for a non-OAuth account (should not happen with current logic, but good to check)
+    if (user.password === null) {
+      console.error(`User ${user.email} (non-OAuth) has null password.`);
+      return {
+        success: false,
+        message: 'Invalid account state. Please contact support.',
+      };
+    }
+
     // Verify the password
     const isValidPassword = await argon2.verify(user.password, password);
 
@@ -240,6 +263,9 @@ export async function loginUser({
         rollno: user.rollno,
         branch: user.branch,
         address: user.address as AddressData,
+        isOAuthAccount: user.isOAuthAccount,
+        profileStage1Completed: user.profileStage1Completed,
+        profileStage2Completed: user.profileStage2Completed,
       },
     };
   } catch (error) {
@@ -472,9 +498,20 @@ export async function forgotPassword(formData: FormData) {
       where: eq(users.email, email),
     });
 
-    // If user not found, still return success to prevent email enumeration
-    if (!user) {
-      return { success: true, message: 'Email sent successfully' };
+    // If user not found, or if it's an OAuth account, return success to prevent email enumeration
+    // but don't send a reset email for OAuth accounts.
+    if (!user || user.isOAuthAccount) {
+      if (user && user.isOAuthAccount) {
+        console.log(
+          `Password reset attempt for OAuth user: ${email}. No email sent.`,
+        );
+        // Optionally, send a specific email to the user explaining this.
+      }
+      return {
+        success: true,
+        message:
+          'If an account with that email exists, a password reset link has been sent.',
+      };
     }
 
     // Create reset token payload
@@ -580,6 +617,15 @@ export async function resetPassword(token: string, formData: FormData) {
       };
     }
 
+    // Prevent password reset for OAuth accounts
+    if (existingUser.isOAuthAccount) {
+      return {
+        success: false,
+        message:
+          'Password reset is not available for accounts created with Google Sign-In.',
+      };
+    }
+
     // Hash the new password
     const hashedPassword = await argon2.hash(password);
 
@@ -632,6 +678,281 @@ export async function getUserProfilePicture(userId: number) {
     return {
       success: false,
       message: `Error fetching user profile picture: ${error}`,
+    };
+  }
+}
+
+// Complete user profile after Google Sign-Up
+export async function completeUserProfile({
+  mobile,
+  rollno,
+  school,
+  branch,
+  address,
+}: {
+  mobile: string;
+  rollno: string;
+  school: string;
+  branch: string;
+  address: AddressData;
+}) {
+  try {
+    const authPayload = await verifyAuth();
+
+    // Check if the payload exists and is a standard user with a userId
+    if (
+      !authPayload ||
+      !('userId' in authPayload) ||
+      authPayload.role !== 'user'
+    ) {
+      return {
+        success: false,
+        message: 'User not authenticated or invalid role.',
+        error: 'Authentication failed',
+      };
+    }
+
+    const userId = authPayload.userId;
+
+    const db = (await connectToDB()) as unknown as NodePgDatabase<
+      typeof dbSchema
+    >;
+
+    // Use a transaction to ensure both address and user are saved/updated
+    const result = await db.transaction(async (tx) => {
+      // Create address first
+      const [newAddress] = await tx
+        .insert(addresses)
+        .values({
+          country: address.country,
+          address1: address.address1,
+          address2: address.address2 || null,
+          area: address.area,
+          city: address.city,
+          pincode: address.pincode,
+          state: address.state,
+        })
+        .returning({ id: addresses.id });
+
+      if (!newAddress || !newAddress.id) {
+        throw new Error('Failed to create address.');
+      }
+
+      // Update user with the new addressId and other details
+      // We don't need the returning values from this specific update anymore,
+      // as we will fetch the full user object next.
+      await tx
+        .update(users)
+        .set({
+          mobile,
+          school,
+          rollno,
+          branch,
+          addressId: newAddress.id,
+          profileStage1Completed: true,
+          updatedAt: new Date(),
+        })
+        .where(eq(users.id, userId));
+
+      // Fetch the complete updated user record to ensure all data is fresh for the token
+      const fullyUpdatedUser = await tx.query.users.findFirst({
+        where: eq(users.id, userId),
+        with: {
+          address: true, // Ensure address is also fetched if needed for the token/response
+        },
+      });
+
+      if (!fullyUpdatedUser) {
+        throw new Error('Failed to retrieve updated user profile.');
+      }
+
+      // Ensure the address data is in the expected format for the JWT payload
+      const userAddressForToken: AddressData = fullyUpdatedUser.address
+        ? {
+            // Ensure id is handled correctly: if db returns number | null, map to number | undefined for AddressData.id?
+            id: fullyUpdatedUser.address.id ?? undefined,
+            // For fields expected as string in AddressData, convert null from DB to empty string ''
+            country: fullyUpdatedUser.address.country ?? '',
+            address1: fullyUpdatedUser.address.address1 ?? '',
+            // For fields expected as string? (string | undefined) in AddressData, convert null from DB to undefined
+            address2: fullyUpdatedUser.address.address2 ?? undefined,
+            area: fullyUpdatedUser.address.area ?? '',
+            city: fullyUpdatedUser.address.city ?? '',
+            pincode: fullyUpdatedUser.address.pincode ?? '',
+            state: fullyUpdatedUser.address.state ?? '',
+          }
+        : {
+            // Default structure when no address is linked, ensuring conformity with AddressData
+            id: undefined,
+            country: '',
+            address1: '',
+            address2: undefined,
+            area: '',
+            city: '',
+            pincode: '',
+            state: '',
+          };
+
+      // Create new token payload with all updated user data
+      const newTokenPayload: UserJwtPayload = {
+        userId: fullyUpdatedUser.id,
+        role: 'user', // Assuming 'user' role, adjust if role can change or is dynamic
+        name: fullyUpdatedUser.name,
+        email: fullyUpdatedUser.email, // Email should already be in authPayload but good to have from DB
+        mobile: fullyUpdatedUser.mobile,
+        school: fullyUpdatedUser.school,
+        rollno: fullyUpdatedUser.rollno,
+        branch: fullyUpdatedUser.branch,
+        address: userAddressForToken,
+        isOAuthAccount: fullyUpdatedUser.isOAuthAccount, // Include OAuth status
+        profileStage1Completed: fullyUpdatedUser.profileStage1Completed,
+        profileStage2Completed: fullyUpdatedUser.profileStage2Completed,
+      };
+
+      // Generate new token
+      const token = await generateToken(newTokenPayload);
+
+      // Update cookie with new token
+      await setCookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: '/',
+      });
+
+      // The user object to return in the response
+      // This should match what the client expects
+      const returnedUserObject = {
+        id: fullyUpdatedUser.id,
+        name: fullyUpdatedUser.name,
+        email: fullyUpdatedUser.email,
+        mobile: fullyUpdatedUser.mobile,
+        school: fullyUpdatedUser.school,
+        rollno: fullyUpdatedUser.rollno,
+        branch: fullyUpdatedUser.branch,
+        address: userAddressForToken,
+        isOAuthAccount: fullyUpdatedUser.isOAuthAccount,
+        profileStage1Completed: fullyUpdatedUser.profileStage1Completed,
+        profileStage2Completed: fullyUpdatedUser.profileStage2Completed,
+      };
+
+      return { success: true, user: returnedUserObject };
+    });
+
+    return {
+      success: true,
+      message: 'Profile completed successfully',
+      user: result.user,
+    };
+  } catch (error) {
+    console.error('Error completing user profile:', error);
+    return {
+      success: false,
+      message: `Failed to complete profile: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+// New action to check and mark profile stage 2 completion
+export async function checkAndMarkStage2Completed() {
+  try {
+    const authPayload = await verifyAuth();
+    if (
+      !authPayload ||
+      !('userId' in authPayload) ||
+      authPayload.role !== 'user'
+    ) {
+      return {
+        success: false,
+        message: 'User not authenticated or invalid role.',
+        stage2Completed: false,
+      };
+    }
+    const userId = authPayload.userId;
+
+    const db = (await connectToDB()) as unknown as NodePgDatabase<
+      typeof dbSchema
+    >;
+
+    // Get the user's current stage 2 status first
+    const currentUser = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+      columns: { profileStage2Completed: true },
+    });
+
+    if (!currentUser) {
+      return {
+        success: false,
+        message: 'User not found.',
+        stage2Completed: false,
+      };
+    }
+
+    // If already completed, no need to re-check or update
+    if (currentUser.profileStage2Completed) {
+      return {
+        success: true,
+        message: 'Stage 2 already completed.',
+        stage2Completed: true,
+      };
+    }
+
+    const uploadedDocs = await db.query.uploadFiles.findMany({
+      where: eq(uploadFiles.userId, userId),
+      columns: {
+        documentType: true,
+      },
+    });
+
+    const uploadedDocTypes = new Set(
+      uploadedDocs.map((doc) => doc.documentType),
+    );
+
+    // Updated list of required document types for Stage 2 completion
+    const requiredDocTypes = [
+      'aadhar',
+      '10th_marksheet',
+      '12th_marksheet',
+      'profile_pic',
+    ];
+
+    let allRequiredDocsPresent = true;
+    for (const docType of requiredDocTypes) {
+      if (!uploadedDocTypes.has(docType)) {
+        allRequiredDocsPresent = false;
+        break;
+      }
+    }
+
+    if (allRequiredDocsPresent) {
+      await db
+        .update(users)
+        .set({ profileStage2Completed: true, updatedAt: new Date() })
+        .where(eq(users.id, userId));
+      return {
+        success: true,
+        message: 'Profile Stage 2 completed.',
+        stage2Completed: true,
+      };
+    }
+
+    return {
+      success: false,
+      message:
+        'All required documents for Stage 2 are not yet uploaded or verified.',
+      stage2Completed: false,
+    };
+  } catch (error) {
+    console.error('Error checking/marking Stage 2 completion:', error);
+    return {
+      success: false,
+      message: `Error processing Stage 2 completion: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+      stage2Completed: false,
     };
   }
 }
