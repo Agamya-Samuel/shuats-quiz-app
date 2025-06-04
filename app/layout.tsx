@@ -3,6 +3,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { cookies } from 'next/headers';
+import Script from 'next/script';
 
 import '@/app/globals.css';
 import { Toaster } from '@/components/ui/toaster';
@@ -52,6 +53,8 @@ export default async function RootLayout({
             <Toaster />
           </CookieProvider>
         </GoogleOAuthProvider>
+        {/* Add Simple Analytics script here */}
+        <Script src="https://scripts.simpleanalyticscdn.com/latest.js" />
       </body>
     </html>
   );
