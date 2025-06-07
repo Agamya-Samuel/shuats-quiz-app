@@ -72,7 +72,7 @@ const TypingHeading = () => {
 
 // Countdown Calendar Card styled like the event timeline
 const CountdownCalendarCard = () => {
-  const eventDate = new Date('2025-07-12T00:00:00');
+  const eventDate = new Date('2025-07-12T10:30:00');
   const [daysLeft, setDaysLeft] = useState<number | null>(null);
 
   useEffect(() => {
@@ -131,6 +131,49 @@ const TimelineCalendarCard = ({ month, day, label }: { month: string; day: strin
     </div>
   </div>
 );
+
+// Add this component above TakeQuiz
+const CountdownTimer = () => {
+  const eventDate = new Date('2025-07-12T00:00:00');
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date();
+      const diff = eventDate.getTime() - now.getTime();
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      setTimeLeft({ days, hours, minutes, seconds });
+    };
+    updateCountdown();
+    const timer = setInterval(updateCountdown, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="w-full flex justify-center mt-12 mb-12">
+      <div className="bg-white rounded-2xl px-10 py-8 shadow-lg border border-blue-200 flex items-center justify-center text-center transition-transform duration-200 hover:scale-105">
+        <span className="text-4xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-blue-500 via-pink-500 to-purple-600 bg-clip-text text-transparent animate-gradient-x flex gap-4" style={{letterSpacing: '0.05em', backgroundSize: '200% 200%'}}>
+          <span className="flex flex-col items-center"><span>{String(timeLeft.days).padStart(2, '0')}</span><span className="text-base md:text-xl font-bold text-gray-500 tracking-widest mt-1">DAYS</span></span>
+          <span className="flex flex-col items-center"><span>{String(timeLeft.hours).padStart(2, '0')}</span><span className="text-base md:text-xl font-bold text-gray-500 tracking-widest mt-1">HRS</span></span>
+          <span className="flex flex-col items-center"><span>{String(timeLeft.minutes).padStart(2, '0')}</span><span className="text-base md:text-xl font-bold text-gray-500 tracking-widest mt-1">MIN</span></span>
+          <span className="flex flex-col items-center"><span>{String(timeLeft.seconds).padStart(2, '0')}</span><span className="text-base md:text-xl font-bold text-gray-500 tracking-widest mt-1">SEC</span></span>
+        </span>
+      </div>
+    </div>
+  );
+};
 
 const TakeQuiz = () => {
   return (
@@ -283,6 +326,8 @@ const TakeQuiz = () => {
           </div>
         </div>
       </section>
+      {/* Countdown Timer Section */}
+      <CountdownTimer />
       {/* Quiz Timeline Section */}
       <section className="w-full max-w-3xl mx-auto mt-8 mb-12">
         <h2 className="text-4xl font-bold text-center mb-10">Quiz Timeline</h2>
@@ -297,7 +342,7 @@ const TakeQuiz = () => {
         global>{`
         .animate-gradient-x {
           background-size: 200% 200%;
-          animation: gradient-x 8s ease-in-out infinite;
+          animation: gradient-x 3s ease-in-out infinite;
         }
         @keyframes gradient-x {
           0% {
