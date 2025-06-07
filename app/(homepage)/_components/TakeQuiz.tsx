@@ -72,7 +72,7 @@ const TypingHeading = () => {
 
 // Countdown Calendar Card styled like the event timeline
 const CountdownCalendarCard = () => {
-  const eventDate = new Date('2025-07-12T00:00:00');
+  const eventDate = new Date('2025-07-12T10:30:00');
   const [daysLeft, setDaysLeft] = useState<number | null>(null);
 
   useEffect(() => {
