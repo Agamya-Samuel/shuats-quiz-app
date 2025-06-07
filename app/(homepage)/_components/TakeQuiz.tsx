@@ -2,6 +2,8 @@
 
 import { Calendar, Trophy } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useCookies } from '@/contexts/cookie-context';
 
 import VideoFrame from './VideoFrame';
 
@@ -72,7 +74,7 @@ const TypingHeading = () => {
 
 // Countdown Calendar Card styled like the event timeline
 const CountdownCalendarCard = () => {
-  const eventDate = new Date('2025-07-12T00:00:00');
+  const eventDate = new Date('2025-07-12T10:30:00');
   const [daysLeft, setDaysLeft] = useState<number | null>(null);
 
   useEffect(() => {
@@ -131,6 +133,94 @@ const TimelineCalendarCard = ({ month, day, label }: { month: string; day: strin
     </div>
   </div>
 );
+
+// Add this component above TakeQuiz
+const CountdownTimer = () => {
+  const eventDate = new Date('2025-07-12T00:00:00');
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const [isOver, setIsOver] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { user } = useCookies();
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date();
+      const diff = eventDate.getTime() - now.getTime();
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        setIsOver(true);
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      setTimeLeft({ days, hours, minutes, seconds });
+      setIsOver(false);
+    };
+    updateCountdown();
+    const timer = setInterval(updateCountdown, 1000); // update every second
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleStartQuiz = () => {
+    if (!isOver || loading) return;
+    setLoading(true);
+    if (user && user.userId) {
+      router.push('/user/quiz');
+    } else {
+      router.push('/login?redirect=/user/quiz');
+    }
+  };
+
+  return (
+    <div className="w-full flex justify-center mt-8 mb-8 px-2">
+      {/* Gradient border wrapper */}
+      <div className="bg-gradient-to-r from-pink-400 via-blue-400 to-purple-400 p-[2px] rounded-full w-full max-w-xl shadow-lg">
+        <div className="flex items-center bg-white rounded-full shadow-md w-full p-1 md:p-2">
+          <div className="flex items-center px-2 md:px-6 py-2 md:py-4 gap-2 md:gap-6 text-center flex-1 overflow-x-auto">
+            <div className="flex flex-col items-center min-w-[40px]">
+              <span className="text-lg md:text-2xl font-extrabold text-gray-900">{String(timeLeft.days).padStart(2, '0')}</span>
+              <span className="text-[10px] md:text-xs font-semibold text-gray-500 tracking-widest mt-1">DAYS</span>
+            </div>
+            <span className="text-lg md:text-xl font-bold text-gray-300">|</span>
+            <div className="flex flex-col items-center min-w-[40px]">
+              <span className="text-lg md:text-2xl font-extrabold text-gray-900">{String(timeLeft.hours).padStart(2, '0')}</span>
+              <span className="text-[10px] md:text-xs font-semibold text-gray-500 tracking-widest mt-1">HRS</span>
+            </div>
+            <span className="text-lg md:text-xl font-bold text-gray-300">|</span>
+            <div className="flex flex-col items-center min-w-[40px]">
+              <span className="text-lg md:text-2xl font-extrabold text-gray-900">{String(timeLeft.minutes).padStart(2, '0')}</span>
+              <span className="text-[10px] md:text-xs font-semibold text-gray-500 tracking-widest mt-1">MINS</span>
+            </div>
+            <span className="text-lg md:text-xl font-bold text-gray-300">|</span>
+            <div className="flex flex-col items-center min-w-[40px]">
+              <span className="text-lg md:text-2xl font-extrabold text-gray-900">{String(timeLeft.seconds).padStart(2, '0')}</span>
+              <span className="text-[10px] md:text-xs font-semibold text-gray-500 tracking-widest mt-1">SECS</span>
+            </div>
+          </div>
+          <button
+            className={`ml-2 md:ml-4 px-4 md:px-8 py-2 md:py-3 rounded-full font-bold text-base md:text-lg transition-all duration-200 ${isOver ? 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer' : 'bg-gray-100 text-gray-400 cursor-not-allowed'} shadow whitespace-nowrap flex items-center justify-center`}
+            disabled={!isOver || loading}
+            style={{minWidth: 90}}
+            onClick={handleStartQuiz}
+          >
+            {loading ? (
+              <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+            ) : null}
+            Start Quiz
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const TakeQuiz = () => {
   return (
@@ -283,6 +373,8 @@ const TakeQuiz = () => {
           </div>
         </div>
       </section>
+      {/* Countdown Timer Section */}
+      <CountdownTimer />
       {/* Quiz Timeline Section */}
       <section className="w-full max-w-3xl mx-auto mt-8 mb-12">
         <h2 className="text-4xl font-bold text-center mb-10">Quiz Timeline</h2>
@@ -297,7 +389,7 @@ const TakeQuiz = () => {
         global>{`
         .animate-gradient-x {
           background-size: 200% 200%;
-          animation: gradient-x 8s ease-in-out infinite;
+          animation: gradient-x 3s ease-in-out infinite;
         }
         @keyframes gradient-x {
           0% {
