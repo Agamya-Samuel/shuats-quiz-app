@@ -7,28 +7,6 @@ import { useCookies } from '@/contexts/cookie-context';
 
 import VideoFrame from './VideoFrame';
 
-const prizes = [
-  {
-    place: '2nd Prize',
-    amount: '₹5,000',
-    color: 'from-gray-200 to-gray-400',
-    icon: <Trophy className="h-7 w-7 text-gray-500" />,
-  },
-  {
-    place: '1st Prize',
-    amount: '₹10,000',
-    color: 'from-yellow-300 to-yellow-500',
-    icon: <Trophy className="h-7 w-7 text-yellow-600" />,
-    highlight: 'Grand Winner',
-  },
-  {
-    place: '3rd Prize',
-    amount: '₹3,000',
-    color: 'from-orange-200 to-orange-400',
-    icon: <Trophy className="h-7 w-7 text-orange-500" />,
-  },
-];
-
 const TYPING_TEXT = 'SHUATS National Talent Search Quiz';
 const TYPING_SPEED = 60; // ms per character
 
@@ -169,14 +147,10 @@ const CountdownTimer = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const handleStartQuiz = () => {
-    if (!isOver || loading) return;
+  const handleRegister = () => {
+    if (loading) return;
     setLoading(true);
-    if (user && user.userId) {
-      router.push('/user/quiz');
-    } else {
-      router.push('/login?redirect=/user/quiz');
-    }
+    router.push('/register');
   };
 
   return (
@@ -206,15 +180,15 @@ const CountdownTimer = () => {
             </div>
           </div>
           <button
-            className={`ml-2 md:ml-4 px-4 md:px-8 py-2 md:py-3 rounded-full font-bold text-base md:text-lg transition-all duration-200 ${isOver ? 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer' : 'bg-gray-100 text-gray-400 cursor-not-allowed'} shadow whitespace-nowrap flex items-center justify-center`}
-            disabled={!isOver || loading}
+            className={`ml-2 md:ml-4 px-4 md:px-8 py-2 md:py-3 rounded-full font-bold text-base md:text-lg transition-all duration-200 bg-blue-600 text-white hover:bg-blue-700 cursor-pointer shadow whitespace-nowrap flex items-center justify-center`}
             style={{minWidth: 90}}
-            onClick={handleStartQuiz}
+            onClick={handleRegister}
+            disabled={loading}
           >
             {loading ? (
               <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
             ) : null}
-            Start Quiz
+            Register
           </button>
         </div>
       </div>
