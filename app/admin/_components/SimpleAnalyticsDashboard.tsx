@@ -10,6 +10,7 @@ import {
   Users,
 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+import { getSimpleAnalyticsData } from '../_actions/get-simple-analytics-data';
 import {
   Bar,
   CartesianGrid,
@@ -78,6 +79,7 @@ interface SADeviceTypeStat {
 }
 
 interface SimpleAnalyticsData {
+  domain?: string;
   pageviews?: number;
   visitors?: number; // Changed from uniques
   // bounce_rate?: number; // Removed, not directly available from API with these fields
@@ -89,6 +91,8 @@ interface SimpleAnalyticsData {
   error?: string;
   message?: string;
 }
+
+export type { SimpleAnalyticsData };
 
 const getTimeRange = (timeframe: string): { start: string; end: string } => {
   const endDate = new Date();
@@ -131,58 +135,19 @@ export function SimpleAnalyticsDashboard() {
     setIsRefreshing(true);
     setError(null);
 
-    const domain = process.env.NEXT_PUBLIC_SIMPLE_ANALYTICS_WEBSITE_DOMAIN;
-    const apiKey = process.env.NEXT_PUBLIC_SIMPLE_ANALYTICS_API_KEY || '';
-
-    if (!domain) {
-      setError(
-        'Simple Analytics domain is not configured. Please set NEXT_PUBLIC_SIMPLE_ANALYTICS_WEBSITE_DOMAIN in your environment variables.',
-      );
-      setIsLoading(false);
-      setIsRefreshing(false);
-      setAnalyticsData(null); // Clear previous data
-      return;
-    }
-
-    const { start, end } = getTimeRange(timeframe);
-    const fields =
-      'pageviews,visitors,seconds_on_page,histogram,pages,referrers,device_types'; // Corrected fields
-    // Note: Simple Analytics API uses 'start' and 'end' not 'start_date' and 'end_date' for version 5
-    const apiUrl = `https://simpleanalytics.com/${domain}.json?version=5&fields=${fields}&start=${start}&end=${end}&info=true`; // info=true for messages
-
-    const headers: HeadersInit = {
-      'Api-Key': apiKey,
-    };
-
-    if (apiKey && apiKey !== '') {
-      console.warn(
-        'NEXT_PUBLIC_SIMPLE_ANALYTICS_API_KEY is set with a non-empty value. If this key is for private data and sensitive, fetching should be moved to a server action or API route to protect the key.',
-      );
-    }
-
     try {
-      const response = await fetch(apiUrl, { headers });
-      const data = await response.json();
+      const result = await getSimpleAnalyticsData();
 
-      if (!response.ok) {
-        const errorMsg =
-          data.error || `Error: ${response.status} ${response.statusText}`;
-        console.error('Simple Analytics API Error:', errorMsg, data);
-        setError(errorMsg);
+      if (result.error) {
+        setError(result.error);
         setAnalyticsData(null);
         toast({
           title: 'Error Fetching Analytics',
-          description: errorMsg,
+          description: result.error,
           variant: 'destructive',
         });
       } else {
-        // Check for "No data for this period" message
-        if (data.message && data.histogram && data.histogram.length === 0) {
-          setError(data.message); // Display the message from SA
-          setAnalyticsData({ ...data, error: data.message }); // Keep other data if any, but show message
-        } else {
-          setAnalyticsData(data);
-        }
+        setAnalyticsData(result);
         toast({
           title: 'Data Refreshed',
           description: 'Simple Analytics data has been updated.',
@@ -212,6 +177,43 @@ export function SimpleAnalyticsDashboard() {
     fetchData();
   };
 
+  if (isLoading && !analyticsData && !error) {
+    // Show full page loader only on initial load and no error
+    return (
+      <div className="flex items-center justify-center h-64">
+        <RefreshCw className="h-8 w-8 animate-spin text-primary" />
+        <p className="ml-2">Loading analytics data...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6 p-4 border border-red-500 bg-red-50 rounded-md">
+        <div className="flex items-start gap-3">
+          <AlertCircle className="h-5 w-5 text-red-700 mt-0.5" />
+          <div>
+            <h4 className="font-medium text-red-800">Configuration Error</h4>
+            <p className="text-sm text-red-700">{error}</p>
+            <Button
+              onClick={handleRefresh}
+              variant="outline"
+              className="mt-2"
+              disabled={isRefreshing}
+            >
+              <RefreshCw
+                className={
+                  'mr-2 h-4 w-4 ' + (isRefreshing ? 'animate-spin' : '')
+                }
+              />{' '}
+              Try Again
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Helper to format duration from seconds to MMm SSs
   const formatDuration = (seconds: number | undefined) => {
     if (seconds === undefined || seconds === null) return 'N/A';
@@ -220,25 +222,6 @@ export function SimpleAnalyticsDashboard() {
     return `${minutes}m ${remainingSeconds}s`;
   };
 
-  // Display error message if domain is not configured
-  if (!process.env.NEXT_PUBLIC_SIMPLE_ANALYTICS_WEBSITE_DOMAIN) {
-    return (
-      <div className="space-y-6 p-4 border border-red-500 bg-red-50 rounded-md">
-        <div className="flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 text-red-700 mt-0.5" />
-          <div>
-            <h4 className="font-medium text-red-800">Configuration Error</h4>
-            <p className="text-sm text-red-700">
-              The Simple Analytics website domain (
-              <code>NEXT_PUBLIC_SIMPLE_ANALYTICS_WEBSITE_DOMAIN</code>) is not
-              set in your environment variables. Please configure it to fetch
-              analytics data.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   // Display error or "no data" message if fetch failed or returned no data
   // analyticsData might exist but with an error/message property from the API (e.g., "No data")
@@ -293,7 +276,7 @@ export function SimpleAnalyticsDashboard() {
           <p className="text-muted-foreground">
             Key metrics from Simple Analytics for '
             <code>
-              {process.env.NEXT_PUBLIC_SIMPLE_ANALYTICS_WEBSITE_DOMAIN}
+              {analyticsData?.domain ?? ''}
             </code>
             '.
           </p>
@@ -303,7 +286,7 @@ export function SimpleAnalyticsDashboard() {
             value={timeframe}
             onValueChange={setTimeframe}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select timeframe" />
+            <SelectValue placeholder="Select timeframe" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="24h">Last 24 Hours</SelectItem>
@@ -383,12 +366,14 @@ export function SimpleAnalyticsDashboard() {
             {analyticsData?.histogram && analyticsData.histogram.length > 0 ? (
               <ResponsiveContainer
                 width="100%"
-                height="100%">
+                height="100%"
+              >
                 <RechartsLineChart
                   data={analyticsData.histogram.map((p) => ({
                     date: new Date(p.date).toLocaleDateString(),
                     views: p.pageviews,
-                  }))}>
+                  }))}
+                >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
                   <YAxis />
@@ -422,14 +407,16 @@ export function SimpleAnalyticsDashboard() {
             {analyticsData?.histogram && analyticsData.histogram.length > 0 ? (
               <ResponsiveContainer
                 width="100%"
-                height="100%">
+                height="100%"
+              >
                 <RechartsLineChart
                   data={analyticsData.histogram.map((p) => ({
                     date: new Date(p.date).toLocaleDateString(),
                     visitors:
                       p.visitors ??
                       0 /* Use visitors from histogram if available */,
-                  }))}>
+                  }))}
+                >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
                   <YAxis />
@@ -478,7 +465,8 @@ export function SimpleAnalyticsDashboard() {
                     <TableRow key={page.path || `page-${index}`}>
                       <TableCell
                         className="truncate max-w-[150px] sm:max-w-[250px]"
-                        title={page.path}>
+                        title={page.path}
+                      >
                         {page.path}
                       </TableCell>
                       <TableCell className="text-right">
@@ -527,7 +515,8 @@ export function SimpleAnalyticsDashboard() {
                       <TableRow key={referrer.name || `ref-${index}`}>
                         <TableCell
                           className="truncate max-w-[150px] sm:max-w-[250px]"
-                          title={referrer.name}>
+                          title={referrer.name}
+                        >
                           {referrer.name}
                         </TableCell>
                         <TableCell className="text-right">
@@ -558,10 +547,11 @@ export function SimpleAnalyticsDashboard() {
         </CardHeader>
         <CardContent className="h-[300px]">
           {analyticsData?.device_types &&
-          analyticsData.device_types.length > 0 ? (
+            analyticsData.device_types.length > 0 ? (
             <ResponsiveContainer
               width="100%"
-              height="100%">
+              height="100%"
+            >
               <RechartsPieChart>
                 <Pie
                   data={analyticsData.device_types}
@@ -570,7 +560,8 @@ export function SimpleAnalyticsDashboard() {
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  label>
+                  label
+                >
                   {analyticsData.device_types.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
@@ -599,12 +590,13 @@ export function SimpleAnalyticsDashboard() {
 
       <div className="text-xs text-center text-muted-foreground py-4">
         Powered by Simple Analytics.
-        {process.env.NEXT_PUBLIC_SIMPLE_ANALYTICS_WEBSITE_DOMAIN && (
+        {analyticsData?.domain && (
           <a
-            href={`https://simpleanalytics.com/${process.env.NEXT_PUBLIC_SIMPLE_ANALYTICS_WEBSITE_DOMAIN}?utm_source=${process.env.NEXT_PUBLIC_SIMPLE_ANALYTICS_WEBSITE_DOMAIN}&utm_content=dashboard_link`}
+            href={`https://simpleanalytics.com/${analyticsData.domain}?utm_source=${analyticsData.domain}&utm_content=dashboard_link`}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-primary ml-1">
+            className="underline hover:text-primary ml-1"
+          >
             View on Simple Analytics{' '}
             <ExternalLink className="inline h-3 w-3 ml-0.5" />
           </a>
