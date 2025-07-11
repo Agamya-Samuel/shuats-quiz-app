@@ -52,7 +52,8 @@ const TypingHeading = () => {
 
 // Countdown Calendar Card styled like the event timeline
 const CountdownCalendarCard = () => {
-  const eventDate = new Date('2025-07-12T10:30:00');
+  // Changed event date to 12th August, 2025
+  const eventDate = new Date('2025-08-12T10:30:00');
   const [daysLeft, setDaysLeft] = useState<number | null>(null);
 
   useEffect(() => {
@@ -77,7 +78,8 @@ const CountdownCalendarCard = () => {
           <div className="w-3 h-3 bg-white rounded-b-full absolute right-0 -bottom-1 shadow" />
         </div>
         <div className="flex flex-col items-center py-3">
-          <span className="text-xs font-semibold text-gray-500 tracking-widest mb-1">JULY</span>
+          {/* Changed month to AUGUST and day to 12 */}
+          <span className="text-xs font-semibold text-gray-500 tracking-widest mb-1">AUGUST</span>
           <span className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-1">12</span>
         </div>
       </div>
@@ -114,7 +116,8 @@ const TimelineCalendarCard = ({ month, day, label }: { month: string; day: strin
 
 // Add this component above TakeQuiz
 const CountdownTimer = () => {
-  const eventDate = new Date('2025-07-12T00:00:00');
+  // Changed event date to 12th August, 2025
+  const eventDate = new Date('2025-08-12T00:00:00');
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -230,7 +233,8 @@ const TakeQuiz = () => {
           <div className="w-full">
             <div className="flex items-center justify-center gap-2 text-xl font-bold text-purple-700 mb-3 mt-6">
               <Calendar className="h-5 w-5" />
-              <span>Date: 12 July, 2025</span>
+              {/* Changed date text to 12 August, 2025 */}
+              <span>Date: 12 August, 2025</span>
             </div>
             {/* Prizes Layout: 1st Prize on top, 2nd & 3rd below */}
             <div className="w-full flex flex-col items-center">
@@ -353,9 +357,10 @@ const TakeQuiz = () => {
       <section className="w-full max-w-3xl mx-auto mt-8 mb-12">
         <h2 className="text-4xl font-bold text-center mb-10">Quiz Timeline</h2>
         <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
+          {/* Changed month and day for Quiz is Live timeline card */}
           <TimelineCalendarCard month="MAY" day="26" label="Enrollment Begins" />
-          <TimelineCalendarCard month="JULY" day="12" label="Quiz is Live" />
-          <TimelineCalendarCard month="JULY" day="15" label="See Result" />
+          <TimelineCalendarCard month="AUGUST" day="12" label="Quiz is Live" />
+          <TimelineCalendarCard month="August" day="15" label="See Result" />
         </div>
       </section>
       <style
