@@ -6,6 +6,7 @@ export async function loadEmailTemplate(
   data: Record<string, string | number>,
 ): Promise<string> {
   try {
+    console.log(`Loading email template: ${templateName} - via @lib/email-template-loader.ts`);
     // Dynamic import of the template
     const template = await import(`@/email-templates/${templateName}.html`);
 
