@@ -780,7 +780,8 @@ export default function QuizInterface() {
                     </span>
                   </div>
                   <p className="text-xl font-bold text-gray-800">
-                    12th July, 2025
+                    {/* Changed date to 12th August, 2025 */}
+                    12th August, 2025
                   </p>
                 </div>
 
