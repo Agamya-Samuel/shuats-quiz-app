@@ -53,8 +53,6 @@ import { Readable } from "stream";
  * The maximum number of concurrent file transfers.
  * Adjust this value based on your network and the S3 provider's rate limits.
  */
-const CONCURRENCY_LIMIT = 10;
-
 // --- Main Transfer Logic ---
 
 /**
@@ -87,65 +85,52 @@ async function main() {
 
   let errorOccurred = false;
   let transferredCount = 0;
+  let totalObjects = 0;
 
   try {
     // 3. List all objects in the source bucket
     console.log(`Listing objects in source bucket: ${config.source.bucketName}`);
     const objects = await listAllObjects(sourceS3, config.source.bucketName);
-    console.log(`Found ${objects.length} objects to transfer.`);
+    totalObjects = objects.length;
+    console.log(`Found ${totalObjects} objects to transfer.`);
 
-    // 4. Process objects with a concurrency pool
-    const totalObjects = objects.length;
-    const objectQueue = [...objects];
-    const activeTransfers: Promise<void>[] = [];
+    // 4. Process objects sequentially
+    for (const obj of objects) {
+      if (!obj || !obj.Key) continue;
 
-    const processQueue = async () => {
-      while (objectQueue.length > 0) {
-        const obj = objectQueue.shift();
-        if (!obj || !obj.Key) continue;
-
-        const transferPromise = transferObject(
+      try {
+        await transferObject(
           sourceS3,
           destinationS3,
           config.source.bucketName,
           config.destination.bucketName,
           obj
-        )
-          .then(() => {
-            transferredCount++;
-            console.log(
-              `[${transferredCount}/${totalObjects}] Successfully transferred: ${obj.Key}`
-            );
-          })
-          .catch((err) => {
-            console.error(`[ERROR] Failed to transfer ${obj.Key}:`, err);
-            errorOccurred = true;
-          });
-
-        activeTransfers.push(transferPromise);
-
-        if (activeTransfers.length >= CONCURRENCY_LIMIT) {
-          await Promise.race(activeTransfers);
-          activeTransfers.splice(
-            activeTransfers.findIndex((p) => p === Promise.race(activeTransfers)),
-            1
-          );
-        }
+        );
+        transferredCount++;
+        console.log(
+          `[${transferredCount}/${totalObjects}] Successfully transferred: ${obj.Key}`
+        );
+      } catch (err) {
+        console.error(`[ERROR] Failed to transfer ${obj.Key}:`, err);
+        errorOccurred = true;
       }
-      await Promise.all(activeTransfers);
-    };
-
-    await processQueue();
-
+    }
   } catch (error) {
     console.error("A critical error occurred:", error);
     errorOccurred = true;
   } finally {
     console.log("\n--- Transfer Summary ---");
-    console.log(`Total objects found: ${transferredCount > 0 ? transferredCount : 'N/A'}`);
+    console.log(`Total objects found: ${totalObjects}`);
     console.log(`Successfully transferred: ${transferredCount}`);
     if (errorOccurred) {
-      console.error("Some files failed to transfer. Please check the logs above.");
+      console.error(
+        "Some files failed to transfer. Please check the logs above."
+      );
+      process.exit(1);
+    } else if (transferredCount < totalObjects) {
+      console.error(
+        `Only ${transferredCount} out of ${totalObjects} objects were transferred.`
+      );
       process.exit(1);
     } else {
       console.log("All objects transferred successfully.");
