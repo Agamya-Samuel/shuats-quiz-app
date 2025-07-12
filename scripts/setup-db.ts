@@ -6,9 +6,14 @@
  *
  * Use this for development or testing purposes
  */
+
+import * as dotenv from 'dotenv';
+// Load .env.local file
+dotenv.config({ path: '.env.local' });
+console.log('Loading environment variables from .env.local');
+
 // Load environment variables from .env.local
 import argon2 from 'argon2';
-import * as dotenv from 'dotenv';
 import 'dotenv/config';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -17,8 +22,6 @@ import { connectToDB } from '../db';
 import { addresses, admins, users } from '../db/schema';
 import * as dbSchema from '../db/schema';
 
-// Load .env.local file
-dotenv.config({ path: '.env.local' });
 
 async function setupDatabase() {
   try {

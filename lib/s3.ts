@@ -91,3 +91,28 @@ export function generateS3Key(
 		.toLowerCase()
 		.replace(/\s+/g, '-')}-${timestamp}.${fileExtension}`;
 }
+
+/**
+ * Creates an S3 client instance.
+ *
+ * @param accessKeyId - The access key ID for the S3-compatible service.
+ * @param secretAccessKey - The secret access key for the S3-compatible service.
+ * @param region - The region of the S3-compatible service.
+ * @param endpoint - The endpoint URL of the S3-compatible service.
+ * @returns An S3 client instance.
+ */
+export function createS3Client(
+  accessKeyId: string,
+  secretAccessKey: string,
+  region: string,
+  endpoint?: string
+): S3Client {
+  return new S3Client({
+    region,
+    endpoint,
+    credentials: {
+      accessKeyId,
+      secretAccessKey,
+    },
+  });
+}
