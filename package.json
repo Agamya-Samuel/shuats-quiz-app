@@ -14,7 +14,8 @@
     "db:push": "drizzle-kit push --config=./drizzle.config.ts",
     "db:studio": "drizzle-kit studio --config=./drizzle.config.ts",
     "db:seed": "ts-node -r tsconfig-paths/register scripts/setup-db.ts",
-    "mail:bulk": "ts-node -r tsconfig-paths/register scripts/bulk-email.ts"
+    "mail:bulk": "ts-node -r tsconfig-paths/register scripts/bulk-email.ts",
+    "s3:transfer": "ts-node -r tsconfig-paths/register scripts/transfer-s3-data.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.808.0",
