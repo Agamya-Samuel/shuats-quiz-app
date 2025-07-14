@@ -13,6 +13,15 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Test the configuration
+transporter.verify((error, success) => {
+  if (error) {
+    console.log('Email configuration error:', error);
+  } else {
+    console.log('Email server is ready to send messages');
+  }
+});
+
 // Function to send registration confirmation email
 export async function sendRegistrationEmail(
   email: string,
