@@ -17,7 +17,8 @@
     "mail:bulk": "ts-node -r tsconfig-paths/register scripts/bulk-email.ts",
     "s3:transfer": "ts-node -r tsconfig-paths/register scripts/transfer-s3-data.ts",
     "db:update-urls": "ts-node -r tsconfig-paths/register scripts/update-file-urls.ts",
-    "db:util": "ts-node -r tsconfig-paths/register scripts/db-util.ts"
+    "db:util": "ts-node -r tsconfig-paths/register scripts/db-util.ts",
+    "mail:bulk-xl": "ts-node -r tsconfig-paths/register scripts/bulk-email-from-file.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.808.0",
@@ -91,6 +92,7 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5",
-    "webpack": "^5.0.0"
+    "webpack": "^5.0.0",
+    "xlsx": "^0.18.5"
   }
 }
