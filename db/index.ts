@@ -35,7 +35,10 @@ export function getConnectionPool(): Pool {
           'Database connection pool created (persisted in global, no SSL for development)',
         );
       }
-    } else {
+    } else if (
+      process.env.NODE_ENV === 'production' &&
+      process.env.IS_OCI !== 'true'
+    ) {
       // In production, require SSL with CA cert
       if (!process.env.DATABASE_CA_CERT) {
         throw new Error('DATABASE_CA_CERT environment variable is not defined');

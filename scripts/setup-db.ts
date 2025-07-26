@@ -17,15 +17,51 @@ import argon2 from 'argon2';
 import 'dotenv/config';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 
 import { connectToDB } from '../db';
 import { addresses, admins, users } from '../db/schema';
 import * as dbSchema from '../db/schema';
 
 
+async function ensureDatabaseExists() {
+  const dbName = 'quizdb';
+  const connectionString = process.env.DATABASE_URL;
+
+  if (!connectionString) {
+    throw new Error('DATABASE_URL environment variable is not set');
+  }
+
+  // Connect to the default 'postgres' database to check for 'quizdb'
+  const pool = new Pool({
+    connectionString: connectionString.replace(/\/[^/]+$/, '/postgres'),
+  });
+
+  const client = await pool.connect();
+  try {
+    const res = await client.query(
+      `SELECT 1 FROM pg_database WHERE datname = $1`,
+      [dbName],
+    );
+    if (res.rowCount === 0) {
+      console.log(`Database '${dbName}' does not exist. Creating...`);
+      await client.query(`CREATE DATABASE ${dbName}`);
+      console.log(`Database '${dbName}' created successfully.`);
+    } else {
+      console.log(`Database '${dbName}' already exists.`);
+    }
+  } finally {
+    client.release();
+    await pool.end();
+  }
+}
+
 async function setupDatabase() {
   try {
     console.log('Starting database setup...');
+
+    // Ensure the database exists before connecting
+    await ensureDatabaseExists();
 
     // Connect to the database (this will also run migrations)
     const db = (await connectToDB()) as unknown as NodePgDatabase<
