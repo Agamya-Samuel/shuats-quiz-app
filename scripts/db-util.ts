@@ -157,8 +157,8 @@ async function main() {
     await restoreDatabase(backupFile);
   } else {
     console.log('Usage:');
-    console.log('  npm run script:db-util -- --backup');
-    console.log('  npm run script:db-util -- --restore <path-to-backup-file>');
+    console.log('  yarn db:util --backup');
+    console.log('  yarn db:util --restore <path-to-backup-file>');
     process.exit(1);
   }
 }
