@@ -1,7 +1,7 @@
 'use server';
 
 import argon2 from 'argon2';
-import { eq } from 'drizzle-orm';
+import { eq, sql, desc, count } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
 import { connectToDB } from '@/db';
@@ -328,3 +328,103 @@ export async function deleteUserWithNotification(
     };
   }
 }
+
+// Reset all submitted answers for a specific user
+export async function resetUserSubmissions(userId: number) {
+  // First verify that the requester is an admin or superadmin
+  const user = await verifyAuth();
+
+  if (!user || (user.role !== 'admin' && user.role !== 'superadmin')) {
+    return {
+      success: false,
+      message: 'Unauthorized: You do not have permission to reset submissions',
+    };
+  }
+
+  try {
+    // Connect to db
+    const db = (await connectToDB()) as unknown as NodePgDatabase<
+      typeof dbSchema
+    >;
+
+    // Check if user exists
+    const userToReset = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+    });
+
+    if (!userToReset) {
+      return {
+        success: false,
+        message: 'User not found',
+      };
+    }
+
+    // Delete all submitted answers for this user
+    await db
+      .delete(dbSchema.userSubmissions)
+      .where(eq(dbSchema.userSubmissions.userId, userId));
+
+    return {
+      success: true,
+      message: `Successfully reset submissions for user ${userToReset.email}`,
+    };
+  } catch (error) {
+    console.error('Error resetting user submissions:', error);
+    return {
+      success: false,
+      message: 'Failed to reset user submissions',
+    };
+  }
+}
+
+export const getUsersWithSubmissionCount = async () => {
+  // First verify that the requester is an admin or superadmin
+  const user = await verifyAuth();
+
+  if (!user || (user.role !== 'admin' && user.role !== 'superadmin')) {
+    return {
+      success: false,
+      message: 'Unauthorized: You do not have permission to view users',
+    };
+  }
+
+  try {
+    // Connect to db
+    const db = (await connectToDB()) as unknown as NodePgDatabase<
+      typeof dbSchema
+    >;
+
+    // Get total number of questions
+    const totalQuestions = await db
+      .select({ value: count() })
+      .from(dbSchema.questions);
+
+    // Get users with their submission count
+    const usersWithSubmissions = await db
+      .select({
+        id: dbSchema.users.id,
+        name: dbSchema.users.name,
+        email: dbSchema.users.email,
+        submissionCount: count(dbSchema.userSubmissions.id),
+      })
+      .from(dbSchema.users)
+      .leftJoin(
+        dbSchema.userSubmissions,
+        eq(dbSchema.users.id, dbSchema.userSubmissions.userId),
+      )
+      .groupBy(dbSchema.users.id)
+      .having(sql`${count(dbSchema.userSubmissions.id)} > 0`);
+
+    return {
+      success: true,
+      users: usersWithSubmissions,
+      totalQuestions: totalQuestions[0].value,
+    };
+  } catch (error) {
+    console.error('Error getting users with submission count:', error);
+    return {
+      success: false,
+      message: 'Failed to fetch users with submission count',
+    };
+  }
+};

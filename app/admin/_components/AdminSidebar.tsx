@@ -55,6 +55,12 @@ export function AdminSidebar() {
       value: 'users',
     },
     {
+      name: 'Submission',
+      href: '/admin/submission',
+      icon: CheckSquare,
+      value: 'submission',
+    },
+    {
       name: 'Analytics',
       href: '/admin?section=analytics',
       icon: BarChart,
