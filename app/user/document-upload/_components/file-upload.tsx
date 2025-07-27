@@ -55,6 +55,7 @@ export function FileUpload({
 	const [uploading, setUploading] = useState(false);
 	const [uploadProgress, setUploadProgress] = useState(0);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+	const [isReplacing, setIsReplacing] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,6 +148,7 @@ export function FileUpload({
 						fileUrl: result.fileUrl,
 					});
 					setUploading(false);
+					setIsReplacing(false); // Reset replacing state
 				}, 500);
 			} else {
 				throw new Error(result.error || 'Upload failed');
@@ -174,31 +176,116 @@ export function FileUpload({
 	};
 
 	const renderUploadState = () => {
-		if (status?.verified) {
-			return (
-				<div className="flex flex-col items-center justify-center p-6 text-center">
-					<div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 mb-4">
-						<CheckCircle className="h-6 w-6" />
+		// If replacing, show the file upload UI immediately
+		if (!isReplacing) {
+			if (status?.verified) {
+				return (
+					<div className="flex flex-col items-center justify-center p-6 text-center">
+						<div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 mb-4">
+							<CheckCircle className="h-6 w-6" />
+						</div>
+						<h3 className="font-medium text-green-800">
+							Verification Complete
+						</h3>
+						<p className="text-sm text-green-600 mt-1">
+							This document has been verified
+						</p>
+						<div className="flex flex-col sm:flex-row gap-2 mt-4 w-full justify-center">
+							<Button
+								variant="outline"
+								onClick={() => {
+									setIsReplacing(true); // Set replacing state
+									if (fileInputRef.current) {
+										fileInputRef.current.click();
+									}
+								}}
+							>
+								<RefreshCw className="mr-2 h-4 w-4" />
+								Replace Document
+							</Button>
+							{status.fileUrl && (
+								<Button
+									variant="secondary"
+									onClick={() =>
+										window.open(status.fileUrl, '_blank')
+									}
+								>
+									<FileText className="mr-2 h-4 w-4" />
+									View Document
+								</Button>
+							)}
+						</div>
 					</div>
-					<h3 className="font-medium text-green-800">
-						Verification Complete
-					</h3>
-					<p className="text-sm text-green-600 mt-1">
-						This document has been verified
-					</p>
-					<div className="flex flex-col sm:flex-row gap-2 mt-4 w-full justify-center">
-						<Button
-							variant="outline"
-							onClick={() => {
-								if (fileInputRef.current) {
-									fileInputRef.current.click();
-								}
-							}}
-						>
-							<RefreshCw className="mr-2 h-4 w-4" />
-							Replace Document
-						</Button>
-						{status.fileUrl && (
+				);
+			}
+
+			if (status?.rejected) {
+				return (
+					<div className="flex flex-col items-center justify-center p-6 text-center">
+						<div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 mb-4">
+							<AlertCircle className="h-6 w-6" />
+						</div>
+						<h3 className="font-medium text-red-800">
+							Verification Failed
+						</h3>
+						<p className="text-sm text-red-600 mt-1">
+							{status.rejectionReason ||
+								'Please upload a new document'}
+						</p>
+						<div className="flex flex-col sm:flex-row gap-2 mt-4 w-full justify-center">
+							<Button
+								variant="outline"
+								onClick={() => {
+									setIsReplacing(true); // Set replacing state
+									if (fileInputRef.current) {
+										fileInputRef.current.click();
+									}
+								}}
+							>
+								<RefreshCw className="mr-2 h-4 w-4" />
+								Upload New Document
+							</Button>
+							{status.fileUrl && (
+								<Button
+									variant="secondary"
+									onClick={() =>
+										window.open(status.fileUrl, '_blank')
+									}
+								>
+									<FileText className="mr-2 h-4 w-4" />
+									View Document
+								</Button>
+							)}
+						</div>
+					</div>
+				);
+			}
+
+			if (status?.uploaded) {
+				return (
+					<div className="flex flex-col items-center justify-center p-6 text-center">
+						<div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mb-4">
+							<FileText className="h-6 w-6" />
+						</div>
+						<h3 className="font-medium text-amber-800">
+							Verification in Progress
+						</h3>
+						<p className="text-sm text-amber-600 mt-1">
+							Your document is being reviewed
+						</p>
+						<div className="flex flex-col sm:flex-row gap-2 mt-4 w-full justify-center">
+							<Button
+								variant="outline"
+								onClick={() => {
+									setIsReplacing(true); // Set replacing state
+									if (fileInputRef.current) {
+										fileInputRef.current.click();
+									}
+								}}
+							>
+								<RefreshCw className="mr-2 h-4 w-4" />
+								Replace Document
+							</Button>
 							<Button
 								variant="secondary"
 								onClick={() =>
@@ -208,91 +295,13 @@ export function FileUpload({
 								<FileText className="mr-2 h-4 w-4" />
 								View Document
 							</Button>
-						)}
+						</div>
 					</div>
-				</div>
-			);
+				);
+			}
 		}
 
-		if (status?.rejected) {
-			return (
-				<div className="flex flex-col items-center justify-center p-6 text-center">
-					<div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 mb-4">
-						<AlertCircle className="h-6 w-6" />
-					</div>
-					<h3 className="font-medium text-red-800">
-						Verification Failed
-					</h3>
-					<p className="text-sm text-red-600 mt-1">
-						{status.rejectionReason ||
-							'Please upload a new document'}
-					</p>
-					<div className="flex flex-col sm:flex-row gap-2 mt-4 w-full justify-center">
-						<Button
-							variant="outline"
-							onClick={() => {
-								if (fileInputRef.current) {
-									fileInputRef.current.click();
-								}
-							}}
-						>
-							<RefreshCw className="mr-2 h-4 w-4" />
-							Upload New Document
-						</Button>
-						{status.fileUrl && (
-							<Button
-								variant="secondary"
-								onClick={() =>
-									window.open(status.fileUrl, '_blank')
-								}
-							>
-								<FileText className="mr-2 h-4 w-4" />
-								View Document
-							</Button>
-						)}
-					</div>
-				</div>
-			);
-		}
-
-		if (status?.uploaded) {
-			return (
-				<div className="flex flex-col items-center justify-center p-6 text-center">
-					<div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mb-4">
-						<FileText className="h-6 w-6" />
-					</div>
-					<h3 className="font-medium text-amber-800">
-						Verification in Progress
-					</h3>
-					<p className="text-sm text-amber-600 mt-1">
-						Your document is being reviewed
-					</p>
-					<div className="flex flex-col sm:flex-row gap-2 mt-4 w-full justify-center">
-						<Button
-							variant="outline"
-							onClick={() => {
-								if (fileInputRef.current) {
-									fileInputRef.current.click();
-								}
-							}}
-						>
-							<RefreshCw className="mr-2 h-4 w-4" />
-							Replace Document
-						</Button>
-						<Button
-							variant="secondary"
-							onClick={() =>
-								window.open(status.fileUrl, '_blank')
-							}
-						>
-							<FileText className="mr-2 h-4 w-4" />
-							View Document
-						</Button>
-					</div>
-				</div>
-			);
-		}
-
+		// This part handles the file selection and upload UI
 		if (file) {
 			return (
 				<div className="p-4">

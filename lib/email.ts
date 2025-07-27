@@ -13,6 +13,15 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Test the configuration
+transporter.verify((error, success) => {
+  if (error) {
+    console.log('Email configuration error:', error);
+  } else {
+    console.log('Email server is ready to send messages');
+  }
+});
+
 // Function to send registration confirmation email
 export async function sendRegistrationEmail(
   email: string,
@@ -90,5 +99,24 @@ export async function sendAccountTerminationEmail(
   } catch (error) {
     console.error('Error sending account termination email:', error);
     return false;
+  }
+}
+
+// Function to send custom email
+export async function sendCustomEmail(
+  email: string,
+  subject: string,
+  emailTemplate: string,
+): Promise<void> {
+  try {
+    await transporter.sendMail({
+      from: `"SHUATS (DCS & IT)" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: subject,
+      html: emailTemplate,
+    });
+    console.log(`Custom email sent to ${email}`);
+  } catch (error) {
+    console.error('Error sending custom email:', error);
   }
 }

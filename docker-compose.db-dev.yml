@@ -1,13 +1,13 @@
-name: shuats-quiz-app-postgres
+name: shuats-quiz-app
 
 services:
     postgres:
-        image: postgres:16-alpine
-        container_name: shuats-quiz-app-postgres
+        image: postgres:17-alpine
+        container_name: shuats-quiz-app-db
         environment:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
-            POSTGRES_DB: quizapp
+            POSTGRES_DB: quizdb
         ports:
             - '5433:5432'
         volumes:

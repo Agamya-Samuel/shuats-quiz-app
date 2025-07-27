@@ -67,7 +67,7 @@ export function SectionTabs() {
       value={activeTab}
       onValueChange={handleTabChange}
       className="w-full">
-      <TabsList className="grid grid-cols-2 gap-2">
+      <TabsList className="flex flex-wrap items-center gap-2">
         <TabsTrigger
           value="overview"
           className="flex items-center gap-2">
@@ -125,7 +125,7 @@ export function SectionTabs() {
       value={activeTab}
       onValueChange={handleTabChange}
       className="w-full">
-      <TabsList className="grid grid-cols-2 gap-2">
+      <TabsList className="flex flex-wrap items-center gap-2">
         <TabsTrigger
           value="dashboard"
           className="flex items-center gap-2">
@@ -144,18 +144,6 @@ export function SectionTabs() {
           <ListChecks className="h-4 w-4" />
           <span>Question List</span>
         </TabsTrigger>
-        <TabsTrigger
-          value="import"
-          className="flex items-center gap-2">
-          <FileText className="h-4 w-4" />
-          <span>Import Questions</span>
-        </TabsTrigger>
-        <TabsTrigger
-          value="export"
-          className="flex items-center gap-2">
-          <FileText className="h-4 w-4" />
-          <span>Export Questions</span>
-        </TabsTrigger>
       </TabsList>
     </Tabs>
   );
@@ -165,7 +153,7 @@ export function SectionTabs() {
       value={activeTab}
       onValueChange={handleTabChange}
       className="w-full">
-      <TabsList className="grid grid-cols-3 gap-2">
+      <TabsList className="flex flex-wrap items-center gap-2">
         <TabsTrigger
           value="pending"
           className="flex items-center gap-2">
@@ -205,7 +193,7 @@ export function SectionTabs() {
       value={activeTab}
       onValueChange={handleTabChange}
       className="w-full">
-      <TabsList className="grid grid-cols-2 gap-2">
+      <TabsList className="flex flex-wrap items-center gap-2">
         <TabsTrigger
           value="general"
           className="flex items-center gap-2">
@@ -227,7 +215,7 @@ export function SectionTabs() {
       value={activeTab}
       onValueChange={handleTabChange}
       className="w-full">
-      <TabsList className="grid grid-cols-2 gap-2">
+      <TabsList className="flex flex-wrap items-center gap-2">
         <TabsTrigger
           value="original"
           className="flex items-center gap-2">
