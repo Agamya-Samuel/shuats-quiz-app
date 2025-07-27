@@ -126,7 +126,8 @@ export default function QuizInterface() {
   const { user: currentUser } = useAuthCookies();
   const { setCookie } = useCookies();
   const router = useRouter();
-
+  const [allQuestionsAttempted, setAllQuestionsAttempted] = useState(false);
+ 
   // Subject selection state
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [showSubjectSelector, setShowSubjectSelector] = useState(false);
@@ -400,14 +401,21 @@ export default function QuizInterface() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answers]); // Only run when answers change
-
+ 
   // Save answers to localStorage whenever they change
   useEffect(() => {
-    if (Object.keys(answers).length > 0) {
-      localStorage.setItem('quiz_answers', JSON.stringify(answers));
-    }
-  }, [answers]);
-
+  	if (Object.keys(answers).length > 0) {
+  		localStorage.setItem('quiz_answers', JSON.stringify(answers));
+  	}
+ 
+  	if (questions.length > 0) {
+  		const allAttempted = questions.every(
+  			(q) => answers[String(q.id)]
+  		);
+  		setAllQuestionsAttempted(allAttempted);
+  	}
+  }, [answers, questions]);
+ 
   // Handle subject selection
   const handleSubjectSelect = async (subjects: string[]) => {
     setSelectedSubjects(subjects);
@@ -1054,10 +1062,11 @@ export default function QuizInterface() {
                 onAutoSave={handleAutoSave}
                 onSubmit={handleSubmit}
                 isSubmitting={isSubmitting}
-              />
+                allQuestionsAttempted={allQuestionsAttempted}
+               />
+              </div>
+             </div>
             </div>
-          </div>
-        </div>
       </div>
 
       {/* Time Up Dialog */}
