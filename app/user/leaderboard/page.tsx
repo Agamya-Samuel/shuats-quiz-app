@@ -125,7 +125,7 @@ export default function LeaderboardPage() {
 		return (
 			<div className="min-h-screen bg-gray-50">
 				<div className="max-w-4xl mx-auto px-4 py-8">
-					<Card>
+					<Card className="shadow-md">
 						<CardContent className="p-6">
 							<div className="text-center">
 								<AlertTriangle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
@@ -139,10 +139,10 @@ export default function LeaderboardPage() {
 								<Button
 									variant="outline"
 									onClick={() =>
-										router.push('/user/dashboard')
+										router.push('/user/profile')
 									}
 								>
-									Return to Dashboard
+									Return to Profile
 								</Button>
 							</div>
 						</CardContent>

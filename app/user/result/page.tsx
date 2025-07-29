@@ -177,11 +177,10 @@ export default function ResultPage() {
 								<Button
 									variant="outline"
 									onClick={() =>
-										router.push('/user/dashboard')
+										router.push('/user/profile')
 									}
-									className="flex items-center gap-2"
 								>
-									Return to Dashboard
+									Return to Profile
 								</Button>
 							</div>
 						</CardContent>
@@ -218,11 +217,11 @@ export default function ResultPage() {
 									<Button
 										variant="outline"
 										onClick={() =>
-											router.push('/user/dashboard')
+											router.push('/user/profile')
 										}
 										className="flex items-center gap-2"
 									>
-										Return to Dashboard
+										Return to Profile
 									</Button>
 								</div>
 							</div>
