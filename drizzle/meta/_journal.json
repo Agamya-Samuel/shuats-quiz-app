@@ -36,6 +36,13 @@
       "when": 1753774676554,
       "tag": "0004_goofy_paibok",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1753779122015,
+      "tag": "0005_condemned_randall",
+      "breakpoints": true
     }
   ]
 }
