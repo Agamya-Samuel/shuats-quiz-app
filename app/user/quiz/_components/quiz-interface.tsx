@@ -27,14 +27,10 @@ import { useCookies as useAuthCookies } from '@/contexts/cookie-context';
 import { safeExitFullscreen, useAntiCheat } from '@/hooks/use-anti-cheat';
 import { useCookies } from '@/hooks/use-cookies';
 import { useToast } from '@/hooks/use-toast';
-import { subjects } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
 import Legend from './legend';
 import QuizQuestionView from './quiz-question-view';
-import SubjectSelector from './subject-selector';
-
-// app/user/quiz/_components/quiz-interface.tsx
 
 // app/user/quiz/_components/quiz-interface.tsx
 
@@ -127,10 +123,6 @@ export default function QuizInterface() {
   const { setCookie } = useCookies();
   const router = useRouter();
   const [allQuestionsAttempted, setAllQuestionsAttempted] = useState(false);
- 
-  // Subject selection state
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
-  const [showSubjectSelector, setShowSubjectSelector] = useState(false);
 
   // Quiz settings state
   const [quizSettings, setQuizSettings] = useState<{
@@ -219,8 +211,11 @@ export default function QuizInterface() {
           now - parsedCheck.timestamp < 5 * 60 * 1000
         ) {
           setHasAlreadyAttempted(false);
-          setShowSubjectSelector(quizSettings?.isLive || false);
           setIsCheckingAttemptStatus(false);
+          // Directly fetch questions if user has not attempted
+          if (quizSettings?.isLive) {
+            fetchQuestions();
+          }
           return;
         }
 
@@ -233,12 +228,11 @@ export default function QuizInterface() {
 
         if (hasAttempted) {
           setHasAlreadyAttempted(true);
-          setShowSubjectSelector(false);
         } else {
-          // User hasn't attempted the quiz, show subject selector if quiz is live
+          // User hasn't attempted the quiz, fetch questions if quiz is live
           setHasAlreadyAttempted(false);
           if (quizSettings?.isLive) {
-            setShowSubjectSelector(true);
+            fetchQuestions();
           }
         }
 
@@ -269,9 +263,8 @@ export default function QuizInterface() {
 
   // Timer effect
   useEffect(() => {
-    // Only start the timer if the quiz is loaded, not already attempted, and subject is selected
-    if (isLoading || hasAlreadyAttempted || isTimeUp || showSubjectSelector)
-      return;
+    // Only start the timer if the quiz is loaded and not already attempted
+    if (isLoading || hasAlreadyAttempted || isTimeUp) return;
 
     const timerId = setInterval(() => {
       setTimeRemaining((prev) => {
@@ -285,7 +278,7 @@ export default function QuizInterface() {
     }, 1000);
 
     return () => clearInterval(timerId);
-  }, [isLoading, hasAlreadyAttempted, isTimeUp, showSubjectSelector]);
+  }, [isLoading, hasAlreadyAttempted, isTimeUp]);
 
   // Handle time up
   useEffect(() => {
@@ -415,75 +408,37 @@ export default function QuizInterface() {
   		setAllQuestionsAttempted(allAttempted);
   	}
   }, [answers, questions]);
- 
-  // Handle subject selection
-  const handleSubjectSelect = async (subjects: string[]) => {
-    setSelectedSubjects(subjects);
-    setShowSubjectSelector(false);
-    await fetchQuestions(subjects);
 
+  // Fetch all questions
+  const fetchQuestions = useCallback(async () => {
     // Set quiz as started to enable anti-cheat
     setQuizStarted(true);
 
-    // Save selected subjects to cookies for Career Guidance feature
-    setCookie(
-      'selectedSubjects',
-      encodeURIComponent(JSON.stringify(subjects)),
-      { expires: 7 },
-    );
-
-    // Record quiz start time after subject selection - but only record on the server if we have a user ID
+    // Record quiz start time - but only record on the server if we have a user ID
     const startTime = new Date();
     setQuizStartTime(startTime);
     localStorage.setItem('quiz_start_time', JSON.stringify(startTime));
 
-    // Only make the API call if we have a user ID
     if (currentUser?.userId) {
       await recordQuizStartTime(currentUser.userId, startTime);
     }
-  };
 
-  // Fetch questions only from selected subjects
-  const fetchQuestions = useCallback(async (selectedSubjects?: string[]) => {
     try {
       setIsLoading(true);
       setError(null);
       const response = await getAllQuestions();
 
       if (response.success && Array.isArray(response.questions)) {
-        let filteredQuestions = [...response.questions];
+        const allQuestions = [...response.questions];
 
-        // Filter questions to only include those from selected subjects
-        if (selectedSubjects && selectedSubjects.length > 0) {
-          // Only keep questions from selected subjects
-          filteredQuestions = filteredQuestions.filter((q) =>
-            selectedSubjects.includes(q.subject),
-          );
-
-          // Create a map for subject priority (lower index = higher priority)
-          const subjectPriority = new Map(
-            selectedSubjects.map((subject, index) => [subject, index]),
-          );
-
-          // Sort questions based on subject priority
-          filteredQuestions.sort((a, b) => {
-            const aPriority = subjectPriority.get(a.subject) || 0;
-            const bPriority = subjectPriority.get(b.subject) || 0;
-            return aPriority - bPriority;
-          });
-        }
-
-        // If no questions match the selected subjects, show an error
-        if (filteredQuestions.length === 0) {
-          setError(
-            'No questions available for the selected subjects. Please select different subjects.',
-          );
+        if (allQuestions.length === 0) {
+          setError('No questions available.');
           setIsLoading(false);
           return;
         }
 
         // Initialize question status and properly format data for our UI
-        const initializedQuestions = filteredQuestions.map((q, index) => {
+        const initializedQuestions = allQuestions.map((q, index) => {
           // Type assertion to handle the possibility that q might have either text or question property
           const questionData = q as {
             id: number;
@@ -949,11 +904,6 @@ export default function QuizInterface() {
     );
   }
 
-  // Subject selection
-  if (showSubjectSelector) {
-    return <SubjectSelector onSubjectSelect={handleSubjectSelect} />;
-  }
-
   // Show loading state while fetching questions
   if (isLoading) {
     return (
@@ -997,18 +947,7 @@ export default function QuizInterface() {
         </div>
         {/* Quiz Header */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 my-6">
-          <div className="flex flex-wrap gap-2">
-            {selectedSubjects.map((subject, index) => (
-              <div
-                key={subject}
-                className="flex items-center">
-                <span className="text-sm font-medium bg-primary/10 text-primary px-3 py-1 rounded-full">
-                  {index + 1}.{' '}
-                  {subjects.find((s) => s.key === subject)?.value || subject}
-                </span>
-              </div>
-            ))}
-          </div>
+          <h2 className="text-2xl font-bold text-primary">SHUATS Online Quiz</h2>
           <div className="mt-4 md:mt-0 flex items-center">
             <div
               className={cn(
