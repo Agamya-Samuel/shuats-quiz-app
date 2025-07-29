@@ -19,6 +19,9 @@ export interface LeaderboardEntry {
 	totalAnswered: number;
 	correctAnswers: number;
 	accuracy: number;
+	attemptedQuestions?: number;
+	totalQuestions?: number;
+	submittedAt?: string;
 }
 
 interface LeaderboardResponse {

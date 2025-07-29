@@ -37,11 +37,11 @@ export default function LeaderboardStats({
 
 		// Calculate participation rate
 		const totalAttempted = leaderboardData.reduce(
-			(sum, entry) => sum + entry.attemptedQuestions,
+			(sum, entry) => sum + (entry.attemptedQuestions || 0),
 			0
 		);
 		const totalQuestions = leaderboardData.reduce(
-			(sum, entry) => sum + entry.totalQuestions,
+			(sum, entry) => sum + (entry.totalQuestions || 0),
 			0
 		);
 		const participationRate =
@@ -122,7 +122,7 @@ export default function LeaderboardStats({
 										</p>
 										<p className="font-semibold">
 											{performer.correctAnswers} /{' '}
-											{performer.attemptedQuestions}
+											{performer.attemptedQuestions || 0}
 										</p>
 									</div>
 									<div>
@@ -130,8 +130,8 @@ export default function LeaderboardStats({
 											Attempted
 										</p>
 										<p className="font-semibold">
-											{performer.attemptedQuestions} /{' '}
-											{performer.totalQuestions}
+											{performer.attemptedQuestions || 0} /{' '}
+											{performer.totalQuestions || 0}
 										</p>
 									</div>
 								</div>
