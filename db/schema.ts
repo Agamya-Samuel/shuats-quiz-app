@@ -166,13 +166,13 @@ export const quizSettings = pgTable('quiz_settings', {
   id: serial('id').primaryKey(),
 
   // Time Limit Settings
-  perQuizTimeLimit: integer('per_quiz_time_limit').default(30), // in minutes
+  perQuizTimeLimit: integer('per_quiz_time_limit').default(60), // in minutes
   perQuestionTimeLimit: integer('per_question_time_limit').default(0), // in seconds
   enablePerQuestionTimer: boolean('enable_per_question_timer').default(false),
   showCountdown: boolean('show_countdown').default(true),
 
   // Availability Settings
-  isLive: boolean('is_live').default(true),
+  isLive: boolean('is_live').default(false),
   isScheduled: boolean('is_scheduled').default(false),
   scheduledDate: timestamp('scheduled_date'),
 
