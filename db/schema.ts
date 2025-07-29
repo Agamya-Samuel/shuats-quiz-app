@@ -55,6 +55,7 @@ export const users = pgTable('users', {
   profileStage2Completed: boolean('profile_stage2_completed')
     .default(false)
     .notNull(),
+  quizAttempted: boolean('quiz_attempted').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
