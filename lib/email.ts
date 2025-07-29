@@ -1,26 +1,7 @@
 'use server';
 
-import nodemailer from 'nodemailer';
-
 import { loadEmailTemplate } from '@/lib/email-template-loader';
-
-// Create a transporter using SMTP for Gmail
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD, // Use app password for Gmail
-  },
-});
-
-// Test the configuration
-transporter.verify((error, success) => {
-  if (error) {
-    console.log('Email configuration error:', error);
-  } else {
-    console.log('Email server is ready to send messages');
-  }
-});
+import transporter from './email-transporter';
 
 // Function to send registration confirmation email
 export async function sendRegistrationEmail(
