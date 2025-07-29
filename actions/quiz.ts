@@ -525,12 +525,35 @@ export async function getQuizResults(userId: number) {
 			(await db.query.correctAnswers.findMany()) as CorrectAnswer[];
 
 		// Map to store correct answers by question ID
-		const correctAnswersMap = new Map<number, string>();
+		const correctAnswersMap = new Map<number, number>();
 		allCorrectAnswers.forEach((answer) => {
 			if (answer.questionId !== null) {
-				correctAnswersMap.set(answer.questionId, answer.correctOption);
+				correctAnswersMap.set(
+					answer.questionId,
+					parseInt(answer.correctOption, 10)
+				);
 			}
 		});
+
+		const hasAttempted = submissions.length > 0;
+
+		if (!hasAttempted) {
+			return {
+				success: true,
+				hasAttempted: false,
+				data: {
+					results: [],
+					summary: {
+						totalQuestions: 0,
+						attemptedQuestions: 0,
+						correctAnswers: 0,
+						score: 0,
+						submittedAt: new Date().toISOString(),
+						timeTaken: null,
+					},
+				},
+			};
+		}
 
 		// Process results
 		let correctAnswersCount = 0;
@@ -540,35 +563,51 @@ export async function getQuizResults(userId: number) {
 		const questionResults = submissions
 			.map((submission) => {
 				const questionId = submission.questionId;
-				// Skip questions with null IDs
-				if (questionId === null) {
+				if (questionId === null || !submission.question) {
 					return null;
 				}
 
-				const correctOption = correctAnswersMap.get(questionId);
+				const correctOptionId = correctAnswersMap.get(questionId) ?? null;
+				const userSelectedOptionId = submission.option
+					? parseInt(submission.option, 10)
+					: null;
 
-				// Check if the answer is correct
-				const isCorrect = submission.option === correctOption;
+				const isCorrect =
+					correctOptionId !== null &&
+					userSelectedOptionId === correctOptionId;
+
 				if (isCorrect) {
 					correctAnswersCount++;
 				}
 
-				if (submission.option) {
+				if (userSelectedOptionId !== null) {
 					attemptedQuestions++;
 				}
 
-				// Return formatted result for this question
+				const options =
+					submission.question.options?.map((opt: any) => ({
+						id: opt.id,
+						text: opt.value,
+					})) ?? [];
+
 				return {
-					questionId,
-					question:
-						submission.question?.question ?? 'Question not found',
-					options: submission.question?.options ?? [],
-					selectedOption: submission.option,
-					correctOption,
+					questionId: String(questionId),
+					question: submission.question.question,
+					options,
+					userSelectedOptionId,
+					correctOptionId,
 					isCorrect,
+					subject: submission.question.subject,
 				};
 			})
-			.filter(Boolean); // Remove null results
+			.filter(Boolean);
+
+		// Get the latest submission time
+		const lastSubmission = submissions.sort(
+			(a, b) =>
+				new Date(b.question?.createdAt ?? 0).getTime() -
+				new Date(a.question?.createdAt ?? 0).getTime()
+		)[0];
 
 		// Prepare summary statistics
 		const summary = {
@@ -579,13 +618,21 @@ export async function getQuizResults(userId: number) {
 				questionResults.length > 0
 					? (correctAnswersCount / questionResults.length) * 100
 					: 0,
+			submittedAt:
+				lastSubmission?.question?.createdAt?.toISOString() ??
+				new Date().toISOString(),
+			timeTaken: null, // Time taken is not tracked in the backend
+			attemptedSubjects: [
+				...new Set(questionResults.map((r) => r!.subject)),
+			],
 		};
 
 		return {
 			success: true,
-			results: {
+			hasAttempted: true,
+			data: {
+				results: questionResults,
 				summary,
-				questions: questionResults,
 			},
 		};
 	} catch (error) {

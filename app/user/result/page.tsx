@@ -34,16 +34,8 @@ export interface QuizSummary {
 export interface ServerResponse {
 	success: boolean;
 	data?: {
-		results: QuizResult[];
-		summary: {
-			totalQuestions: number;
-			attemptedQuestions: number;
-			correctAnswers: number;
-			score: number;
-			submittedAt: string;
-			timeTaken: number | null;
-			attemptedSubjects?: string[];
-		};
+		results: (QuizResult | null)[];
+		summary: QuizSummary;
 	};
 	error?: string;
 	hasAttempted?: boolean;
@@ -92,17 +84,17 @@ export default function ResultPage() {
 					response.data &&
 					response.data.results.length > 0
 				) {
-					setResults(response.data.results);
+					setResults(
+						response.data.results.filter(
+							(r): r is QuizResult => r !== null
+						)
+					);
 					setSummary({
 						...response.data.summary,
 						submittedAt: response.data.summary.submittedAt,
 					});
-					setHasAttempted(true);
-				} else if (
-					response.success &&
-					(!response.data || response.data.results.length === 0)
-				) {
-					// User hasn't attempted the quiz yet
+					setHasAttempted(response.hasAttempted ?? true);
+				} else if (response.hasAttempted === false) {
 					setHasAttempted(false);
 				} else {
 					throw new Error(
