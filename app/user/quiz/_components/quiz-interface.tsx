@@ -31,6 +31,7 @@ import { cn } from '@/lib/utils';
 
 import Legend from './legend';
 import QuizQuestionView from './quiz-question-view';
+import PreQuizPrompt from './pre-quiz-prompt';
 
 // app/user/quiz/_components/quiz-interface.tsx
 
@@ -123,6 +124,7 @@ export default function QuizInterface() {
   const { setCookie } = useCookies();
   const router = useRouter();
   const [allQuestionsAttempted, setAllQuestionsAttempted] = useState(false);
+  const [showPreQuizPrompt, setShowPreQuizPrompt] = useState(true);
 
   // Quiz settings state
   const [quizSettings, setQuizSettings] = useState<{
@@ -212,10 +214,6 @@ export default function QuizInterface() {
         ) {
           setHasAlreadyAttempted(false);
           setIsCheckingAttemptStatus(false);
-          // Directly fetch questions if user has not attempted
-          if (quizSettings?.isLive) {
-            fetchQuestions();
-          }
           return;
         }
 
@@ -229,11 +227,8 @@ export default function QuizInterface() {
         if (hasAttempted) {
           setHasAlreadyAttempted(true);
         } else {
-          // User hasn't attempted the quiz, fetch questions if quiz is live
+          // User hasn't attempted the quiz, show the prompt
           setHasAlreadyAttempted(false);
-          if (quizSettings?.isLive) {
-            fetchQuestions();
-          }
         }
 
         // Store the check in localStorage to avoid redundant API calls
@@ -408,6 +403,11 @@ export default function QuizInterface() {
   		setAllQuestionsAttempted(allAttempted);
   	}
   }, [answers, questions]);
+
+  const handleStartQuiz = () => {
+    setShowPreQuizPrompt(false);
+    fetchQuestions();
+  };
 
   // Fetch all questions
   const fetchQuestions = useCallback(async () => {
@@ -902,6 +902,10 @@ export default function QuizInterface() {
         </Card>
       </div>
     );
+  }
+
+  if (showPreQuizPrompt) {
+    return <PreQuizPrompt onStartQuiz={handleStartQuiz} />;
   }
 
   // Show loading state while fetching questions
