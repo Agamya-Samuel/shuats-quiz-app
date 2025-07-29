@@ -108,13 +108,13 @@ function processServerSettings(
 		// Return default settings if none provided
 		return {
 			timeLimit: {
-				perQuiz: 30,
+				perQuiz: 60,
 				perQuestion: 0,
 				enablePerQuestionTimer: false,
 				showCountdown: true,
 			},
 			availability: {
-				live: true,
+				live: false,
 				scheduled: false,
 				scheduledDate: null,
 			},
@@ -132,14 +132,14 @@ function processServerSettings(
 
 	return {
 		timeLimit: {
-			perQuiz: serverSettings.timeLimit.perQuiz ?? 30,
+			perQuiz: serverSettings.timeLimit.perQuiz ?? 60,
 			perQuestion: serverSettings.timeLimit.perQuestion ?? 0,
 			enablePerQuestionTimer:
 				serverSettings.timeLimit.enablePerQuestionTimer ?? false,
 			showCountdown: serverSettings.timeLimit.showCountdown ?? true,
 		},
 		availability: {
-			live: serverSettings.availability.live ?? true,
+			live: serverSettings.availability.live ?? false,
 			scheduled: serverSettings.availability.scheduled ?? false,
 			scheduledDate: serverSettings.availability.scheduledDate,
 		},
@@ -170,13 +170,13 @@ export function QuizSettings({ showResetOnly = false }: QuizSettingsProps) {
 
 	const [settings, setSettings] = useState<QuizSettingsType>({
 		timeLimit: {
-			perQuiz: 30,
+			perQuiz: 60,
 			perQuestion: 0,
 			enablePerQuestionTimer: false,
 			showCountdown: true,
 		},
 		availability: {
-			live: true,
+			live: false,
 			scheduled: false,
 			scheduledDate: null,
 		},
