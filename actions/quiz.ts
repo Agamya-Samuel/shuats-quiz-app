@@ -935,7 +935,7 @@ export async function getDefaultQuizSettings() {
 		success: true,
 		settings: {
 			timeLimit: {
-				perQuiz: 30,
+				perQuiz: 60,
 				perQuestion: 0,
 				enablePerQuestionTimer: false,
 				showCountdown: true,
@@ -1043,6 +1043,7 @@ export async function getPublicQuizSettings() {
 				settings: {
 					isLive: false,
 					isResultLive: false,
+					perQuizTimeLimit: 60, // Default time limit
 				},
 			};
 		}
@@ -1053,6 +1054,7 @@ export async function getPublicQuizSettings() {
 			settings: {
 				isLive: settings.isLive,
 				isResultLive: settings.isResultLive,
+				perQuizTimeLimit: settings.perQuizTimeLimit, // Expose time limit
 			},
 		};
 	} catch (error) {

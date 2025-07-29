@@ -129,11 +129,12 @@ export default function QuizInterface() {
   // Quiz settings state
   const [quizSettings, setQuizSettings] = useState<{
     isLive: boolean;
+    perQuizTimeLimit: number;
   } | null>(null);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
 
-  // Timer state - use a fixed value since we don't get it from API anymore
-  const [timeRemaining, setTimeRemaining] = useState(30 * 60); // 30 minutes in seconds (fixed)
+  // Timer state
+  const [timeRemaining, setTimeRemaining] = useState(0);
   const [showTimeUpDialog, setShowTimeUpDialog] = useState(false);
   const [isTimeUp, setIsTimeUp] = useState(false);
 
@@ -155,29 +156,26 @@ export default function QuizInterface() {
 
         if (response.success && response.settings) {
           // Use nullish coalescing to ensure we have valid boolean value
-          const isLive =
-            typeof response.settings.isLive === 'boolean'
-              ? response.settings.isLive
-              : true;
+          const { isLive, perQuizTimeLimit } = response.settings;
 
-          setQuizSettings({ isLive });
+          setQuizSettings({
+            isLive: typeof isLive === 'boolean' ? isLive : true,
+            perQuizTimeLimit: perQuizTimeLimit || 60,
+          });
 
-          // Immediately update loading state if quiz is not live
-          // This allows the UI to show "Quiz Not Available" message faster
+          setTimeRemaining((perQuizTimeLimit || 60) * 60);
+
           if (!isLive) {
             setIsLoadingSettings(false);
           }
-
-          // We now use a fixed time limit
-          // No need to update timeRemaining here
         } else {
-          // Use defaults if we can't load settings
-          setQuizSettings({ isLive: true });
+          setQuizSettings({ isLive: true, perQuizTimeLimit: 60 });
+          setTimeRemaining(60 * 60);
         }
       } catch (error) {
         console.error('Error loading quiz settings:', error);
-        // Set default values if there's an error
-        setQuizSettings({ isLive: true });
+        setQuizSettings({ isLive: true, perQuizTimeLimit: 60 });
+        setTimeRemaining(60 * 60);
       } finally {
         // Only set loading to false here if it hasn't been set already
         // This prevents overriding the early completion for not-live quizzes
@@ -221,8 +219,8 @@ export default function QuizInterface() {
 
         const hasAttempted =
           response.success &&
-          response.results &&
-          response.results.questions.length > 0;
+          response.data &&
+          response.data.results.length > 0;
 
         if (hasAttempted) {
           setHasAlreadyAttempted(true);
