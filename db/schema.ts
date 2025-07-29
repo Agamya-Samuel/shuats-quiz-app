@@ -183,6 +183,7 @@ export const quizSettings = pgTable('quiz_settings', {
   maxAttempts: integer('max_attempts').default(1),
   showCorrectAnswers: boolean('show_correct_answers').default(false),
   preventTabSwitching: boolean('prevent_tab_switching').default(true),
+  isResultLive: boolean('is_result_live').default(false),
 
   // Metadata
   createdAt: timestamp('created_at').defaultNow(),

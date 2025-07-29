@@ -512,6 +512,16 @@ export async function getQuizResults(userId: number) {
 			typeof dbSchema
 		>;
 
+		// Get the quiz settings
+		const settings = await db.query.quizSettings.findFirst();
+
+		// Check if the results are live
+		if (!settings?.isResultLive) {
+			return {
+				success: false,
+				message: 'Results are not live yet.',
+			};
+		}
 		// Get all submitted answers for the user
 		const submissions = (await db.query.userSubmissions.findMany({
 			where: eq(userSubmissions.userId, userId),
@@ -768,6 +778,7 @@ type QuizSettingsInput = {
 		maxAttempts: number;
 		showCorrectAnswers: boolean;
 		preventTabSwitching: boolean;
+		isResultLive: boolean;
 	};
 };
 
@@ -818,6 +829,7 @@ export async function getQuizSettings() {
 				maxAttempts: settings.maxAttempts,
 				showCorrectAnswers: settings.showCorrectAnswers,
 				preventTabSwitching: settings.preventTabSwitching,
+				isResultLive: settings.isResultLive,
 			},
 		};
 
@@ -869,6 +881,7 @@ export async function saveQuizSettings(settingsInput: QuizSettingsInput) {
 			maxAttempts: settingsInput.behavior.maxAttempts,
 			showCorrectAnswers: settingsInput.behavior.showCorrectAnswers,
 			preventTabSwitching: settingsInput.behavior.preventTabSwitching,
+			isResultLive: settingsInput.behavior.isResultLive,
 			updatedAt: new Date(),
 		};
 
@@ -929,6 +942,7 @@ export async function getDefaultQuizSettings() {
 				maxAttempts: 1,
 				showCorrectAnswers: false,
 				preventTabSwitching: true,
+				isResultLive: false,
 			},
 		},
 	};
@@ -983,6 +997,7 @@ export async function resetQuizSettings() {
 				defaultSettings?.behavior?.showCorrectAnswers ?? false,
 			preventTabSwitching:
 				defaultSettings?.behavior?.preventTabSwitching ?? true,
+			isResultLive: defaultSettings?.behavior?.isResultLive ?? false,
 		});
 
 		revalidatePath(`/admin?section=settings`);
@@ -1017,6 +1032,7 @@ export async function getPublicQuizSettings() {
 				success: true,
 				settings: {
 					isLive: false,
+					isResultLive: false,
 				},
 			};
 		}
@@ -1026,6 +1042,7 @@ export async function getPublicQuizSettings() {
 			success: true,
 			settings: {
 				isLive: settings.isLive,
+				isResultLive: settings.isResultLive,
 			},
 		};
 	} catch (error) {
