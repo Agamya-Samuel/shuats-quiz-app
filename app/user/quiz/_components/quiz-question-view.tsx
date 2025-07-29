@@ -196,7 +196,7 @@ export default function QuizQuestionView({
 									/>
 									<Label
 										htmlFor={`option-${option.id}`}
-										className="flex-1 cursor-pointer flex items-center"
+										className="flex items-center"
 									>
 										<span className="font-medium mr-2">
 											{OptionsMapping[option.id]}
