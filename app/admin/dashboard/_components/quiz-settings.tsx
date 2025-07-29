@@ -65,6 +65,7 @@ type ServerSettingsResponse = {
 			maxAttempts: number | null;
 			showCorrectAnswers: boolean | null;
 			preventTabSwitching: boolean | null;
+			isResultLive: boolean | null;
 		};
 	};
 };
@@ -90,6 +91,7 @@ type BehaviorSettings = {
 	maxAttempts: number;
 	showCorrectAnswers: boolean;
 	preventTabSwitching: boolean;
+	isResultLive: boolean;
 };
 
 type QuizSettingsType = {
@@ -123,6 +125,7 @@ function processServerSettings(
 				maxAttempts: 1,
 				showCorrectAnswers: false,
 				preventTabSwitching: true,
+				isResultLive: false,
 			},
 		};
 	}
@@ -150,6 +153,7 @@ function processServerSettings(
 				serverSettings.behavior.showCorrectAnswers ?? false,
 			preventTabSwitching:
 				serverSettings.behavior.preventTabSwitching ?? true,
+			isResultLive: serverSettings.behavior.isResultLive ?? false,
 		},
 	};
 }
@@ -183,6 +187,7 @@ export function QuizSettings({ showResetOnly = false }: QuizSettingsProps) {
 			maxAttempts: 1,
 			showCorrectAnswers: false,
 			preventTabSwitching: true,
+			isResultLive: false,
 		},
 	});
 
@@ -773,6 +778,29 @@ export function QuizSettings({ showResetOnly = false }: QuizSettingsProps) {
 											<p className="text-sm text-muted-foreground">
 												Discourage cheating by detecting
 												when users leave the quiz
+											</p>
+										</div>
+									</div>
+									<div className="flex items-center space-x-2">
+										<Switch
+											id="is-result-live"
+											checked={
+												settings.behavior.isResultLive
+											}
+											onCheckedChange={(checked) =>
+												handleBehaviorChange(
+													'isResultLive',
+													checked
+												)
+											}
+										/>
+										<div className="space-y-0.5">
+											<Label htmlFor="is-result-live">
+												Result is currently live
+											</Label>
+											<p className="text-sm text-muted-foreground">
+												When enabled, users can view their
+												results
 											</p>
 										</div>
 									</div>
