@@ -25,7 +25,7 @@ export function SectionTabs() {
       case 'dashboard':
         return 'overview';
       case 'manage-quiz':
-        return 'list';
+        return 'dashboard';
       case 'verification':
         return 'pending';
       case 'site-analytics':

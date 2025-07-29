@@ -1065,3 +1065,42 @@ export async function getPublicQuizSettings() {
 		};
 	}
 }
+
+// Delete all questions
+export async function deleteAllQuestions() {
+	// First verify that the requester is an admin or superadmin
+	const user = await verifyAuth();
+
+	if (!user || (user.role !== 'admin' && user.role !== 'superadmin')) {
+		return {
+			success: false,
+			message:
+				'Unauthorized: You do not have permission to delete questions',
+		};
+	}
+
+	try {
+		// Connect to the database
+		const db = (await connectToDB()) as unknown as NodePgDatabase<
+			typeof dbSchema
+		>;
+
+		// Use a transaction to ensure atomicity
+		await db.transaction(async (tx) => {
+			// Delete all correct answers
+			await tx.delete(correctAnswers);
+			// Delete all questions
+			await tx.delete(questions);
+		});
+
+		revalidatePath('/admin/manage-quiz');
+
+		return { success: true, message: 'All questions deleted successfully' };
+	} catch (error) {
+		console.error('Error deleting all questions:', error);
+		return {
+			success: false,
+			message: `Failed to delete all questions: ${error}`,
+		};
+	}
+}
