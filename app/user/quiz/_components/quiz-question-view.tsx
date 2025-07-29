@@ -32,6 +32,7 @@ interface QuizQuestionViewProps {
 	onAutoSave: (questionId: string, answer: string) => Promise<void>;
 	onSubmit: () => Promise<void>;
 	isSubmitting: boolean;
+	allQuestionsAttempted: boolean;
 }
 
 export default function QuizQuestionView({
@@ -46,6 +47,7 @@ export default function QuizQuestionView({
 	onAutoSave,
 	onSubmit,
 	isSubmitting,
+	allQuestionsAttempted,
 }: QuizQuestionViewProps) {
 	const currentQuestion = questions[currentQuestionIndex];
 	const [showSubmitDialog, setShowSubmitDialog] = useState(false);
@@ -194,7 +196,7 @@ export default function QuizQuestionView({
 									/>
 									<Label
 										htmlFor={`option-${option.id}`}
-										className="flex-1 cursor-pointer flex items-center"
+										className="flex items-center"
 									>
 										<span className="font-medium mr-2">
 											{OptionsMapping[option.id]}
@@ -235,23 +237,23 @@ export default function QuizQuestionView({
 							>
 								Clear
 							</Button>
-							{isLastQuestion ? (
+							<Button
+								onClick={handleSaveAndNext}
+								variant="default"
+								disabled={isSubmitting}
+							>
+								Save & Next
+							</Button>
+							{isLastQuestion && allQuestionsAttempted && (
 								<Button
 									onClick={() => setShowSubmitDialog(true)}
-									variant="default"
+									variant="destructive"
 									disabled={isSubmitting}
+									className="bg-blue-500 hover:bg-blue-600 text-white"
 								>
 									{isSubmitting
 										? 'Submitting...'
 										: 'Submit Quiz'}
-								</Button>
-							) : (
-								<Button
-									onClick={handleSaveAndNext}
-									variant="default"
-									disabled={isSubmitting}
-								>
-									Save & Next
 								</Button>
 							)}
 						</div>

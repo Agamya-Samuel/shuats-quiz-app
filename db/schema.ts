@@ -55,6 +55,7 @@ export const users = pgTable('users', {
   profileStage2Completed: boolean('profile_stage2_completed')
     .default(false)
     .notNull(),
+  quizAttempted: boolean('quiz_attempted').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -165,13 +166,13 @@ export const quizSettings = pgTable('quiz_settings', {
   id: serial('id').primaryKey(),
 
   // Time Limit Settings
-  perQuizTimeLimit: integer('per_quiz_time_limit').default(30), // in minutes
+  perQuizTimeLimit: integer('per_quiz_time_limit').default(60), // in minutes
   perQuestionTimeLimit: integer('per_question_time_limit').default(0), // in seconds
   enablePerQuestionTimer: boolean('enable_per_question_timer').default(false),
   showCountdown: boolean('show_countdown').default(true),
 
   // Availability Settings
-  isLive: boolean('is_live').default(true),
+  isLive: boolean('is_live').default(false),
   isScheduled: boolean('is_scheduled').default(false),
   scheduledDate: timestamp('scheduled_date'),
 
@@ -182,6 +183,7 @@ export const quizSettings = pgTable('quiz_settings', {
   maxAttempts: integer('max_attempts').default(1),
   showCorrectAnswers: boolean('show_correct_answers').default(false),
   preventTabSwitching: boolean('prevent_tab_switching').default(true),
+  isResultLive: boolean('is_result_live').default(false),
 
   // Metadata
   createdAt: timestamp('created_at').defaultNow(),

@@ -45,3 +45,6 @@ next-env.d.ts
 /logs
 
 Bihar_12th_Science_Agriculture.xlsx
+
+backups/
+docker-compose.db-prod.yml

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getLeaderboard } from '@/actions/quiz';
+import { getLeaderboard, getPublicQuizSettings } from '@/actions/quiz';
 import LeaderboardTable from './_components/leaderboard-table';
 import LeaderboardStats from './_components/leaderboard-stats';
 import { Card, CardContent } from '@/components/ui/card';
@@ -11,16 +11,14 @@ import { AlertTriangle, Printer } from 'lucide-react';
 import ImageCarousel from '@/components/image-carousel';
 
 export interface LeaderboardEntry {
-	userId: string | null;
+	userId: number;
 	name: string;
 	school: string;
 	rank: number;
 	score: number;
-	totalQuestions: number;
-	attemptedQuestions: number;
+	totalAnswered: number;
 	correctAnswers: number;
 	accuracy: number;
-	submittedAt: string;
 }
 
 interface LeaderboardResponse {
@@ -53,6 +51,7 @@ export default function LeaderboardPage() {
 	const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>(
 		[]
 	);
+	const [isResultLive, setIsResultLive] = useState(false);
 
 	// Handle print functionality
 	const handlePrint = () => {
@@ -62,12 +61,26 @@ export default function LeaderboardPage() {
 	useEffect(() => {
 		const fetchLeaderboard = async () => {
 			try {
-				const response: LeaderboardResponse = await getLeaderboard();
-				if (response.success) {
-					setLeaderboardData(response.data || []);
+				const settingsResponse = await getPublicQuizSettings();
+				if (settingsResponse.success && settingsResponse.settings) {
+					setIsResultLive(
+						settingsResponse.settings.isResultLive ?? false
+					);
+					if (settingsResponse.settings.isResultLive) {
+						const response: LeaderboardResponse =
+							await getLeaderboard();
+						if (response.success) {
+							setLeaderboardData(response.data || []);
+						} else {
+							throw new Error(
+								response.error ||
+									'Failed to fetch leaderboard data'
+							);
+						}
+					}
 				} else {
 					throw new Error(
-						response.error || 'Failed to fetch leaderboard data'
+						settingsResponse.message || 'Failed to fetch settings'
 					);
 				}
 			} catch (err) {
@@ -104,6 +117,37 @@ export default function LeaderboardPage() {
 						</div>
 					</CardContent>
 				</Card>
+			</div>
+		);
+	}
+
+	if (!isResultLive) {
+		return (
+			<div className="min-h-screen bg-gray-50">
+				<div className="max-w-4xl mx-auto px-4 py-8">
+					<Card className="shadow-md">
+						<CardContent className="p-6">
+							<div className="text-center">
+								<AlertTriangle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
+								<h3 className="text-xl font-semibold mb-2">
+									Leaderboard Not Yet Live
+								</h3>
+								<p className="mb-6 text-gray-600">
+									The leaderboard is not yet available. Please
+									check back later.
+								</p>
+								<Button
+									variant="outline"
+									onClick={() =>
+										router.push('/user/profile')
+									}
+								>
+									Return to Profile
+								</Button>
+							</div>
+						</CardContent>
+					</Card>
+				</div>
 			</div>
 		);
 	}
