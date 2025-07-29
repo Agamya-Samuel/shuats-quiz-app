@@ -153,6 +153,11 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 					</CardDescription>
 				</CardHeader>
 
+				<div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mx-6 mt-4 rounded-md mb-8" role="alert">
+					<p className="font-bold">Restricted Access</p>
+					<p>This page is for authorized administrators only.</p>
+				</div>
+
 				<CardContent>
 					<Form {...form}>
 						<form
@@ -197,9 +202,6 @@ export function LoginForm({ redirect }: { redirect?: string }) {
 				</CardContent>
 
 				<CardFooter className="flex flex-col items-center justify-center pt-2 pb-6">
-					<p className="text-xs text-muted-foreground mt-2">
-						This login is restricted to quiz administrators only
-					</p>
 				</CardFooter>
 			</Card>
 		</div>
