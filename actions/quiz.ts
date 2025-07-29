@@ -662,6 +662,16 @@ export async function getLeaderboard() {
 			typeof dbSchema
 		>;
 
+		// Get the quiz settings
+		const settings = await db.query.quizSettings.findFirst();
+
+		// Check if the results are live
+		if (!settings?.isResultLive) {
+			return {
+				success: false,
+				message: 'Leaderboard is not live yet.',
+			};
+		}
 		// Get all users
 		const allUsers = (await db.query.users.findMany({
 			columns: {
