@@ -1,1 +1,0 @@
-ALTER TABLE "quiz_settings" ADD COLUMN "is_result_live" boolean DEFAULT false;
