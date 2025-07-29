@@ -1,7 +1,10 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { getAllQuestionsWithAnswers } from '@/actions/quiz';
+import {
+	getAllQuestionsWithAnswers,
+	deleteAllQuestions,
+} from '@/actions/quiz';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Search, RefreshCw, Filter, Eye, Pencil, Trash2 } from 'lucide-react';
@@ -10,7 +13,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { ViewDialog } from './view-dialog';
 import { EditDialog } from './edit-dialog';
-import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
+import {
+	DeleteConfirmationDialog,
+	DeleteAllConfirmationDialog,
+} from './delete-confirmation-dialog';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -75,6 +81,7 @@ export function EnhancedQuestionList() {
 	const [selectedQuestion, setSelectedQuestion] = useState<IQuestion | null>(
 		null
 	);
+	const [isDeleteAllOpen, setIsDeleteAllOpen] = useState(false);
 	const { toast } = useToast();
 
 	const fetchQuestions = useCallback(async () => {
@@ -91,7 +98,7 @@ export function EnhancedQuestionList() {
 					topic: q.topic || 'General',
 					difficulty: q.difficulty || 'medium',
 					options: Array.isArray(q.options)
-						? q.options.map((opt) => ({
+						? q.options.map((opt: { id: string; text: string }) => ({
 								id: opt.id?.toString() || '',
 								text: opt.text || '',
 								isCorrect:
@@ -125,6 +132,35 @@ export function EnhancedQuestionList() {
 	useEffect(() => {
 		fetchQuestions();
 	}, [fetchQuestions]);
+
+	const handleDeleteAll = useCallback(async () => {
+		try {
+			const response = await deleteAllQuestions();
+
+			if (response.success) {
+				toast({
+					title: 'Success',
+					description: response.message,
+					variant: 'success',
+				});
+				setIsDeleteAllOpen(false);
+				fetchQuestions(); // Refresh the list
+			} else {
+				toast({
+					title: 'Error',
+					description:
+						response.message || 'Failed to delete all questions',
+					variant: 'destructive',
+				});
+			}
+		} catch {
+			toast({
+				title: 'Error',
+				description: 'An error occurred while deleting all questions',
+				variant: 'destructive',
+			});
+		}
+	}, [fetchQuestions, toast]);
 
 	const handleViewQuestion = (question: IQuestion) => {
 		setSelectedQuestion(question);
@@ -263,6 +299,15 @@ export function EnhancedQuestionList() {
 						/>
 						Refresh
 					</Button>
+					<Button
+						variant="destructive"
+						size="sm"
+						onClick={() => setIsDeleteAllOpen(true)}
+						className="w-full sm:w-auto"
+					>
+						<Trash2 className="h-4 w-4 mr-2" />
+						Delete All Questions
+					</Button>
 				</div>
 			</div>
 
@@ -373,7 +418,7 @@ export function EnhancedQuestionList() {
 								subject: q.subject,
 								topic: 'General', // Assuming this is not in the API response
 								difficulty: 'medium' as const, // Assuming this is not in the API response
-								options: q.options.map((opt) => ({
+								options: q.options.map((opt: { id: string; text: string }) => ({
 									id: opt.id,
 									text: opt.text,
 									isCorrect: opt.id === q.correctOptionId
@@ -397,7 +442,7 @@ export function EnhancedQuestionList() {
 								subject: q.subject,
 								topic: 'General', // Assuming this is not in the API response
 								difficulty: 'medium' as const, // Assuming this is not in the API response
-								options: q.options.map((opt) => ({
+								options: q.options.map((opt: { id: string; text: string }) => ({
 									id: opt.id,
 									text: opt.text,
 									isCorrect: opt.id === q.correctOptionId
@@ -410,6 +455,11 @@ export function EnhancedQuestionList() {
 					/>
 				</>
 			)}
+			<DeleteAllConfirmationDialog
+				isOpen={isDeleteAllOpen}
+				onOpenChange={setIsDeleteAllOpen}
+				onConfirm={handleDeleteAll}
+			/>
 		</div>
 	);
 }

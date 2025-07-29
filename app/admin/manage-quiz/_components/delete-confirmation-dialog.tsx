@@ -10,23 +10,14 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { deleteQuestion, getAllQuestionsWithAnswers } from '@/actions/quiz';
-import { toast } from '@/hooks/use-toast';
-
-// Updated Question interface to match the schema
-interface Question {
-	id: number;
-	text: string;
-	options: { id: string; text: string }[];
-	correctOptionId: string | null;
-	subject: string;
-}
+import { deleteQuestion } from '@/actions/quiz';
+import { useToast } from '@/hooks/use-toast';
 
 interface DeleteConfirmationDialogProps {
 	isOpen: boolean;
 	onOpenChange: (isOpen: boolean) => void;
-	questionId: string | null;
-	setQuestions: (questions: Question[]) => void;
+	questionId: string;
+	setQuestions: (questions: any[]) => void;
 }
 
 export function DeleteConfirmationDialog({
@@ -35,41 +26,34 @@ export function DeleteConfirmationDialog({
 	questionId,
 	setQuestions,
 }: DeleteConfirmationDialogProps) {
+	const { toast } = useToast();
+
 	const handleDelete = async () => {
-		if (questionId) {
-			try {
-				const response = await deleteQuestion(Number(questionId));
-				if (response.success) {
-					toast({
-						title: 'Success',
-						description:
-							response.message || 'Question deleted successfully',
-					});
-					const updatedQuestions = await getAllQuestionsWithAnswers();
-					if (
-						updatedQuestions.success &&
-						updatedQuestions.questions
-					) {
-						// Questions are already in the correct format, no need for complex conversions
-						setQuestions(updatedQuestions.questions);
-					}
-				} else {
-					throw new Error(
-						response.message || 'Failed to delete question'
-					);
-				}
-			} catch (error) {
+		try {
+			const response = await deleteQuestion(parseInt(questionId, 10));
+			if (response.success) {
 				toast({
+					title: 'Success',
+					description: 'Question deleted successfully',
+				});
+				// Optimistically update the UI
+				// setQuestions((prev) =>
+				// 	prev.filter((q) => q.id !== questionId)
+				// );
+			} else {
+				toast({
+					variant: 'destructive',
 					title: 'Error',
 					description:
-						error instanceof Error
-							? error.message
-							: 'Failed to delete question',
-					variant: 'destructive',
+						response.message || 'Failed to delete question',
 				});
-			} finally {
-				onOpenChange(false);
 			}
+		} catch (error) {
+			toast({
+				variant: 'destructive',
+				title: 'Error',
+				description: 'An unexpected error occurred',
+			});
 		}
 	};
 
@@ -80,13 +64,50 @@ export function DeleteConfirmationDialog({
 					<AlertDialogTitle>Are you sure?</AlertDialogTitle>
 					<AlertDialogDescription>
 						This action cannot be undone. This will permanently
-						delete the question from the database.
+						delete the question.
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>
 					<AlertDialogAction onClick={handleDelete}>
-						Delete
+						Continue
+					</AlertDialogAction>
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
+	);
+}
+
+interface DeleteAllConfirmationDialogProps {
+	isOpen: boolean;
+	onOpenChange: (isOpen: boolean) => void;
+	onConfirm: () => void;
+}
+
+export function DeleteAllConfirmationDialog({
+	isOpen,
+	onOpenChange,
+	onConfirm,
+}: DeleteAllConfirmationDialogProps) {
+	return (
+		<AlertDialog open={isOpen} onOpenChange={onOpenChange}>
+			<AlertDialogContent>
+				<AlertDialogHeader>
+					<AlertDialogTitle>
+						Are you absolutely sure?
+					</AlertDialogTitle>
+					<AlertDialogDescription>
+						This action cannot be undone. This will permanently
+						delete all questions from the database.
+					</AlertDialogDescription>
+				</AlertDialogHeader>
+				<AlertDialogFooter>
+					<AlertDialogCancel>Cancel</AlertDialogCancel>
+					<AlertDialogAction
+						onClick={onConfirm}
+						className="bg-red-500 hover:bg-red-600"
+					>
+						Delete All
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>
