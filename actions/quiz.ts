@@ -722,18 +722,23 @@ export async function getLeaderboard() {
 			})
 		);
 
+		// Filter out users who haven't attempted the quiz
+		const filteredData = leaderboardData.filter(
+			(user) => user.totalAnswered > 0
+		);
+
 		// Sort by score in descending order
-		leaderboardData.sort((a, b) => b.score - a.score);
+		filteredData.sort((a, b) => b.score - a.score);
 
 		// Add rankings
-		const rankedData = leaderboardData.map((user, index: number) => ({
+		const rankedData = filteredData.map((user, index: number) => ({
 			...user,
 			rank: index + 1,
 		}));
 
 		return {
 			success: true,
-			leaderboard: rankedData,
+			data: rankedData,
 		};
 	} catch (error) {
 		console.error('Error getting leaderboard:', error);
