@@ -33,7 +33,6 @@ export default function AdminPage() {
               {activeSection === 'analytics' && 'Analytics'}
               {activeSection === 'notifications' && 'Notifications'}
               {activeSection === 'settings' && 'Settings'}
-              {activeSection === 'quiz-config' && 'Quiz Configuration'}
               {activeSection === 'site-analytics' && 'Site Analytics'}
             </h2>
             <p className="text-muted-foreground">
@@ -51,8 +50,6 @@ export default function AdminPage() {
                 'Manage system notifications and announcements'}
               {activeSection === 'settings' &&
                 'Configure system settings and preferences'}
-              {activeSection === 'quiz-config' &&
-                'Configure global quiz settings and behavior'}
               {activeSection === 'site-analytics' &&
                 'View website analytics powered by Simple Analytics'}
             </p>

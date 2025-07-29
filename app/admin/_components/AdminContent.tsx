@@ -32,7 +32,6 @@ const knownSections = [
   'analytics',
   'notifications',
   'settings',
-  'quiz-config',
   'site-analytics',
 ];
 
@@ -51,8 +50,6 @@ export function AdminContent() {
         return 'pending';
       case 'users':
         return 'list';
-      case 'quiz-config':
-        return 'general';
       case 'site-analytics':
         return 'original';
       default:
@@ -157,17 +154,6 @@ export function AdminContent() {
     }
   };
 
-  const renderQuizConfigContent = () => {
-    switch (activeTab) {
-      case 'general':
-        return <QuizSettings />;
-      case 'reset':
-        return <QuizSettings showResetOnly={true} />;
-      default:
-        router.replace('/admin?section=quiz-config&tab=general');
-        return <QuizSettings />;
-    }
-  };
 
   const renderSiteAnalyticsContent = () => {
     switch (activeTab) {
@@ -239,23 +225,7 @@ export function AdminContent() {
           </Card>
         );
       case 'settings':
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle>Site Settings</CardTitle>
-              <CardDescription>
-                Configure global site settings and preferences.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>
-                General settings content goes here. (Tab: {activeTab || 'None'})
-              </p>
-            </CardContent>
-          </Card>
-        );
-      case 'quiz-config':
-        return renderQuizConfigContent();
+        return <QuizSettings />;
       case 'site-analytics':
         return renderSiteAnalyticsContent();
       default:
