@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "quiz_attempted" boolean DEFAULT false NOT NULL;
