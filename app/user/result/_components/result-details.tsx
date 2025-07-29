@@ -238,7 +238,7 @@ export default function ResultDetails({ results }: ResultDetailsProps) {
 											)}
 										>
 											<div className="flex items-start">
-												<span className="font-medium mr-1 mt-0.5">
+												<span className="font-medium mr-1">
 													{OptionsMapping[option.id]})
 												</span>
 												<span
