@@ -12,6 +12,7 @@ import { setCookie } from '@/lib/cookies';
 import { verifyAuth } from '@/lib/dal';
 import { sendAccountTerminationEmail } from '@/lib/email';
 import { AdminJwtPayload } from '@/types/admin';
+import { revalidatePath } from 'next/cache';
 
 // 30 days in seconds
 const THIRTY_DAYS = 60 * 60 * 24 * 30;
@@ -371,6 +372,7 @@ export async function resetUserSubmissions(userId: number) {
       .set({ quizAttempted: false })
       .where(eq(users.id, userId));
 
+    revalidatePath('/admin');
     return {
       success: true,
       message: `Successfully reset submissions for user ${userToReset.email}`,

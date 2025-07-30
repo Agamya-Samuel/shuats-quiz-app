@@ -1,143 +1,28 @@
-export const dynamic = 'force-dynamic';
 import { AdminHeader } from './_components/AdminHeader';
 import { AdminSidebar } from './_components/AdminSidebar';
 import { SectionTabs } from './_components/SectionTabs';
+import AdminContent from './_components/AdminContent';
 import SubmissionContent from './_components/SubmissionContent';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Analytics } from './dashboard/_components/analytics';
-import { Notifications } from './dashboard/_components/notifications';
-import { QuizControl } from './dashboard/_components/quiz-control';
-import { QuizSettings } from './dashboard/_components/quiz-settings';
-import { UserManagement as DashboardUserManagement } from './dashboard/_components/user-management';
-import { EnhancedQuestionList } from './manage-quiz/_components/enhanced-question-list';
-import { QuestionForm } from './manage-quiz/_components/question-form';
-import { QuizDashboard } from './manage-quiz/_components/quiz-dashboard';
-import { DocumentVerificationList } from './verification/_components/document-verification-list';
-import { VerificationHistory } from './verification/_components/verification-history';
-import { VerificationSettings } from './verification/_components/verification-settings';
-import { SimpleAnalyticsDashboard } from './_components/SimpleAnalyticsDashboard';
-
-const knownSections = [
-  'dashboard',
-  'manage-quiz',
-  'verification',
-  'users',
-  'analytics',
-  'notifications',
-  'settings',
-  'site-analytics',
-  'submission',
-];
+import { Suspense } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export default async function AdminPage({
   searchParams,
 }: {
-  searchParams: { section?: string; tab?: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const activeSection = searchParams.section || 'dashboard';
-  const activeTab = searchParams.tab;
-
-  const renderContent = () => {
-    if (!knownSections.includes(activeSection)) {
-      return (
-        <Card>
-          <CardHeader>
-            <CardTitle>Section Not Found</CardTitle>
-            <CardDescription>
-              The section '{activeSection}' does not exist. Redirecting to
-              dashboard...
-            </CardDescription>
-          </CardHeader>
-          <CardContent>Please wait while we redirect you.</CardContent>
-        </Card>
-      );
-    }
-
-    switch (activeSection) {
-      case 'dashboard':
-        switch (activeTab) {
-          case 'overview':
-            return <Analytics />;
-          case 'control':
-            return <QuizControl />;
-          case 'settings':
-            return <QuizSettings />;
-          case 'users':
-            return <DashboardUserManagement />;
-          case 'analytics':
-            return <Analytics />;
-          case 'notifications':
-            return <Notifications />;
-          default:
-            return <Analytics />;
-        }
-      case 'manage-quiz':
-        switch (activeTab) {
-          case 'dashboard':
-            return <QuizDashboard />;
-          case 'add':
-            return <QuestionForm />;
-          case 'list':
-            return <EnhancedQuestionList />;
-          default:
-            return <QuizDashboard />;
-        }
-      case 'verification':
-        switch (activeTab) {
-          case 'pending':
-            return <DocumentVerificationList />;
-          case 'approved':
-            return <DocumentVerificationList />;
-          case 'rejected':
-            return <DocumentVerificationList />;
-          case 'settings':
-            return <VerificationSettings />;
-          case 'history':
-            return <VerificationHistory />;
-          default:
-            return <DocumentVerificationList />;
-        }
-      case 'users':
-        return <DashboardUserManagement />;
-      case 'submission':
-        return <SubmissionContent />;
-      case 'site-analytics':
-        switch (activeTab) {
-          case 'original':
-            return <Analytics />;
-          case 'simple':
-            return <SimpleAnalyticsDashboard />;
-          default:
-            return <Analytics />;
-        }
-      default:
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle>Content Area</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>
-                Selected section: {activeSection}, Tab: {activeTab || 'None'}
-              </p>
-            </CardContent>
-          </Card>
-        );
-    }
-  };
+  const awaitedSearchParams = await searchParams;
+  const activeSection =
+    typeof awaitedSearchParams.section === 'string'
+      ? awaitedSearchParams.section
+      : 'dashboard';
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <AdminHeader />
-
-      <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-6 max-w-7xl">
-        <aside className="hidden md:block w-full md:w-64 shrink-0">
+      <div className="container mx-auto flex max-w-7xl flex-col gap-6 px-4 py-8 md:flex-row">
+        <aside className="hidden w-full shrink-0 md:block md:w-64">
           <AdminSidebar />
         </aside>
 
@@ -176,9 +61,32 @@ export default async function AdminPage({
             </p>
           </div>
 
-          {activeSection !== 'submission' && <SectionTabs />}
+          {activeSection !== 'submission' && (
+            <Suspense fallback={<Skeleton className="h-12 w-full" />}>
+              <SectionTabs />
+            </Suspense>
+          )}
 
-          <div className="mt-6">{renderContent()}</div>
+          <div className="mt-6">
+            <Suspense
+              fallback={
+                <Card>
+                  <CardHeader>
+                    <Skeleton className="h-8 w-1/2" />
+                  </CardHeader>
+                  <CardContent>
+                    <Skeleton className="h-32 w-full" />
+                  </CardContent>
+                </Card>
+              }
+            >
+              {activeSection === 'submission' ? (
+                <SubmissionContent />
+              ) : (
+                <AdminContent />
+              )}
+            </Suspense>
+          </div>
         </main>
       </div>
     </div>

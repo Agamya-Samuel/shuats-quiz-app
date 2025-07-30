@@ -18,25 +18,8 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 export function SectionTabs() {
   const searchParams = useSearchParams();
   const router = useRouter();
-
-  // Helper function to get the default tab for each section
-  const getDefaultTabForSection = (section: string) => {
-    switch (section) {
-      case 'dashboard':
-        return 'overview';
-      case 'manage-quiz':
-        return 'dashboard';
-      case 'verification':
-        return 'pending';
-      case 'site-analytics':
-        return 'original';
-      default:
-        return '';
-    }
-  };
-
   const section = searchParams.get('section') || 'dashboard';
-  const activeTab = searchParams.get('tab') || getDefaultTabForSection(section);
+  const activeTab = searchParams.get('tab') || 'overview';
 
   const handleTabChange = (tab: string) => {
     router.push(`/admin?section=${section}&tab=${tab}`, { scroll: false });
