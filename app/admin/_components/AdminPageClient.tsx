@@ -9,11 +9,7 @@ import { Suspense, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
-export default function AdminPageClient({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default function AdminPageClient() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sp = useSearchParams();
   const activeSection = sp.get('section') || 'dashboard';
