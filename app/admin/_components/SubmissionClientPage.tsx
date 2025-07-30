@@ -121,9 +121,9 @@ export default function SubmissionClientPage() {
 						users.map((user) => (
 							<div
 								key={user.id}
-								className="flex items-center justify-between rounded-lg border p-4"
+								className="flex flex-wrap items-center justify-between rounded-lg border p-4 sm:flex-nowrap"
 							>
-								<div>
+								<div className="flex-grow">
 									<p className="font-semibold">{user.name}</p>
 									<p className="text-sm text-gray-500">{user.email}</p>
 									<p className="text-sm text-gray-500">
@@ -132,7 +132,11 @@ export default function SubmissionClientPage() {
 								</div>
 								<AlertDialog>
 									<AlertDialogTrigger asChild>
-										<Button disabled={loading[user.id]} variant="destructive">
+										<Button
+											disabled={loading[user.id]}
+											variant="destructive"
+											className="mt-4 w-full sm:mt-0 sm:w-auto"
+										>
 											{loading[user.id]
 												? 'Resetting...'
 												: 'Reset Submissions'}
