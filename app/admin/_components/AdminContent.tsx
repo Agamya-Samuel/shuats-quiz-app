@@ -19,11 +19,13 @@ import { DocumentVerificationList } from '../verification/_components/document-v
 import { VerificationHistory } from '../verification/_components/verification-history';
 import { VerificationSettings } from '../verification/_components/verification-settings';
 import { SimpleAnalyticsDashboard } from './SimpleAnalyticsDashboard';
+import SubmissionClientPage from './SubmissionClientPage';
 
 const knownSections = [
   'dashboard',
   'manage-quiz',
   'verification',
+  'submission',
   'users',
   'analytics',
   'notifications',
@@ -80,23 +82,25 @@ export default function AdminContent() {
           return <QuizDashboard />;
       }
     case 'verification':
-      switch (activeTab) {
-        case 'pending':
-          return <DocumentVerificationList />;
-        case 'approved':
-          return <DocumentVerificationList />;
-        case 'rejected':
-          return <DocumentVerificationList />;
-        case 'settings':
-          return <VerificationSettings />;
-        case 'history':
-          return <VerificationHistory />;
-        default:
-          return <DocumentVerificationList />;
-      }
-    case 'users':
-      return <DashboardUserManagement />;
-    case 'settings':
+         switch (activeTab) {
+           case 'pending':
+             return <DocumentVerificationList />;
+           case 'approved':
+             return <DocumentVerificationList />;
+           case 'rejected':
+             return <DocumentVerificationList />;
+           case 'settings':
+             return <VerificationSettings />;
+           case 'history':
+             return <VerificationHistory />;
+           default:
+             return <DocumentVerificationList />;
+         }
+  case 'submission':
+        return <SubmissionClientPage />;
+       case 'users':
+         return <DashboardUserManagement />;
+       case 'settings':
       return <QuizSettings />;
     case 'site-analytics':
       switch (activeTab) {

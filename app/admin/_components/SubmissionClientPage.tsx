@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { RefreshCw } from 'lucide-react';
 import {
 	getUsersWithSubmissionCount,
@@ -33,18 +33,34 @@ type User = {
 	email: string;
 	submissionCount: number;
 };
-export default function SubmissionClientPage({
-	users: initialUsers,
-	totalQuestions,
-}: {
-	users: User[];
-	totalQuestions: number;
-}) {
+export default function SubmissionClientPage() {
 	const { toast } = useToast();
-	const [users, setUsers] = useState(initialUsers);
+	const [users, setUsers] = useState<User[]>([]);
+	const [totalQuestions, setTotalQuestions] = useState(0);
 	const [loading, setLoading] = useState<Record<number, boolean>>({});
 	const [isRefreshing, startRefreshing] = useTransition();
 	const router = useRouter();
+
+	useEffect(() => {
+		const fetchUsers = async () => {
+			const {
+				users: fetchedUsers,
+				totalQuestions: fetchedTotalQuestions,
+				success,
+			} = await getUsersWithSubmissionCount();
+			if (success) {
+				setUsers(fetchedUsers || []);
+				setTotalQuestions(fetchedTotalQuestions || 0);
+			} else {
+				toast({
+					title: 'Error',
+					description: 'Failed to fetch users.',
+					variant: 'destructive',
+				});
+			}
+		};
+		fetchUsers();
+	}, [toast]);
 	const handleReset = async (userId: number) => {
 		setLoading((prev) => ({ ...prev, [userId]: true }));
 		const { success, message } = await resetUserSubmissions(userId);

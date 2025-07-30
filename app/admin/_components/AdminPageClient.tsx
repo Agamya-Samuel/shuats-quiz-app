@@ -4,7 +4,6 @@ import { AdminHeader } from './AdminHeader';
 import { AdminSidebar } from './AdminSidebar';
 import { SectionTabs } from './SectionTabs';
 import AdminContent from './AdminContent';
-import SubmissionContent from './SubmissionContent';
 import { Suspense, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -79,11 +78,7 @@ export default function AdminPageClient() {
                 </Card>
               }
             >
-              {activeSection === 'submission' ? (
-                <SubmissionContent />
-              ) : (
-                <AdminContent />
-              )}
+              <AdminContent />
             </Suspense>
           </div>
         </main>
