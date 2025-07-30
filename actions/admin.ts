@@ -363,6 +363,10 @@ export async function resetUserSubmissions(userId: number) {
     // Delete all submitted answers for this user
     // Delete all submitted answers for this user
     await db
+      .delete(dbSchema.userSubmissionTimestamps)
+      .where(eq(dbSchema.userSubmissionTimestamps.userId, userId));
+    
+    await db
       .delete(dbSchema.userSubmissions)
       .where(eq(dbSchema.userSubmissions.userId, userId));
 
