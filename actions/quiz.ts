@@ -612,13 +612,9 @@ export async function getQuizResults(userId: number) {
 			})
 			.filter(Boolean);
 
-		// Get the latest submission time
-		const lastSubmission = submissions.sort(
-			(a, b) =>
-				new Date(b.question?.createdAt ?? 0).getTime() -
-				new Date(a.question?.createdAt ?? 0).getTime()
-		)[0];
-
+		const user = await db.query.users.findFirst({
+			where: eq(dbSchema.users.id, userId),
+		});
 		// Prepare summary statistics
 		const summary = {
 			totalQuestions: questionResults.length,
@@ -629,8 +625,7 @@ export async function getQuizResults(userId: number) {
 					? (correctAnswersCount / questionResults.length) * 100
 					: 0,
 			submittedAt:
-				lastSubmission?.question?.createdAt?.toISOString() ??
-				new Date().toISOString(),
+				user?.quizCompletedAt?.toISOString() ?? new Date().toISOString(),
 			timeTaken: null, // Time taken is not tracked in the backend
 			attemptedSubjects: [
 				...new Set(questionResults.map((r) => r!.subject)),
