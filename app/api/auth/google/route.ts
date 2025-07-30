@@ -75,6 +75,7 @@ export async function POST(request: Request) {
         name: userDbRecord.name,
         picture,
         role: 'user', // Assuming role for user
+        school: userDbRecord.school,
       })
         .setProtectedHeader({ alg: 'HS256' })
         .setIssuedAt()
@@ -158,6 +159,7 @@ export async function POST(request: Request) {
         name: newDbUser.name,
         picture,
         role: 'user', // Assuming role for user
+        school: newDbUser.school,
       })
         .setProtectedHeader({ alg: 'HS256' })
         .setIssuedAt()

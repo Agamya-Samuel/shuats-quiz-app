@@ -49,6 +49,7 @@ export interface UserSessionPayload {
   userId: number;
   email: string;
   name: string;
+  school?: string;
   role: 'user' | 'admin' | 'superadmin';
   username?: string;
   picture?: string;
