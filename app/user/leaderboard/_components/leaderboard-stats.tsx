@@ -40,12 +40,13 @@ export default function LeaderboardStats({
 			(sum, entry) => sum + (entry.attemptedQuestions || 0),
 			0
 		);
-		const totalQuestions = leaderboardData.reduce(
-			(sum, entry) => sum + (entry.totalQuestions || 0),
-			0
-		);
+		const totalQuestions = leaderboardData[0]?.totalQuestions ?? 0;
 		const participationRate =
-			Math.round((totalAttempted / totalQuestions) * 100 * 100) / 100;
+			totalQuestions > 0
+				? Math.round(
+						(leaderboardData.length / totalQuestions) * 100 * 100
+				  ) / 100
+				: 0;
 
 		return {
 			topPerformers,
@@ -122,7 +123,7 @@ export default function LeaderboardStats({
 										</p>
 										<p className="font-semibold">
 											{performer.correctAnswers} /{' '}
-											{performer.attemptedQuestions || 0}
+											{performer.totalAnswered || 0}
 										</p>
 									</div>
 									<div>
@@ -130,7 +131,7 @@ export default function LeaderboardStats({
 											Attempted
 										</p>
 										<p className="font-semibold">
-											{performer.attemptedQuestions || 0} /{' '}
+											{performer.totalAnswered || 0} /{' '}
 											{performer.totalQuestions || 0}
 										</p>
 									</div>

@@ -8,6 +8,13 @@
       "when": 1753782364317,
       "tag": "0000_faulty_dorian_gray",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1753885368746,
+      "tag": "0001_complex_gladiator",
+      "breakpoints": true
     }
   ]
 }

@@ -131,6 +131,11 @@ export async function submitQuiz(
 			})
 		);
 
+		// Update the user's quiz completion timestamp
+		await db
+			.update(users)
+			.set({ quizCompletedAt: new Date() })
+			.where(eq(users.id, userId));
 		// Revalidate the quiz page to reflect the changes
 		revalidatePath('/user/quiz');
 
