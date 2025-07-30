@@ -6,6 +6,17 @@ import {
 	getUsersWithSubmissionCount,
 	resetUserSubmissions,
 } from '@/actions/admin';
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import {
 	Card,
@@ -57,7 +68,6 @@ export default function SubmissionClientPage({
 		startRefreshing(async () => {
 			const { users: newUsers, success } =
 				await getUsersWithSubmissionCount();
-
 			if (success) {
 				setUsers(newUsers || []);
 				toast({
@@ -104,12 +114,30 @@ export default function SubmissionClientPage({
 										Attempted: {user.submissionCount} / {totalQuestions}
 									</p>
 								</div>
-								<Button
-									onClick={() => handleReset(user.id)}
-									disabled={loading[user.id]}
-								>
-									{loading[user.id] ? 'Resetting...' : 'Reset Submissions'}
-								</Button>
+								<AlertDialog>
+									<AlertDialogTrigger asChild>
+										<Button disabled={loading[user.id]} variant="destructive">
+											{loading[user.id]
+												? 'Resetting...'
+												: 'Reset Submissions'}
+										</Button>
+									</AlertDialogTrigger>
+									<AlertDialogContent>
+										<AlertDialogHeader>
+											<AlertDialogTitle>Are you sure?</AlertDialogTitle>
+											<AlertDialogDescription>
+												This will reset the user's submission and cannot be
+												undone.
+											</AlertDialogDescription>
+										</AlertDialogHeader>
+										<AlertDialogFooter>
+											<AlertDialogCancel>Cancel</AlertDialogCancel>
+											<AlertDialogAction onClick={() => handleReset(user.id)}>
+												Continue
+											</AlertDialogAction>
+										</AlertDialogFooter>
+									</AlertDialogContent>
+								</AlertDialog>
 							</div>
 						))
 					) : (
