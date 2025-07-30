@@ -372,7 +372,7 @@ export async function resetUserSubmissions(userId: number) {
       .set({ quizAttempted: false })
       .where(eq(users.id, userId));
 
-    revalidatePath('/admin');
+    revalidatePath('/admin?section=submission');
     return {
       success: true,
       message: `Successfully reset submissions for user ${userToReset.email}`,

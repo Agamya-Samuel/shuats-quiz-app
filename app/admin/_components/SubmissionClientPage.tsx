@@ -1,78 +1,124 @@
 'use client';
 
-import { useState } from 'react';
-
-
-import { resetUserSubmissions } from '@/actions/admin';
+import { useState, useTransition } from 'react';
+import { RefreshCw } from 'lucide-react';
+import {
+	getUsersWithSubmissionCount,
+	resetUserSubmissions,
+} from '@/actions/admin';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
 } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
+type User = {
+	id: number;
+	name: string;
+	email: string;
+	submissionCount: number;
+};
 export default function SubmissionClientPage({
-  users,
-  totalQuestions,
+	users: initialUsers,
+	totalQuestions,
 }: {
-  users: any[];
-  totalQuestions: number;
-
-
+	users: User[];
+	totalQuestions: number;
 }) {
-  const { toast } = useToast();
-  
-  const [loading, setLoading] = useState<Record<number, boolean>>({});
+	const { toast } = useToast();
+	const [users, setUsers] = useState(initialUsers);
+	const [loading, setLoading] = useState<Record<number, boolean>>({});
+	const [isRefreshing, startRefreshing] = useTransition();
+	const router = useRouter();
+	const handleReset = async (userId: number) => {
+		setLoading((prev) => ({ ...prev, [userId]: true }));
+		const { success, message } = await resetUserSubmissions(userId);
+		if (success) {
+			toast({
+				title: 'Success',
+				description: message,
+			});
+			setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+		} else {
+			toast({
+				title: 'Error',
+				description: message,
+				variant: 'destructive',
+			});
+		}
+		setLoading((prev) => ({ ...prev, [userId]: false }));
+	};
 
-  const handleReset = async (userId: number) => {
-    setLoading((prev) => ({ ...prev, [userId]: true }));
-    const { success, message } = await resetUserSubmissions(userId);
-    if (success) {
-      toast({
-        title: 'Success',
-        description: message,
-      });
-    } else {
-      toast({
-        title: 'Error',
-        description: message,
-        variant: 'destructive',
-      });
-    }
-    setLoading((prev) => ({ ...prev, [userId]: false }));
-  };
+	const handleRefresh = () => {
+		startRefreshing(async () => {
+			const { users: newUsers, success } =
+				await getUsersWithSubmissionCount();
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>User Submissions</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {users.map((user) => (
-            <div
-              key={user.id}
-              className="flex items-center justify-between rounded-lg border p-4"
-            >
-              <div>
-                <p className="font-semibold">{user.name}</p>
-                <p className="text-sm text-gray-500">{user.email}</p>
-                <p className="text-sm text-gray-500">
-                  Attempted: {user.submissionCount} / {totalQuestions}
-                </p>
-              </div>
-              <Button
-                onClick={() => handleReset(user.id)}
-                disabled={loading[user.id]}
-              >
-                {loading[user.id] ? 'Resetting...' : 'Reset Submissions'}
-              </Button>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
+			if (success) {
+				setUsers(newUsers || []);
+				toast({
+					title: 'Success',
+					description: 'Successfully refreshed the submission list',
+				});
+			} else {
+				toast({
+					title: 'Error',
+					description: 'Failed to refresh the submission list',
+					variant: 'destructive',
+				});
+			}
+		});
+	};
+	return (
+		<Card>
+			<CardHeader className="flex flex-row items-center justify-between">
+				<CardTitle>User Submissions</CardTitle>
+				<Button
+					onClick={handleRefresh}
+					disabled={isRefreshing}
+					variant="outline"
+					size="sm"
+				>
+					<RefreshCw
+						className={`mr-2 h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`}
+					/>
+					{isRefreshing ? 'Refreshing...' : 'Refresh'}
+				</Button>
+			</CardHeader>
+			<CardContent>
+				<div className="space-y-4">
+					{users.length > 0 ? (
+						users.map((user) => (
+							<div
+								key={user.id}
+								className="flex items-center justify-between rounded-lg border p-4"
+							>
+								<div>
+									<p className="font-semibold">{user.name}</p>
+									<p className="text-sm text-gray-500">{user.email}</p>
+									<p className="text-sm text-gray-500">
+										Attempted: {user.submissionCount} / {totalQuestions}
+									</p>
+								</div>
+								<Button
+									onClick={() => handleReset(user.id)}
+									disabled={loading[user.id]}
+								>
+									{loading[user.id] ? 'Resetting...' : 'Reset Submissions'}
+								</Button>
+							</div>
+						))
+					) : (
+						<div className="text-center text-gray-500">
+							No submissions to display.
+						</div>
+					)}
+				</div>
+			</CardContent>
+		</Card>
+	);
 }
