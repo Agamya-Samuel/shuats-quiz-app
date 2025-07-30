@@ -231,6 +231,26 @@ export function UserProfile() {
 		}
 	}, [currentUser]);
 
+	const resetFormWithUserData = useCallback(() => {
+		if (user) {
+			form.reset({
+				name: user.name || '',
+				email: user.email || '',
+				mobile: user.mobile || '',
+				school: user.school || '',
+				rollno: user.rollno || '',
+				branch: user.branch || '',
+				address1: user.address?.address1 || '',
+				address2: user.address?.address2 || '',
+				city: user.address?.city || '',
+				state: user.address?.state || '',
+				country: user.address?.country || '',
+				pincode: user.address?.pincode || '',
+				area: user.address?.area || '',
+			});
+		}
+	}, [user, form]);
+
 	// Fetch user data from the server
 	useEffect(() => {
 		const fetchUserData = async () => {
@@ -241,23 +261,6 @@ export function UserProfile() {
 
 					if (response.success && response.user) {
 						setUser(response.user as IUser);
-
-						// Reset form with user data
-						form.reset({
-							name: response.user.name || '',
-							email: response.user.email || '',
-							mobile: response.user.mobile || '',
-							school: response.user.school || '',
-							rollno: response.user.rollno || '',
-							branch: response.user.branch || '',
-							address1: response.user.address?.address1 || '',
-							address2: response.user.address?.address2 || '',
-							city: response.user.address?.city || '',
-							state: response.user.address?.state || '',
-							country: response.user.address?.country || '',
-							pincode: response.user.address?.pincode || '',
-							area: response.user.address?.area || '',
-						});
 					} else {
 						toast({
 							title: 'Error',
@@ -279,7 +282,12 @@ export function UserProfile() {
 		};
 
 		fetchUserData();
-	}, [currentUser, form]);
+	}, [currentUser]);
+
+	// Reset form whenever user data changes
+	useEffect(() => {
+		resetFormWithUserData();
+	}, [user, resetFormWithUserData]);
 
 	// Create a fetchProfilePhoto function that can be reused
 	const fetchProfilePhoto = useCallback(async () => {
@@ -474,7 +482,7 @@ export function UserProfile() {
 										variant="outline"
 										onClick={() => {
 											setIsEditing(false);
-											form.reset(); // Reset form to original values
+											resetFormWithUserData(); // Reset form to original values
 										}}
 										disabled={isSaving}
 									>
@@ -919,7 +927,7 @@ export function UserProfile() {
 									variant="outline"
 									onClick={() => {
 										setIsEditing(false);
-										form.reset(); // Reset form to original values
+										resetFormWithUserData(); // Reset form to original values
 									}}
 									disabled={isSaving}
 									className="flex-1"
