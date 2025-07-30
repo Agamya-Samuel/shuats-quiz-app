@@ -209,25 +209,27 @@ export function UserManagement() {
           <CardDescription>View and manage user accounts</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <Search className="h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search users..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-[300px]"
+                className="w-full sm:w-[300px]"
               />
             </div>
             <Button
               onClick={loadUsers}
               variant="outline"
-              size="sm">
+              size="sm"
+              className="w-full sm:w-auto"
+            >
               Refresh List
             </Button>
           </div>
 
-          <div className="rounded-md border">
+          <div className="hidden md:block rounded-md border">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -354,6 +356,142 @@ export function UserManagement() {
                 )}
               </TableBody>
             </Table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="grid gap-4 md:hidden">
+            {filteredUsers.map((user) => (
+              <Card
+                key={user.id}
+                className="p-4">
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <p className="font-medium">{user.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {user.email}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-medium">School</p>
+                    <p className="text-sm text-muted-foreground">
+                      {user.school}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Branch</p>
+                    <p className="text-sm text-muted-foreground">
+                      {user.branch}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Roll No</p>
+                    <p className="text-sm text-muted-foreground">
+                      {user.rollno}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Location</p>
+                    <p className="text-sm text-muted-foreground">
+                      {user.address ? (
+                        <>
+                          {user.address.city && (
+                            <span>{user.address.city}, </span>
+                          )}
+                          {user.address.state && (
+                            <span>{user.address.state}, </span>
+                          )}
+                          {user.address.country && (
+                            <span>{user.address.country}</span>
+                          )}
+                        </>
+                      ) : (
+                        'No location data'
+                      )}
+                    </p>
+                  </div>
+                  <div>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          className="w-full"
+                          disabled={isDeleting === user.id}>
+                          {isDeleting === user.id ? (
+                            <>
+                              <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                              Deleting...
+                            </>
+                          ) : (
+                            <>
+                              <UserX className="h-4 w-4 mr-1" />
+                              Delete
+                            </>
+                          )}
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete User Account</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action will permanently delete the user account
+                            and send a termination notice. This action cannot be
+                            undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <div className="py-4">
+                          <Label
+                            htmlFor="termination-reason-mobile"
+                            className="mb-2 block">
+                            Select Termination Reason
+                          </Label>
+                          <Select
+                            value={selectedReason}
+                            onValueChange={setSelectedReason}>
+                            <SelectTrigger
+                              id="termination-reason-mobile"
+                              className="w-full">
+                              <SelectValue placeholder="Select a reason" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Object.entries(TERMINATION_REASONS).map(
+                                ([key, value]) => (
+                                  <SelectItem
+                                    key={key}
+                                    value={key}>
+                                    {value}
+                                  </SelectItem>
+                                ),
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel
+                            onClick={() => setSelectedReason('')}>
+                            Cancel
+                          </AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDeleteUser(user.id)}
+                            disabled={
+                              !selectedReason || isDeleting === user.id
+                            }>
+                            {isDeleting === user.id
+                              ? 'Deleting...'
+                              : 'Delete Account'}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </div>
+              </Card>
+            ))}
+            {filteredUsers.length === 0 && (
+              <div className="text-center py-6 text-muted-foreground">
+                No users found
+              </div>
+            )}
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
