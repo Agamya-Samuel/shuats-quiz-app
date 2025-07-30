@@ -33,7 +33,7 @@ export function MarkdownPreview({
 			rehypePlugins={[rehypeKatex, rehypeRaw]}
 			components={{
 				// Override the default paragraph renderer to preserve line breaks
-				p: ({ children }) => <p className="mb-4">{children}</p>,
+				p: ({ children }) => <p>{children}</p>,
 			}}
 		>
 			{processedContent}

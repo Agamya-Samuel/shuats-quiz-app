@@ -25,11 +25,9 @@ export function SectionTabs() {
       case 'dashboard':
         return 'overview';
       case 'manage-quiz':
-        return 'list';
+        return 'dashboard';
       case 'verification':
         return 'pending';
-      case 'quiz-config':
-        return 'general';
       case 'site-analytics':
         return 'original';
       default:
@@ -53,8 +51,6 @@ export function SectionTabs() {
         return renderManageQuizTabs();
       case 'verification':
         return renderVerificationTabs();
-      case 'quiz-config':
-        return renderQuizConfigTabs();
       case 'site-analytics':
         return renderSiteAnalyticsTabs();
       default:
@@ -188,27 +184,6 @@ export function SectionTabs() {
     </Tabs>
   );
 
-  const renderQuizConfigTabs = () => (
-    <Tabs
-      value={activeTab}
-      onValueChange={handleTabChange}
-      className="w-full">
-      <TabsList className="flex flex-wrap items-center gap-2">
-        <TabsTrigger
-          value="general"
-          className="flex items-center gap-2">
-          <Sliders className="h-4 w-4" />
-          <span>General Settings</span>
-        </TabsTrigger>
-        <TabsTrigger
-          value="reset"
-          className="flex items-center gap-2">
-          <RefreshCcw className="h-4 w-4" />
-          <span>Reset Settings</span>
-        </TabsTrigger>
-      </TabsList>
-    </Tabs>
-  );
 
   const renderSiteAnalyticsTabs = () => (
     <Tabs

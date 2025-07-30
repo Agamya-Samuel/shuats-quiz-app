@@ -1,2 +1,0 @@
-ALTER TABLE "users" ADD COLUMN "profile_stage1_completed" boolean DEFAULT false NOT NULL;--> statement-breakpoint
-ALTER TABLE "users" ADD COLUMN "profile_stage2_completed" boolean DEFAULT false NOT NULL;

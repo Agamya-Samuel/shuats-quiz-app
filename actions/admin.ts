@@ -360,9 +360,16 @@ export async function resetUserSubmissions(userId: number) {
     }
 
     // Delete all submitted answers for this user
+    // Delete all submitted answers for this user
     await db
       .delete(dbSchema.userSubmissions)
       .where(eq(dbSchema.userSubmissions.userId, userId));
+
+    // Reset the quizAttempted flag for the user
+    await db
+      .update(users)
+      .set({ quizAttempted: false })
+      .where(eq(users.id, userId));
 
     return {
       success: true,

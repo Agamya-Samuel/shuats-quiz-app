@@ -3,7 +3,7 @@
 'use server';
 
 import { connectToDB } from '@/db';
-import { userSubmissions } from '@/db/schema';
+import { userSubmissions, users } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
 import { and, eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -72,8 +72,14 @@ export async function submitAnswer(
 			});
 		}
 
+		// Mark the quiz as attempted
+		await db
+		  .update(users)
+		  .set({ quizAttempted: true })
+		  .where(eq(users.id, userId));
+
 		return { success: true, message: 'Answer submitted successfully' };
-	} catch (error) {
+} catch (error) {
 		console.error('Error submitting answer:', error);
 		return { success: false, message: 'Failed to submit answer' };
 	}

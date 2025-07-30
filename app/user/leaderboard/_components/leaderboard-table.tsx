@@ -67,7 +67,8 @@ export default function LeaderboardTable({
 	};
 
 	// Format date
-	const formatDate = (dateString: string) => {
+	const formatDate = (dateString: string | undefined) => {
+		if (!dateString) return 'Not available';
 		return new Date(dateString).toLocaleString();
 	};
 

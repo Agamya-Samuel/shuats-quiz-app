@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getQuizResults } from '@/actions/quiz';
+import { getQuizResults, getPublicQuizSettings } from '@/actions/quiz';
 import { useCookies } from '@/contexts/cookie-context';
 import ResultSummary from './_components/result-summary';
 import ResultDetails from './_components/result-details';
@@ -34,16 +34,8 @@ export interface QuizSummary {
 export interface ServerResponse {
 	success: boolean;
 	data?: {
-		results: QuizResult[];
-		summary: {
-			totalQuestions: number;
-			attemptedQuestions: number;
-			correctAnswers: number;
-			score: number;
-			submittedAt: string;
-			timeTaken: number | null;
-			attemptedSubjects?: string[];
-		};
+		results: (QuizResult | null)[];
+		summary: QuizSummary;
 	};
 	error?: string;
 	hasAttempted?: boolean;
@@ -74,6 +66,7 @@ export default function ResultPage() {
 	const [results, setResults] = useState<QuizResult[]>([]);
 	const [summary, setSummary] = useState<QuizSummary | null>(null);
 	const [hasAttempted, setHasAttempted] = useState(false);
+	const [isResultLive, setIsResultLive] = useState(false);
 
 	useEffect(() => {
 		const fetchResults = async () => {
@@ -83,30 +76,42 @@ export default function ResultPage() {
 			}
 
 			try {
-				const response: ServerResponse = await getQuizResults(
-					Number(currentUser.userId)
-				);
+				const settingsResponse = await getPublicQuizSettings();
+				if (settingsResponse.success && settingsResponse.settings) {
+					setIsResultLive(
+						settingsResponse.settings.isResultLive ?? false
+					);
+					if (settingsResponse.settings.isResultLive) {
+						const response: ServerResponse = await getQuizResults(
+							Number(currentUser.userId)
+						);
 
-				if (
-					response.success &&
-					response.data &&
-					response.data.results.length > 0
-				) {
-					setResults(response.data.results);
-					setSummary({
-						...response.data.summary,
-						submittedAt: response.data.summary.submittedAt,
-					});
-					setHasAttempted(true);
-				} else if (
-					response.success &&
-					(!response.data || response.data.results.length === 0)
-				) {
-					// User hasn't attempted the quiz yet
-					setHasAttempted(false);
+						if (
+							response.success &&
+							response.data &&
+							response.data.results.length > 0
+						) {
+							setResults(
+								response.data.results.filter(
+									(r): r is QuizResult => r !== null
+								)
+							);
+							setSummary({
+								...response.data.summary,
+								submittedAt: response.data.summary.submittedAt,
+							});
+							setHasAttempted(response.hasAttempted ?? true);
+						} else if (response.hasAttempted === false) {
+							setHasAttempted(false);
+						} else {
+							throw new Error(
+								response.error || 'Failed to fetch results'
+							);
+						}
+					}
 				} else {
 					throw new Error(
-						response.error || 'Failed to fetch results'
+						settingsResponse.message || 'Failed to fetch settings'
 					);
 				}
 			} catch (err) {
@@ -154,6 +159,37 @@ export default function ResultPage() {
 		);
 	}
 
+	if (!isResultLive) {
+		return (
+			<div className="min-h-screen bg-gray-50">
+				<div className="max-w-4xl mx-auto px-4 py-8">
+					<Card className="shadow-md">
+						<CardContent className="p-6">
+							<div className="text-center">
+								<AlertCircle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
+								<h3 className="text-xl font-semibold mb-2">
+									Results Not Yet Live
+								</h3>
+								<p className="mb-6 text-gray-600">
+									The quiz results are not yet available.
+									Please check back later.
+								</p>
+								<Button
+									variant="outline"
+									onClick={() =>
+										router.push('/user/profile')
+									}
+								>
+									Return to Profile
+								</Button>
+							</div>
+						</CardContent>
+					</Card>
+				</div>
+			</div>
+		);
+	}
+
 	if (!hasAttempted) {
 		return (
 			<div className="min-h-screen bg-gray-50">
@@ -181,11 +217,11 @@ export default function ResultPage() {
 									<Button
 										variant="outline"
 										onClick={() =>
-											router.push('/user/dashboard')
+											router.push('/user/profile')
 										}
 										className="flex items-center gap-2"
 									>
-										Return to Dashboard
+										Return to Profile
 									</Button>
 								</div>
 							</div>

@@ -68,8 +68,8 @@ export function UserSubmissions() {
 		setIsLoading(true);
 		try {
 			const response = await getLeaderboard();
-			if (response.success && response.leaderboard) {
-				setUsers(response.leaderboard);
+			if (response.success && response.data) {
+				setUsers(response.data);
 			} else {
 				toast({
 					variant: 'destructive',

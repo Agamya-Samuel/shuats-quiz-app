@@ -1,5 +1,5 @@
 {
-  "id": "05206f31-a1de-4dbd-8a6b-eb746bb9873f",
+  "id": "088f725a-0f8d-4580-a4be-85e74b43ee34",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -287,7 +287,7 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": 30
+          "default": 60
         },
         "per_question_time_limit": {
           "name": "per_question_time_limit",
@@ -315,7 +315,7 @@
           "type": "boolean",
           "primaryKey": false,
           "notNull": false,
-          "default": true
+          "default": false
         },
         "is_scheduled": {
           "name": "is_scheduled",
@@ -371,6 +371,13 @@
           "primaryKey": false,
           "notNull": false,
           "default": true
+        },
+        "is_result_live": {
+          "name": "is_result_live",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
         },
         "created_at": {
           "name": "created_at",
@@ -738,7 +745,7 @@
           "name": "password",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "address_id": {
           "name": "address_id",
@@ -769,6 +776,34 @@
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
+        },
+        "is_oauth_account": {
+          "name": "is_oauth_account",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "profile_stage1_completed": {
+          "name": "profile_stage1_completed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "profile_stage2_completed": {
+          "name": "profile_stage2_completed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "quiz_attempted": {
+          "name": "quiz_attempted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         },
         "created_at": {
           "name": "created_at",

@@ -1,6 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { OptionsMapping } from '@/app/user/quiz/_components/quiz-interface';
 import { CheckCircle2, XCircle, BookOpen } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { MarkdownPreview } from '@/components/markdown-preview';
 import { subjects } from '@/lib/constants';
@@ -237,7 +238,7 @@ export default function ResultDetails({ results }: ResultDetailsProps) {
 											)}
 										>
 											<div className="flex items-start">
-												<span className="font-medium mr-1 mt-0.5">
+												<span className="font-medium mr-1">
 													{OptionsMapping[option.id]})
 												</span>
 												<span
@@ -265,23 +266,23 @@ export default function ResultDetails({ results }: ResultDetailsProps) {
 								result.userSelectedOptionId &&
 								result.correctOptionId && (
 									<div className="mt-3 text-xs text-gray-600 border-t pt-2">
-										<p>
-											<span className="font-medium">
-												Your:
-											</span>{' '}
-											{result.userSelectedOptionId &&
-												OptionsMapping[
-													result.userSelectedOptionId
-												]}{' '}
-											<span className="font-medium ml-2">
-												Correct:
-											</span>{' '}
-											{
-												OptionsMapping[
-													result.correctOptionId
-												]
-											}
-										</p>
+										<div className="flex items-center gap-2">
+										  <span className="font-medium">Your:</span>
+										  <Badge variant="destructive">
+										    {result.userSelectedOptionId &&
+										      OptionsMapping[
+										        result.userSelectedOptionId
+										      ]}
+										  </Badge>
+										  <span className="font-medium">Correct:</span>
+										  <Badge variant="secondary">
+										    {
+										      OptionsMapping[
+										        result.correctOptionId
+										      ]
+										    }
+										  </Badge>
+										</div>
 									</div>
 								)}
 						</CardContent>

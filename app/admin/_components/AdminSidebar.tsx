@@ -37,12 +37,6 @@ export function AdminSidebar() {
       value: 'manage-quiz',
     },
     {
-      name: 'Quiz Config',
-      href: '/admin?section=quiz-config',
-      icon: Sliders,
-      value: 'quiz-config',
-    },
-    {
       name: 'Verification',
       href: '/admin?section=verification',
       icon: FileCheck,

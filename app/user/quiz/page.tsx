@@ -28,6 +28,7 @@ export default async function QuizPage() {
       where: eq(users.id, session.userId),
       columns: {
         profileStage1Completed: true,
+        quizAttempted: true,
         // profileStage2Completed is no longer directly used here for quiz access
       },
     });
@@ -48,6 +49,13 @@ export default async function QuizPage() {
       `QuizPage: Profile stage 1 not complete for userId: ${session.userId}, redirecting to /user/complete-profile`,
     );
     redirect('/user/complete-profile');
+  }
+
+  if (userProfile.quizAttempted) {
+    console.log(
+      `QuizPage: Quiz already attempted by userId: ${session.userId}, redirecting to /user/quiz/completion`,
+    );
+    redirect('/user/quiz/completion');
   }
 
   // If profile stage 1 is complete, check for required documents
