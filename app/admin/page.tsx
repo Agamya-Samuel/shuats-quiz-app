@@ -18,7 +18,7 @@ export default function AdminPage() {
 
       <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-6 max-w-7xl">
         {/* Sidebar Navigation */}
-        <aside className="w-full md:w-64 shrink-0">
+        <aside className="hidden md:block w-full md:w-64 shrink-0">
           <AdminSidebar />
         </aside>
 
