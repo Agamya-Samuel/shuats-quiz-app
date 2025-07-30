@@ -96,6 +96,8 @@ export default function AdminContent() {
       }
     case 'users':
       return <DashboardUserManagement />;
+    case 'settings':
+      return <QuizSettings />;
     case 'site-analytics':
       switch (activeTab) {
         case 'original':
