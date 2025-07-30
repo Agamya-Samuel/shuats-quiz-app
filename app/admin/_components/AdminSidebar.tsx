@@ -1,5 +1,6 @@
 'use client';
 
+import type { Dispatch, SetStateAction } from 'react';
 import {
   BarChart,
   BarChart3,
@@ -15,11 +16,14 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
-export function AdminSidebar() {
+export function AdminSidebar({
+  setSidebarOpen,
+}: {
+  setSidebarOpen?: Dispatch<SetStateAction<boolean>>;
+}) {
   const searchParams = useSearchParams();
   const activeSection = searchParams.get('section') || 'dashboard';
 
@@ -88,6 +92,7 @@ export function AdminSidebar() {
             <Link
               key={item.value}
               href={item.href}
+              onClick={() => setSidebarOpen && setSidebarOpen(false)}
               className={cn(
                 'flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors',
                 activeSection === item.value

@@ -10,7 +10,7 @@ import {
 	Settings,
 	LogOut,
 } from 'lucide-react';
-import { useState } from 'react';
+import { type Dispatch, type SetStateAction } from 'react';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -20,12 +20,17 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { AdminSidebar } from './AdminSidebar';
+import { AdminSidebar } from '@/app/admin/_components/AdminSidebar';
 import { useToast } from '@/hooks/use-toast';
 import { logout } from '@/actions/logout';
 
-export function AdminHeader() {
-	const [sidebarOpen, setSidebarOpen] = useState(false);
+export function AdminHeader({
+	sidebarOpen,
+	setSidebarOpen,
+}: {
+	sidebarOpen: boolean;
+	setSidebarOpen: Dispatch<SetStateAction<boolean>>;
+}) {
 	const router = useRouter();
 	const { toast } = useToast();
 
@@ -84,7 +89,7 @@ export function AdminHeader() {
 								</Link>
 							</div>
 							<div className="flex-1 overflow-auto py-2">
-								<AdminSidebar />
+								<AdminSidebar setSidebarOpen={setSidebarOpen}/>
 							</div>
 						</div>
 					</SheetContent>

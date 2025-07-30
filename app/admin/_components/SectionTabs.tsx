@@ -1,5 +1,6 @@
 'use client';
 
+import type { Dispatch, SetStateAction } from 'react';
 import {
   CheckSquare,
   Clock,
@@ -12,10 +13,13 @@ import {
   Sliders,
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-export function SectionTabs() {
+export function SectionTabs({
+  setSidebarOpen,
+}: {
+  setSidebarOpen: Dispatch<SetStateAction<boolean>>;
+}) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const section = searchParams.get('section') || 'dashboard';
@@ -23,6 +27,7 @@ export function SectionTabs() {
 
   const handleTabChange = (tab: string) => {
     router.push(`/admin?section=${section}&tab=${tab}`, { scroll: false });
+    setSidebarOpen(false);
   };
 
   // Render tabs based on active section
