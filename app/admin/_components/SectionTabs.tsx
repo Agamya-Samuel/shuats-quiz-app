@@ -45,8 +45,6 @@ export function SectionTabs() {
   // Render tabs based on active section
   const renderTabs = () => {
     switch (section) {
-      case 'dashboard':
-        return renderDashboardTabs();
       case 'manage-quiz':
         return renderManageQuizTabs();
       case 'verification':
@@ -57,64 +55,6 @@ export function SectionTabs() {
         return null;
     }
   };
-
-  const renderDashboardTabs = () => (
-    <Tabs
-      value={activeTab}
-      onValueChange={handleTabChange}
-      className="w-full">
-      <TabsList className="flex flex-wrap items-center gap-2">
-        <TabsTrigger
-          value="overview"
-          className="flex items-center gap-2">
-          <LayoutDashboard className="h-4 w-4" />
-          <span>Overview</span>
-        </TabsTrigger>
-        <TabsTrigger
-          value="control"
-          className="flex items-center gap-2">
-          <Clock className="h-4 w-4" />
-          <span>Quiz Control</span>
-        </TabsTrigger>
-        <TabsTrigger
-          value="settings"
-          className="flex items-center gap-2">
-          <FileText className="h-4 w-4" />
-          <span>Quiz Settings</span>
-        </TabsTrigger>
-        <TabsTrigger
-          value="users"
-          className="flex items-center gap-2">
-          <FileText className="h-4 w-4" />
-          <span>User Management</span>
-        </TabsTrigger>
-        <TabsTrigger
-          value="analytics"
-          className="flex items-center gap-2">
-          <FileText className="h-4 w-4" />
-          <span>Analytics</span>
-        </TabsTrigger>
-        <TabsTrigger
-          value="notifications"
-          className="flex items-center gap-2">
-          <FileText className="h-4 w-4" />
-          <span>Notifications</span>
-        </TabsTrigger>
-        <TabsTrigger
-          value="theme"
-          className="flex items-center gap-2">
-          <FileText className="h-4 w-4" />
-          <span>Theme</span>
-        </TabsTrigger>
-        <TabsTrigger
-          value="maintenance"
-          className="flex items-center gap-2">
-          <FileText className="h-4 w-4" />
-          <span>Maintenance</span>
-        </TabsTrigger>
-      </TabsList>
-    </Tabs>
-  );
 
   const renderManageQuizTabs = () => (
     <Tabs
