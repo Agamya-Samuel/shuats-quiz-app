@@ -23,6 +23,7 @@ import { DocumentVerificationList } from '../verification/_components/document-v
 import { VerificationHistory } from '../verification/_components/verification-history';
 import { VerificationSettings } from '../verification/_components/verification-settings';
 import { SimpleAnalyticsDashboard } from './SimpleAnalyticsDashboard';
+import SubmissionContent from './SubmissionContent';
 
 const knownSections = [
   'dashboard',
@@ -33,6 +34,7 @@ const knownSections = [
   'notifications',
   'settings',
   'site-analytics',
+  'submission',
 ];
 
 export function AdminContent() {
@@ -65,8 +67,14 @@ export function AdminContent() {
     } else if (
       activeSection &&
       !activeTab &&
-      getDefaultTabForSection(activeSection)
+      getDefaultTabForSection(activeSection) &&
+      activeSection !== 'submission'
     ) {
+      router.replace(
+        `/admin?section=${activeSection}&tab=${getDefaultTabForSection(
+          activeSection,
+        )}`,
+      );
     }
   }, [activeSection, activeTab, router]);
 
@@ -192,6 +200,8 @@ export function AdminContent() {
         return renderVerificationContent();
       case 'users':
         return renderUsersContent();
+      case 'submission':
+        return <SubmissionContent />;
       case 'analytics':
         return (
           <Card>

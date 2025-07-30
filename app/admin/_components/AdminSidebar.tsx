@@ -50,7 +50,7 @@ export function AdminSidebar() {
     },
     {
       name: 'Submission',
-      href: '/admin/submission',
+      href: '/admin?section=submission',
       icon: CheckSquare,
       value: 'submission',
     },

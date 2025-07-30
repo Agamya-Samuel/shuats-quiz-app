@@ -1,7 +1,7 @@
 import { getUsersWithSubmissionCount } from '@/actions/admin';
-import SubmissionClientPage from './_components/submission-client-page';
+import SubmissionClientPage from './SubmissionClientPage';
 
-export default async function SubmissionPage() {
+export default async function SubmissionContent() {
   const { users, totalQuestions, success } =
     await getUsersWithSubmissionCount();
 
