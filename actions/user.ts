@@ -378,7 +378,7 @@ export async function updateUser(userId: number, userData: UpdateUserData) {
 
     // Use a transaction to update both user and address
     await db.transaction(async (tx: NodePgDatabase<typeof dbSchema>) => {
-      // Update user
+      // Update user details
       await tx
         .update(users)
         .set({
@@ -391,20 +391,45 @@ export async function updateUser(userId: number, userData: UpdateUserData) {
         })
         .where(eq(users.id, userId));
 
-      // Update address if it exists
-      if (existingUser.address && userData.address) {
-        await tx
-          .update(addresses)
-          .set({
-            country: userData.address.country,
-            address1: userData.address.address1,
-            address2: userData.address.address2 || null,
-            area: userData.address.area,
-            city: userData.address.city,
-            pincode: userData.address.pincode,
-            state: userData.address.state,
-          })
-          .where(eq(addresses.id, existingUser.address.id));
+      // Handle address update or creation
+      if (userData.address) {
+        if (existingUser.addressId && existingUser.address) {
+          // Address exists, so update it
+          await tx
+            .update(addresses)
+            .set({
+              country: userData.address.country,
+              address1: userData.address.address1,
+              address2: userData.address.address2 || null,
+              area: userData.address.area,
+              city: userData.address.city,
+              pincode: userData.address.pincode,
+              state: userData.address.state,
+            })
+            .where(eq(addresses.id, existingUser.addressId));
+        } else {
+          // Address does not exist, so create it
+          const [newAddress] = await tx
+            .insert(addresses)
+            .values({
+              country: userData.address.country,
+              address1: userData.address.address1,
+              address2: userData.address.address2 || null,
+              area: userData.address.area,
+              city: userData.address.city,
+              pincode: userData.address.pincode,
+              state: userData.address.state,
+            })
+            .returning({ id: addresses.id });
+
+          // Update the user with the new address ID
+          if (newAddress) {
+            await tx
+              .update(users)
+              .set({ addressId: newAddress.id })
+              .where(eq(users.id, userId));
+          }
+        }
       }
     });
 
