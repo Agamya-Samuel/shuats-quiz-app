@@ -248,6 +248,7 @@ export const getUsers = async () => {
             country: true,
           },
         },
+        uploads: true,
       },
     });
 

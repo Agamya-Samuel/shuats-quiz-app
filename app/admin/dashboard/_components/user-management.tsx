@@ -14,7 +14,7 @@ import {
   UserX,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-
+import { UserDetailsDialog } from './user-details-dialog';
 import { deleteUserWithNotification, getUsers } from '@/actions/admin';
 import {
   AlertDialog,
@@ -66,7 +66,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
 
-interface User {
+export interface User {
   id: number;
   name: string;
   email: string;
@@ -81,6 +81,21 @@ interface User {
     state: string | null;
     country: string | null;
   } | null;
+uploads: {
+  id: number;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  userId: number | null;
+  documentType: string;
+  mimeType: string | null;
+  fileUrl: string;
+  fileName: string;
+  fileKey: string;
+  fileSize: string | null;
+  verified: boolean | null;
+  rejected: boolean | null;
+  rejectionReason: string | null;
+}[];
 }
 
 // Add termination reasons
@@ -239,8 +254,8 @@ export function UserManagement() {
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Mobile</TableHead>
-                  <TableHead>School</TableHead>
-                  <TableHead>Branch</TableHead>
+                  {/* <TableHead>School</TableHead> */}
+                  {/* <TableHead>Branch</TableHead> */}
                   <TableHead>Roll No</TableHead>
                   <TableHead>Location</TableHead>
                   <TableHead>Actions</TableHead>
@@ -253,8 +268,8 @@ export function UserManagement() {
                     <TableCell className="font-medium">{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.mobile}</TableCell>
-                    <TableCell>{user.school}</TableCell>
-                    <TableCell>{user.branch}</TableCell>
+                    {/* <TableCell>{user.school}</TableCell> */}
+                    {/* <TableCell>{user.branch}</TableCell> */}
                     <TableCell>{user.rollno}</TableCell>
                     <TableCell>
                       {user.address ? (
@@ -274,80 +289,83 @@ export function UserManagement() {
                       )}
                     </TableCell>
                     <TableCell>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            disabled={isDeleting === user.id}>
-                            {isDeleting === user.id ? (
-                              <>
-                                <Loader2 className="h-4 w-4 animate-spin mr-1" />
-                                Deleting...
-                              </>
-                            ) : (
-                              <>
-                                <UserX className="h-4 w-4 mr-1" />
-                                Delete
-                              </>
-                            )}
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Delete User Account
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This action will permanently delete the user
-                              account and send a termination notice. This action
-                              cannot be undone.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <div className="py-4">
-                            <Label
-                              htmlFor="termination-reason"
-                              className="mb-2 block">
-                              Select Termination Reason
-                            </Label>
-                            <Select
-                              value={selectedReason}
-                              onValueChange={setSelectedReason}>
-                              <SelectTrigger
-                                id="termination-reason"
-                                className="w-full">
-                                <SelectValue placeholder="Select a reason" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {Object.entries(TERMINATION_REASONS).map(
-                                  ([key, value]) => (
-                                    <SelectItem
-                                      key={key}
-                                      value={key}>
-                                      {value}
-                                    </SelectItem>
-                                  ),
-                                )}
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel
-                              onClick={() => setSelectedReason('')}>
-                              Cancel
-                            </AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleDeleteUser(user.id)}
-                              disabled={
-                                !selectedReason || isDeleting === user.id
-                              }>
-                              {isDeleting === user.id
-                                ? 'Deleting...'
-                                : 'Delete Account'}
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                      <div className="flex gap-2">
+                        <UserDetailsDialog user={user} uploads={user.uploads} />
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              disabled={isDeleting === user.id}>
+                              {isDeleting === user.id ? (
+                                <>
+                                  <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                                  Deleting...
+                                </>
+                              ) : (
+                                <>
+                                  <UserX className="h-4 w-4 mr-1" />
+                                  Delete
+                                </>
+                              )}
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>
+                                Delete User Account
+                              </AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This action will permanently delete the user
+                                account and send a termination notice. This action
+                                cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <div className="py-4">
+                              <Label
+                                htmlFor="termination-reason"
+                                className="mb-2 block">
+                                Select Termination Reason
+                              </Label>
+                              <Select
+                                value={selectedReason}
+                                onValueChange={setSelectedReason}>
+                                <SelectTrigger
+                                  id="termination-reason"
+                                  className="w-full">
+                                  <SelectValue placeholder="Select a reason" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {Object.entries(TERMINATION_REASONS).map(
+                                    ([key, value]) => (
+                                      <SelectItem
+                                        key={key}
+                                        value={key}>
+                                        {value}
+                                      </SelectItem>
+                                    ),
+                                  )}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel
+                                onClick={() => setSelectedReason('')}>
+                                Cancel
+                              </AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handleDeleteUser(user.id)}
+                                disabled={
+                                  !selectedReason || isDeleting === user.id
+                                }>
+                                {isDeleting === user.id
+                                  ? 'Deleting...'
+                                  : 'Delete Account'}
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -425,79 +443,84 @@ export function UserManagement() {
                     </p>
                   </div>
                   <div>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          className="w-full"
-                          disabled={isDeleting === user.id}>
-                          {isDeleting === user.id ? (
-                            <>
-                              <Loader2 className="h-4 w-4 animate-spin mr-1" />
-                              Deleting...
-                            </>
-                          ) : (
-                            <>
-                              <UserX className="h-4 w-4 mr-1" />
-                              Delete
-                            </>
-                          )}
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete User Account</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This action will permanently delete the user account
-                            and send a termination notice. This action cannot be
-                            undone.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <div className="py-4">
-                          <Label
-                            htmlFor="termination-reason-mobile"
-                            className="mb-2 block">
-                            Select Termination Reason
-                          </Label>
-                          <Select
-                            value={selectedReason}
-                            onValueChange={setSelectedReason}>
-                            <SelectTrigger
-                              id="termination-reason-mobile"
-                              className="w-full">
-                              <SelectValue placeholder="Select a reason" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {Object.entries(TERMINATION_REASONS).map(
-                                ([key, value]) => (
-                                  <SelectItem
-                                    key={key}
-                                    value={key}>
-                                    {value}
-                                  </SelectItem>
-                                ),
-                              )}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel
-                            onClick={() => setSelectedReason('')}>
-                            Cancel
-                          </AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => handleDeleteUser(user.id)}
-                            disabled={
-                              !selectedReason || isDeleting === user.id
-                            }>
-                            {isDeleting === user.id
-                              ? 'Deleting...'
-                              : 'Delete Account'}
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <div className="flex gap-2">
+                      <UserDetailsDialog user={user} uploads={user.uploads} />
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="w-full"
+                            disabled={isDeleting === user.id}>
+                            {isDeleting === user.id ? (
+                              <>
+                                <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                                Deleting...
+                              </>
+                            ) : (
+                              <>
+                                <UserX className="h-4 w-4 mr-1" />
+                                Delete
+                              </>
+                            )}
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Delete User Account
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action will permanently delete the user account
+                              and send a termination notice. This action cannot be
+                              undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <div className="py-4">
+                            <Label
+                              htmlFor="termination-reason-mobile"
+                              className="mb-2 block">
+                              Select Termination Reason
+                            </Label>
+                            <Select
+                              value={selectedReason}
+                              onValueChange={setSelectedReason}>
+                              <SelectTrigger
+                                id="termination-reason-mobile"
+                                className="w-full">
+                                <SelectValue placeholder="Select a reason" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Object.entries(TERMINATION_REASONS).map(
+                                  ([key, value]) => (
+                                    <SelectItem
+                                      key={key}
+                                      value={key}>
+                                      {value}
+                                    </SelectItem>
+                                  ),
+                                )}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel
+                              onClick={() => setSelectedReason('')}>
+                              Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDeleteUser(user.id)}
+                              disabled={
+                                !selectedReason || isDeleting === user.id
+                              }>
+                              {isDeleting === user.id
+                                ? 'Deleting...'
+                                : 'Delete Account'}
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                   </div>
                 </div>
               </Card>
