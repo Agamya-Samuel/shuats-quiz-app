@@ -43,7 +43,7 @@ interface LeaderboardEntry {
 	attemptedQuestions?: number;
 	correctAnswers: number;
 	accuracy: number;
-	submittedAt?: string | Date;
+	submittedAt?: string | Date | null;
 	totalAnswered?: number;
 }
 

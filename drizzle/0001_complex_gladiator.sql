@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "quiz_completed_at" timestamp;

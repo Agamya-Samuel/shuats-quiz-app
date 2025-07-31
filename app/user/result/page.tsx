@@ -319,6 +319,11 @@ export default function ResultPage() {
 					</h2>
 					<ResultDetails results={results} />
 				</div>
+				<div className="mt-8 text-center">
+					<Button onClick={() => router.push('/user/leaderboard')}>
+						View Leaderboard
+					</Button>
+				</div>
 			</div>
 		</div>
 	);
