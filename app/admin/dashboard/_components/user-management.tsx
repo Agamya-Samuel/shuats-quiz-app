@@ -187,6 +187,8 @@ export function UserManagement() {
     (user) =>
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (user.mobile &&
+        user.mobile.toLowerCase().includes(searchQuery.toLowerCase())) ||
       user.school.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.branch.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.rollno.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -236,6 +238,7 @@ export function UserManagement() {
                   <TableHead>Sr. No.</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
+                  <TableHead>Mobile</TableHead>
                   <TableHead>School</TableHead>
                   <TableHead>Branch</TableHead>
                   <TableHead>Roll No</TableHead>
@@ -249,6 +252,7 @@ export function UserManagement() {
                     <TableCell>{index + 1}</TableCell>
                     <TableCell className="font-medium">{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.mobile}</TableCell>
                     <TableCell>{user.school}</TableCell>
                     <TableCell>{user.branch}</TableCell>
                     <TableCell>{user.rollno}</TableCell>
@@ -350,7 +354,7 @@ export function UserManagement() {
                 {filteredUsers.length === 0 && (
                   <TableRow>
                     <TableCell
-                      colSpan={8}
+                      colSpan={9}
                       className="text-center py-6 text-muted-foreground">
                       No users found
                     </TableCell>
@@ -374,6 +378,12 @@ export function UserManagement() {
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {user.email}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Mobile</p>
+                    <p className="text-sm text-muted-foreground">
+                      {user.mobile}
                     </p>
                   </div>
                   <div>
