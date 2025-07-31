@@ -333,6 +333,20 @@ export function LoginForm({ redirect }: { redirect?: string }) {
               Privacy Policy
             </Link>
           </p>
+          <p className="text-md text-muted-foreground mt-2 text-center">
+            Developed by{' '}
+            <Link
+              href="https://www.linkedin.com/in/agamyasamuel/"
+              className="underline hover:text-primary">
+              Agamya
+            </Link>{' '}
+            and{' '}
+            <Link
+              href="https://www.linkedin.com/in/aditya0545/"
+              className="underline hover:text-primary">
+              Aditya
+            </Link>
+          </p>
           {isLoading && (
             <div className="absolute inset-0 bg-white/50 flex items-center justify-center">
               <LoadingSpinner />
