@@ -91,6 +91,7 @@ export function FileUpload({
 			}
 
 			setFile(selectedFile);
+			handleUpload(selectedFile);
 
 			// Create preview for images
 			if (fileType.includes('image')) {
@@ -106,7 +107,7 @@ export function FileUpload({
 		}
 	};
 
-	const handleUpload = async () => {
+	const handleUpload = async (file: File) => {
 		if (!file) return;
 
 		setUploading(true);
@@ -349,24 +350,6 @@ export function FileUpload({
 							<span>Max: {maxFileSizeMB} MB</span>
 						</div>
 					</div>
-
-					<Button
-						onClick={handleUpload}
-						disabled={uploading}
-						className="w-full bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600"
-					>
-						{uploading ? (
-							<>
-								<LoadingSpinner />
-								<span className="ml-2">Uploading...</span>
-							</>
-						) : (
-							<>
-								<Upload className="mr-2 h-4 w-4" />
-								Upload Document
-							</>
-						)}
-					</Button>
 
 					{uploading && (
 						<div className="mt-4">
