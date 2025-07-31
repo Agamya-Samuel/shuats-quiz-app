@@ -31,6 +31,6 @@
 import { redirect } from 'next/navigation';
 
 export default function Home() {
-  // Redirect to /user/login
-  redirect('/user/login');
+  // Redirect to /login
+  redirect('/login');
 }
