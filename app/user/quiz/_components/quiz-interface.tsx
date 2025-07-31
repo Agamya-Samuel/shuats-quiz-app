@@ -661,6 +661,13 @@ export default function QuizInterface() {
 
           {/* Main content */}
           <div className="p-6">
+            <div className="mb-6 flex items-center justify-center rounded-full bg-red-100 p-3 text-center text-red-800">
+              <span className="relative mr-3 flex h-3 w-3">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
+              </span>
+              <p className="text-lg font-semibold">The Exam is not Live!</p>
+            </div>
             <div className="flex flex-col items-center text-center">
               {/* Status icon */}
               <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mb-4">
