@@ -233,6 +233,7 @@ export function UserManagement() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Sr. No.</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>School</TableHead>
@@ -243,8 +244,9 @@ export function UserManagement() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredUsers.map((user) => (
+                {filteredUsers.map((user, index) => (
                   <TableRow key={user.id}>
+                    <TableCell>{index + 1}</TableCell>
                     <TableCell className="font-medium">{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.school}</TableCell>
@@ -348,7 +350,7 @@ export function UserManagement() {
                 {filteredUsers.length === 0 && (
                   <TableRow>
                     <TableCell
-                      colSpan={7}
+                      colSpan={8}
                       className="text-center py-6 text-muted-foreground">
                       No users found
                     </TableCell>
@@ -360,13 +362,16 @@ export function UserManagement() {
 
           {/* Mobile Card View */}
           <div className="grid gap-4 md:hidden">
-            {filteredUsers.map((user) => (
+            {filteredUsers.map((user, index) => (
               <Card
                 key={user.id}
                 className="p-4">
                 <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <p className="font-medium">{user.name}</p>
+                    <div className="flex justify-between">
+                      <p className="font-medium">{user.name}</p>
+                      <p className="font-medium">#{index + 1}</p>
+                    </div>
                     <p className="text-sm text-muted-foreground">
                       {user.email}
                     </p>
