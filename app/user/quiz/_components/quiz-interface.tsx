@@ -32,6 +32,7 @@ import { cn } from '@/lib/utils';
 import Legend from './legend';
 import PreQuizPrompt from './pre-quiz-prompt';
 import QuizQuestionView from './quiz-question-view';
+import CountdownTimer from './countdown-timer';
 
 // Types
 export interface Option {
@@ -674,10 +675,6 @@ export default function QuizInterface() {
                 <Smile />
               </div>
 
-              <h3 className="text-xl font-semibold mb-3">
-                Exam Not Yet Available
-              </h3>
-
               <p className="text-muted-foreground mb-6">
                 The exam is currently not available. Please check back during
                 the scheduled time when it will be activated by the
@@ -761,6 +758,9 @@ export default function QuizInterface() {
                 <p className="text-sm font-medium text-primary">
                   Please be ready 15 minutes before the scheduled time
                 </p>
+              </div>
+              <div className="mt-6">
+                <CountdownTimer targetDate="2025-08-12T10:30:00" />
               </div>
             </div>
 
