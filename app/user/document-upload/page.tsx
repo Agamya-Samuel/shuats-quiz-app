@@ -1,8 +1,6 @@
 'use client';
 
 import { FileText, Upload } from 'lucide-react';
-import { ArrowRight } from 'lucide-react';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -419,25 +417,6 @@ export default function DocumentUploadPage() {
             />
           </div>
 
-          <div className="mt-8 flex justify-center">
-            <Link
-              href="/user/quiz"
-              passHref>
-              <Button
-                variant="default"
-                size="lg"
-                disabled={
-                  !documentStatus.aadhar.verified ||
-                  !documentStatus.marksheet10.verified ||
-                  !documentStatus.marksheet12.verified ||
-                  !documentStatus.photo.verified
-                }
-                className="bg-green-600 hover:bg-green-700">
-                Continue to Quiz
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-          </div>
 
           <div className="mt-6">
             <DocumentUploadGuide />
