@@ -10,7 +10,7 @@ import * as dbSchema from '@/db/schema';
 import { generateToken } from '@/lib/auth';
 import { setCookie } from '@/lib/cookies';
 import { verifyAuth } from '@/lib/dal';
-import { sendAccountTerminationEmail } from '@/lib/email';
+import { sendAccountTerminationEmail, sendCustomEmail } from '@/lib/email';
 import { AdminJwtPayload } from '@/types/admin';
 import { revalidatePath } from 'next/cache';
 
@@ -442,3 +442,35 @@ export const getUsersWithSubmissionCount = async () => {
     };
   }
 };
+
+// Send a custom email to a user
+export async function emailUser({
+  email,
+  subject,
+  content,
+}: {
+  email: string;
+  subject: string;
+  content: string;
+}) {
+  // First verify that the requester is an admin or superadmin
+  const user = await verifyAuth();
+
+  if (!user || (user.role !== 'admin' && user.role !== 'superadmin')) {
+    return {
+      success: false,
+      message: 'Unauthorized: You do not have permission to send emails',
+    };
+  }
+
+  try {
+    await sendCustomEmail(email, subject, content);
+    return { success: true, message: 'Email sent successfully' };
+  } catch (error) {
+    console.error('Error sending email:', error);
+    return {
+      success: false,
+      message: `Failed to send email: ${error}`,
+    };
+  }
+}

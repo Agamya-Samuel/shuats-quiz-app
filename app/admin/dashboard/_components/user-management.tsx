@@ -14,6 +14,7 @@ import {
   UserX,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { EmailUserDialog } from './EmailUserDialog';
 import { UserDetailsDialog } from './user-details-dialog';
 import { deleteUserWithNotification, getUsers } from '@/actions/admin';
 import {
@@ -291,6 +292,10 @@ export function UserManagement() {
                     <TableCell>
                       <div className="flex gap-2">
                         <UserDetailsDialog user={user} uploads={user.uploads} />
+                        <EmailUserDialog
+                          userEmail={user.email}
+                          userName={user.name}
+                        />
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
                             <Button
@@ -445,6 +450,10 @@ export function UserManagement() {
                   <div>
                     <div className="flex gap-2">
                       <UserDetailsDialog user={user} uploads={user.uploads} />
+                      <EmailUserDialog
+                        userEmail={user.email}
+                        userName={user.name}
+                      />
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button
