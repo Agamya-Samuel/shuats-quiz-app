@@ -157,9 +157,8 @@ export const userSubmissionTimestamps = pgTable('user_submission_timestamps', {
       onDelete: 'cascade',
     },
   ),
-  startTime: timestamp('start_time').notNull().defaultNow(),
-  endTime: timestamp('end_time'),
   createdAt: timestamp('created_at').defaultNow(),
+  totalTimeSpent: integer('total_time_spent'), // in seconds
 });
 
 // Quiz settings table
