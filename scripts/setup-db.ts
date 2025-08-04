@@ -20,7 +20,7 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 
 import { connectToDB } from '../db';
-import { addresses, admins, users } from '../db/schema';
+import { addresses, admins, users, questions, correctAnswers } from '../db/schema';
 import * as dbSchema from '../db/schema';
 
 
@@ -144,6 +144,90 @@ async function setupDatabase() {
     } else {
       console.log('Dummy user already exists');
     }
+
+    // 3. Seed sample questions
+    const sampleQuestions = [
+      {
+        question: 'What is the capital of France?',
+        options: [
+          { id: '1', value: 'Berlin' },
+          { id: '2', value: 'Madrid' },
+          { id: '3', value: 'Paris' },
+          { id: '4', value: 'Rome' },
+        ],
+        subject: 'General Knowledge',
+        correctOption: '3',
+      },
+      {
+        question: 'What is 2 + 2?',
+        options: [
+          { id: '1', value: '3' },
+          { id: '2', value: '4' },
+          { id: '3', value: '5' },
+          { id: '4', value: '6' },
+        ],
+        subject: 'Arithmatic',
+        correctOption: '2',
+      },
+      {
+        question: 'What is the largest planet in our solar system?',
+        options: [
+          { id: '1', value: 'Earth' },
+          { id: '2', value: 'Jupiter' },
+          { id: '3', value: 'Mars' },
+          { id: '4', value: 'Saturn' },
+        ],
+        subject: 'General Knowledge',
+        correctOption: '2',
+      },
+      {
+        question: 'What is the chemical symbol for water?',
+        options: [
+          { id: '1', value: 'O2' },
+          { id: '2', value: 'H2O' },
+          { id: '3', value: 'CO2' },
+          { id: '4', value: 'NaCl' },
+        ],
+        subject: 'General Knowledge',
+        correctOption: '2',
+      },
+      {
+        question: 'Who wrote "Romeo and Juliet"?',
+        options: [
+          { id: '1', value: 'William Shakespeare' },
+          { id: '2', value: 'Charles Dickens' },
+          { id: '3', value: 'Mark Twain' },
+          { id: '4', value: 'Jane Austen' },
+        ],
+        subject: 'General Knowledge',
+        correctOption: '1',
+      },
+    ];
+
+    console.log('Seeding sample questions...');
+    for (const q of sampleQuestions) {
+      const existingQuestion = await db.query.questions.findFirst({
+        where: eq(questions.question, q.question),
+      });
+
+      if (!existingQuestion) {
+        const [newQuestion] = await db
+          .insert(questions)
+          .values({
+            question: q.question,
+            options: q.options,
+            subject: q.subject,
+          })
+          .returning({ id: questions.id });
+
+        await db.insert(correctAnswers).values({
+          questionId: newQuestion.id,
+          correctOption: q.correctOption,
+        });
+        console.log(`Inserted question: ${q.question}`);
+      }
+    }
+    console.log('Sample questions seeded successfully');
 
     console.log('Database setup completed successfully');
     process.exit(0);
