@@ -1,7 +1,7 @@
 // app/user/quiz/_components/quiz-interface.tsx
 'use client';
 
-import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Smile, Twitter } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -30,12 +30,9 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 import Legend from './legend';
-import QuizQuestionView from './quiz-question-view';
 import PreQuizPrompt from './pre-quiz-prompt';
-
-// app/user/quiz/_components/quiz-interface.tsx
-
-// app/user/quiz/_components/quiz-interface.tsx
+import QuizQuestionView from './quiz-question-view';
+import CountdownTimer from './countdown-timer';
 
 // Types
 export interface Option {
@@ -218,9 +215,7 @@ export default function QuizInterface() {
         const response = await getQuizResults(Number(currentUser.userId));
 
         const hasAttempted =
-          response.success &&
-          response.data &&
-          response.data.results.length > 0;
+          response.success && response.data && response.data.results.length > 0;
 
         if (hasAttempted) {
           setHasAlreadyAttempted(true);
@@ -387,19 +382,17 @@ export default function QuizInterface() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answers]); // Only run when answers change
- 
+
   // Save answers to localStorage whenever they change
   useEffect(() => {
-  	if (Object.keys(answers).length > 0) {
-  		localStorage.setItem('quiz_answers', JSON.stringify(answers));
-  	}
- 
-  	if (questions.length > 0) {
-  		const allAttempted = questions.every(
-  			(q) => answers[String(q.id)]
-  		);
-  		setAllQuestionsAttempted(allAttempted);
-  	}
+    if (Object.keys(answers).length > 0) {
+      localStorage.setItem('quiz_answers', JSON.stringify(answers));
+    }
+
+    if (questions.length > 0) {
+      const allAttempted = questions.every((q) => answers[String(q.id)]);
+      setAllQuestionsAttempted(allAttempted);
+    }
   }, [answers, questions]);
 
   const handleStartQuiz = () => {
@@ -669,27 +662,18 @@ export default function QuizInterface() {
 
           {/* Main content */}
           <div className="p-6">
+            <div className="mb-6 flex items-center justify-center rounded-full bg-red-100 p-3 text-center text-red-800">
+              <span className="relative mr-3 flex h-3 w-3">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
+              </span>
+              <p className="text-lg font-semibold">The Exam is not Live!</p>
+            </div>
             <div className="flex flex-col items-center text-center">
               {/* Status icon */}
               <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-amber-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+                <Smile />
               </div>
-
-              <h3 className="text-xl font-semibold mb-3">
-                Exam Not Yet Available
-              </h3>
 
               <p className="text-muted-foreground mb-6">
                 The exam is currently not available. Please check back during
@@ -719,7 +703,7 @@ export default function QuizInterface() {
                 </h3>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center mb-4">
+              <div className="flex flex-col sm:flex-row items-stretch gap-4 justify-center mb-4">
                 {/* Date */}
                 <div className="bg-white rounded-lg p-4 shadow-sm border border-primary/10 flex-1 w-full sm:w-auto">
                   <div className="flex items-center gap-2 mb-1">
@@ -774,6 +758,9 @@ export default function QuizInterface() {
                 <p className="text-sm font-medium text-primary">
                   Please be ready 15 minutes before the scheduled time
                 </p>
+              </div>
+              <div className="mt-6">
+                <CountdownTimer targetDate="2025-08-12T10:30:00" />
               </div>
             </div>
 
@@ -903,7 +890,12 @@ export default function QuizInterface() {
   }
 
   if (showPreQuizPrompt) {
-    return <PreQuizPrompt onStartQuiz={handleStartQuiz} />;
+    return (
+      <PreQuizPrompt
+        onStartQuiz={handleStartQuiz}
+        isLive={quizSettings?.isLive ?? false}
+      />
+    );
   }
 
   // Show loading state while fetching questions
@@ -949,7 +941,9 @@ export default function QuizInterface() {
         </div>
         {/* Quiz Header */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 my-6">
-          <h2 className="text-2xl font-bold text-primary">SHUATS Online Quiz</h2>
+          <h2 className="text-2xl font-bold text-primary">
+            SHUATS Online Quiz
+          </h2>
           <div className="mt-4 md:mt-0 flex items-center">
             <div
               className={cn(
@@ -1004,10 +998,10 @@ export default function QuizInterface() {
                 onSubmit={handleSubmit}
                 isSubmitting={isSubmitting}
                 allQuestionsAttempted={allQuestionsAttempted}
-               />
-              </div>
-             </div>
+              />
             </div>
+          </div>
+        </div>
       </div>
 
       {/* Time Up Dialog */}
