@@ -1,8 +1,9 @@
 'use server';
 
 import argon2 from 'argon2';
-import { eq, sql, desc, count } from 'drizzle-orm';
+import { count, desc, eq, sql } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { revalidatePath } from 'next/cache';
 
 import { connectToDB } from '@/db';
 import { admins, users } from '@/db/schema';
@@ -12,7 +13,6 @@ import { setCookie } from '@/lib/cookies';
 import { verifyAuth } from '@/lib/dal';
 import { sendAccountTerminationEmail, sendCustomEmail } from '@/lib/email';
 import { AdminJwtPayload } from '@/types/admin';
-import { revalidatePath } from 'next/cache';
 
 // 30 days in seconds
 const THIRTY_DAYS = 60 * 60 * 24 * 30;
@@ -349,10 +349,12 @@ export async function resetUserSubmissions(userId: number) {
       typeof dbSchema
     >;
 
-    // Check if user exists
-    const userToReset = await db.query.users.findFirst({
-      where: eq(users.id, userId),
-    });
+    // Check if user exists (select only needed columns to avoid missing-column issues)
+    const [userToReset] = await db
+      .select({ id: users.id, email: users.email })
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1);
 
     if (!userToReset) {
       return {
@@ -364,17 +366,13 @@ export async function resetUserSubmissions(userId: number) {
     // Delete all submitted answers for this user
     // Delete all submitted answers for this user
     await db
-      .delete(dbSchema.userSubmissionTimestamps)
-      .where(eq(dbSchema.userSubmissionTimestamps.userId, userId));
-    
-    await db
       .delete(dbSchema.userSubmissions)
       .where(eq(dbSchema.userSubmissions.userId, userId));
 
     // Reset the quizAttempted flag for the user
     await db
       .update(users)
-      .set({ quizAttempted: false })
+      .set({ quizAttempted: false, quizStartedAt: null, quizCompletedAt: null })
       .where(eq(users.id, userId));
 
     revalidatePath('/admin?section=submission');
