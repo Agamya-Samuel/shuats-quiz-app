@@ -2,6 +2,7 @@
 import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 
+import Footer from '@/app/user/quiz/_components/Footer';
 import QuizInterface from '@/app/user/quiz/_components/quiz-interface';
 import { db } from '@/db';
 import { uploadFiles, users } from '@/db/schema';
@@ -60,6 +61,7 @@ export default async function QuizPage() {
   return (
     <div className="bg-gray-50 min-h-[calc(100vh-111px)]">
       <QuizInterface />
+      <Footer />
     </div>
   );
 }
