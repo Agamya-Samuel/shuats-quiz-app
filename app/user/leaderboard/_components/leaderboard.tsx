@@ -33,25 +33,7 @@ interface ParticipantData {
 }
 
 // Sample data - replace with actual data from your quiz system
-const leaderboardData: ParticipantData[] = [
-	{
-		participant_name: 'John Doe',
-		total_correct: 20,
-		total_time: 720,
-		'General Knowledge': { correct: 9, time_spent: 270 },
-		Computer: { correct: 5, time_spent: 150 },
-		'Logical Reasoning': { correct: 6, time_spent: 300 },
-	},
-	{
-		participant_name: 'Jane Smith',
-		total_correct: 22,
-		total_time: 690,
-		'General Knowledge': { correct: 8, time_spent: 260 },
-		Computer: { correct: 5, time_spent: 140 },
-		'Logical Reasoning': { correct: 9, time_spent: 290 },
-	},
-	// Add more participants here...
-];
+const leaderboardData: ParticipantData[] = [];
 
 const subjects = [
 	'General Knowledge',
