@@ -151,3 +151,30 @@ export async function submitQuiz(
 		};
 	}
 }
+
+export const recordTimeSpent = async (
+  userId: number,
+  questionId: number,
+  timeSpent: number,
+) => {
+  try {
+    const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+    await db
+      .update(userSubmissions)
+      .set({ totalTimeSpent: timeSpent })
+      .where(
+        and(
+          eq(userSubmissions.userId, userId),
+          eq(userSubmissions.questionId, questionId),
+        ),
+      );
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error recording time spent:', error);
+    return {
+      success: false,
+      message: 'An error occurred while recording the time spent.',
+    };
+  }
+};

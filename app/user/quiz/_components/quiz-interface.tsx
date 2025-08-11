@@ -11,6 +11,7 @@ import {
   recordQuizStartTime,
   submitAnswer,
   submitQuiz,
+  recordTimeSpent,
 } from '@/actions/submit-answers';
 import GlobalLoading from '@/components/global-loading';
 import ImageCarousel from '@/components/image-carousel';
@@ -143,6 +144,12 @@ export default function QuizInterface() {
 
   // Enable anti-cheat measures when quiz is active
   const antiCheat = useAntiCheat(quizStarted);
+
+  // Time tracking per question
+  const [timeSpent, setTimeSpent] = useState<Record<string, number>>({});
+  const [questionStartTime, setQuestionStartTime] = useState<number | null>(
+    null,
+  );
 
   // Load quiz settings
   useEffect(() => {
@@ -306,6 +313,7 @@ export default function QuizInterface() {
         localStorage.removeItem('quiz_answers');
         localStorage.removeItem('quiz_start_time');
         localStorage.removeItem('quiz_current_question_index');
+        localStorage.removeItem('quiz_time_spent');
         setAnswers({});
 
         // IMPORTANT: First mark that we're intentionally exiting fullscreen
@@ -377,6 +385,17 @@ export default function QuizInterface() {
         console.error('Error parsing saved question index:', err);
       }
     }
+
+    // Load time spent from localStorage
+    const savedTimeSpent = localStorage.getItem('quiz_time_spent');
+    if (savedTimeSpent) {
+      try {
+        const parsedTimeSpent = JSON.parse(savedTimeSpent);
+        setTimeSpent(parsedTimeSpent);
+      } catch (err) {
+        console.error('Error parsing saved time spent:', err);
+      }
+    }
   }, []); // Empty dependency array - run only on mount
 
   // Update questions when answers change
@@ -391,6 +410,7 @@ export default function QuizInterface() {
             status: 'answered' as const,
             userAnswer: savedAnswer.answerText,
           };
+        
         }
         return q;
       });
@@ -420,6 +440,42 @@ export default function QuizInterface() {
       );
     }
   }, [currentQuestionIndex, questions]);
+
+  // Save time spent to localStorage
+  useEffect(() => {
+    if (Object.keys(timeSpent).length > 0) {
+      localStorage.setItem('quiz_time_spent', JSON.stringify(timeSpent));
+    }
+  }, [timeSpent]);
+
+  // Track time spent on each question
+  useEffect(() => {
+    const previousQuestionIndex = currentQuestionIndex - 1;
+
+    if (questionStartTime && previousQuestionIndex >= 0) {
+      const timeElapsed = (Date.now() - questionStartTime) / 1000;
+      const question = questions[previousQuestionIndex];
+
+      if (question?._id) {
+        const newTimeSpent = (timeSpent[question._id] || 0) + timeElapsed;
+        setTimeSpent((prev) => ({
+          ...prev,
+          [question._id as string]: newTimeSpent,
+        }));
+
+        if (currentUser?.userId) {
+          recordTimeSpent(
+            Number(currentUser.userId),
+            question.id,
+            Math.round(newTimeSpent),
+          );
+        }
+      }
+    }
+
+    setQuestionStartTime(Date.now());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentQuestionIndex]);
 
   const handleStartQuiz = () => {
     setShowPreQuizPrompt(false);
@@ -610,6 +666,7 @@ export default function QuizInterface() {
         localStorage.removeItem('quiz_answers');
         localStorage.removeItem('quiz_start_time');
         localStorage.removeItem('quiz_current_question_index');
+        localStorage.removeItem('quiz_time_spent');
         setAnswers({});
 
         // IMPORTANT: First mark that we're intentionally exiting fullscreen
