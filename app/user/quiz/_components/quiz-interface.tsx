@@ -305,6 +305,7 @@ export default function QuizInterface() {
         // Clear local storage after successful submission
         localStorage.removeItem('quiz_answers');
         localStorage.removeItem('quiz_start_time');
+        localStorage.removeItem('quiz_current_question_index');
         setAnswers({});
 
         // IMPORTANT: First mark that we're intentionally exiting fullscreen
@@ -361,6 +362,21 @@ export default function QuizInterface() {
         console.error('Error parsing saved start time:', err);
       }
     }
+
+    // Load current question index from localStorage
+    const savedQuestionIndex = localStorage.getItem(
+      'quiz_current_question_index',
+    );
+    if (savedQuestionIndex) {
+      try {
+        const parsedIndex = JSON.parse(savedQuestionIndex);
+        if (typeof parsedIndex === 'number') {
+          setCurrentQuestionIndex(parsedIndex);
+        }
+      } catch (err) {
+        console.error('Error parsing saved question index:', err);
+      }
+    }
   }, []); // Empty dependency array - run only on mount
 
   // Update questions when answers change
@@ -394,6 +410,16 @@ export default function QuizInterface() {
       setAllQuestionsAttempted(allAttempted);
     }
   }, [answers, questions]);
+
+  // Save current question index to localStorage
+  useEffect(() => {
+    if (questions.length > 0) {
+      localStorage.setItem(
+        'quiz_current_question_index',
+        JSON.stringify(currentQuestionIndex),
+      );
+    }
+  }, [currentQuestionIndex, questions]);
 
   const handleStartQuiz = () => {
     setShowPreQuizPrompt(false);
@@ -583,6 +609,7 @@ export default function QuizInterface() {
         // Clear local storage after successful submission
         localStorage.removeItem('quiz_answers');
         localStorage.removeItem('quiz_start_time');
+        localStorage.removeItem('quiz_current_question_index');
         setAnswers({});
 
         // IMPORTANT: First mark that we're intentionally exiting fullscreen
