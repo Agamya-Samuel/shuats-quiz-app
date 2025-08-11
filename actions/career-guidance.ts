@@ -15,15 +15,9 @@ type ConfigType = {
 
 // Map subject keys from constants.ts to keys used in config.json
 const subjectKeyMapping: Record<string, string> = {
-	physics: 'physics',
-	chemistry: 'chemistry',
-	math: 'mathematics',
-	biology: 'biology',
-	social: 'social_science',
-	english: 'english',
 	gk: 'general_knowledge',
 	computer: 'computer_science',
-	commerce: 'commerce',
+	logical_reasoning: 'logical_reasoning',
 };
 
 // Load markdown files using dynamic imports
