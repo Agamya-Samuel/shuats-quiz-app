@@ -135,12 +135,7 @@ export const userSubmissions = pgTable(
     }),
     option: text('option').notNull(),
   },
-  (table) => ({
-    userQuestionIndex: index('user_question_idx').on(
-      table.userId,
-      table.questionId,
-    ),
-  }),
+  (table) => [index('user_question_idx').on(table.userId, table.questionId)],
 );
 
 // User submission timestamps table - to track when a user starts and completes a submission
