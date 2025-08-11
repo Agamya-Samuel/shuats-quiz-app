@@ -57,6 +57,7 @@ export const users = pgTable('users', {
     .notNull(),
   quizAttempted: boolean('quiz_attempted').default(false).notNull(),
   quizCompletedAt: timestamp('quiz_completed_at'),
+  quizStartedAt: timestamp('quiz_started_at'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
