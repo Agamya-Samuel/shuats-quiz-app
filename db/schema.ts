@@ -134,27 +134,10 @@ export const userSubmissions = pgTable(
       onDelete: 'cascade',
     }),
     option: text('option').notNull(),
+    totalTimeSpent: integer('total_time_spent').default(0), // in seconds
   },
   (table) => [index('user_question_idx').on(table.userId, table.questionId)],
 );
-
-// User submission timestamps table - to track when a user starts and completes a submission
-export const userSubmissionTimestamps = pgTable('user_submission_timestamps', {
-  id: integer('id')
-    .primaryKey()
-    .generatedAlwaysAsIdentity({ startWith: 10001 }),
-  userId: integer('user_id').references(() => users.id, {
-    onDelete: 'cascade',
-  }),
-  userSubmissionId: integer('user_submission_id').references(
-    () => userSubmissions.id,
-    {
-      onDelete: 'cascade',
-    },
-  ),
-  createdAt: timestamp('created_at').defaultNow(),
-  totalTimeSpent: integer('total_time_spent'), // in seconds
-});
 
 // Quiz settings table
 export const quizSettings = pgTable('quiz_settings', {
@@ -219,7 +202,7 @@ export const correctAnswersRelations = relations(correctAnswers, ({ one }) => ({
 
 export const userSubmissionsRelations = relations(
   userSubmissions,
-  ({ one, many }) => ({
+  ({ one }) => ({
     user: one(users, {
       fields: [userSubmissions.userId],
       references: [users.id],
@@ -227,21 +210,6 @@ export const userSubmissionsRelations = relations(
     question: one(questions, {
       fields: [userSubmissions.questionId],
       references: [questions.id],
-    }),
-    timestamps: many(userSubmissionTimestamps),
-  }),
-);
-
-export const userSubmissionTimestampsRelations = relations(
-  userSubmissionTimestamps,
-  ({ one }) => ({
-    user: one(users, {
-      fields: [userSubmissionTimestamps.userId],
-      references: [users.id],
-    }),
-    submission: one(userSubmissions, {
-      fields: [userSubmissionTimestamps.userSubmissionId],
-      references: [userSubmissions.id],
     }),
   }),
 );
