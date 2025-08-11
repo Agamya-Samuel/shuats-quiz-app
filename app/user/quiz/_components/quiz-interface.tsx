@@ -12,6 +12,10 @@ import {
   submitAnswer,
   submitQuiz,
 } from '@/actions/submit-answers';
+import {
+  batchUpdateQuestionTimes,
+  updateQuestionTime,
+} from '@/actions/update-question-time';
 import GlobalLoading from '@/components/global-loading';
 import ImageCarousel from '@/components/image-carousel';
 import { Button } from '@/components/ui/button';
@@ -29,10 +33,47 @@ import { useCookies } from '@/hooks/use-cookies';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
+import { useQuestionTimeTracker } from '../_hooks/useQuestionTimeTracker';
+import CountdownTimer from './countdown-timer';
 import Legend from './legend';
 import PreQuizPrompt from './pre-quiz-prompt';
 import QuizQuestionView from './quiz-question-view';
-import CountdownTimer from './countdown-timer';
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
+
+// app/user/quiz/_components/quiz-interface.tsx
 
 // Types
 export interface Option {
@@ -136,13 +177,64 @@ export default function QuizInterface() {
   const [isTimeUp, setIsTimeUp] = useState(false);
 
   // Quiz start time state
-  const [, setQuizStartTime] = useState<Date | null>(null);
+  const [quizStartTime, setQuizStartTime] = useState<Date | null>(null);
 
   // Anti-cheat state
   const [quizStarted, setQuizStarted] = useState(false);
 
   // Enable anti-cheat measures when quiz is active
   const antiCheat = useAntiCheat(quizStarted);
+
+  // Question time tracking
+  const timeTracker = useQuestionTimeTracker(
+    currentUser?.userId ? Number(currentUser.userId) : null,
+  );
+
+  // Calculate remaining time based on start time and quiz duration
+  const calculateRemainingTime = useCallback(
+    (startTime: Date | null, quizDurationMinutes: number): number => {
+      console.log('calculateRemainingTime called with:', {
+        startTime,
+        quizDurationMinutes,
+        hasStartTime: !!startTime,
+      });
+
+      if (!startTime) {
+        // No start time means quiz hasn't started yet, return full duration
+        console.log(
+          'No start time, returning full duration:',
+          quizDurationMinutes * 60,
+        );
+        return quizDurationMinutes * 60;
+      }
+
+      try {
+        const now = new Date();
+        const elapsedSeconds = Math.floor(
+          (now.getTime() - startTime.getTime()) / 1000,
+        );
+        const totalQuizSeconds = quizDurationMinutes * 60;
+        const remainingSeconds = Math.max(0, totalQuizSeconds - elapsedSeconds);
+
+        console.log('Timer calculation details:', {
+          now: now.toISOString(),
+          startTime: startTime.toISOString(),
+          elapsedSeconds,
+          elapsedMinutes: Math.floor(elapsedSeconds / 60),
+          totalQuizSeconds,
+          remainingSeconds,
+          remainingMinutes: Math.floor(remainingSeconds / 60),
+        });
+
+        return remainingSeconds;
+      } catch (error) {
+        console.error('Error calculating remaining time:', error);
+        // Return full duration as fallback
+        return quizDurationMinutes * 60;
+      }
+    },
+    [],
+  );
 
   // Load quiz settings
   useEffect(() => {
@@ -160,19 +252,15 @@ export default function QuizInterface() {
             perQuizTimeLimit: perQuizTimeLimit || 60,
           });
 
-          setTimeRemaining((perQuizTimeLimit || 60) * 60);
-
           if (!isLive) {
             setIsLoadingSettings(false);
           }
         } else {
           setQuizSettings({ isLive: true, perQuizTimeLimit: 60 });
-          setTimeRemaining(60 * 60);
         }
       } catch (error) {
         console.error('Error loading quiz settings:', error);
         setQuizSettings({ isLive: true, perQuizTimeLimit: 60 });
-        setTimeRemaining(60 * 60);
       } finally {
         // Only set loading to false here if it hasn't been set already
         // This prevents overriding the early completion for not-live quizzes
@@ -182,6 +270,51 @@ export default function QuizInterface() {
 
     loadQuizSettings();
   }, []);
+
+  // Track question viewing time - only when question index changes
+  useEffect(() => {
+    if (questions.length > 0 && currentQuestionIndex >= 0) {
+      const currentQuestion = questions[currentQuestionIndex];
+      if (currentQuestion) {
+        console.log('Starting time tracking for question:', currentQuestion.id);
+        timeTracker.startQuestionTimer(currentQuestion.id);
+      }
+    }
+
+    // Cleanup: stop tracking when question changes
+    return () => {
+      if (timeTracker.isTracking) {
+        const elapsedTime = timeTracker.stopQuestionTimer();
+        console.log('Stopped time tracking, elapsed:', elapsedTime);
+
+        // Update server with total time for this question (async, don't wait)
+        if (
+          currentUser?.userId &&
+          timeTracker.currentQuestionId &&
+          elapsedTime > 0
+        ) {
+          // Get total time spent on this question (including previous sessions)
+          const totalTimeForQuestion = timeTracker.getQuestionTime(
+            timeTracker.currentQuestionId,
+          );
+
+          console.log('Updating server with question time:', {
+            questionId: timeTracker.currentQuestionId,
+            elapsedThisSession: elapsedTime,
+            totalTimeForQuestion,
+          });
+
+          updateQuestionTime(
+            Number(currentUser.userId),
+            timeTracker.currentQuestionId,
+            totalTimeForQuestion, // Send total time, not just elapsed
+          ).catch((error) => {
+            console.error('Failed to update question time:', error);
+          });
+        }
+      }
+    };
+  }, [currentQuestionIndex]); // Only depend on question index change
 
   // Check if user has already attempted the quiz
   useEffect(() => {
@@ -249,10 +382,47 @@ export default function QuizInterface() {
     }
   }, [currentUser?.userId, isLoadingSettings, quizSettings]);
 
-  // Timer effect
+  // Initial timer calculation effect (separate from countdown effect)
+  useEffect(() => {
+    if (quizStartTime && quizSettings && !isLoading) {
+      const remainingTime = calculateRemainingTime(
+        quizStartTime,
+        quizSettings.perQuizTimeLimit,
+      );
+
+      console.log('Timer calculated:', {
+        quizStartTime,
+        perQuizTimeLimit: quizSettings.perQuizTimeLimit,
+        remainingTime,
+        remainingMinutes: Math.floor(remainingTime / 60),
+      });
+
+      setTimeRemaining(remainingTime);
+
+      // If time has already expired, mark as time up
+      if (remainingTime <= 0) {
+        setIsTimeUp(true);
+      }
+    }
+  }, [quizStartTime, quizSettings, isLoading, calculateRemainingTime]);
+
+  // Timer effect with proper dependencies and sync
   useEffect(() => {
     // Only start the timer if the quiz is loaded and not already attempted
-    if (isLoading || hasAlreadyAttempted || isTimeUp) return;
+    if (
+      isLoading ||
+      hasAlreadyAttempted ||
+      isTimeUp ||
+      !quizStartTime ||
+      !quizSettings
+    )
+      return;
+
+    console.log('Starting timer with:', {
+      timeRemaining,
+      quizStartTime,
+      quizSettings,
+    });
 
     const timerId = setInterval(() => {
       setTimeRemaining((prev) => {
@@ -265,8 +435,47 @@ export default function QuizInterface() {
       });
     }, 1000);
 
-    return () => clearInterval(timerId);
-  }, [isLoading, hasAlreadyAttempted, isTimeUp]);
+    // Periodic sync every 30 seconds to prevent drift and handle clock changes
+    const syncTimerId = setInterval(() => {
+      if (quizStartTime && quizSettings) {
+        const actualRemainingTime = calculateRemainingTime(
+          quizStartTime,
+          quizSettings.perQuizTimeLimit,
+        );
+
+        setTimeRemaining((currentRemaining) => {
+          // Only sync if there's a significant difference (more than 2 seconds)
+          const diff = Math.abs(actualRemainingTime - currentRemaining);
+          if (diff > 2) {
+            console.log('Timer sync: correcting drift', {
+              current: currentRemaining,
+              actual: actualRemainingTime,
+              diff,
+            });
+            return actualRemainingTime;
+          }
+          return currentRemaining;
+        });
+
+        // Check if time has expired during sync
+        if (actualRemainingTime <= 0) {
+          setIsTimeUp(true);
+        }
+      }
+    }, 30000); // Sync every 30 seconds
+
+    return () => {
+      clearInterval(timerId);
+      clearInterval(syncTimerId);
+    };
+  }, [
+    isLoading,
+    hasAlreadyAttempted,
+    isTimeUp,
+    quizStartTime,
+    quizSettings,
+    calculateRemainingTime,
+  ]); // Remove timeRemaining to prevent infinite loop
 
   // Handle time up
   useEffect(() => {
@@ -561,6 +770,20 @@ export default function QuizInterface() {
     try {
       setIsSubmitting(true);
 
+      // Stop current question timer and get final time data
+      let finalQuestionTime = 0;
+      if (timeTracker.isTracking) {
+        finalQuestionTime = timeTracker.stopQuestionTimer();
+        console.log(
+          'Final question time before submission:',
+          finalQuestionTime,
+        );
+      }
+
+      // Get all question times for batch update
+      const allQuestionTimes = timeTracker.getAllQuestionTimes();
+      console.log('All question times:', allQuestionTimes);
+
       // Format answers for submission using stored optionIds
       const formattedAnswers = Object.values(answers)
         .map(({ questionId, selectedOptionId }) => ({
@@ -575,15 +798,36 @@ export default function QuizInterface() {
       );
 
       if (result.success) {
+        // Send final batch update of all question times
+        if (allQuestionTimes.size > 0) {
+          const questionTimeArray = Array.from(allQuestionTimes.entries()).map(
+            ([questionId, timeSpent]) => ({
+              questionId,
+              timeSpent,
+            }),
+          );
+
+          batchUpdateQuestionTimes(
+            Number(currentUser.userId),
+            questionTimeArray,
+          ).catch((error) => {
+            console.error('Failed to batch update question times:', error);
+          });
+        }
+
         toast({
           title: 'Quiz Submitted',
           description: 'Your answers have been recorded successfully.',
           variant: 'success',
         });
+
         // Clear local storage after successful submission
         localStorage.removeItem('quiz_answers');
         localStorage.removeItem('quiz_start_time');
         setAnswers({});
+
+        // Clear question time tracking data
+        timeTracker.clearAllTimes();
 
         // IMPORTANT: First mark that we're intentionally exiting fullscreen
         if (antiCheat.setIntentionallyExiting) {
