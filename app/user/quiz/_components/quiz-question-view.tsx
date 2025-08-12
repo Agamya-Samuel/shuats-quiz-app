@@ -239,7 +239,7 @@ export default function QuizQuestionView({
 							</Button>
 							<Button
 								onClick={handleSaveAndNext}
-								variant="default"
+								variant="success"
 								disabled={isSubmitting}
 							>
 								Save & Next
