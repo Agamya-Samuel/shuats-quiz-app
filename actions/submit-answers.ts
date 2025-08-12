@@ -12,11 +12,13 @@ import * as dbSchema from '@/db/schema';
 // Record quiz start time for a user
 export async function recordQuizStartTime(userId: number, startTime?: Date) {
 	try {
-		// Use provided startTime or create a new one
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 		const quizStartTime = startTime || new Date();
 
-		// In the new schema, we don't store start time with submissions
-		// This is just a utility function to track time client-side
+		await db
+			.update(users)
+			.set({ quizStartedAt: quizStartTime })
+			.where(eq(users.id, userId));
 
 		return {
 			success: true,
