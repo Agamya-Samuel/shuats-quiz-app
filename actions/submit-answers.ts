@@ -72,12 +72,6 @@ export async function submitAnswer(
 			});
 		}
 
-		// Mark the quiz as attempted
-		await db
-		  .update(users)
-		  .set({ quizAttempted: true })
-		  .where(eq(users.id, userId));
-
 		return { success: true, message: 'Answer submitted successfully' };
 } catch (error) {
 		console.error('Error submitting answer:', error);
@@ -131,10 +125,10 @@ export async function submitQuiz(
 			})
 		);
 
-		// Update the user's quiz completion timestamp
+		// Mark the quiz as attempted and set completion timestamp
 		await db
 			.update(users)
-			.set({ quizCompletedAt: new Date() })
+			.set({ quizAttempted: true, quizCompletedAt: new Date() })
 			.where(eq(users.id, userId));
 		// Revalidate the quiz page to reflect the changes
 		revalidatePath('/user/quiz');
