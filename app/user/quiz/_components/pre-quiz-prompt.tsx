@@ -58,9 +58,35 @@ export default function PreQuizPrompt({
                 Participation.
               </span>
             </li>
-          </ul>
-
-          <Alert className="mb-6 bg-amber-50 border-amber-200">
+           </ul>
+      
+           <div className="my-6">
+            <h4 className="font-semibold mb-2 text-center">Button Guide</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+            	<li className="flex items-start">
+            		<Button variant="outline" size="sm" className="mr-2">Prev</Button>
+            		<span>- Navigates to the previous question.</span>
+            	</li>
+            	<li className="flex items-start">
+            		<Button variant="outline" size="sm" className="mr-2">Next</Button>
+            		<span>- Navigates to the next question.</span>
+            	</li>
+            	<li className="flex items-start">
+            		<Button variant="secondary" size="sm" className="mr-2">Clear</Button>
+            		<span>- Clears the selected answer for the current question.</span>
+            	</li>
+            	<li className="flex items-start">
+            		<Button variant="default" size="sm" className="mr-2 bg-green-500 hover:bg-green-600 text-white">Save & Next</Button>
+            		<span>- Saves the current answer and moves to the next question.</span>
+            	</li>
+            	<li className="flex items-start">
+            		<Button variant="destructive" size="sm" className="mr-2">Submit Quiz</Button>
+            		<span>- Submits the entire quiz for evaluation.</span>
+            	</li>
+            </ul>
+           </div>
+      
+           <Alert className="mb-6 bg-amber-50 border-amber-200">
             <AlertCircle className="h-4 w-4 text-amber-500" />
             <AlertDescription className="text-sm text-amber-700">
               Are you sure you want to begin the quiz?

@@ -12,11 +12,13 @@ import * as dbSchema from '@/db/schema';
 // Record quiz start time for a user
 export async function recordQuizStartTime(userId: number, startTime?: Date) {
 	try {
-		// Use provided startTime or create a new one
+		const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
 		const quizStartTime = startTime || new Date();
 
-		// In the new schema, we don't store start time with submissions
-		// This is just a utility function to track time client-side
+		await db
+			.update(users)
+			.set({ quizStartedAt: quizStartTime })
+			.where(eq(users.id, userId));
 
 		return {
 			success: true,
@@ -72,12 +74,6 @@ export async function submitAnswer(
 			});
 		}
 
-		// Mark the quiz as attempted
-		await db
-		  .update(users)
-		  .set({ quizAttempted: true })
-		  .where(eq(users.id, userId));
-
 		return { success: true, message: 'Answer submitted successfully' };
 } catch (error) {
 		console.error('Error submitting answer:', error);
@@ -131,10 +127,10 @@ export async function submitQuiz(
 			})
 		);
 
-		// Update the user's quiz completion timestamp
+		// Mark the quiz as attempted and set completion timestamp
 		await db
 			.update(users)
-			.set({ quizCompletedAt: new Date() })
+			.set({ quizAttempted: true, quizCompletedAt: new Date() })
 			.where(eq(users.id, userId));
 		// Revalidate the quiz page to reflect the changes
 		revalidatePath('/user/quiz');
@@ -151,3 +147,30 @@ export async function submitQuiz(
 		};
 	}
 }
+
+export const recordTimeSpent = async (
+  userId: number,
+  questionId: number,
+  timeSpent: number,
+) => {
+  try {
+    const db = await connectToDB() as unknown as NodePgDatabase<typeof dbSchema>;
+    await db
+      .update(userSubmissions)
+      .set({ totalTimeSpent: timeSpent })
+      .where(
+        and(
+          eq(userSubmissions.userId, userId),
+          eq(userSubmissions.questionId, questionId),
+        ),
+      );
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error recording time spent:', error);
+    return {
+      success: false,
+      message: 'An error occurred while recording the time spent.',
+    };
+  }
+};

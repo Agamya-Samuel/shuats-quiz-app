@@ -363,9 +363,6 @@ export async function resetUserSubmissions(userId: number) {
 
     // Delete all submitted answers for this user
     // Delete all submitted answers for this user
-    await db
-      .delete(dbSchema.userSubmissionTimestamps)
-      .where(eq(dbSchema.userSubmissionTimestamps.userId, userId));
     
     await db
       .delete(dbSchema.userSubmissions)
@@ -374,7 +371,11 @@ export async function resetUserSubmissions(userId: number) {
     // Reset the quizAttempted flag for the user
     await db
       .update(users)
-      .set({ quizAttempted: false })
+      .set({
+        quizAttempted: false,
+        quizCompletedAt: null,
+        quizStartedAt: null,
+      })
       .where(eq(users.id, userId));
 
     revalidatePath('/admin?section=submission');
