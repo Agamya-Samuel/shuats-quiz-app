@@ -291,6 +291,22 @@ export default function QuizInterface() {
       setIsSubmitting(true);
       setShowTimeUpDialog(true);
 
+      // Record time for the last question
+      if (questionStartTime) {
+        const timeElapsed = (Date.now() - questionStartTime) / 1000;
+        const question = questions[currentQuestionIndex];
+        if (question?._id) {
+          const newTimeSpent = (timeSpent[question._id] || 0) + timeElapsed;
+          if (currentUser?.userId) {
+            await recordTimeSpent(
+              Number(currentUser.userId),
+              question.id,
+              Math.round(newTimeSpent),
+            );
+          }
+        }
+      }
+
       // Format answers for submission using stored optionIds
       const formattedAnswers = Object.values(answers)
         .map(({ questionId, selectedOptionId }) => ({
@@ -450,8 +466,14 @@ export default function QuizInterface() {
 
   // Track time spent on each question
   useEffect(() => {
+    // Only start tracking time after the quiz has officially started
+    if (!quizStarted) {
+      return;
+    }
+
     const previousQuestionIndex = currentQuestionIndex - 1;
 
+    // Record time for the *previous* question when the index changes
     if (questionStartTime && previousQuestionIndex >= 0) {
       const timeElapsed = (Date.now() - questionStartTime) / 1000;
       const question = questions[previousQuestionIndex];
@@ -473,9 +495,10 @@ export default function QuizInterface() {
       }
     }
 
+    // Set the start time for the *current* question
     setQuestionStartTime(Date.now());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentQuestionIndex]);
+  }, [currentQuestionIndex, quizStarted]);
 
   const handleStartQuiz = () => {
     setShowPreQuizPrompt(false);
@@ -642,6 +665,22 @@ export default function QuizInterface() {
 
     try {
       setIsSubmitting(true);
+
+      // Record time for the last question
+      if (questionStartTime) {
+        const timeElapsed = (Date.now() - questionStartTime) / 1000;
+        const question = questions[currentQuestionIndex];
+        if (question?._id) {
+          const newTimeSpent = (timeSpent[question._id] || 0) + timeElapsed;
+          if (currentUser?.userId) {
+            await recordTimeSpent(
+              Number(currentUser.userId),
+              question.id,
+              Math.round(newTimeSpent),
+            );
+          }
+        }
+      }
 
       // Format answers for submission using stored optionIds
       const formattedAnswers = Object.values(answers)
