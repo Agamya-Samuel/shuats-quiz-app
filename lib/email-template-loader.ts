@@ -16,7 +16,7 @@ export async function loadEmailTemplate(
   try {
     console.log(`Loading email template: ${templateName} - via @lib/email-template-loader.ts`);
     // import of the template
-    const templatePath = path.join(
+    const templatePath = path.resolve(
       process.cwd(),
       'email-templates',
       `${templateName}.html`,
