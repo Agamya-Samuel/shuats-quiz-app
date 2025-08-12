@@ -33,45 +33,12 @@ interface ParticipantData {
 }
 
 // Sample data - replace with actual data from your quiz system
-const leaderboardData: ParticipantData[] = [
-	{
-		participant_name: 'John Doe',
-		total_correct: 65,
-		total_time: 1800,
-		Physics: { correct: 7, time_spent: 300 },
-		Chemistry: { correct: 8, time_spent: 320 },
-		Math: { correct: 10, time_spent: 400 },
-		Biology: { correct: 6, time_spent: 240 },
-		'Social Science': { correct: 8, time_spent: 300 },
-		'English Language': { correct: 12, time_spent: 360 },
-		'General Knowledge': { correct: 9, time_spent: 270 },
-		'Computer Science': { correct: 5, time_spent: 150 },
-	},
-	{
-		participant_name: 'Jane Smith',
-		total_correct: 70,
-		total_time: 1750,
-		Physics: { correct: 8, time_spent: 280 },
-		Chemistry: { correct: 9, time_spent: 310 },
-		Math: { correct: 11, time_spent: 390 },
-		Biology: { correct: 7, time_spent: 230 },
-		'Social Science': { correct: 9, time_spent: 290 },
-		'English Language': { correct: 13, time_spent: 350 },
-		'General Knowledge': { correct: 8, time_spent: 260 },
-		'Computer Science': { correct: 5, time_spent: 140 },
-	},
-	// Add more participants here...
-];
+const leaderboardData: ParticipantData[] = [];
 
 const subjects = [
-	'Physics',
-	'Chemistry',
-	'Math',
-	'Biology',
-	'Social Science',
-	'English Language',
 	'General Knowledge',
-	'Computer Science',
+	'Computer',
+	'Logical Reasoning',
 ] as const;
 
 type SortBy = 'total_correct' | 'total_time';
