@@ -29,7 +29,7 @@ function isDockerRunning(): Promise<boolean> {
 /**
  * Creates a backup of the database using Docker.
  */
-async function backupDatabase() {
+async function backupDatabase(onlyTables = false) {
   if (!(await isDockerRunning())) {
     console.error(
       'Error: Docker is not running. Please start Docker and try again.'
@@ -58,7 +58,10 @@ async function backupDatabase() {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   const backupFilePath = `/backups/backup-${timestamp}.sql`;
 
-  const command = `docker run --rm -v "${path.resolve(backupDir)}:/backups" --network host -e PGPASSWORD=${PGPASSWORD} postgres:17-alpine pg_dump -h ${PGHOST} -p ${PGPORT} -U ${PGUSER} -d ${PGDATABASE} -F c -b -v -f ${backupFilePath}`;
+  const onlyTablesFlag = onlyTables ? '--data-only' : '';
+  const command = `docker run --rm -v "${path.resolve(
+    backupDir
+  )}:/backups" --network host -e PGPASSWORD=${PGPASSWORD} postgres:17-alpine pg_dump -h ${PGHOST} -p ${PGPORT} -U ${PGUSER} -d ${PGDATABASE} -F c -b -v ${onlyTablesFlag} -f ${backupFilePath}`;
 
   console.log('Starting database backup using Docker...');
   const child = exec(command);
@@ -146,7 +149,8 @@ async function main() {
   const args = process.argv;
 
   if (args.includes('--backup')) {
-    await backupDatabase();
+    const onlyTables = args.includes('--only-tables');
+    await backupDatabase(onlyTables);
   } else if (args.includes('--restore')) {
     const backupFileIndex = args.indexOf('--restore') + 1;
     if (backupFileIndex >= args.length || !args[backupFileIndex]) {
@@ -157,7 +161,7 @@ async function main() {
     await restoreDatabase(backupFile);
   } else {
     console.log('Usage:');
-    console.log('  yarn db:util --backup');
+    console.log('  yarn db:util --backup [--only-tables]');
     console.log('  yarn db:util --restore <path-to-backup-file>');
     process.exit(1);
   }
