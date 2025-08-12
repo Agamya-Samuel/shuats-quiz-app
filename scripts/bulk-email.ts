@@ -14,10 +14,10 @@ import { connectToDB } from '@/db';
 import * as dbSchema from '@/db/schema';
 
 async function sendBulkEmails() {
-  const EMAIL_TEMPLATE = 'share-quiz-hi';
+  const EMAIL_TEMPLATE = 'quiz-reminder';
   const SUBJECT =
-    '📣 SHUATS राष्ट्रीय प्रतिभा खोज प्रश्नोत्तरी साझा करें और पुरस्कार प्राप्त करें!';
-  const SLEEP_DURATION = 10 * 1000;
+    '📣 Reminder: SHUATS National Talent Search Quiz @ 10:30AM Today';
+  const SLEEP_DURATION = 2 * 1000;
   const LOGS_DIR = path.join(process.cwd(), 'logs');
 
   let successfulSends = 0;
