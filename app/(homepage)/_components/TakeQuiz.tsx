@@ -117,7 +117,7 @@ const TimelineCalendarCard = ({ month, day, label }: { month: string; day: strin
 // Add this component above TakeQuiz
 const CountdownTimer = () => {
   // Changed event date to 12th August, 2025
-  const eventDate = new Date('2025-08-12T00:00:00');
+  const eventDate = new Date('2025-08-12T10:30:00');
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
