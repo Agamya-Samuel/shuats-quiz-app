@@ -206,8 +206,7 @@ export function UserManagement() {
       (user.mobile &&
         user.mobile.toLowerCase().includes(searchQuery.toLowerCase())) ||
       user.school.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.branch.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.rollno.toLowerCase().includes(searchQuery.toLowerCase()),
+      user.branch.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   if (isLoading) {
@@ -257,7 +256,6 @@ export function UserManagement() {
                   <TableHead>Mobile</TableHead>
                   {/* <TableHead>School</TableHead> */}
                   {/* <TableHead>Branch</TableHead> */}
-                  <TableHead>Roll No</TableHead>
                   <TableHead>Location</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -271,7 +269,6 @@ export function UserManagement() {
                     <TableCell>{user.mobile}</TableCell>
                     {/* <TableCell>{user.school}</TableCell> */}
                     {/* <TableCell>{user.branch}</TableCell> */}
-                    <TableCell>{user.rollno}</TableCell>
                     <TableCell>
                       {user.address ? (
                         <>
@@ -419,12 +416,6 @@ export function UserManagement() {
                     <p className="font-medium">Branch</p>
                     <p className="text-sm text-muted-foreground">
                       {user.branch}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Roll No</p>
-                    <p className="text-sm text-muted-foreground">
-                      {user.rollno}
                     </p>
                   </div>
                   <div>
