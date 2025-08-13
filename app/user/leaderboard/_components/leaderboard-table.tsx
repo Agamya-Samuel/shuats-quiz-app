@@ -1,6 +1,12 @@
 'use client';
 
-import { ArrowUpDown, ChevronDown, Medal, Search } from 'lucide-react';
+import {
+	ArrowUpDown,
+	ChevronDown,
+	Medal,
+	Search,
+	Info,
+} from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -13,13 +19,19 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
 } from '@/components/ui/table';
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 import { LeaderboardEntry } from '../page';
 
@@ -149,24 +161,63 @@ export default function LeaderboardTable({
                   <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
               </TableHead>
-              <TableHead className="w-24">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleSort('score')}>
-                  Score
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-              </TableHead>
-              <TableHead className="w-24">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleSort('accuracy')}>
-                  Accuracy
-                  <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-              </TableHead>
+       <TableHead className="w-24">
+        <div className="flex items-center">
+         <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => handleSort('score')}
+         >
+          Score
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+         </Button>
+         <TooltipProvider>
+          <Tooltip>
+           <TooltipTrigger>
+            <Info className="h-4 w-4 ml-1" />
+           </TooltipTrigger>
+           <TooltipContent>
+            <p>
+             Score is calculated based on the
+             number of correct answers.
+             <br />
+             Formula: (Correct Answers / Total
+             Questions) * 100
+            </p>
+           </TooltipContent>
+          </Tooltip>
+         </TooltipProvider>
+        </div>
+       </TableHead>
+       <TableHead className="w-24">
+        <div className="flex items-center">
+         <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => handleSort('accuracy')}
+         >
+          Accuracy
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+         </Button>
+         <TooltipProvider>
+          <Tooltip>
+           <TooltipTrigger>
+            <Info className="h-4 w-4 ml-1" />
+           </TooltipTrigger>
+           <TooltipContent>
+            <p>
+             Accuracy is the percentage of
+             correct answers out of the
+             questions attempted.
+             <br />
+             Formula: (Correct Answers /
+             Attempted Questions) * 100
+            </p>
+           </TooltipContent>
+          </Tooltip>
+         </TooltipProvider>
+        </div>
+       </TableHead>
               <TableHead className="w-32">
                 <Button
                   variant="ghost"
