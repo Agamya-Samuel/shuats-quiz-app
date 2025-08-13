@@ -55,10 +55,6 @@ export function UserDetailsDialog({ user, uploads }: UserDetailsDialogProps) {
               <p>{user.branch}</p>
             </div>
             <div>
-              <Badge variant="secondary">Roll No</Badge>
-              <p>{user.rollno}</p>
-            </div>
-            <div>
               <Badge variant="secondary">Location</Badge>
               <p>
                 {user.address
@@ -72,19 +68,29 @@ export function UserDetailsDialog({ user, uploads }: UserDetailsDialogProps) {
             {uploads && uploads.length > 0 ? (
               <ul className="list-disc pl-5 mt-2">
                 {uploads.map((upload) => (
-                  <li key={upload.id}>
-                    <span className="font-semibold">
-                      {upload.documentType}:
-                    </span>{' '}
-                    {upload.verified ? (
-                      <span className="text-green-600">Verified</span>
-                    ) : upload.rejected ? (
-                      <span className="text-red-600">
-                        Rejected ({upload.rejectionReason})
-                      </span>
-                    ) : (
-                      <span className="text-yellow-600">Pending</span>
-                    )}
+                  <li
+                    key={upload.id}
+                    className="flex items-center justify-between">
+                    <div>
+                      <span className="font-semibold">
+                        {upload.documentType}:
+                      </span>{' '}
+                      {upload.verified ? (
+                        <span className="text-green-600">Verified</span>
+                      ) : upload.rejected ? (
+                        <span className="text-red-600">
+                          Rejected ({upload.rejectionReason})
+                        </span>
+                      ) : (
+                        <span className="text-yellow-600">Pending</span>
+                      )}
+                    </div>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => window.open(upload.fileUrl, '_blank')}>
+                      View Document
+                    </Button>
                   </li>
                 ))}
               </ul>
